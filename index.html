@@ -9049,23 +9049,78 @@ window.addEventListener('load', function(){
   function enableMobileMode(on){
     if(on){
       document.body.classList.add('mobile-mode');
-      document.getElementById('btn-view-toggle').innerHTML = '🖥️ Desktop';
+      var btn = document.getElementById('btn-view-toggle');
+      if(btn) btn.innerHTML = '🖥️ Desktop';
       localStorage.setItem('viewMode','mobile');
-      // Force hide PIX, DADOS, KPIs and Hall da Fama
-      ['pix-box','pix-title','card-pix','card-dados','kpis-section','medalhas-right-hall'].forEach(function(id){
-        var el = document.getElementById(id);
-        if(el){ el.style.cssText += ';display:none!important'; }
-      });
-      document.querySelectorAll('.pix-box, .pix-meta, .pix-actions, .pix-label, .pix-key, .pix-qr').forEach(function(el){
-        el.style.cssText += ';display:none!important';
-      });
-      // Hide entire card containing PIX
-      document.querySelectorAll('.card').forEach(function(card){
-        if(card.querySelector('.pix-box') || card.querySelector('#pix-box')){
-          card.style.cssText += ';display:none!important';
-        }
-      });
+
+      // ── Inject mobile styles directly via JS (Safari-proof) ──
+      var styleId = 'rn-mobile-inject';
+      var existing = document.getElementById(styleId);
+      if(existing) existing.remove();
+      var s = document.createElement('style');
+      s.id = styleId;
+      s.textContent = [
+        // Hide header
+        'header { display: none !important; }',
+        // Show mobile topbar
+        '#mobile-topbar { display: flex !important; position: sticky; top: 0; z-index: 1000; }',
+        // Hide PIX
+        '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions { display: none !important; }',
+        // Hide DADOS card
+        '#card-dados { display: none !important; }',
+        // Hide KPIs
+        '#kpis-section { display: none !important; }',
+        // Hide Hall da Fama
+        '#medalhas-right-hall { display: none !important; }',
+        // Medals full width
+        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; }',
+        '.medalhas-flex { flex-direction: column !important; }',
+        // Controls 2 cols
+        '.controls { grid-template-columns: 1fr 1fr !important; }',
+        // Chips wrap
+        '#chips { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; height: auto !important; max-height: none !important; }',
+        '#chips-parent { flex-wrap: wrap !important; }',
+        // Rankings stack
+        '.row.mini-ranks { display: flex !important; flex-direction: column !important; }',
+        '.row.mini-ranks .card.mini-card { width: 100% !important; }',
+        // Charts stack
+        '.grid-charts { display: flex !important; flex-direction: column !important; }',
+        '.grid-charts .chart { width: 100% !important; height: 300px !important; }',
+        '#card-heatmap { min-height: 420px !important; }',
+        '#heatmapFrame { width: 100% !important; height: 400px !important; border: none !important; }',
+        // Tables scroll
+        'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
+        // Toggle button
+        '#btn-view-toggle { bottom: 80px !important; right: 12px !important; font-size: 11px !important; padding: 7px 12px !important; }'
+      ].join('
+');
+      document.head.appendChild(s);
+
+      // Also force via inline styles
+      setTimeout(function(){
+        // Hide PIX cards
+        document.querySelectorAll('.card').forEach(function(card){
+          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')||card.id==='card-dados'){
+            card.style.display='none';
+          }
+        });
+        // Hide KPIs
+        var kpis = document.getElementById('kpis-section');
+        if(kpis) kpis.style.display='none';
+        // Hide Hall da Fama
+        var hall = document.getElementById('medalhas-right-hall');
+        if(hall) hall.style.display='none';
+        // Fix chips
+        var chips = document.getElementById('chips');
+        if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; }
+        var cp = document.getElementById('chips-parent');
+        if(cp){ cp.style.flexWrap='wrap'; }
+      }, 100);
+
     } else {
+      // Remove injected styles
+      var s = document.getElementById('rn-mobile-inject');
+      if(s) s.remove();
       document.body.classList.remove('mobile-mode');
       document.getElementById('btn-view-toggle').innerHTML = '📱 Mobile';
       localStorage.setItem('viewMode','desktop');
