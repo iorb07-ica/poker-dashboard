@@ -1519,6 +1519,29 @@ body { overflow-x: hidden; }
 .mini-prizes b{white-space:nowrap}
 </style>
 <!-- Sticky controls: ensure the top filter bar remains fixed below the header but do not include the player chips row -->
+<style id="medal-standalone-row-css">
+/* Card de medalhas agora em linha própria — expande livremente */
+#medal-standalone-row {
+  width: 100%;
+  box-sizing: border-box;
+}
+#medal-standalone-row #card-kopontos {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  align-self: stretch !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+/* Remove constraints herdadas de mini-slot dentro de grid */
+#medal-standalone-row #card-kopontos.mini-slot {
+  grid-column: unset !important;
+  grid-row: unset !important;
+  place-self: unset !important;
+  align-self: unset !important;
+}
+</style>
 <style id="medal-card-expand-fix">
 /* CRITICAL: medal card must expand to fit all content (top3 + list 4-9) */
 #card-kopontos.mini-slot {
@@ -1870,6 +1893,61 @@ body.mobile-mode .grid-charts .chart {
   @keyframes coinSpin { 0%,100% { transform: none; } }
 }
 </style>
+<style id="medals-final-override">
+/* FINAL OVERRIDE — garantia que todos os 9 jogadores aparecem no card de medalhas */
+html body #card-kopontos.mini-slot {
+  align-self: flex-start !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  min-height: 0 !important;
+}
+html body #card-medalhas {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body .medalhas-left {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body #list-4-9 {
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  min-height: 0 !important;
+}
+html body #list-4-9.populated {
+  display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body.mobile-mode #list-4-9.populated {
+  display: flex !important;
+  flex-direction: column !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+html body #card-medalhas .row {
+  display: grid !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+}
+/* Garante que mini-ranks não constranja card de medalhas */
+html body .row.mini-ranks {
+  align-items: flex-start !important;
+}
+html body .row.mini-ranks #card-kopontos {
+  align-self: flex-start !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+</style>
 </head>
 <body>
 
@@ -2014,20 +2092,26 @@ body.mobile-mode .grid-charts .chart {
 </div>
 <div class="mini-list" id="mini-tri-list"></div>
 <div class="mini-prizes" id="mini-tri-prizes"></div><div class="mini-rule" id="mini-tri-rule"></div></div>
+
+<template id="svg-gold"><svg aria-hidden="true" class="medal g" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradG)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradG"><stop offset="0%" stop-color="#fff1a6"></stop><stop offset="60%" stop-color="#f4c842"></stop><stop offset="100%" stop-color="#caa12a"></stop></radialgradient></defs></svg></template>
+<template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
+<template id="svg-bronze"><svg aria-hidden="true" class="medal b" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradB)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradB"><stop offset="0%" stop-color="#ffd3b0"></stop><stop offset="60%" stop-color="#cd7f32"></stop><stop offset="100%" stop-color="#8c4f1e"></stop></radialgradient></defs></svg></template>
+</div>
+<div class="row" id="medal-standalone-row" style="margin-top:10px;">
 <div class="card mini-slot" id="card-kopontos">
 <span class="card-title">🏅 Medalhas do Período</span>
-<div id="card-medalhas">
+<div id="card-medalhas" style="height:auto;overflow:visible;">
 <div class="card-header" style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
 <span class="pill" id="periodo-label">Ano</span>
 <span class="pill" id="regra-label">Critério: Ouro → Prata → Bronze</span>
 </div>
-<div class="medalhas-flex" style="display:flex; gap:14px; align-items:stretch;">
-  <div class="medalhas-left" style="flex:1 1 62%; min-width:320px;">
+<div class="medalhas-flex" style="display:flex; gap:14px; align-items:stretch; overflow:visible; height:auto;">
+  <div class="medalhas-left" style="flex:1 1 62%; min-width:320px; height:auto; overflow:visible;">
     <div id="medalhas-empty" style="opacity:.75;font-size:14px;padding:12px;border:1px dashed rgba(255,255,255,.15);border-radius:10px;">
       Faça o upload da base para exibir as medalhas.
     </div>
 <div class="podium" id="podium" style="display:none"></div>
-<div class="list" id="list-4-9" style="display:none"></div>
+<div class="list" id="list-4-9" style="display:none; height:auto; overflow:visible; max-height:none;"></div>
   </div>
   <div class="medalhas-right" id="medalhas-right-hall" style="flex:0 0 38%; min-width:250px;">
     <div style="display:flex; align-items:center; gap:10px; margin:2px 0 10px 0;">
@@ -2089,10 +2173,8 @@ body.mobile-mode .grid-charts .chart {
   </div>
 </div>
 </div>
-<template id="svg-gold"><svg aria-hidden="true" class="medal g" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradG)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradG"><stop offset="0%" stop-color="#fff1a6"></stop><stop offset="60%" stop-color="#f4c842"></stop><stop offset="100%" stop-color="#caa12a"></stop></radialgradient></defs></svg></template>
-<template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
-<template id="svg-bronze"><svg aria-hidden="true" class="medal b" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradB)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradB"><stop offset="0%" stop-color="#ffd3b0"></stop><stop offset="60%" stop-color="#cd7f32"></stop><stop offset="100%" stop-color="#8c4f1e"></stop></radialgradient></defs></svg></template>
-</div></div>
+</div>
+</div>
 <div class="kpis" id="kpis-section">
 <div class="kpi kpi-pot"><h3>Pote do período</h3><div class="val" id="kpi-pote">—</div><div class="sub">Regras: 3×entradas (semana/mês), 2×entradas (tri/ano)</div></div>
 <div class="kpi kpi-entr"><h3>Entradas</h3><div class="val" id="kpi-entradas">—</div><div class="sub">buy-ins + rebuys</div></div>
