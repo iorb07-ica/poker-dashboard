@@ -935,8 +935,9 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
   background: linear-gradient(90deg, rgba(255,255,255,.45), rgba(255,255,255,.08)); }
 
 /* List 4-9 desktop — always visible when populated */
-#list-4-9 { overflow: visible; }
+#list-4-9 { overflow: visible; display: none; }
 #list-4-9.populated { display: block !important; }
+body.mobile-mode #list-4-9.populated { display: flex !important; flex-direction: column !important; }
 #medal-table{ overflow:auto; border-top:1px solid rgba(255,255,255,.08); padding-top:8px; }
 #medal-table table{ width:100%; border-collapse:collapse; font-size:13px; }
 #medal-table th, #medal-table td{ padding:8px; border-bottom:1px solid #223047; }
@@ -1060,8 +1061,14 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
   #list-4-9 {
     display: flex !important; flex-direction: column !important;
     gap: 5px !important; overflow: visible !important;
-    height: auto !important; border: none !important;
-    background: transparent !important; padding: 2px 0 0 !important; min-height: auto !important;
+    height: auto !important; max-height: none !important;
+    border: none !important;
+    background: transparent !important; padding: 2px 0 6px !important; min-height: auto !important;
+  }
+  #list-4-9 .row {
+    display: grid !important;
+    visibility: visible !important;
+    opacity: 1 !important;
   }
   #card-medalhas .row {
     display: grid !important;
@@ -6199,7 +6206,11 @@ function avatarNode(photo,name){
     }
     if(empty){ empty.style.display="none"; }
     podium.style.display="grid";
-    listEl.style.display = document.body.classList.contains('mobile-mode') ? 'flex' : 'block';
+    if(document.body.classList.contains('mobile-mode')){
+      listEl.style.cssText += ';display:flex!important;flex-direction:column!important;';
+    } else {
+      listEl.style.display = 'block';
+    }
     listEl.classList.add("populated");
     const sorted=list.slice().sort(sortByMedals);
     const top3=sorted.slice(0,3);
@@ -8551,7 +8562,7 @@ window.addEventListener('load', function(){
            MEDALHAS — LAYOUT MOBILE OTIMIZADO
         ══════════════════════════════════════ */
         '.medalhas-flex { flex-direction: column !important; }',
-        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; overflow: visible !important; }',
+        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; overflow: visible !important; height: auto !important; max-height: none !important; }',
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
         '#card-kopontos { height: auto !important; overflow: visible !important; padding: 12px !important; }',
         '#card-kopontos .card-title { font-size: 14px !important; margin-bottom: 10px !important; }',
@@ -8667,10 +8678,7 @@ window.addEventListener('load', function(){
         // Show medals list + force re-render if needed
         var list49=document.getElementById('list-4-9');
         if(list49){
-          list49.style.display='flex';
-          list49.style.flexDirection='column';
-          list49.style.overflow='visible';
-          list49.style.height='auto';
+          list49.style.cssText += ';display:flex!important;flex-direction:column!important;overflow:visible!important;height:auto!important;';
           list49.classList.add('populated');
         }
         // Force re-render medals in mobile mode
@@ -8679,7 +8687,7 @@ window.addEventListener('load', function(){
           if(podium && typeof window.refresh==='function') window.refresh();
           // Re-check list after refresh
           var l=document.getElementById('list-4-9');
-          if(l && l.classList.contains('populated')) l.style.display='flex';
+          if(l && l.classList.contains('populated')) l.style.cssText += ';display:flex!important;flex-direction:column!important;';
         }, 300);
         // Re-trigger medal render if podium is empty
         setTimeout(function(){
