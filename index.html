@@ -116,14 +116,14 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
     .grid-charts{
       display:grid;
       grid-template-columns: 1.6fr 1fr 1fr;
-      grid-auto-rows: 360px;
+      grid-auto-rows: minmax(300px, auto);
       gap:10px;
     }
     .chart{height:100%;background:linear-gradient(180deg,#0e1424,#0b0f1c);border:1px solid #1c2638;border-radius:16px;padding:6px;
            box-shadow:inset 0 1px 0 rgba(255,255,255,.06), 0 12px 24px rgba(0,0,0,.35), 0 4px 10px rgba(10,12,20,.45); position:relative}
     .chart .title{position:absolute;left:10px;top:6px;color:#9fb3d4;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
     .ranking-span{grid-column:1/3}
-    .kos-small{grid-column:3/4; grid-row:1/2; height:260px; align-self:start}
+    .kos-small{grid-column:3/4; grid-row:1/2; height:340px; align-self:start}
     .evo-span{grid-column:1/3; grid-row:2/3}
     .medal-col{grid-column:3/4; grid-row:2/3}
     .heatmap-span{grid-column:1/4; grid-row:3/4}
@@ -1664,7 +1664,7 @@ html, body { overflow-x: hidden; }
 
 
 <script>
-var _revealAt = Date.now() + 3000;
+var _revealAt = Date.now() + 5000;
 // Animate loading dots
 (function(){
   var d=document.getElementById('dots'), i=0;
@@ -3420,7 +3420,7 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:95,right:120,top:30,bottom:30},
+      grid:{left:95,right:80,top:20,bottom:20},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
       yAxis:{type:'category',data:names,inverse:true,axisLabel:{
       formatter:function(value,idx){
@@ -3434,7 +3434,7 @@ function refresh(){
       }
     }},
       series:[
-        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:33, z:1, silent:true,
+        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:28, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
         { type:'bar', data: vals, barWidth:27, z:2, realtimeSort: !isSaldo,
           label:{ show:true, color:'#ffffff', position:'inside',
@@ -3620,9 +3620,9 @@ function refresh(){
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       tooltip:{trigger:'item', formatter:(p)=>`${p.marker} ${p.name}: <b>${fmt(p.value)}</b> KOs (${p.percent}%)`},
       series:[{
-        name:'KOs por jogador', type:'pie', radius:['22%','55%'], center:['50%','50%'],
-        avoidLabelOverlap:true,
-        label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:12 },
+        name:'KOs por jogador', type:'pie', radius:['20%','42%'], center:['50%','52%'],
+        avoidLabelOverlap:true, containLabel:true,
+        label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:11 },
         labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
         data: seriesData
       }]
@@ -6087,7 +6087,7 @@ document.addEventListener('DOMContentLoaded', function(){
       tooltip:{ trigger:'item', formatter: '{b}: {c} ({d}%)' },
       series:[{
         name:'KOs por jogador', type:'pie', radius:['30%','70%'], center:['50%','55%'],
-        avoidLabelOverlap:true,
+        avoidLabelOverlap:true, containLabel:true,
         label:{ show:true, formatter: '{b}: {c} ({d}%)', color:'#e6edf3', fontSize:12 },
         labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
         data:data
@@ -9104,6 +9104,9 @@ window.addEventListener('load', function(){
         '#card-medalhas { min-height: auto !important; height: auto !important; overflow: visible !important; }',
         '.chart.medal-col { overflow: visible !important; height: auto !important; min-height: 360px !important; }',
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
+        '.chart.ranking-span { margin-top: 0 !important; }',
+        '.controls { position: static !important; top: unset !important; }',
+        '.grid-charts { gap: 8px !important; }'
         '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
         '#list-4-9 { display: block !important; }',
         '.medalhas-left { min-height: auto !important; }',
@@ -9117,16 +9120,26 @@ window.addEventListener('load', function(){
         '.card { padding-bottom: 20px !important; overflow: visible !important; }',
         /* Charts need explicit height and no clipping */
         '.chart { overflow: visible !important; }',
-        '#chartRanking { height: 360px !important; }',
-        '#chartKOs { height: 420px !important; }',
-        '#chartEvolucao { height: 380px !important; }',
+        '#chartRanking { height: 400px !important; }',
+        '#chartKOs { height: 360px !important; }',
+        '#chartEvolucao { height: 460px !important; }',
         /* Medal card full height */
         '.mini-slot { height: auto !important; overflow: visible !important; align-self: start !important; }',
         '#card-kopontos { height: auto !important; overflow: visible !important; }',
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
         '.medalhas-left { width: 100% !important; min-width: 0 !important; overflow: visible !important; }',
         '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
-        '#podium { display: grid !important; }',
+        '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; }',
+        '.slot { padding: 6px 2px !important; }',
+        '.slot img, .slot .avatar { width: 52px !important; height: 52px !important; }',
+        '.slot .name { font-size: 10px !important; }',
+        '.slot .rank-badge { font-size: 10px !important; }',
+        '.slot .tally { gap: 2px !important; }',
+        '#list-4-9 .row { padding: 6px 8px !important; gap: 6px !important; }',
+        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 28px !important; height: 28px !important; }',
+        '#list-4-9 .row .who .nm { font-size: 12px !important; }',
+        '.tally svg, .tally .medal { width: 14px !important; height: 14px !important; }',
+        '.tally .cnt { font-size: 11px !important; }',
         /* Bottom padding for last card */
         '.container { padding-bottom: 100px !important; }'
       ].join(' ');
@@ -9171,6 +9184,16 @@ window.addEventListener('load', function(){
         if(cont) cont.style.paddingBottom='100px';
         // Fix all charts
         document.querySelectorAll('.chart').forEach(function(c){ c.style.overflow='visible'; });
+        // Fix evo chart height
+        var evoChart = document.querySelector('.evo-span');
+        if(evoChart){ evoChart.style.height='500px'; evoChart.style.minHeight='500px'; }
+        var evoEl = document.getElementById('chartEvolucao');
+        if(evoEl){ evoEl.style.height='460px'; evoEl.style.minHeight='460px'; }
+        // Give KOs chart extra height
+        var kChart = document.querySelector('.kos-small');
+        if(kChart){ kChart.style.height='380px'; kChart.style.minHeight='380px'; kChart.style.overflow='hidden'; }
+        var kEl = document.getElementById('chartKOs');
+        if(kEl){ kEl.style.height='360px'; kEl.style.minHeight='360px'; }
         // Fix chips
         var chips = document.getElementById('chips');
         if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; chips.style.display='flex'; }
