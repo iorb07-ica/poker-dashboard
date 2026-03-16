@@ -4900,7 +4900,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var options = Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
     if(!options.length) return null;
     // registros com buyin==1
-    var candidates = (window.RAW||[]).filter(r => (+r.buyin||0) >= 1);
+    var candidates = (window.RAW && window.RAW.length ? window.RAW : (typeof RAW !== 'undefined' ? RAW : [])).filter(r => (+r.buyin||0) >= 1);
     // com data válida e <= hoje
     var withDate = candidates.map(r => ({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data)}))
                              .filter(x => x.wk>0 && x.dt && x.dt<=now && options.includes(x.wk))
@@ -4915,11 +4915,12 @@ document.addEventListener('DOMContentLoaded', function(){
   function applyAutoWK(){
     var selWk = document.getElementById('mini-wk');
     if(!selWk) return;
-    var wk = lastPlayedWeekStrict();
-    if(wk!=null){
-      var opt = Array.from(selWk.options).find(o => +o.value===+wk);
-      if(opt){ selWk.value = String(wk); selWk.dispatchEvent(new Event('change')); }
-    }
+    // Simply use the maximum WK available
+    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
+    if(!opts.length) return;
+    var maxWk = Math.max.apply(null, opts);
+    selWk.value = String(maxWk);
+    selWk.dispatchEvent(new Event('change'));
   }
   // rodada pós-carregamento e também após initSelectors (que o topo dispara ao mudar 'Período')
   var tries=0;
@@ -8359,9 +8360,9 @@ document.addEventListener('DOMContentLoaded', function(){
     var inp = document.getElementById('rn-senha-input');
     var err = document.getElementById('rn-senha-erro');
     if(!inp) return;
-    var senha = inp.value;
-    // Verificar contra senha salva no localStorage (configurada pelo admin)
-    var senhaCorreta = localStorage.getItem('rn_senha') || 'poker2026';
+    var senha = inp.value.trim();
+    // Verificar contra senha salva no localStorage
+    var senhaCorreta = (localStorage.getItem('rn_senha') || 'poker2026').trim();
     if(senha === senhaCorreta){
       RN_AUTENTICADO = true;
       document.getElementById('rn-senha-modal').style.display='none';
@@ -8505,7 +8506,10 @@ document.addEventListener('DOMContentLoaded', function(){
       var koInp=rows[i].querySelector('.rn-kos-total');
       if(koInp){koInp.disabled=false; koInp.style.opacity='1';}
 
-      if(+linha.faltou===1){
+      // Treat as faltou if: faltou=1 OR buyin is null/0 with no position
+      var efectivamenteFaltou = (+linha.faltou===1) || 
+        (linha.buyin==null && linha.posicao==null && linha.fichas_restantes==null);
+      if(efectivamenteFaltou){
         rows[i].querySelector('.rn-faltou').checked=true;
         rnToggleFaltou(i);
         continue;
@@ -8896,6 +8900,17 @@ window.ghCarregarDados = function(){
       refresh();
       window.RAW = RAW || [];
       try{ initMiniCombos(); }catch(e){}
+      // Force select last WK
+      // Select last WK once after data settles
+      setTimeout(function(){
+        try{
+          var selWK = document.getElementById('mini-wk');
+          if(selWK && selWK.options.length > 0){
+            selWK.selectedIndex = selWK.options.length - 1;
+            selWK.dispatchEvent(new Event('change'));
+          }
+        }catch(e){}
+      }, 600);
       ghMostrarStatus('✅ Dados carregados do GitHub!', '#22c55e');
     })
     .catch(function(e){
@@ -9073,12 +9088,16 @@ window.addEventListener('load', function(){
         // Hide Hall da Fama
         '#medalhas-right-hall { display: none !important; }',
         // Medals full width
-        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; }',
+        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; }',
+        '#podium { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }',
+        '#list-4-9 .row { font-size: 13px !important; }',
+        '.slot { padding: 8px 4px !important; }',
+        '.slot .name { font-size: 11px !important; }',
         '.medalhas-flex { flex-direction: column !important; }',
         // Controls 2 cols
         '.controls { grid-template-columns: 1fr 1fr !important; }',
         // Chips wrap
-        '#chips { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; height: auto !important; max-height: none !important; }',
+        '#chips, #chips.chips, .chips { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; height: auto !important; max-height: none !important; }',
         '#chips-parent { flex-wrap: wrap !important; }',
         // Rankings stack
         '.row.mini-ranks { display: flex !important; flex-direction: column !important; }',
@@ -9098,9 +9117,12 @@ window.addEventListener('load', function(){
 
       // Also force via inline styles
       setTimeout(function(){
-        // Hide PIX cards
+        // Hide PIX - all possible elements
+        document.querySelectorAll('.pix-box, .pix-qr, .pix-meta, .pix-actions, #pix-box, #pix-title').forEach(function(el){ el.style.display='none'; });
+        var cd = document.getElementById('card-dados');
+        if(cd) cd.style.display='none';
         document.querySelectorAll('.card').forEach(function(card){
-          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')||card.id==='card-dados'){
+          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')){
             card.style.display='none';
           }
         });
@@ -9110,9 +9132,16 @@ window.addEventListener('load', function(){
         // Hide Hall da Fama
         var hall = document.getElementById('medalhas-right-hall');
         if(hall) hall.style.display='none';
+        // Fix medals-left width
+        var medLeft = document.querySelector('.medalhas-left');
+        if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; }
+        var medFlex = document.querySelector('.medalhas-flex');
+        if(medFlex){ medFlex.style.flexDirection='column'; }
         // Fix chips
         var chips = document.getElementById('chips');
-        if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; }
+        if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; chips.style.display='flex'; }
+        // Also find by class
+        document.querySelectorAll('.chips').forEach(function(el){ el.style.maxHeight='none'; el.style.overflow='visible'; el.style.height='auto'; el.style.flexWrap='wrap'; });
         var cp = document.getElementById('chips-parent');
         if(cp){ cp.style.flexWrap='wrap'; }
       }, 100);
@@ -9122,8 +9151,35 @@ window.addEventListener('load', function(){
       var s = document.getElementById('rn-mobile-inject');
       if(s) s.remove();
       document.body.classList.remove('mobile-mode');
-      document.getElementById('btn-view-toggle').innerHTML = '📱 Mobile';
+      var btn = document.getElementById('btn-view-toggle');
+      if(btn) btn.innerHTML = '📱 Mobile';
       localStorage.setItem('viewMode','desktop');
+      // Restore elements hidden by JS inline styles
+      ['card-dados','kpis-section','medalhas-right-hall'].forEach(function(id){
+        var el = document.getElementById(id);
+        if(el) el.style.display = '';
+      });
+      document.querySelectorAll('.pix-box, .pix-qr, .pix-meta, .pix-actions, #pix-box').forEach(function(el){
+        el.style.display = '';
+      });
+      document.querySelectorAll('.card').forEach(function(card){
+        card.style.display = '';
+      });
+      document.querySelectorAll('.chips').forEach(function(el){
+        el.style.maxHeight = '';
+        el.style.overflow = '';
+        el.style.height = '';
+      });
+      var medLeft = document.querySelector('.medalhas-left');
+      if(medLeft){ medLeft.style.flex = ''; medLeft.style.minWidth = ''; medLeft.style.width = ''; }
+      var medFlex = document.querySelector('.medalhas-flex');
+      if(medFlex){ medFlex.style.flexDirection = ''; }
+      // Restore header
+      var header = document.querySelector('header');
+      if(header) header.style.display = '';
+      // Hide mobile topbar
+      var topbar = document.getElementById('mobile-topbar');
+      if(topbar) topbar.style.display = 'none';
     }
   }
 
