@@ -1893,6 +1893,31 @@ body.mobile-mode .grid-charts .chart {
   @keyframes coinSpin { 0%,100% { transform: none; } }
 }
 </style>
+<style id="medals-spacing-mobile">
+/* Reduz espaço excessivo no card de medalhas no mobile */
+body.mobile-mode #medal-standalone-row {
+  margin-top: 8px !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
+body.mobile-mode #card-kopontos {
+  padding-bottom: 10px !important;
+}
+/* Garante que medalhas-right oculta não cria espaço */
+body.mobile-mode .medalhas-right {
+  display: none !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+body.mobile-mode .medalhas-flex {
+  gap: 0 !important;
+}
+body.mobile-mode #list-4-9 {
+  padding-bottom: 4px !important;
+}
+</style>
 <style id="medals-final-override">
 /* FINAL OVERRIDE — garantia que todos os 9 jogadores aparecem no card de medalhas */
 html body #card-kopontos.mini-slot {
@@ -2097,7 +2122,7 @@ html body .row.mini-ranks #card-kopontos {
 <template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
 <template id="svg-bronze"><svg aria-hidden="true" class="medal b" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradB)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradB"><stop offset="0%" stop-color="#ffd3b0"></stop><stop offset="60%" stop-color="#cd7f32"></stop><stop offset="100%" stop-color="#8c4f1e"></stop></radialgradient></defs></svg></template>
 </div>
-<div class="row" id="medal-standalone-row" style="margin-top:10px;">
+<div class="row" id="medal-standalone-row" style="margin-top:10px; margin-bottom:0;">
 <div class="card mini-slot" id="card-kopontos">
 <span class="card-title">🏅 Medalhas do Período</span>
 <div id="card-medalhas" style="height:auto;overflow:visible;">
@@ -2188,7 +2213,7 @@ html body .row.mini-ranks #card-kopontos {
 <div class="chart evo-span"><div class="title">Evolução (Pontos Acumulados)</div><div id="chartEvolucao" style="height:100%"></div></div>
 <div class="chart medal-col" id="card-personas" style="position:relative;">
   <div class="title">Arquétipos do Plaza</div>
-  <div class="small-note">Rebuys/Jogo (X) × KOs/Jogo (Y). Cortes = mediana do período. Bolha = pontos.</div>
+  <div class="small-note" style="display:none;">Rebuys/Jogo (X) × KOs/Jogo (Y). Cortes = mediana do período. Bolha = pontos.</div>
   <div id="chartPersonas" style="height:100%; width:100%;"></div>
   <div id="personaEmpty" style="display:none; position:absolute; inset:46px 14px 14px 14px; align-items:center; justify-content:center; color:rgba(255,255,255,.55); font-weight:600; letter-spacing:.2px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:rgba(255,255,255,.03);">
     Sem dados carregados
