@@ -1748,11 +1748,14 @@ html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
   #mobile-topbar {
     padding-left: max(14px, env(safe-area-inset-left)) !important;
     padding-right: max(14px, env(safe-area-inset-right)) !important;
-    padding-top: max(env(safe-area-inset-top), 0px) !important;
-    height: calc(64px + env(safe-area-inset-top)) !important;
+    padding-top: max(env(safe-area-inset-top), 14px) !important;
+    height: auto !important;
+    min-height: calc(64px + env(safe-area-inset-top)) !important;
     top: 0 !important;
+    align-items: flex-end !important;
+    padding-bottom: 10px !important;
   }
-  .container { padding-top: calc(72px + env(safe-area-inset-top)) !important; }
+  .container { padding-top: calc(80px + env(safe-area-inset-top)) !important; }
 
   /* Cards com sombra mais marcante no mobile */
   .card {
@@ -8096,7 +8099,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!inp) return;
     // Limpar caracteres invisíveis e normalizar (iOS pode inserir espaços especiais)
     var senha = inp.value.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
-    var senhaCorreta = (localStorage.getItem('rn_senha') || 'poker2026').replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
+    var senhaCorreta = 'poker2026'; // ← troque aqui para mudar a senha
     if(senha === senhaCorreta){
       RN_AUTENTICADO = true;
       document.getElementById('rn-senha-modal').style.display='none';
