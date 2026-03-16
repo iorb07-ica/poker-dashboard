@@ -9078,6 +9078,7 @@ window.addEventListener('load', function(){
         '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions { display: none !important; }',
         // Hide DADOS card
         '#card-dados { display: none !important; }',
+        '#card-pix { display: none !important; }',
         // Hide KPIs
         '#kpis-section { display: none !important; }',
         // Hide Hall da Fama
@@ -9106,7 +9107,7 @@ window.addEventListener('load', function(){
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
         '.chart.ranking-span { margin-top: 0 !important; }',
         '.controls { position: static !important; top: unset !important; }',
-        '.grid-charts { gap: 8px !important; }'
+        '.grid-charts { gap: 8px !important; }',
         '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
         '#list-4-9 { display: block !important; }',
         '.medalhas-left { min-height: auto !important; }',
@@ -9129,17 +9130,20 @@ window.addEventListener('load', function(){
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
         '.medalhas-left { width: 100% !important; min-width: 0 !important; overflow: visible !important; }',
         '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
-        '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; }',
-        '.slot { padding: 6px 2px !important; }',
-        '.slot img, .slot .avatar { width: 52px !important; height: 52px !important; }',
-        '.slot .name { font-size: 10px !important; }',
-        '.slot .rank-badge { font-size: 10px !important; }',
-        '.slot .tally { gap: 2px !important; }',
-        '#list-4-9 .row { padding: 6px 8px !important; gap: 6px !important; }',
-        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 28px !important; height: 28px !important; }',
-        '#list-4-9 .row .who .nm { font-size: 12px !important; }',
-        '.tally svg, .tally .medal { width: 14px !important; height: 14px !important; }',
-        '.tally .cnt { font-size: 11px !important; }',
+        /* Podium: scroll horizontal to show all 3 */
+        '#podium { display: flex !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; padding-bottom: 8px !important; -webkit-overflow-scrolling: touch !important; }',
+        '.slot { min-width: 120px !important; flex-shrink: 0 !important; padding: 8px 6px !important; }',
+        '.slot img, .slot .avatar { width: 60px !important; height: 60px !important; }',
+        '.slot .name { font-size: 12px !important; }',
+        '.slot .rank-badge { font-size: 11px !important; }',
+        '.slot .tally { gap: 4px !important; flex-wrap: nowrap !important; }',
+        /* List 4-9: show all */
+        '#list-4-9 { display: block !important; }',
+        '#list-4-9 .row { padding: 8px 10px !important; gap: 8px !important; }',
+        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 32px !important; height: 32px !important; }',
+        '#list-4-9 .row .who .nm { font-size: 13px !important; }',
+        '.tally svg, .tally .medal { width: 16px !important; height: 16px !important; }',
+        '.tally .cnt { font-size: 12px !important; }',
         /* Bottom padding for last card */
         '.container { padding-bottom: 100px !important; }'
       ].join(' ');
@@ -9149,16 +9153,19 @@ window.addEventListener('load', function(){
       setTimeout(function(){
         // Hide PIX - all possible elements
         document.querySelectorAll('.pix-box, .pix-qr, .pix-meta, .pix-actions, #pix-box, #pix-title').forEach(function(el){ el.style.display='none'; });
-        var cd = document.getElementById('card-dados');
-        if(cd) cd.style.display='none';
+        // Hide Dados, Premio, PIX cards
+        ['card-dados','card-pix'].forEach(function(id){
+          var el=document.getElementById(id); if(el) el.style.display='none';
+        });
         document.querySelectorAll('.card').forEach(function(card){
-          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')){
+          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')||
+             card.querySelector('.pix-qr')||card.querySelector('#pixQrImg')){
             card.style.display='none';
           }
         });
         // Hide KPIs
         var kpis = document.getElementById('kpis-section');
-        if(kpis) kpis.style.display='none';
+        if(kpis){ kpis.style.display='none'; kpis.style.cssText+='display:none!important'; }
         // Hide Hall da Fama
         var hall = document.getElementById('medalhas-right-hall');
         if(hall) hall.style.display='none';
