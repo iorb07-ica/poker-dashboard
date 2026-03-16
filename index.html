@@ -8097,6 +8097,90 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
 #rn-table th{color:#8a9ab8;font-size:13px;text-transform:uppercase;letter-spacing:.5px;padding:10px 8px 8px;text-align:left;}
 #rn-table td input[type=number],#rn-table td select{width:100%;background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:7px 6px;font-size:15px;text-align:center;}
 #rn-table td input[type=checkbox]{width:18px;height:18px;cursor:pointer;accent-color:#22c55e;}
+
+/* ═══ MOBILE: inputs grandes e touch-friendly ═══ */
+@media (max-width: 600px) {
+  #rn-table { font-size:14px; }
+  #rn-table th { font-size:11px; padding:8px 4px 6px; letter-spacing:.3px; }
+  #rn-table td { padding:4px 2px; }
+
+  /* Campos numéricos — grandes para toque */
+  #rn-table td input[type=number] {
+    min-height: 48px !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+    border-radius: 10px !important;
+    padding: 8px 4px !important;
+    border: 1.5px solid #1e3a5a !important;
+  }
+  #rn-table td input[type=number]:focus {
+    border-color: #22c55e !important;
+    background: #0d1a2a !important;
+    box-shadow: 0 0 0 2px rgba(34,197,94,.2) !important;
+    outline: none !important;
+  }
+
+  /* Rebuy — campo compacto mas alto */
+  .rn-rebuys { width: 52px !important; }
+
+  /* Fichas — campo mais largo */
+  .rn-fichas { width: 80px !important; font-size: 18px !important; }
+
+  /* KOs — campo compacto */
+  .rn-kos-total { width: 52px !important; }
+
+  /* Checkbox faltou — maior */
+  #rn-table td input[type=checkbox] {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  /* Nome do jogador */
+  #rn-table td:first-child {
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    padding-right: 6px !important;
+  }
+
+  /* Select de posição */
+  #rn-table td select {
+    min-height: 44px !important;
+    font-size: 16px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Feedback visual ao tocar na linha */
+  #rn-table tbody tr {
+    transition: background .15s;
+    border-radius: 10px;
+  }
+  #rn-table tbody tr:active {
+    background: rgba(34,197,94,.07) !important;
+  }
+
+  /* Linha com foco em algum input — destaque sutil */
+  #rn-table tbody tr:focus-within {
+    background: rgba(59,130,246,.06) !important;
+    outline: none;
+  }
+
+  /* Badge de posição */
+  .rn-pos-badge {
+    min-height: 44px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 16px !important;
+    min-width: 44px !important;
+  }
+
+  /* Rebuys total no cabeçalho */
+  #rn-rebuys-total {
+    min-height: 48px !important;
+    font-size: 20px !important;
+    font-weight: 700 !important;
+  }
+}
 /* Colunas: Jogador|Faltou|RB|Fichas|Pos|KOs|Pontos|Prêmio|Saldo */
 #rn-table td:nth-child(1),#rn-table th:nth-child(1){width:120px;white-space:nowrap;padding:7px 18px 7px 4px;}
 #rn-table td:nth-child(2),#rn-table th:nth-child(2){width:60px;text-align:center;padding:7px 14px;}
@@ -8182,7 +8266,7 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
     </div>
     <div class="rn-field">
       <label>Ano</label>
-      <input type="number" id="rn-ano" value="2026"/>
+      <input type="number" id="rn-ano" inputmode="numeric" pattern="[0-9]*" value="2026"/>
     </div>
     <div class="rn-field">
       <label>Dealer (antecipa R$200)</label>
@@ -8198,7 +8282,7 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
   <div style="background:#0a1525;border:1px solid #1e3a5a;border-radius:14px;padding:6px 14px;margin-bottom:6px;">
     <div style="display:flex;align-items:center;gap:14px;margin-bottom:6px;flex-wrap:wrap;">
       <label style="font-size:17px;color:#8a9ab8;white-space:nowrap;font-weight:700;">🔄 Rebuys totais:</label>
-      <input type="number" id="rn-rebuys-total" min="0" max="50" value="0" oninput="rnAtualizarContadores()"
+      <input type="number" id="rn-rebuys-total" inputmode="numeric" pattern="[0-9]*" min="0" max="50" value="0" oninput="rnAtualizarContadores()"
   onfocus="if(this.value==='0')this.value=''"
   onblur="if(this.value==='')this.value='0';rnAtualizarContadores()" style="width:80px;background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:20px;font-weight:700;text-align:center;"/>
       <span id="rn-check-rebuys" style="font-size:18px;display:none;">✅</span>
@@ -8237,13 +8321,13 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
   <table id="rn-table">
     <thead><tr>
       <th>Jogador</th>
-      <th style="text-align:center">Faltou?</th>
-      <th style="text-align:center">RB</th>
-      <th style="text-align:center">Fichas</th>
-      <th style="text-align:center">Pos.</th>
-      <th style="text-align:center">KOs</th>
-      <th style="text-align:right">Pontos</th>
-      <th style="text-align:right">Prêmio</th>
+      <th style="text-align:center" title="Faltou?">❌</th>
+      <th style="text-align:center" title="Rebuys">🔄</th>
+      <th style="text-align:center" title="Fichas">🪙</th>
+      <th style="text-align:center" title="Posição">🏆</th>
+      <th style="text-align:center" title="KOs">💀</th>
+      <th style="text-align:right">Pts</th>
+      <th style="text-align:right">R$</th>
       <th style="text-align:right">Saldo</th>
     </tr></thead>
     <tbody id="rn-tbody"></tbody>
@@ -8525,8 +8609,8 @@ document.addEventListener('DOMContentLoaded', function(){
       var tr=document.createElement('tr'); tr.dataset.jogador=nome;
       tr.innerHTML='<td style="font-weight:700;color:#c7d2e5;font-size:16px;">'+nome+'</td>'
         +'<td style="text-align:center;"><input type="checkbox" class="rn-faltou" onchange="rnToggleFaltou('+idx+')"/></td>'
-        +'<td style="text-align:center;"><input type="number" class="rn-rebuys" value="0" min="0" max="20" style="width:46px;" oninput="rnRecalcular()" onfocus="if(this.value===\'0\')this.value=\'\'" onblur="if(this.value===\'\')this.value=\'0\';rnRecalcular()"/></td>'
-        +'<td style="text-align:center;"><input type="number" class="rn-fichas" value="" min="0" step="100" placeholder="0" style="width:90px;" oninput="rnAutoPos(false);rnRecalcular()" onblur="rnAutoPos(true);rnRecalcular()" onfocus="if(this.value===\'0\')this.value=\'\'"/></td>'
+        +'<td style="text-align:center;"><input type="number" inputmode="numeric" pattern="[0-9]*" class="rn-rebuys" value="0" min="0" max="20" style="width:46px;" oninput="rnRecalcular()" onfocus="if(this.value===\'0\')this.value=\'\'" onblur="if(this.value===\'\')this.value=\'0\';rnRecalcular()"/></td>'
+        +'<td style="text-align:center;"><input type="number" class="rn-fichas" inputmode="numeric" pattern="[0-9]*" value="" min="0" step="100" placeholder="0" style="width:90px;" oninput="rnAutoPos(false);rnRecalcular()" onblur="rnAutoPos(true);rnRecalcular()" onfocus="if(this.value===\'0\')this.value=\'\'"/></td>'
         +'<td style="text-align:center;" id="rn-pos-cell-'+idx+'">'
           +'<select class="rn-pos" style="display:none;" onchange="rnSyncPosicoes();rnRecalcular();rnOrdenarLinhas()">'
           +'<option value="">—</option>'
@@ -8534,7 +8618,7 @@ document.addEventListener('DOMContentLoaded', function(){
           +'</select>'
           +'<span class="rn-pos-badge" id="rn-pos-badge-'+idx+'">—</span>'
         +'</td>'
-        +'<td style="text-align:center;"><input type="number" class="rn-kos-total" value="0" min="0" max="30" style="width:52px;background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:7px 0;font-size:15px;font-weight:800;" oninput="rnKOTotalInput('+idx+',this)" onfocus="if(this.value===\'0\')this.value=\'\'" onblur="if(this.value===\'\')this.value=\'0\';rnKOTotalInput('+idx+',this)"/></td>'
+        +'<td style="text-align:center;"><input type="number" class="rn-kos-total" inputmode="numeric" pattern="[0-9]*" value="0" min="0" max="30" style="width:52px;background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:7px 0;font-size:15px;font-weight:800;" oninput="rnKOTotalInput('+idx+',this)" onfocus="if(this.value===\'0\')this.value=\'\'" onblur="if(this.value===\'\')this.value=\'0\';rnKOTotalInput('+idx+',this)"/></td>'
         +'<td class="rn-pts-preview">—</td>'
         +'<td class="rn-premio-preview">—</td>'
         +'<td class="rn-saldo-preview">—</td>';
