@@ -58,6 +58,27 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
+/* ═══ MOBILE TOPBAR: ALWAYS FIXED ═══ */
+#mobile-topbar {
+  display: none;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 99999 !important;
+  box-sizing: border-box !important;
+}
+body.mobile-mode #mobile-topbar {
+  display: flex !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 99999 !important;
+}
+
     :root {
       --bg:#0f1115; --panel:#121723; --muted:#8a94a6; --text:#e6edf3; --accent:#66d9ef;
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
@@ -1093,9 +1114,7 @@ body.mobile-mode header {
 }
 
 /* Barra mobile simples no topo */
-body.mobile-mode #mobile-topbar {
-  display: flex !important;
-}
+
 
 /* Controls mobile: 2 colunas */
 body.mobile-mode .controls {
@@ -1188,11 +1207,7 @@ body.mobile-mode .medalhas-flex {
 }
 
 /* Header: sticky no topo no mobile */
-body.mobile-mode #mobile-topbar {
-  position: -webkit-sticky !important;
-  position: sticky !important;
-  top: 0 !important;
-}
+
 
 /* Botão toggle fixo */
 #btn-view-toggle {
@@ -3420,7 +3435,7 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:95,right:80,top:20,bottom:20},
+      grid:{left:90,right:60,top:8,bottom:8,containLabel:true},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
       yAxis:{type:'category',data:names,inverse:true,axisLabel:{
       formatter:function(value,idx){
@@ -3434,7 +3449,7 @@ function refresh(){
       }
     }},
       series:[
-        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:28, z:1, silent:true,
+        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:22, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
         { type:'bar', data: vals, barWidth:27, z:2, realtimeSort: !isSaldo,
           label:{ show:true, color:'#ffffff', position:'inside',
@@ -9072,7 +9087,7 @@ window.addEventListener('load', function(){
       s.textContent = [
         /* ── LAYOUT ── */
         'header { display: none !important; }',
-        '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; }',
+        '',
         '.container { padding-top: 56px !important; }',
         '.controls { grid-template-columns: 1fr 1fr !important; position: static !important; }',
         /* ── HIDE DESKTOP-ONLY CARDS ── */
@@ -9095,21 +9110,31 @@ window.addEventListener('load', function(){
         '.medalhas-flex { flex-direction: column !important; }',
         '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; overflow: visible !important; }',
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
-        '#card-kopontos { height: auto !important; overflow: visible !important; }',
+        '#card-kopontos { height: auto !important; overflow: visible !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }',
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
         '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; overflow: visible !important; }',
         '.slot { padding: 6px 4px !important; }',
-        '.slot img, .slot .avatar { width: 50px !important; height: 50px !important; }',
+        '.slot img, .slot .avatar { width: 70px !important; height: 70px !important; }',
+        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 40px !important; height: 40px !important; }',
         '.slot .name { font-size: 10px !important; }',
         '.slot .tally { display: flex !important; flex-direction: column !important; gap: 2px !important; }',
         '.slot .chip { padding: 2px 4px !important; font-size: 10px !important; }',
         '.slot .medal { width: 12px !important; height: 12px !important; }',
         '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
+        '#card-medalhas .list { overflow: visible !important; min-height: 0 !important; height: auto !important; }',
+        '#card-medalhas .row { display: grid !important; grid-template-columns: 36px 1fr 90px !important; gap: 6px !important; align-items: center !important; padding: 6px 8px !important; overflow: visible !important; }',
+        '#card-medalhas .medals { display: flex !important; gap: 6px !important; align-items: center !important; justify-content: flex-end !important; overflow: visible !important; flex-wrap: nowrap !important; min-width: 90px !important; }',
+        '#card-medalhas .medals strong { min-width: 16px !important; text-align: center !important; font-size: 12px !important; }',
+        '#card-medalhas .medals svg, #card-medalhas .medals .medal { width: 14px !important; height: 14px !important; flex-shrink: 0 !important; }',
+        '#card-medalhas .medals { display: flex !important; gap: 4px !important; align-items: center !important; overflow: visible !important; flex-shrink: 0 !important; flex-wrap: nowrap !important; }',
+        '#card-medalhas .medals svg, #card-medalhas .medals .medal { width: 14px !important; height: 14px !important; }',
+        '#card-medalhas .medals strong { font-size: 11px !important; margin: 0 2px !important; }',
         '#list-4-9 .row { padding: 6px 8px !important; display: flex !important; align-items: center !important; }',
         '#list-4-9 .medals { display: flex !important; overflow: visible !important; flex-shrink: 0 !important; }',
         /* ── CHARTS ── */
         '.grid-charts { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-top: 8px !important; }',
         '.grid-charts .chart { width: 100% !important; height: auto !important; min-height: 280px !important; overflow: visible !important; }',
+        '.chart.ranking-span { height: 480px !important; min-height: 480px !important; padding-top: 12px !important; padding-bottom: 12px !important; margin-top: 12px !important; }',
         '#chartRanking { height: 440px !important; min-height: 440px !important; }',
         '#chartKOs { height: 300px !important; }',
         '#chartEvolucao { height: 460px !important; }',
