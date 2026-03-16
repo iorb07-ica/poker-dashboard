@@ -2,7 +2,21 @@
 
 <html lang="pt-br">
 <head>
-<meta charset="utf-8"/>
+<meta chars
+
+/* Ocultar KPIs no mobile */
+body.mobile-mode #kpis-section {
+  display: none !important;
+}
+
+/* Ocultar Hall da Fama no mobile */
+body.mobile-mode #medalhas-right-hall {
+  display: none !important;
+}
+body.mobile-mode .medalhas-left {
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+}et="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Poker do Plaza - Dashboard 2026</title>
 
@@ -1155,6 +1169,31 @@ body.mobile-mode table {
   -webkit-overflow-scrolling: touch !important;
 }
 
+/* Ocultar KPIs (pote, entradas, KOs, saldo) no mobile */
+body.mobile-mode #kpis-section {
+  display: none !important;
+}
+
+/* Ocultar Hall da Fama no mobile - mostrar só medalhas */
+body.mobile-mode #medalhas-right-hall {
+  display: none !important;
+}
+body.mobile-mode .medalhas-left {
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+body.mobile-mode .medalhas-flex {
+  flex-direction: column !important;
+}
+
+/* Header: sticky no topo no mobile */
+body.mobile-mode #mobile-topbar {
+  position: -webkit-sticky !important;
+  position: sticky !important;
+  top: 0 !important;
+}
+
 /* Botão toggle fixo */
 #btn-view-toggle {
   position: fixed;
@@ -1758,7 +1797,7 @@ html, body { overflow-x: hidden; }
 <div class="podium" id="podium" style="display:none"></div>
 <div class="list" id="list-4-9" style="display:none"></div>
   </div>
-  <div class="medalhas-right" style="flex:0 0 38%; min-width:250px;">
+  <div class="medalhas-right" id="medalhas-right-hall" style="flex:0 0 38%; min-width:250px;">
     <div style="display:flex; align-items:center; gap:10px; margin:2px 0 10px 0;">
       <div style="width:28px; height:28px; border-radius:999px; background:rgba(255,255,255,.08); display:flex; align-items:center; justify-content:center; font-weight:800;">🏆</div>
       <div style="font-weight:800; letter-spacing:.2px;">Hall da Fama</div>
@@ -1822,7 +1861,7 @@ html, body { overflow-x: hidden; }
 <template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
 <template id="svg-bronze"><svg aria-hidden="true" class="medal b" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradB)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradB"><stop offset="0%" stop-color="#ffd3b0"></stop><stop offset="60%" stop-color="#cd7f32"></stop><stop offset="100%" stop-color="#8c4f1e"></stop></radialgradient></defs></svg></template>
 </div></div>
-<div class="kpis">
+<div class="kpis" id="kpis-section">
 <div class="kpi kpi-pot"><h3>Pote do período</h3><div class="val" id="kpi-pote">—</div><div class="sub">Regras: 3×entradas (semana/mês), 2×entradas (tri/ano)</div></div>
 <div class="kpi kpi-entr"><h3>Entradas</h3><div class="val" id="kpi-entradas">—</div><div class="sub">buy-ins + rebuys</div></div>
 <div class="kpi kpi-ko"><h3>KO do período</h3><div class="val" id="kpi-kos">—</div><div class="sub">soma dos selecionados</div></div>
@@ -9012,8 +9051,8 @@ window.addEventListener('load', function(){
       document.body.classList.add('mobile-mode');
       document.getElementById('btn-view-toggle').innerHTML = '🖥️ Desktop';
       localStorage.setItem('viewMode','mobile');
-      // Force hide PIX and DADOS elements
-      ['pix-box','pix-title','card-pix','card-dados'].forEach(function(id){
+      // Force hide PIX, DADOS, KPIs and Hall da Fama
+      ['pix-box','pix-title','card-pix','card-dados','kpis-section','medalhas-right-hall'].forEach(function(id){
         var el = document.getElementById(id);
         if(el){ el.style.cssText += ';display:none!important'; }
       });
