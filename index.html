@@ -1700,7 +1700,7 @@ function setLoadingProgress(pct, msg){
 </header>
 
 <!-- Barra mobile simples -->
-<div id="mobile-topbar" style="display:none;position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,#0d1424,#0a0f1c);border-bottom:1px solid #1e2e46;padding:8px 12px;align-items:center;justify-content:space-between;gap:8px;">
+<div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#0d1424,#0a0f1c);border-bottom:1px solid #1e2e46;padding:8px 12px;align-items:center;justify-content:space-between;gap:8px;">
   <div style="display:flex;align-items:center;gap:8px;">
     <span style="font-size:18px;">🃏</span>
     <span style="color:#e6edf3;font-size:14px;font-weight:700;">Poker do Plaza</span>
@@ -3620,7 +3620,7 @@ function refresh(){
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       tooltip:{trigger:'item', formatter:(p)=>`${p.marker} ${p.name}: <b>${fmt(p.value)}</b> KOs (${p.percent}%)`},
       series:[{
-        name:'KOs por jogador', type:'pie', radius:['20%','42%'], center:['50%','52%'],
+        name:'KOs por jogador', type:'pie', radius:['10%','28%'], center:['50%','52%'],
         avoidLabelOverlap:true, containLabel:true,
         label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:11 },
         labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
@@ -9070,151 +9070,92 @@ window.addEventListener('load', function(){
       var s = document.createElement('style');
       s.id = styleId;
       s.textContent = [
-        // Hide header
+        /* ── LAYOUT ── */
         'header { display: none !important; }',
-        // Show mobile topbar
-        '#mobile-topbar { display: flex !important; position: sticky; top: 0; z-index: 1000; }',
-        // Hide PIX
-        '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions { display: none !important; }',
-        // Hide DADOS card
+        '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; }',
+        '.container { padding-top: 56px !important; }',
+        '.controls { grid-template-columns: 1fr 1fr !important; position: static !important; }',
+        /* ── HIDE DESKTOP-ONLY CARDS ── */
         '#card-dados { display: none !important; }',
         '#card-pix { display: none !important; }',
-        // Hide KPIs
+        '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions, #pixQrImg { display: none !important; }',
         '#kpis-section { display: none !important; }',
-        // Hide Hall da Fama
         '#medalhas-right-hall { display: none !important; }',
         '#card-radar { display: none !important; }',
         '#card-campeoes { display: none !important; }',
         '#card-heatmap { display: none !important; }',
-        // Medals full width
-        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; }',
-        '#podium { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }',
-        '#list-4-9 .row { font-size: 13px !important; }',
-        '.slot { padding: 8px 4px !important; }',
-        '.slot .name { font-size: 11px !important; }',
-        '.medalhas-flex { flex-direction: column !important; }',
-        // Controls 2 cols
-        '.controls { grid-template-columns: 1fr 1fr !important; }',
-        // Chips wrap
-        '#chips, #chips.chips, .chips { display: flex !important; flex-wrap: wrap !important; overflow: visible !important; height: auto !important; max-height: none !important; }',
+        '#card-premiacoes { display: none !important; }',
+        /* ── CHIPS ── */
+        '.chips { display: flex !important; flex-wrap: wrap !important; max-height: none !important; height: auto !important; overflow: visible !important; }',
         '#chips-parent { flex-wrap: wrap !important; }',
-        // Rankings stack
+        /* ── MINI RANKINGS ── */
         '.row.mini-ranks { display: flex !important; flex-direction: column !important; }',
         '.row.mini-ranks .card.mini-card { width: 100% !important; }',
-        // Charts stack
-        '.grid-charts { display: flex !important; flex-direction: column !important; }',
-        '.grid-charts .chart { width: 100% !important; height: 400px !important; padding-bottom: 10px !important; }',
-        '#card-heatmap { min-height: 420px !important; }',
-        '#card-medalhas { min-height: auto !important; height: auto !important; overflow: visible !important; }',
-        '.chart.medal-col { overflow: visible !important; height: auto !important; min-height: 360px !important; }',
-        '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
-        '.chart.ranking-span { margin-top: 0 !important; padding-top: 0 !important; }',
-        '.grid-charts > .chart { margin-top: 0 !important; }',
-        '.controls { position: static !important; top: unset !important; }',
-        '.grid-charts { gap: 8px !important; }',
-        '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
-        '#list-4-9 { display: block !important; }',
-        '.medalhas-left { min-height: auto !important; }',
-        '#podium { margin-bottom: 8px !important; }',
-        '#heatmapFrame { width: 100% !important; height: 400px !important; border: none !important; }',
-        // Tables scroll
-        'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
-        // Toggle button
-        '#btn-view-toggle { bottom: 80px !important; right: 12px !important; font-size: 11px !important; padding: 7px 12px !important; }',
-        /* Extra padding at bottom of every card */
-        '.card { padding-bottom: 20px !important; overflow: visible !important; }',
-        /* Charts need explicit height and no clipping */
-        '.chart { overflow: visible !important; }',
-        '#chartRanking { height: 400px !important; }',
-        '#chartKOs { height: 360px !important; }',
-        '#chartEvolucao { height: 460px !important; }',
-        /* Medal card full height */
-        '.mini-slot { height: auto !important; overflow: visible !important; align-self: start !important; }',
-        '#card-kopontos { height: auto !important; overflow: visible !important; }',
+        /* ── MEDALS ── */
+        '.medalhas-flex { flex-direction: column !important; }',
+        '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; overflow: visible !important; }',
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
-        '.medalhas-left { width: 100% !important; min-width: 0 !important; overflow: visible !important; }',
+        '#card-kopontos { height: auto !important; overflow: visible !important; }',
+        '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
+        '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; overflow: visible !important; }',
+        '.slot { padding: 6px 4px !important; }',
+        '.slot img, .slot .avatar { width: 50px !important; height: 50px !important; }',
+        '.slot .name { font-size: 10px !important; }',
+        '.slot .tally { display: flex !important; flex-direction: column !important; gap: 2px !important; }',
+        '.slot .chip { padding: 2px 4px !important; font-size: 10px !important; }',
+        '.slot .medal { width: 12px !important; height: 12px !important; }',
         '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
-        /* Podium: scroll horizontal to show all 3 */
-        '#podium { display: flex !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; padding-bottom: 8px !important; -webkit-overflow-scrolling: touch !important; }',
-        '.slot { min-width: 120px !important; flex-shrink: 0 !important; padding: 8px 6px !important; }',
-        '.slot img, .slot .avatar { width: 60px !important; height: 60px !important; }',
-        '.slot .name { font-size: 12px !important; }',
-        '.slot .rank-badge { font-size: 11px !important; }',
-        '.slot .tally { gap: 4px !important; flex-wrap: nowrap !important; }',
-        /* List 4-9: show all */
-        '#list-4-9 { display: block !important; }',
-        '#list-4-9 .row { padding: 8px 10px !important; gap: 8px !important; }',
-        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 32px !important; height: 32px !important; }',
-        '#list-4-9 .row .who .nm { font-size: 13px !important; }',
-        '.tally svg, .tally .medal { width: 16px !important; height: 16px !important; }',
-        '.tally .cnt { font-size: 12px !important; }',
-        /* Bottom padding for last card */
-        '.container { padding-bottom: 100px !important; }'
+        '#list-4-9 .row { padding: 6px 8px !important; display: flex !important; align-items: center !important; }',
+        '#list-4-9 .medals { display: flex !important; overflow: visible !important; flex-shrink: 0 !important; }',
+        /* ── CHARTS ── */
+        '.grid-charts { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-top: 8px !important; }',
+        '.grid-charts .chart { width: 100% !important; height: auto !important; min-height: 280px !important; overflow: visible !important; }',
+        '#chartRanking { height: 440px !important; min-height: 440px !important; }',
+        '#chartKOs { height: 300px !important; }',
+        '#chartEvolucao { height: 460px !important; }',
+        /* ── TABLES ── */
+        'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
+        /* ── GLOBAL ── */
+        '.card { overflow: visible !important; }',
+        '.container { padding-bottom: 100px !important; }',
+        '#btn-view-toggle { bottom: 8px !important; right: 8px !important; font-size: 10px !important; padding: 5px 10px !important; opacity: 0.75 !important; }'
       ].join(' ');
       document.head.appendChild(s);
 
-      // Also force via inline styles
+      // Force hide via inline styles (Safari-proof)
       setTimeout(function(){
-        // Hide PIX - all possible elements
-        document.querySelectorAll('.pix-box, .pix-qr, .pix-meta, .pix-actions, #pix-box, #pix-title').forEach(function(el){ el.style.display='none'; });
-        // Hide Dados, Premio, PIX cards
-        ['card-dados','card-pix'].forEach(function(id){
-          var el=document.getElementById(id); if(el) el.style.display='none';
+        // Hide PIX
+        document.querySelectorAll('.pix-box,.pix-qr,.pix-meta,.pix-actions,#pix-box,#pix-title,#pixQrImg').forEach(function(el){ el.style.display='none'; });
+        // Hide cards
+        ['card-dados','card-pix','kpis-section','medalhas-right-hall',
+         'card-radar','card-campeoes','card-heatmap','card-premiacoes'].forEach(function(id){
+          var el=document.getElementById(id); if(el) el.style.cssText+='display:none!important';
         });
+        // Also hide any card containing PIX
         document.querySelectorAll('.card').forEach(function(card){
-          if(card.querySelector('.pix-box')||card.querySelector('#pix-box')||
-             card.querySelector('.pix-qr')||card.querySelector('#pixQrImg')){
-            card.style.display='none';
-          }
+          if(card.querySelector('.pix-box,#pix-box,#pixQrImg')) card.style.display='none';
         });
-        // Hide KPIs
-        var kpis = document.getElementById('kpis-section');
-        if(kpis){ kpis.style.display='none'; kpis.style.cssText+='display:none!important'; }
-        // Hide Hall da Fama
-        var hall = document.getElementById('medalhas-right-hall');
-        if(hall) hall.style.display='none';
-        ['card-radar','card-campeoes','card-heatmap'].forEach(function(id){
-          var el=document.getElementById(id); if(el) el.style.display='none';
-        });
-        // Force show all medal rows
-        var list49 = document.getElementById('list-4-9');
+        // Show medals list
+        var list49=document.getElementById('list-4-9');
         if(list49){ list49.style.display='block'; list49.style.overflow='visible'; list49.style.height='auto'; }
-        var podium = document.getElementById('podium');
-        if(podium){ podium.style.display='grid'; }
-        // Fix medals-left width
-        var medLeft = document.querySelector('.medalhas-left');
-        if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; medLeft.style.overflow='visible'; }
-        var medFlex = document.querySelector('.medalhas-flex');
-        if(medFlex){ medFlex.style.flexDirection='column'; medFlex.style.overflow='visible'; }
-        // Fix kopontos card
-        var kop = document.getElementById('card-kopontos');
-        if(kop){ kop.style.height='auto'; kop.style.overflow='visible'; kop.style.minHeight='unset'; }
-        var miniSlot = document.querySelector('.mini-slot');
-        if(miniSlot){ miniSlot.style.height='auto'; miniSlot.style.overflow='visible'; miniSlot.style.alignSelf='start'; }
-        // Add padding to all cards
-        document.querySelectorAll('.card').forEach(function(c){ c.style.paddingBottom='20px'; c.style.overflow='visible'; });
-        // Fix container bottom
-        var cont = document.getElementById('main-container');
-        if(cont) cont.style.paddingBottom='100px';
-        // Fix all charts
-        document.querySelectorAll('.chart').forEach(function(c){ c.style.overflow='visible'; });
-        // Fix evo chart height
-        var evoChart = document.querySelector('.evo-span');
-        if(evoChart){ evoChart.style.height='500px'; evoChart.style.minHeight='500px'; }
-        var evoEl = document.getElementById('chartEvolucao');
-        if(evoEl){ evoEl.style.height='460px'; evoEl.style.minHeight='460px'; }
-        // Give KOs chart extra height
-        var kChart = document.querySelector('.kos-small');
-        if(kChart){ kChart.style.height='380px'; kChart.style.minHeight='380px'; kChart.style.overflow='hidden'; }
-        var kEl = document.getElementById('chartKOs');
-        if(kEl){ kEl.style.height='360px'; kEl.style.minHeight='360px'; }
+        // Fix medals container
+        var medLeft=document.querySelector('.medalhas-left');
+        if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; }
+        var medFlex=document.querySelector('.medalhas-flex');
+        if(medFlex) medFlex.style.flexDirection='column';
         // Fix chips
-        var chips = document.getElementById('chips');
-        if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; chips.style.display='flex'; }
-        // Also find by class
-        document.querySelectorAll('.chips').forEach(function(el){ el.style.maxHeight='none'; el.style.overflow='visible'; el.style.height='auto'; el.style.flexWrap='wrap'; });
-        var cp = document.getElementById('chips-parent');
-        if(cp){ cp.style.flexWrap='wrap'; }
+        document.querySelectorAll('.chips').forEach(function(el){
+          el.style.maxHeight='none'; el.style.overflow='visible'; el.style.height='auto'; el.style.flexWrap='wrap';
+        });
+        // Fix KOs chart height
+        var kChart=document.querySelector('.kos-small');
+        if(kChart){ kChart.style.height='340px'; kChart.style.minHeight='340px'; }
+        // Fix evo chart height
+        var evoChart=document.querySelector('.evo-span');
+        if(evoChart){ evoChart.style.height='500px'; evoChart.style.minHeight='500px'; }
+        // Bottom padding
+        var cont=document.getElementById('main-container');
+        if(cont) cont.style.paddingBottom='100px';
       }, 100);
 
     } else {
