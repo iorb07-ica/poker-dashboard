@@ -58,27 +58,6 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
-/* ═══ MOBILE TOPBAR: ALWAYS FIXED ═══ */
-#mobile-topbar {
-  display: none;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  z-index: 99999 !important;
-  box-sizing: border-box !important;
-}
-body.mobile-mode #mobile-topbar {
-  display: flex !important;
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  z-index: 99999 !important;
-}
-
     :root {
       --bg:#0f1115; --panel:#121723; --muted:#8a94a6; --text:#e6edf3; --accent:#66d9ef;
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
@@ -968,258 +947,193 @@ body.mobile-mode #mobile-topbar {
   As seções são empilhadas verticalmente e as fontes são reduzidas para melhor leitura em smartphones.
 -->
 <style id="mobile-responsive">
-  @media (max-width: 768px) {
-    /* Ajusta tamanho base da fonte */
-    body {
-      font-size: 14px;
-    }
-    /* Barra de filtros: duas colunas no grid ao invés de oito, com espaçamento menor */
-    .controls {
-      grid-template-columns: repeat(2, 1fr) !important;
-      gap: 6px !important;
-    }
-    .controls .card {
-      min-width: 0;
-    }
-    /* Mini-rankings empilhados verticalmente */
-    .row.mini-ranks {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 12px !important;
-    }
-    .row.mini-ranks .card.mini-card {
-      width: 100% !important;
-      margin: 0;
-    }
-    /* KPIs em coluna única */
-    .kpis {
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 10px !important;
-    }
-    .kpis .kpi {
-      width: 100% !important;
-    }
-    /* Agrupa gráficos em coluna única */
-    .grid-charts {
-      display: flex !important;
-      flex-direction: column !important;
-    }
-    .grid-charts .chart {
-      width: 100% !important;
-      height: 280px !important;
-      margin-bottom: 12px !important;
-    }
-    /* Ajusta altura mínima dos gráficos, inclusive heatmap */
-    #card-heatmap {
-      min-height: 280px !important;
-    }
-    #chartRanking, #chartKOs, #chartEvolucao, #chartRadar, #chart-kopontos {
-      height: 280px !important;
-    }
-    /* Tabela anual e outras seções ficam em coluna única */
-    .adv-analytics, .table-col {
-      display: block !important;
-      width: 100% !important;
-    }
-    /* Reduz margens internas para caber na tela */
-    .container {
-      padding-left: 8px !important;
-      padding-right: 8px !important;
-    }
+/* ═══════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — POKER DO PLAZA — v10.0 SPECTRAL
+   Telas até 768px: layout mobile-first espetacular
+═══════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  body { font-size: 13px; overflow-x: hidden; }
 
-/* ── CONTROLS: empilhar em coluna única ── */
-    .controls {
-      grid-template-columns: 1fr 1fr !important;
-      gap: 6px !important;
-    }
-
-    /* ── FILTRO DE JOGADORES: scroll horizontal ── */
-    #chips {
-      display: flex !important;
-      flex-wrap: nowrap !important;
-      overflow-x: auto !important;
-      gap: 6px !important;
-      padding-bottom: 4px !important;
-      -webkit-overflow-scrolling: touch;
-    }
-    .chip {
-      flex-shrink: 0 !important;
-      font-size: 12px !important;
-      padding: 4px 10px !important;
-    }
-
-    /* ── HEATMAP: altura maior e scroll ── */
-    #card-heatmap {
-      min-height: 420px !important;
-      height: 420px !important;
-      overflow: hidden !important;
-    }
-    #heatmapFrame {
-      width: 100% !important;
-      height: 400px !important;
-      min-height: 400px !important;
-      border: none !important;
-    }
-    #chart-heatmap {
-      position: relative !important;
-      inset: unset !important;
-      width: 100% !important;
-      height: 380px !important;
-      overflow-x: auto !important;
-    }
-
-    /* ── MINI RANKINGS: fonte maior, mais legível ── */
-    .card.mini-card {
-      font-size: 13px !important;
-    }
-    .card.mini-card .rank-row {
-      padding: 5px 8px !important;
-    }
-
-    /* ── GRID GRÁFICOS: coluna única ── */
-    .grid-charts {
-      grid-template-columns: 1fr !important;
-    }
-    .heatmap-span {
-      grid-column: 1 !important;
-    }
-
-    /* ── CARDS KPIS: 2 por linha ── */
-    .kpis {
-      grid-template-columns: 1fr 1fr !important;
-      display: grid !important;
-    }
-
-    /* ── MEDALHAS: scroll horizontal ── */
-    #card-medalhas .podium {
-      grid-template-columns: repeat(3, minmax(120px, 1fr)) !important;
-      overflow-x: auto !important;
-    }
-
-    /* ── TABELAS: scroll horizontal ── */
-    table {
-      display: block !important;
-      overflow-x: auto !important;
-      -webkit-overflow-scrolling: touch !important;
-      white-space: nowrap !important;
-    }
+  /* ── CONTROLES ── */
+  .controls {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+    position: static !important;
+    background: transparent !important;
+    padding: 0 0 4px 0 !important;
   }
+  .controls .card { padding: 6px 8px !important; }
+  .controls .card-title { font-size: 9px !important; }
+  .controls select { font-size: 11px !important; padding: 4px 6px !important; min-height: 26px !important; }
 
-/* ── MODO MOBILE MANUAL ── */
+  /* ── CHIPS JOGADORES ── */
+  #chips-parent { flex-direction: column !important; gap: 6px !important; }
+  .chips {
+    display: flex !important; flex-wrap: wrap !important;
+    max-height: none !important; overflow: visible !important;
+    gap: 5px !important; padding: 8px !important;
+  }
+  .chip { font-size: 12px !important; padding: 5px 12px !important; min-height: 30px !important; touch-action: manipulation; }
+  .chip-tools .btn { font-size: 11px !important; }
 
-/* Ocultar header original no mobile */
-body.mobile-mode header {
-  display: none !important;
+  /* ── MINI RANKINGS ── */
+  .row.mini-ranks {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .row.mini-ranks .card.mini-card {
+    width: 100% !important; min-width: 0 !important;
+    padding: 10px 12px !important;
+  }
+  .row.mini-ranks .card.mini-card .mini-header {
+    display: flex !important; align-items: center !important;
+    justify-content: space-between !important;
+    min-height: auto !important; padding-top: 0 !important;
+    gap: 8px !important; margin-bottom: 8px !important;
+  }
+  .row.mini-ranks .card.mini-card .card-title { font-size: 13px !important; }
+  .row.mini-ranks .card.mini-card .mini-header select {
+    width: auto !important; max-width: 44% !important;
+    font-size: 12px !important; padding: 4px 8px !important;
+    flex: 0 0 auto !important;
+  }
+  .mini-item { padding: 7px 10px !important; margin-bottom: 4px !important; }
+  .mini-item .pos { font-size: 16px !important; }
+  .mini-item .name { font-size: 13px !important; }
+  .mini-item .value, .mini-item .pts { font-size: 13px !important; }
+
+  /* ── MEDALHAS ── */
+  .medalhas-flex { flex-direction: column !important; }
+  .medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; }
+  #card-medalhas, #card-kopontos { height: auto !important; overflow: visible !important; }
+  .mini-slot { height: auto !important; overflow: visible !important; }
+
+  /* ── Pódio Top 3: foto grande + medalhas ao lado ── */
+  #podium {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    overflow: visible !important;
+  }
+  #card-medalhas .slot {
+    display: grid !important;
+    grid-template-columns: 80px 1fr !important;
+    grid-template-rows: auto auto !important;
+    align-items: center !important;
+    gap: 0 10px !important;
+    padding: 10px 12px !important;
+    min-height: 84px !important;
+    border-radius: 14px !important;
+    position: relative !important;
+  }
+  #card-medalhas .slot .rank-badge {
+    position: absolute !important; top: 6px !important; left: 6px !important;
+    font-size: 10px !important; padding: 2px 7px !important; z-index: 2 !important;
+  }
+  #card-medalhas .slot .avatar {
+    width: 72px !important; height: 72px !important; font-size: 26px !important;
+    grid-column: 1 !important; grid-row: 1 / span 2 !important; border-width: 2px !important;
+  }
+  #card-medalhas .slot .name {
+    font-size: 14px !important; font-weight: 700 !important; text-align: left !important;
+    margin: 0 !important; grid-column: 2 !important; grid-row: 1 !important;
+    position: static !important; align-self: end !important; padding-bottom: 4px !important;
+  }
+  #card-medalhas .slot .tally {
+    display: flex !important; flex-direction: row !important; gap: 6px !important;
+    margin: 0 !important; grid-column: 2 !important; grid-row: 2 !important;
+    align-items: center !important; align-self: start !important; flex-wrap: wrap !important;
+  }
+  #card-medalhas .slot .chip { padding: 3px 8px !important; font-size: 12px !important; }
+  #card-medalhas .slot .medal { width: 14px !important; height: 14px !important; }
+
+  /* ── Lista 4-9: coluna única, medalhas alinhadas ── */
+  #list-4-9 {
+    display: flex !important; flex-direction: column !important;
+    gap: 5px !important; overflow: visible !important;
+    height: auto !important; border: none !important;
+    background: transparent !important; padding: 2px 0 0 !important; min-height: auto !important;
+  }
+  #card-medalhas .row {
+    display: grid !important;
+    grid-template-columns: 28px 1fr 110px !important;
+    align-items: center !important;
+    gap: 8px !important; padding: 7px 10px !important;
+    border-radius: 10px !important; border: 1px solid rgba(255,255,255,.08) !important;
+    background: rgba(255,255,255,.02) !important;
+  }
+  #card-medalhas .pos { width: 22px !important; height: 22px !important; font-size: 10px !important; }
+  #card-medalhas .who { display: flex !important; align-items: center !important; gap: 7px !important; min-width: 0 !important; overflow: hidden !important; }
+  #card-medalhas .who .avatar { width: 30px !important; height: 30px !important; font-size: 11px !important; }
+  #card-medalhas .who .name { font-size: 13px !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #card-medalhas .medals {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 2px !important; flex-shrink: 0 !important; width: 108px !important;
+    align-items: center !important;
+  }
+  #card-medalhas .medals .medal { width: 12px !important; height: 12px !important; vertical-align: middle !important; }
+  #card-medalhas .medals strong { font-size: 12px !important; margin-left: 2px !important; }
+
+  /* ── KPIS: 2 colunas ── */
+  .kpis {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 6px !important;
+  }
+  .kpi { padding: 8px !important; }
+  .kpi h3 { font-size: 9px !important; margin-bottom: 4px !important; }
+  .kpi .val { font-size: 16px !important; }
+  .kpi .sub { font-size: 10px !important; }
+
+  /* ── GRÁFICOS ── */
+  .grid-charts {
+    display: flex !important; flex-direction: column !important;
+    gap: 10px !important; margin-top: 8px !important;
+  }
+  .grid-charts .chart {
+    width: 100% !important; height: auto !important;
+    min-height: 300px !important; overflow: visible !important;
+    padding: 10px !important; border-radius: 14px !important;
+  }
+  .grid-charts .chart .title { font-size: 11px !important; }
+  .heatmap-span { grid-column: 1 !important; }
+  .grid-charts .chart.ranking-span { min-height: 380px !important; }
+  #chartRanking { height: 360px !important; min-height: 360px !important; }
+  .grid-charts .chart.kos-small { min-height: 280px !important; }
+  #chartKOs { height: 260px !important; min-height: 260px !important; }
+  .grid-charts .chart.evo-span { min-height: 360px !important; }
+  #chartEvolucao { height: 340px !important; min-height: 340px !important; }
+  #chartPersonas { height: 280px !important; min-height: 280px !important; }
+
+  /* ── TABELAS ── */
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    font-size: 12px !important;
+  }
+  th, td { padding: 6px 8px !important; }
+
+  /* ── GLOBAL ── */
+  .card { overflow: visible !important; }
+  .container { padding-left: 10px !important; padding-right: 10px !important; }
+  .stacked { flex-wrap: wrap !important; }
 }
 
-/* Barra mobile simples no topo */
-
-
-/* Controls mobile: 2 colunas */
-body.mobile-mode .controls {
-  grid-template-columns: 1fr 1fr !important;
-  gap: 6px !important;
-}
-/* Ocultar card DADOS e PIX completamente */
-body.mobile-mode #card-dados { display: none !important; }
-body.mobile-mode #card-pix { display: none !important; }
-/* Ocultar pix-box e título PIX dentro de qualquer card */
-body.mobile-mode #pix-box { display: none !important; }
-body.mobile-mode #pix-title { display: none !important; }
-body.mobile-mode .pix-box { display: none !important; }
-body.mobile-mode [class*="pix-box"] { display: none !important; }
-/* Ocultar o card que contém o QR code */
-body.mobile-mode .card:has(.pix-box) { display: none !important; }
-body.mobile-mode .card:has(#pix-box) { display: none !important; }
-
-/* Chips: múltiplas linhas */
-body.mobile-mode #chips {
-  display: flex !important;
-  flex-wrap: wrap !important;
-  gap: 5px !important;
-  overflow: visible !important;
-  width: 100% !important;
-}
-body.mobile-mode .chip {
-  flex-shrink: 0 !important;
-  font-size: 12px !important;
-  padding: 4px 10px !important;
-}
-
-/* Rankings empilhados */
-body.mobile-mode .row.mini-ranks {
-  display: flex !important;
-  flex-direction: column !important;
-  gap: 12px !important;
-}
-body.mobile-mode .row.mini-ranks .card.mini-card {
-  width: 100% !important;
-}
-
-/* KPIs: 2 por linha */
-body.mobile-mode .kpis {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
-}
-
-/* Gráficos em coluna */
-body.mobile-mode .grid-charts {
-  display: flex !important;
-  flex-direction: column !important;
-}
-body.mobile-mode .grid-charts .chart {
-  width: 100% !important;
-  height: 280px !important;
-}
-body.mobile-mode #card-heatmap {
-  min-height: 380px !important;
-}
-body.mobile-mode #heatmapFrame {
-  width: 100% !important;
-  height: 360px !important;
-  border: none !important;
-}
-
-/* Tabelas com scroll */
-body.mobile-mode table {
-  display: block !important;
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch !important;
-}
-
-/* Ocultar KPIs (pote, entradas, KOs, saldo) no mobile */
-body.mobile-mode #kpis-section {
-  display: none !important;
-}
-
-/* Ocultar Hall da Fama no mobile - mostrar só medalhas */
-body.mobile-mode #medalhas-right-hall {
-  display: none !important;
-}
-body.mobile-mode .medalhas-left {
-  flex: 1 1 100% !important;
-  min-width: 0 !important;
-  width: 100% !important;
-}
-body.mobile-mode .medalhas-flex {
-  flex-direction: column !important;
-}
-
-/* Header: sticky no topo no mobile */
-
-
-/* Botão toggle fixo */
+/* ── BOTÃO TOGGLE FIXO ── */
 #btn-view-toggle {
   position: fixed;
-  bottom: 24px;
-  right: 20px;
+  bottom: 20px;
+  right: 16px;
   z-index: 9998;
   background: linear-gradient(135deg, #1a3a6e, #3b82f6);
   color: #fff;
   border: none;
   border-radius: 50px;
-  padding: 10px 16px;
+  padding: 9px 16px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
@@ -1228,6 +1142,7 @@ body.mobile-mode .medalhas-flex {
   align-items: center;
   gap: 6px;
   transition: all .2s;
+  letter-spacing: 0.2px;
 }
 @media (min-width: 900px) {
   #btn-view-toggle { bottom: 20px; right: 20px; }
@@ -1585,10 +1500,7 @@ html, body { overflow-x: hidden; }
 </style>
 <!-- Sticky controls: ensure the top filter bar remains fixed below the header but do not include the player chips row -->
 <style id="controls-sticky-fix">
-  /*
-   * Force the top dashboard filter bar to remain pinned below the header.
-   * The `!important` flags override any position settings elsewhere in the CSS.
-   */
+  /* Desktop: sticky abaixo do header */
   .controls{
     position: sticky !important;
     top: 60px !important;
@@ -1596,6 +1508,21 @@ html, body { overflow-x: hidden; }
     background: linear-gradient(180deg,#0d1220,#0a0e19) !important;
     padding-top: 4px !important;
     padding-bottom: 4px !important;
+    transition: opacity 0.25s ease, transform 0.25s ease !important;
+  }
+  /* Mobile: controles normais no topo, somem ao rolar */
+  body.mobile-mode .controls {
+    position: static !important;
+    transition: opacity 0.25s ease, transform 0.25s ease !important;
+  }
+  body.mobile-mode .controls.controls-hidden {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateY(-8px) !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 </style>
 
@@ -1703,6 +1630,153 @@ function setLoadingProgress(pct, msg){
 }
 </script>
 
+
+<style id="mobile-polish-v10">
+/* ═══════════════════════════════════════════════
+   MOBILE POLISH v10 — Detalhes finos e micro-UX
+   Aplicado SEMPRE em telas pequenas
+═══════════════════════════════════════════════ */
+
+/* Scroll suave global */
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+/* Touch targets maiores para botões e selects no mobile */
+@media (max-width: 768px) {
+  button, select, .chip, .btn {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Container com padding seguro (iOS notch) */
+  .container {
+    padding-left: max(10px, env(safe-area-inset-left)) !important;
+    padding-right: max(10px, env(safe-area-inset-right)) !important;
+    padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))) !important;
+  }
+
+  /* Topbar com safe area para notch */
+  #mobile-topbar {
+    padding-left: max(14px, env(safe-area-inset-left)) !important;
+    padding-right: max(14px, env(safe-area-inset-right)) !important;
+    padding-top: env(safe-area-inset-top);
+    height: calc(52px + env(safe-area-inset-top)) !important;
+  }
+  .container { padding-top: calc(60px + env(safe-area-inset-top)) !important; }
+
+  /* Cards com sombra mais marcante no mobile */
+  .card {
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.07),
+      0 4px 16px rgba(0,0,0,.45) !important;
+  }
+
+  /* Mini-items com feedback visual no tap */
+  .mini-item:active { opacity: 0.75; transform: scale(0.98); }
+  .chip:active { opacity: 0.7; transform: scale(0.95); }
+  .btn:active { opacity: 0.75; }
+
+  /* Ranking chart: legenda ao lado em mobile */
+  .grid-charts .chart .title {
+    letter-spacing: 0.4px !important;
+    font-weight: 600 !important;
+  }
+
+  /* KPI cards no modo mobile: 2 colunas elegantes */
+  body.mobile-mode .kpis {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 7px !important;
+  }
+  body.mobile-mode .kpis .kpi {
+    padding: 9px 10px !important;
+    border-radius: 12px !important;
+  }
+  body.mobile-mode .kpis .kpi h3 {
+    font-size: 9px !important;
+    margin-bottom: 5px !important;
+  }
+  body.mobile-mode .kpis .kpi .val {
+    font-size: 18px !important;
+    font-weight: 800 !important;
+  }
+  body.mobile-mode .kpis .kpi .sub {
+    font-size: 9.5px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* Gráfico evolução: espaço extra p/ visualizar linhas */
+  body.mobile-mode .chart.evo-span {
+    min-height: 380px !important;
+  }
+
+  /* Personas/scatter: tamanho útil */
+  body.mobile-mode #card-personas {
+    min-height: 320px !important;
+  }
+
+  /* Chip-tools no mobile: botões full-width empilhados não */
+  body.mobile-mode #chips-parent {
+    gap: 8px !important;
+  }
+  body.mobile-mode .chip-tools {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+  }
+  body.mobile-mode .chip-tools .btn {
+    flex: 1 1 auto !important;
+    text-align: center !important;
+  }
+
+  /* Título do card medalhas no mobile */
+  body.mobile-mode #card-kopontos .card-title {
+    font-size: 14px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding-bottom: 8px !important;
+    border-bottom: 1px solid rgba(255,255,255,.06) !important;
+    margin-bottom: 10px !important;
+  }
+
+  /* Scroll bar thin no mobile (WebKit) */
+  ::-webkit-scrollbar { width: 3px; height: 3px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(59,130,246,0.3); border-radius: 3px; }
+
+  /* Botão toggle flutuante com glass effect no mobile */
+  #btn-view-toggle {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    background: linear-gradient(135deg, rgba(26,58,110,0.92), rgba(59,130,246,0.92)) !important;
+    border: 1px solid rgba(59,130,246,0.35) !important;
+  }
+
+  /* Saldo positivo/negativo mais visível em telas pequenas */
+  .saldo-pos { font-size: 14px !important; }
+  .saldo-neg { font-size: 14px !important; }
+
+  /* Evita overflow horizontal indesejado */
+  .row.mini-ranks,
+  .grid-charts,
+  .kpis,
+  .controls {
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+}
+
+/* Transição suave entre modo desktop/mobile */
+.container, header, #mobile-topbar {
+  transition: padding 0.2s ease, opacity 0.15s ease;
+}
+
+/* Loading overlay mais bonito */
+#loading-overlay {
+  background: radial-gradient(ellipse at 50% 30%, #0d1629 0%, #060d1a 100%) !important;
+}
+</style>
 </head>
 <body>
 
@@ -1715,12 +1789,15 @@ function setLoadingProgress(pct, msg){
 </header>
 
 <!-- Barra mobile simples -->
-<div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#0d1424,#0a0f1c);border-bottom:1px solid #1e2e46;padding:8px 12px;align-items:center;justify-content:space-between;gap:8px;">
-  <div style="display:flex;align-items:center;gap:8px;">
-    <span style="font-size:18px;">🃏</span>
-    <span style="color:#e6edf3;font-size:14px;font-weight:700;">Poker do Plaza</span>
+<div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#080e1c 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.18);padding:0 14px;align-items:center;justify-content:space-between;gap:8px;height:52px;box-shadow:0 2px 20px rgba(0,0,0,0.5);">
+  <div style="display:flex;align-items:center;gap:9px;">
+    <span style="font-size:20px;filter:drop-shadow(0 0 6px rgba(102,217,239,0.4));">🃏</span>
+    <div style="display:flex;flex-direction:column;gap:0;">
+      <span style="color:#e6edf3;font-size:15px;font-weight:800;letter-spacing:0.2px;line-height:1.1;">Poker do Plaza</span>
+      <span style="color:rgba(102,217,239,0.7);font-size:9px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;">Dashboard 2026</span>
+    </div>
   </div>
-  <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;">➕ Registrar</button>
+  <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:20px;padding:7px 14px;font-size:11px;font-weight:800;cursor:pointer;box-shadow:0 2px 10px rgba(34,197,94,0.3);letter-spacing:0.3px;">➕ Registrar</button>
 </div>
 
 <div id="loading-overlay" style="position:fixed;inset:0;z-index:9990;background:#060d1a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
@@ -1733,7 +1810,8 @@ function setLoadingProgress(pct, msg){
 </div>
 
 <div class="container" id="main-container" style="visibility:hidden;opacity:0;transition:opacity 0.3s">
-<div class="controls" style="padding-top:4px;padding-bottom:4px;">
+<div id="controls-sentinel" style="height:1px;width:100%;pointer-events:none;visibility:hidden;"></div>
+<div class="controls" id="main-controls" style="padding-top:4px;padding-bottom:4px;">
 <div class="card">
 <div class="card-title">Período</div>
 <select id="periodo">
@@ -3182,26 +3260,10 @@ function initMiniCombos(){
 }
 
 function renderMini(per, val){
-  // Throttle rapid re-renders to avoid flickering while options populate.
+  // Throttle reduzido para 50ms (evita duplicação, não bloqueia chamadas sequenciais)
   const now = Date.now();
-  // Increase the threshold further to ensure we don't attempt to re-render the mini-cards
-  // multiple times within a short time window. A 1000ms threshold is conservative but
-  // eliminates visible flicker during the initial data load.
-  if (window._lastMiniRender && now - window._lastMiniRender < 1000) {
-    // update timestamp to ensure the throttle resets on longer pauses
-    window._lastMiniRender = now;
-    return;
-  }
+  if (window._lastMiniRender && now - window._lastMiniRender < 50) return;
   window._lastMiniRender = now;
-  // Skip rendering if nothing has changed since the last call (same period, value and player selection)
-  try {
-    const selPlayers = Array.from(SELECTED_PLAYERS || []).sort().join('|');
-    const key = per + ':' + val + ':' + selPlayers;
-    if (window.__lastMiniKey && window.__lastMiniKey === key) {
-      return;
-    }
-    window.__lastMiniKey = key;
-  } catch(_e){}
   const elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
   const target = document.getElementById(elId);
   if(!target) return;
@@ -3435,7 +3497,7 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:90,right:60,top:8,bottom:8,containLabel:true},
+      grid:{left:95,right:80,top:20,bottom:20},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
       yAxis:{type:'category',data:names,inverse:true,axisLabel:{
       formatter:function(value,idx){
@@ -3449,7 +3511,7 @@ function refresh(){
       }
     }},
       series:[
-        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:22, z:1, silent:true,
+        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:28, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
         { type:'bar', data: vals, barWidth:27, z:2, realtimeSort: !isSaldo,
           label:{ show:true, color:'#ffffff', position:'inside',
@@ -4527,1042 +4589,265 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 <script>
+/* ═══════════════════════════════════════════════════════════════
+   MINI-CARDS UNIFICADO v1.0 — substitui 9 scripts redundantes
+   Responsabilidades:
+     1. Formatar números em pt-BR (fmt, money)
+     2. Renderizar mini-cards (semana/mês/trimestre) com barras animadas
+     3. Manter estado local dos filtros (blindado do refresh global)
+     4. Popular combos de semana/mês/trimestre a partir do RAW
+     5. Auto-selecionar: última WK com atividade, mês/trimestre correto
+     6. Interceptar refresh() global para não resetar os mini-cards
+   ═══════════════════════════════════════════════════════════════ */
 (function(){
-  // Função auxiliar para normalizar lista e máximo
-  function computeMax(list){
-    let max = 0;
-    list.forEach(r=>{ const v = +r.pontos || 0; if(v>max) max=v; });
-    return max>0? max : 1;
-  }
-  // Novo miniRow com barra e valor dentro
-  function miniRowBar(pos, name, pontos, max){
-    const pct = Math.max(0, Math.min(100, Math.round((+pontos||0)/max*100)));
-    const badge = (pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos+'.');
-    const cls = 'mini-item p'+pos;
-    return `<div class="${cls}">
-      <div class="pos">${badge}</div>
-      <div class="name">${name||'—'}</div>
-      <div class="bar">
-        <div class="fill" style="--w:${pct}%; width:${pct}%"></div>
-        <div class="value">${Math.round(+pontos||0)} pts</div>
-      </div>
-    </div>`;
-  }
-  // Substitui renderMini para trazer até 9 jogadores e aplicar nova linha
-  const _oldRenderMini = window.renderMini;
-  window.renderMini = function(per, val){
-    const elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
-    const target = document.getElementById(elId);
-    if(!target) return;
-    let rows = [];
-    if(per==='semana'){ rows = RAW.filter(r=>+r.wk===+val); }
-    else if(per==='mes'){ rows = RAW.filter(r=>+r.mes===+val); }
-    else if(per==='trimestre'){ rows = RAW.filter(r=>+r.trimestre===+val); }
-    // respeita filtro de jogadores
-    const picks = selectedPlayers(); if(picks.length) rows = rows.filter(r=>picks.includes(r.jogador));
-    const agg = aggregate(rows); // ordenado por pontos desc (como no original)
-    const list = agg.slice(0, 9); // até 9 jogadores
-    const maxPts = computeMax(list);
-    target.innerHTML = list.map((r,i)=> miniRowBar(i+1, r.jogador, r.pontos, maxPts)).join('');
-  };
-})();
-</script>
-<script>
-(function(){
-  function computeMax(list){
-    let max = 0;
-    list.forEach(r=>{ const v = +r.pontos || 0; if(v>max) max=v; });
-    return max>0? max : 1;
-  }
-  function miniRowBar(pos, name, pontos, max){
-    const pct = Math.max(0, Math.min(100, Math.round((+pontos||0)/max*100)));
-    const badge = (pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos+'.');
-    const cls = 'mini-item p'+pos;
-    return `<div class="${cls}">
-      <div class="pos">${badge}</div>
-      <div class="name">${name||'—'}</div>
-      <div class="bar">
-        <div class="fill" data-target="${pct}"></div>
-        <div class="value">${Math.round(+pontos||0)} pts</div>
-      </div>
-    </div>`;
-  }
-  const _oldRenderMini = window.renderMini;
-  window.renderMini = function(per, val){
-    const elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
-    const target = document.getElementById(elId);
-    if(!target) return;
-    let rows = [];
-    if(per==='semana'){ rows = RAW.filter(r=>+r.wk===+val); }
-    else if(per==='mes'){ rows = RAW.filter(r=>+r.mes===+val); }
-    else if(per==='trimestre'){ rows = RAW.filter(r=>+r.trimestre===+val); }
-    const picks = selectedPlayers(); if(picks.length) rows = rows.filter(r=>picks.includes(r.jogador));
-    const agg = aggregate(rows);
-    const list = agg.slice(0,9);
-    const maxPts = computeMax(list);
-    target.innerHTML = list.map((r,i)=> miniRowBar(i+1, r.jogador, r.pontos, maxPts)).join('');
-    // animação: largura 0 -> alvo
-    requestAnimationFrame(()=>{
-      Array.from(target.querySelectorAll('.fill')).forEach(f=>{
-        const pct = +f.getAttribute('data-target') || 0;
-        f.style.width = '0%';
-        requestAnimationFrame(()=>{ f.style.width = pct + '%'; });
-      });
-    });
-  };
-})();
-</script>
-<script>
-(function(){
-  function parseDate(d){
-    if(!d) return null;
-    const dt = new Date(d);
-    return isNaN(+dt) ? null : dt;
-  }
-  function firstWednesday(y,m){ // m: 0..11
-    const d = new Date(y,m,1);
-    const add = (3 - d.getDay() + 7) % 7;
-    d.setDate(1+add); d.setHours(12,0,0,0);
-    return d;
-  }
-  function monthForFilters(now){
-    let y = now.getFullYear(), m = now.getMonth(); // 0..11
-    const fw = firstWednesday(y,m);
-    if(now < fw){
-      if(m===0){ y=y-1; m=11; } else { m=m-1; }
-    }
-    return {y:y, m:m};
-  }
-  function lastPlayedWeek(now){
-    // pega última linha com data <= hoje; senão, cai no maior WK <= 53 do ano atual; senão, maior WK global
-    const withDates = RAW.map(r=>({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data), ano:+r.ano||null}))
-                         .filter(x=>x.wk>0 && x.dt!=null)
-                         .sort((a,b)=>a.dt - b.dt);
-    const past = withDates.filter(x=> x.dt <= now);
-    if(past.length) return past[past.length-1].wk;
-    const curYear = now.getFullYear();
-    const ofYear = RAW.map(r=>({wk:+r.wk||0, ano:+r.ano||null})).filter(x=>x.wk>0 && x.ano===curYear);
-    if(ofYear.length) return Math.max(...ofYear.map(x=>x.wk));
-    const all = RAW.map(r=>+r.wk||0).filter(Boolean);
-    return all.length ? Math.max(...all) : 1;
-  }
-  function applyAuto(){
-    const now = new Date(); now.setHours(12,0,0,0);
-    const selWk = document.getElementById('mini-wk');
-    const selMes = document.getElementById('mini-mes');
-    const selTri = document.getElementById('mini-tri');
-    // mês e trimestre conforme regra
-    const mf = monthForFilters(now);
-    if(selMes){
-      const mVal = (mf.m+1);
-      const optM = Array.from(selMes.options).find(o => +o.value===+mVal);
-      if(optM){ selMes.value = String(mVal); selMes.dispatchEvent(new Event('change')); }
-    }
-    if(selTri){
-      const tVal = Math.floor(mf.m/3)+1;
-      const optT = Array.from(selTri.options).find(o => +o.value===+tVal);
-      if(optT){ selTri.value = String(tVal); selTri.dispatchEvent(new Event('change')); }
-    }
-    // semana = última jogada
-    if(selWk){
-      const wk = lastPlayedWeek(now);
-      const optW = Array.from(selWk.options).find(o => +o.value===+wk);
-      if(optW){ selWk.value = String(wk); selWk.dispatchEvent(new Event('change')); }
-    }
-  }
-  // espera combos estarem populados
-  let tries = 0;
-  function tryLater(){
-    tries++;
-    const ok = document.getElementById('mini-wk')?.options?.length>0 &&
-               document.getElementById('mini-mes')?.options?.length>0 &&
-               document.getElementById('mini-tri')?.options?.length>0;
-    if(ok){ applyAuto(); }
-    else if(tries<30){ setTimeout(tryLater, 150); }
-  }
-  if(document.readyState==='complete') tryLater();
-  else window.addEventListener('load', tryLater);
-})();
-</script>
-<script>
-(function(){
-  // Override global fmt to garantir separador de milhar com ponto em todo o dashboard
+  'use strict';
+
+  /* ── 1. Formatadores globais pt-BR ── */
   window.fmt = function(n){
     var x = +n;
-    if (!isFinite(x)) return '—';
-    return x.toLocaleString('pt-BR');
+    return isFinite(x) ? x.toLocaleString('pt-BR') : '—';
   };
+  window.money = function(n){
+    var x = +n;
+    return isFinite(x) ? 'R$ ' + x.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2}) : '—';
+  };
+
+  /* ── 2. Estado local dos mini-cards (sobrevive ao refresh global) ── */
+  var state = { wk: null, mes: null, tri: null };
+
+  /* ── 3. Helpers internos ── */
+  function byId(id){ return document.getElementById(id); }
 
   function parseDate(d){
     if(!d) return null;
     var dt = new Date(d);
     return isNaN(+dt) ? null : dt;
   }
-  function firstWednesday(y,m){ // m: 0..11
-    var d = new Date(y,m,1);
-    var add = (3 - d.getDay() + 7) % 7;
-    d.setDate(1+add); d.setHours(12,0,0,0);
+
+  function firstWednesday(y, m){
+    var d = new Date(y, m, 1);
+    d.setDate(1 + (3 - d.getDay() + 7) % 7);
+    d.setHours(12,0,0,0);
     return d;
   }
-  function monthForFilters(now){
-    var y = now.getFullYear(), m = now.getMonth();
-    var fw = firstWednesday(y,m);
-    if(now < fw){ if(m===0){ y--; m=11; } else { m--; } }
-    return {y:y, m:m};
-  }
-  // Nova estratégia: escolher a última WK que tenha registro com data <= hoje; se não houver data, usa maior WK que tenha registros
-  function lastPlayedWeekUsingOptions(now){
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk) return null;
-    var options = Array.from(selWk.options).map(o => +o.value).filter(Boolean).sort((a,b)=>a-b);
-    if(!options.length) return null;
-    // 1) tenta pelos registros com data <= hoje
-    var rows = (window.RAW || [])
-      .map(r => ({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data)}))
-      .filter(x => x.wk>0 && x.dt!=null && options.includes(x.wk) && x.dt <= now)
-      .sort((a,b)=> a.dt - b.dt);
-    if(rows.length) return rows[rows.length-1].wk;
-    // 2) se nenhuma data válida, escolhe a maior wk que exista nas opções e na base
-    var presentWks = new Set((window.RAW || []).map(r=>+r.wk||0).filter(w=>options.includes(w)));
-    if(presentWks.size){
-      return Math.max.apply(null, Array.from(presentWks));
-    }
-    // 3) fallback: maior opção
-    return options[options.length-1];
-  }
 
-  function applyAutoV3(){
+  function currentMonthForFilters(){
     var now = new Date(); now.setHours(12,0,0,0);
-    var selWk = document.getElementById('mini-wk');
-    var selMes = document.getElementById('mini-mes');
-    var selTri = document.getElementById('mini-tri');
-    // mês e trimestre usando a mesma regra
-    var mf = monthForFilters(now);
-    if(selMes){
-      var mVal = (mf.m+1);
-      var optM = Array.from(selMes.options).find(o => +o.value===+mVal);
-      if(optM){ selMes.value = String(mVal); selMes.dispatchEvent(new Event('change')); }
+    var y = now.getFullYear(), m = now.getMonth();
+    if(now < firstWednesday(y, m)){
+      m === 0 ? (y--, m=11) : m--;
     }
-    if(selTri){
-      var tVal = Math.floor(mf.m/3)+1;
-      var optT = Array.from(selTri.options).find(o => +o.value===+tVal);
-      if(optT){ selTri.value = String(tVal); selTri.dispatchEvent(new Event('change')); }
-    }
-    // semana = última jogada válida nas opções
-    if(selWk){
-      var wk = lastPlayedWeekUsingOptions(now);
-      if(wk!=null){
-        var optW = Array.from(selWk.options).find(o => +o.value===+wk);
-        if(optW){ selWk.value = String(wk); selWk.dispatchEvent(new Event('change')); }
-      }
-    }
+    return { y: y, m: m };  // m is 0-indexed
   }
 
-  // Roda depois que os combos estiverem preenchidos; se scripts anteriores já executaram, isso sobrescreve
-  var tries = 0;
-  function waitAndApply(){
-    tries++;
-    var ok = document.getElementById('mini-wk')?.options?.length>0 &&
-             document.getElementById('mini-mes')?.options?.length>0 &&
-             document.getElementById('mini-tri')?.options?.length>0;
-    if(ok){ applyAutoV3(); }
-    else if(tries<40){ setTimeout(waitAndApply, 150); }
-  }
-  if(document.readyState==='complete') waitAndApply();
-  else window.addEventListener('load', waitAndApply);
-})();
-</script>
-<script>
-(function(){
-  // 1) Global number formatters (pt-BR with thousands ".")
-  window.fmt = function(n){
-    var x = +n;
-    if (!isFinite(x)) return '—';
-    return x.toLocaleString('pt-BR');
-  };
-  window.money = function(n){
-    var x = +n;
-    if (!isFinite(x)) return '—';
-    return 'R$ ' + x.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-  };
-
-  // 2) Force mini-row to show formatted points
-  if (window.renderMini) {
-    // Monkey-patch: replace mini renderer to use fmt() and pick last recorded week by activity
-    function computeMax(list){
-      var max = 0;
-      list.forEach(function(r){ var v = +r.pontos || 0; if(v>max) max=v; });
-      return max>0? max : 1;
-    }
-    function miniRowBar(pos, name, pontos, max){
-      var pct = Math.max(0, Math.min(100, Math.round((+pontos||0)/max*100)));
-      var badge = (pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':pos+'.');
-      var cls = 'mini-item p'+pos;
-      return '<div class=\"'+cls+'\">'
-           +   '<div class=\"pos\">'+badge+'</div>'
-           +   '<div class=\"name\">'+(name||'—')+'</div>'
-           +   '<div class=\"bar\">'
-           +     '<div class=\"fill\" data-target=\"'+pct+'\"></div>'
-           +     '<div class=\"value\">'+fmt(Math.round(+pontos||0))+' pts</div>'
-           +   '</div>'
-           + '</div>';
-    }
-    var _oldRenderMini2 = window.renderMini;
-    window.renderMini = function(per, val){
-      var elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
-      var target = document.getElementById(elId);
-      if(!target) return;
-      var rows = [];
-      if(per==='semana'){ rows = RAW.filter(function(r){ return +r.wk===+val; }); }
-      else if(per==='mes'){ rows = RAW.filter(function(r){ return +r.mes===+val; }); }
-      else if(per==='trimestre'){ rows = RAW.filter(function(r){ return +r.trimestre===+val; }); }
-      var picks = selectedPlayers(); if(picks.length) rows = rows.filter(function(r){ return picks.includes(r.jogador); });
-      var agg = aggregate(rows);
-      var list = agg.slice(0,9);
-      var maxPts = computeMax(list);
-      target.innerHTML = list.map(function(r,i){ return miniRowBar(i+1, r.jogador, r.pontos, maxPts); }).join('');
-      requestAnimationFrame(function(){
-        Array.from(target.querySelectorAll('.fill')).forEach(function(f){
-          var pct = +f.getAttribute('data-target') || 0;
-          f.style.width = '0%';
-          requestAnimationFrame(function(){ f.style.width = pct + '%'; });
-        });
-      });
-    };
-  }
-
-  // 3) Robust auto-select: last week with activity (buyin/rebuys/kos/pontos), using existing options
   function hasActivity(r){
-    var b = +r.buyin || 0;
-    var rb = +r.rebuys || 0;
-    var ko = +r.kos || +r.KOs || +r.KO || 0;
-    var pt = +r.pontos || 0;
-    var sf = +r.saldo_semana_final || 0;
-    return (b>0) || (rb>0) || (ko>0) || (pt!==0) || (sf!==0);
-  }
-  function lastRecordedWeekFromOptions(){
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk) return null;
-    var options = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean).sort(function(a,b){return a-b;});
-    if(!options.length) return null;
-    // pega maior wk nas opções que tenha pelo menos 1 linha com atividade
-    var best = null;
-    for (var i=options.length-1; i>=0; i--){
-      var w = options[i];
-      var ok = (RAW||[]).some(function(r){ return +r.wk===w && hasActivity(r); });
-      if(ok){ best = w; break; }
-    }
-    // fallback: maior opção (se não achar atividade)
-    if(best==null) best = options[options.length-1];
-    return best;
+    return (+r.buyin||0) > 0 || (+r.rebuys||0) > 0 ||
+           (+r.kos||+r.KOs||+r.KO||0) > 0 ||
+           (+r.pontos||0) !== 0 || (+r.saldo_semana_final||0) !== 0;
   }
 
-  function applyAutoWeekOnly(){
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk) return;
-    var wk = lastRecordedWeekFromOptions();
-    if(wk!=null){
-      var optW = Array.from(selWk.options).find(function(o){ return +o.value===+wk; });
-      if(optW){ selWk.value = String(wk); selWk.dispatchEvent(new Event('change')); }
+  /* ── 4. Auto-seleção da última WK com atividade ── */
+  function lastActiveWeek(){
+    var sel = byId('mini-wk');
+    if(!sel || !sel.options.length) return null;
+    var opts = Array.from(sel.options).map(function(o){ return +o.value; }).filter(Boolean);
+    // Tenta encontrar a maior WK com pelo menos 1 registro com atividade
+    for(var i = opts.length - 1; i >= 0; i--){
+      var w = opts[i];
+      var ok = (window.RAW||[]).some(function(r){ return +r.wk === w && hasActivity(r); });
+      if(ok) return w;
     }
+    // Fallback: maior opção disponível
+    return opts.length ? Math.max.apply(null, opts) : null;
   }
 
-  // Try a few times after load to beat any earlier defaults
-  var tries=0;
-  function retry(){
-    tries++;
-    var ready = document.getElementById('mini-wk')?.options?.length>0;
-    if(ready){ applyAutoWeekOnly(); }
-    else if(tries<40){ setTimeout(retry, 150); }
+  /* ── 5. Renderização de mini-item com barra animada ── */
+  function maxVal(list){
+    var m = 0;
+    list.forEach(function(r){ var v = +r.pontos||0; if(v>m) m=v; });
+    return m > 0 ? m : 1;
   }
-  if(document.readyState==='complete') retry();
-  else window.addEventListener('load', retry);
-})();
-</script>
-<script>
-// === Patch: tornar mini-cards independentes dos filtros globais e corrigir auto WK ===
-(function(){
-  // 1) Monkey-patch de initMiniCombos: popula opções sem resetar seleção nem disparar render
-  var _origInitMiniCombos = window.initMiniCombos;
+
+  function miniRowHTML(pos, name, pontos, max){
+    var pct = Math.max(0, Math.min(100, Math.round((+pontos||0)/max*100)));
+    var badge = pos===1?'🥇': pos===2?'🥈': pos===3?'🥉': pos+'.';
+    return '<div class="mini-item p'+pos+'">' +
+             '<div class="pos">'+badge+'</div>' +
+             '<div class="name">'+(name||'—')+'</div>' +
+             '<div class="bar">' +
+               '<div class="fill" data-target="'+pct+'"></div>' +
+               '<div class="value">'+window.fmt(Math.round(+pontos||0))+' pts</div>' +
+             '</div>' +
+           '</div>';
+  }
+
+  window.renderMini = function(per, val){
+    var elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
+    var target = byId(elId);
+    if(!target) return;
+
+    var rows = (window.RAW||[]).filter(function(r){
+      if(per==='semana') return +r.wk === +val;
+      if(per==='mes')    return +r.mes === +val;
+      return +r.trimestre === +val;
+    });
+
+    // Respeita filtro de jogadores selecionados
+    if(typeof window.selectedPlayers === 'function'){
+      var picks = window.selectedPlayers();
+      if(picks && picks.length) rows = rows.filter(function(r){ return picks.indexOf(r.jogador) >= 0; });
+    }
+
+    // Agrega por jogador (usa aggregate global se disponível)
+    var agg = typeof window.aggregate === 'function' ? window.aggregate(rows) : rows;
+    var list = agg.slice(0, 9);
+    var maxPts = maxVal(list);
+
+    target.innerHTML = list.map(function(r, i){ return miniRowHTML(i+1, r.jogador, r.pontos, maxPts); }).join('');
+
+    // Anima barras: 0% → alvo
+    requestAnimationFrame(function(){
+      Array.from(target.querySelectorAll('.fill')).forEach(function(f){
+        var pct = +f.getAttribute('data-target') || 0;
+        f.style.width = '0%';
+        requestAnimationFrame(function(){ f.style.width = pct + '%'; });
+      });
+    });
+  };
+
+  /* ── 6. Popula combos de semana/mês/trimestre ── */
   window.initMiniCombos = function(){
-    var sels = { 
-      wk: document.getElementById('mini-wk'),
-      mes: document.getElementById('mini-mes'),
-      tri: document.getElementById('mini-tri')
-    };
-    if(!sels.wk || !window.RAW) return;
-    var cur = {
-      wk: sels.wk.value, mes: sels.mes.value, tri: sels.tri.value
-    };
-    // uniques
-    var wks = Array.from(new Set(RAW.map(r=>+r.wk||0).filter(Boolean))).sort((a,b)=>a-b);
-    var meses = Array.from(new Set(RAW.map(r=>+r.mes||0).filter(Boolean))).sort((a,b)=>a-b);
+    var raw = window.RAW || [];
+    var sels = { wk: byId('mini-wk'), mes: byId('mini-mes'), tri: byId('mini-tri') };
+    if(!sels.wk) return;
+
+    // Salva seleção atual para não resetar
+    var saved = { wk: sels.wk.value, mes: sels.mes ? sels.mes.value : null, tri: sels.tri ? sels.tri.value : null };
+
+    // Semanas únicas
+    var wks = Array.from(new Set(raw.map(function(r){ return +r.wk||0; }).filter(Boolean))).sort(function(a,b){ return a-b; });
+    var meses = Array.from(new Set(raw.map(function(r){ return +r.mes||0; }).filter(Boolean))).sort(function(a,b){ return a-b; });
+    var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
     var tris = [1,2,3,4];
-    // repopulate only if lengths changed (evita piscar e resetar)
+
     function repop(sel, values, textFn){
+      if(!sel) return;
       var need = sel.options.length !== values.length ||
-                 Array.from(sel.options).some((o,i)=> String(+o.value) !== String(+values[i]));
+                 Array.from(sel.options).some(function(o,i){ return String(+o.value) !== String(+values[i]); });
       if(!need) return;
-      sel.innerHTML='';
-      values.forEach(v=>{
+      sel.innerHTML = '';
+      values.forEach(function(v){
         var o = document.createElement('option');
         o.value = String(v);
         o.textContent = textFn(v);
         sel.appendChild(o);
       });
     }
-    repop(sels.wk, wks, v => 'WK'+String(v).padStart(2,'0'));
-    var nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    repop(sels.mes, meses, v => nomes[v-1] || v);
-    repop(sels.tri, tris, v => 'T'+v);
 
-    // restaura seleção anterior se existir
-    if(cur.wk && Array.from(sels.wk.options).some(o=>o.value===cur.wk)) sels.wk.value = cur.wk;
-    if(cur.mes && Array.from(sels.mes.options).some(o=>o.value===cur.mes)) sels.mes.value = cur.mes;
-    if(cur.tri && Array.from(sels.tri.options).some(o=>o.value===cur.tri)) sels.tri.value = cur.tri;
+    repop(sels.wk,  wks,   function(v){ return 'WK' + String(v).padStart(2,'0'); });
+    repop(sels.mes, meses, function(v){ return nomesMes[v-1] || v; });
+    repop(sels.tri, tris,  function(v){ return 'T' + v; });
 
-    // mantém handlers, mas não dispara render aqui
-    sels.wk.onchange = function(){ window.renderMini && window.renderMini('semana', +sels.wk.value); };
-    sels.mes.onchange = function(){ window.renderMini && window.renderMini('mes', +sels.mes.value); };
-    sels.tri.onchange = function(){ window.renderMini && window.renderMini('trimestre', +sels.tri.value); };
-  };
-
-  // 2) Evitar que initSelectors() resete os mini-cards indiretamente: re-monkey após initSelectors rodar
-  var _origInitSelectors = window.initSelectors;
-  if (_origInitSelectors){
-    window.initSelectors = function(){
-      _origInitSelectors.apply(this, arguments);
-      // re-popula mini combos sem resetar seleção (função acima já preserva)
-      if (window.initMiniCombos) window.initMiniCombos();
-    };
-  }
-
-  // 3) Auto WK: usa apenas semanas com buyin==1 e data <= hoje; senão, escolhe maior WK com buyin==1
-  function parseDate(d){
-    if(!d) return null;
-    var dt = new Date(d);
-    return isNaN(+dt) ? null : dt;
-  }
-  function lastPlayedWeekStrict(){
-    // Always return max WK available
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk || !selWk.options.length) return null;
-    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
-    return opts.length ? Math.max.apply(null, opts) : null;
-  }
-  function applyAutoWK(){
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk) return;
-    // Simply use the maximum WK available
-    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
-    if(!opts.length) return;
-    var maxWk = Math.max.apply(null, opts);
-    selWk.value = String(maxWk);
-    selWk.dispatchEvent(new Event('change'));
-  }
-  // rodada pós-carregamento e também após initSelectors (que o topo dispara ao mudar 'Período')
-  var tries=0;
-  function waitAndApply(){
-    tries++;
-    var ok = document.getElementById('mini-wk')?.options?.length>0;
-    if(ok){ applyAutoWK(); }
-    else if(tries<50){ setTimeout(waitAndApply, 120); }
-  }
-  if(document.readyState==='complete') waitAndApply();
-  else window.addEventListener('load', waitAndApply);
-})();
-</script>
-<script>
-(function(){
-  // Helper: pt-BR thousands everywhere (in case something overrides later)
-  window.fmt = function(n){
-    var x = +n;
-    if(!isFinite(x)) return '—';
-    return x.toLocaleString('pt-BR');
-  };
-  // Reuse previous strict last-week logic
-  function parseDate(d){ if(!d) return null; var dt=new Date(d); return isNaN(+dt)?null:dt; }
-  function lastPlayedWeekStrict(){
-    // Always return max WK available
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk || !selWk.options.length) return null;
-    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
-    return opts.length ? Math.max.apply(null, opts) : null;
-  }
-  function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3-d.getDay()+7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
-  function monthForFilters(now){ var y=now.getFullYear(),m=now.getMonth(); var fw=firstWednesday(y,m); if(now<fw){ if(m===0){y--;m=11;} else {m--;}} return {y,m}; }
-
-  function initialMiniRender(){
-    var selWk=document.getElementById('mini-wk');
-    var selMes=document.getElementById('mini-mes');
-    var selTri=document.getElementById('mini-tri');
-    if(!(selWk && selMes && selTri)) return false;
-    // ensure options exist
-    if(!(selWk.options.length && selMes.options.length && selTri.options.length)) return false;
-    // month/quarter per rule
-    var now=new Date(); now.setHours(12,0,0,0);
-    var mf=monthForFilters(now);
-    var mVal=(mf.m+1);
-    var optM=Array.from(selMes.options).find(o=>+o.value===+mVal);
-    if(optM) selMes.value=String(mVal);
-    var tVal=Math.floor(mf.m/3)+1;
-    var optT=Array.from(selTri.options).find(o=>+o.value===+tVal);
-    if(optT) selTri.value=String(tVal);
-    // week: always use maximum available
-    var opts=Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-    var wk=opts.length?Math.max.apply(null,opts):null;
-    if(wk!=null){
-      var optW=Array.from(selWk.options).find(o=>+o.value===+wk);
-      if(optW) selWk.value=String(wk);
-    }
-    // render explicitly
-    if(window.renderMini){
-      window.renderMini('semana', +selWk.value);
-      window.renderMini('mes', +selMes.value);
-      window.renderMini('trimestre', +selTri.value);
-    }
-    return true;
-  }
-
-  // Try after load and again after other initializers run
-  var tries=0;
-  function tryInit(){
-    tries++;
-    var ok = document.getElementById('mini-wk')?.options?.length>0 &&
-             document.getElementById('mini-mes')?.options?.length>0 &&
-             document.getElementById('mini-tri')?.options?.length>0 &&
-             (window.renderMini!=null);
-    if(ok){
-      if(initialMiniRender()) return;
-    }
-    if(tries<60) setTimeout(tryInit, 120);
-  }
-  if(document.readyState==='complete') tryInit();
-  else window.addEventListener('load', tryInit);
-})();
-</script>
-<script>
-// === MINI PATCH v7: restaurar mini-cards e blindar contra filtros do topo ===
-(function(){
-  // Estado próprio dos mini-cards
-  window.__miniState = window.__miniState || { wk: null, mes: null, tri: null };
-
-  function parseDate(d){ if(!d) return null; var dt=new Date(d); return isNaN(+dt)?null:dt; }
-  function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3-d.getDay()+7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
-  function monthForFilters(now){ var y=now.getFullYear(),m=now.getMonth(); var fw=firstWednesday(y,m); if(now<fw){ if(m===0){y--;m=11;} else {m--;}} return {y:y,m:m}; }
-  function currentMonthIndex(){ var now=new Date(); now.setHours(12,0,0,0); return monthForFilters(now).m; } // 0..11
-
-  // Seleção de semana robusta
-  function lastPlayedWeekStrict(){
-    // Always return max WK available
-    var selWk = document.getElementById('mini-wk');
-    if(!selWk || !selWk.options.length) return null;
-    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
-    return opts.length ? Math.max.apply(null, opts) : null;
-  }
-
-  // Guarda e restaura seleção local dos mini-cards
-  function bindMiniState(){
-    var selWk=document.getElementById('mini-wk');
-    var selMes=document.getElementById('mini-mes');
-    var selTri=document.getElementById('mini-tri');
-    if(selWk){
-      selWk.addEventListener('change', function(){ window.__miniState.wk = selWk.value; });
-      if(window.__miniState.wk==null) window.__miniState.wk = selWk.value;
-    }
-    if(selMes){
-      selMes.addEventListener('change', function(){ window.__miniState.mes = selMes.value; });
-      if(window.__miniState.mes==null) window.__miniState.mes = selMes.value;
-    }
-    if(selTri){
-      selTri.addEventListener('change', function(){ window.__miniState.tri = selTri.value; });
-      if(window.__miniState.tri==null) window.__miniState.tri = selTri.value;
-    }
-  }
-  function restoreMiniState(){
-    var selWk=document.getElementById('mini-wk');
-    var selMes=document.getElementById('mini-mes');
-    var selTri=document.getElementById('mini-tri');
-    if(selWk && window.__miniState.wk && Array.from(selWk.options).some(o=>o.value==window.__miniState.wk)){
-      selWk.value = window.__miniState.wk;
-    }
-    if(selMes && window.__miniState.mes && Array.from(selMes.options).some(o=>o.value==window.__miniState.mes)){
-      selMes.value = window.__miniState.mes;
-    }
-    if(selTri && window.__miniState.tri && Array.from(selTri.options).some(o=>o.value==window.__miniState.tri)){
-      selTri.value = window.__miniState.tri;
-    }
-    // re-render baseada no estado
-    if(window.renderMini){
-      if(selWk) window.renderMini('semana', +selWk.value);
-      if(selMes) window.renderMini('mes', +selMes.value);
-      if(selTri) window.renderMini('trimestre', +selTri.value);
-    }
-  }
-
-  // Intercepta initMiniCombos para não apagar seleção e garantir 1º render se vazio
-  var _origIMC = window.initMiniCombos;
-  window.initMiniCombos = function(){
-    if(_origIMC) _origIMC.apply(this, arguments); // popula como já fazia
-    bindMiniState();
-    var wkList = document.getElementById('mini-wk-list');
-    var mesList = document.getElementById('mini-mes-list');
-    var triList = document.getElementById('mini-tri-list');
-    // Auto WK robusto só se wk ainda não setado
-    if(!window.__miniState.wk){
-      var selWk = document.getElementById('mini-wk');
-      if(selWk){
-        var wk = lastPlayedWeekStrict();
-        if(wk!=null){
-          var opt = Array.from(selWk.options).find(o=>+o.value===+wk);
-          if(opt){ selWk.value = String(wk); window.__miniState.wk = selWk.value; }
-        }
-      }
-    }
-    // Render inicial se estiver vazio
-    if(window.renderMini){
-      if(wkList && !wkList.children.length){ var selWk = document.getElementById('mini-wk'); if(selWk) window.renderMini('semana', +selWk.value); }
-      if(mesList && !mesList.children.length){ var selMes = document.getElementById('mini-mes'); if(selMes) window.renderMini('mes', +selMes.value); }
-      if(triList && !triList.children.length){ var selTri = document.getElementById('mini-tri'); if(selTri) window.renderMini('trimestre', +selTri.value); }
-    }
-  };
-
-  // Monkey-patch do refresh global para não interferir nos mini-cards;
-  // depois de rodar, restauramos o estado dos mini e re-renderizamos
-  if(typeof window.refresh === 'function'){
-    var _origRefresh = window.refresh;
-    window.refresh = function(){
-      var saved = Object.assign({}, window.__miniState);
-      var ret = _origRefresh.apply(this, arguments);
-      // re-aplica estado antigo
-      window.__miniState = saved;
-      restoreMiniState();
-      return ret;
-    };
-  }
-
-  // Rodar após load também
-  function kick(){
-    if(window.initMiniCombos) window.initMiniCombos();
-    else restoreMiniState();
-  }
-  if(document.readyState==='complete') setTimeout(kick, 50);
-  else window.addEventListener('load', function(){ setTimeout(kick, 50); });
-})();
-</script>
-<script>
-// === MINI PATCH v8: garante opções dos filtros, auto-WK robusto e desacoplado do topo ===
-(function(){
-  // Estado local dos mini-cards
-  window.__miniState = window.__miniState || { wk: null, mes: null, tri: null };
-
-  function parseDate(d){ if(!d) return null; var dt=new Date(d); return isNaN(+dt)?null:dt; }
-  function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3-d.getDay()+7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
-  function monthForFilters(now){ var y=now.getFullYear(),m=now.getMonth(); var fw=firstWednesday(y,m); if(now<fw){ if(m===0){y--;m=11;} else {m--;}} return {y:y,m:m}; }
-  function curMonthIdx(){ var now=new Date(); now.setHours(12,0,0,0); return monthForFilters(now).m; } // 0..11
-
-  function hasActivity(r){
-    var b=+r.buyin||0, rb=+r.rebuys||0, ko=(+r.kos||+r.KOs||+r.KO||0), pt=+r.pontos||0, sf=+r.saldo_semana_final||0;
-    return (b>0)||(rb>0)||(ko>0)||(pt!==0)||(sf!==0);
-  }
-
-  // última semana jogada: com atividade e data <= hoje; senão, maior WK com atividade; senão, maior WK <= mês atual; senão, maior WK
-  function lastPlayedWeekStrict(options){
-    var now=new Date(); now.setHours(12,0,0,0);
-    var list=(window.RAW||[]);
-    var opts = options && options.length ? options.slice().sort((a,b)=>a-b) : [];
-    if(!opts.length && document.getElementById('mini-wk')){
-      opts = Array.from(document.getElementById('mini-wk').options).map(o=>+o.value).filter(Boolean).sort((a,b)=>a-b);
-    }
-    if(!opts.length) return null;
-
-    var withDate = list.filter(r => hasActivity(r))
-                       .map(r => ({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data)}))
-                       .filter(x => x.wk>0 && x.dt && x.dt<=now && opts.includes(x.wk))
-                       .sort((a,b)=>a.dt-b.dt);
-    if(withDate.length) return withDate[withDate.length-1].wk;
-
-    var withAct = list.filter(r => hasActivity(r)).map(r => +r.wk||0).filter(w=>w>0 && opts.includes(w));
-    if(withAct.length) return Math.max.apply(null, withAct);
-
-    var cm = curMonthIdx()+1;
-    var uptoMonth = list.filter(r => (+r.mes||0)>0 && (+r.mes||0)<=cm).map(r=>+r.wk||0).filter(w=>w>0 && opts.includes(w));
-    if(uptoMonth.length) return Math.max.apply(null, uptoMonth);
-
-    return opts[opts.length-1];
-  }
-
-  function ensureMiniCombosPopulated(){
-    var selWk=document.getElementById('mini-wk');
-    var selMes=document.getElementById('mini-mes');
-    var selTri=document.getElementById('mini-tri');
-    if(!(selWk && selMes && selTri)) return false;
-    if(!(window.RAW && RAW.length)) return false;
-
-    // Deriva valores únicos da base
-    var wks = Array.from(new Set(RAW.map(r=>+r.wk||0).filter(Boolean))).sort((a,b)=>a-b);
-    var meses = Array.from(new Set(RAW.map(r=>+r.mes||0).filter(Boolean))).sort((a,b)=>a-b);
-    var tris = [1,2,3,4];
-
-    function repop(sel, values, textFn){
-      var different = sel.options.length !== values.length ||
-                      Array.from(sel.options).some((o,i)=> String(+o.value)!==String(+values[i]));
-      if(!different) return;
-      var cur = sel.value;
-      sel.innerHTML = '';
-      values.forEach(function(v){
-        var o=document.createElement('option');
-        o.value=String(v);
-        o.textContent=textFn(v);
-        sel.appendChild(o);
-      });
-      if(cur && Array.from(sel.options).some(o=>o.value===cur)) sel.value = cur;
-    }
-    var nomes=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    repop(selWk, wks, v => 'WK'+String(v).padStart(2,'0'));
-    repop(selMes, meses, v => nomes[v-1] || v);
-    repop(selTri, tris, v => 'T'+v);
-
-    // Eventos locais (não mexem no topo)
-    selWk.onchange=function(){ window.__miniState.wk=selWk.value; window.renderMini && window.renderMini('semana', +selWk.value); };
-    selMes.onchange=function(){ window.__miniState.mes=selMes.value; window.renderMini && window.renderMini('mes', +selMes.value); };
-    selTri.onchange=function(){ window.__miniState.tri=selTri.value; window.renderMini && window.renderMini('trimestre', +selTri.value); };
-
-    return true;
-  }
-
-  function initialMiniStateAndRender(){
-    var selWk=document.getElementById('mini-wk');
-    var selMes=document.getElementById('mini-mes');
-    var selTri=document.getElementById('mini-tri');
-    if(!(selWk && selMes && selTri)) return false;
-
-    // define valores se estiverem vazios
-    if(!window.__miniState.mes || !Array.from(selMes.options).some(o=>o.value==window.__miniState.mes)){
-      var now=new Date(); now.setHours(12,0,0,0);
-      var mf=monthForFilters(now);
-      var mVal=String(mf.m+1);
-      if(Array.from(selMes.options).some(o=>o.value==mVal)) window.__miniState.mes=mVal;
-    }
-    if(!window.__miniState.tri || !Array.from(selTri.options).some(o=>o.value==window.__miniState.tri)){
-      var tVal=String(Math.floor((+window.__miniState.mes-1)/3)+1);
-      if(Array.from(selTri.options).some(o=>o.value==tVal)) window.__miniState.tri=tVal;
-    }
-    if(!window.__miniState.wk || !Array.from(selWk.options).some(o=>o.value==window.__miniState.wk)){
-      var options = Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-      var wk = options.length ? Math.max.apply(null, options) : null;
-      if(wk!=null) window.__miniState.wk = String(wk);
-    }
-
-    // aplica no UI
-    if(window.__miniState.wk) selWk.value = window.__miniState.wk;
-    if(window.__miniState.mes) selMes.value = window.__miniState.mes;
-    if(window.__miniState.tri) selTri.value = window.__miniState.tri;
-
-    // render explícito
-    if(window.renderMini){
-      window.renderMini('semana', +selWk.value);
-      window.renderMini('mes', +selMes.value);
-      window.renderMini('trimestre', +selTri.value);
-    }
-    return true;
-  }
-
-  // Loop de inicialização resiliente
-  var tries=0;
-  function boot(){
-    tries++;
-    var ready = document.getElementById('mini-wk') &&
-                document.getElementById('mini-mes') &&
-                document.getElementById('mini-tri') &&
-                (typeof window.renderMini === 'function') &&
-                (window.RAW && RAW.length);
-    if(ready){
-      ensureMiniCombosPopulated();
-      initialMiniStateAndRender();
-      return;
-    }
-    if(tries<120) setTimeout(boot, 120);
-  }
-  if(document.readyState==='complete') boot();
-  else window.addEventListener('load', boot);
-
-  // Blindagem contra refresh global do topo: restaura estado e re-renderiza
-  if(typeof window.refresh === 'function'){
-    var _origRefresh = window.refresh;
-    window.refresh = function(){
-      var saved = Object.assign({}, window.__miniState);
-      var ret = _origRefresh.apply(this, arguments);
-      window.__miniState = saved;
-      ensureMiniCombosPopulated();
-      initialMiniStateAndRender();
-      return ret;
-    };
-  }
-})();
-</script>
-<script>
-/* === MINI BOOT v9 (ES5): popula filtros mini e renderiza, sem depender do topo === */
-(function(){
-  function byId(id){ return document.getElementById(id); }
-  function has(arr, v){ for(var i=0;i<arr.length;i++){ if(arr[i]===v) return true; } return false; }
-  function uniqSortedNumeric(arr){
-    var set = {}, out = [];
-    for(var i=0;i<arr.length;i++){ var n = +arr[i]||0; if(n){ set[n]=1; } }
-    for(var k in set){ out.push(+k); }
-    out.sort(function(a,b){ return a-b; });
-    return out;
-  }
-  function parseDate(d){ var dt=new Date(d); return isNaN(+dt)?null:dt; }
-  function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3 - d.getDay() + 7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
-  function monthForFilters(now){
-    var y=now.getFullYear(), m=now.getMonth();
-    var fw=firstWednesday(y,m);
-    if(now<fw){ if(m===0){y--;m=11;} else { m--; } }
-    return {y:y, m:m};
-  }
-  function curMonthIdx(){ var now=new Date(); now.setHours(12,0,0,0); return monthForFilters(now).m; }
-  function hasActivity(r){
-    var b=+r.buyin||0, rb=+r.rebuys||0, ko=(+r.kos||+r.KOs||+r.KO||0), pt=+r.pontos||0, sf=+r.saldo_semana_final||0;
-    return (b>0)||(rb>0)||(ko>0)||(pt!==0)||(sf!==0);
-  }
-
-  function ensureMiniOptions(RAW){
-    var selWk=byId('mini-wk'), selMes=byId('mini-mes'), selTri=byId('mini-tri');
-    if(!(selWk && selMes && selTri)) return false;
-    var wks = uniqSortedNumeric(RAW.map(function(r){ return r.wk; }));
-    var meses = uniqSortedNumeric(RAW.map(function(r){ return r.mes; }));
-    var tris = [1,2,3,4];
-    function repop(sel, vals, labelFn){
+    // Restore saved or state selection
+    function restoreSel(sel, savedVal, stateVal){
       if(!sel) return;
-      var need = (sel.options.length !== vals.length);
-      if(!need){
-        for(var i=0;i<vals.length;i++){ if(+sel.options[i].value !== +vals[i]){ need=true; break; } }
-      }
-      if(!need) return;
-      var cur = sel.value;
-      sel.innerHTML = '';
-      for(var j=0;j<vals.length;j++){
-        var v = vals[j], o = document.createElement('option');
-        o.value = String(v);
-        o.textContent = labelFn(v);
-        sel.appendChild(o);
-      }
-      if(cur){
-        for(var k=0;k<sel.options.length;k++){ if(sel.options[k].value===cur){ sel.value=cur; break; } }
+      var target = stateVal || savedVal;
+      if(target && Array.from(sel.options).some(function(o){ return o.value == target; })){
+        sel.value = String(target);
       }
     }
-    var nomes=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    repop(selWk, wks, function(v){ return 'WK'+('0'+v).slice(-2); });
-    repop(selMes, meses, function(v){ return nomes[v-1] || v; });
-    repop(selTri, tris, function(v){ return 'T'+v; });
-    // change handlers
-    selWk.onchange = function(){ if(window.renderMini) window.renderMini('semana', +selWk.value); };
-    selMes.onchange = function(){ if(window.renderMini) window.renderMini('mes', +selMes.value); };
-    selTri.onchange = function(){ if(window.renderMini) window.renderMini('trimestre', +selTri.value); };
-    return true;
-  }
+    restoreSel(sels.wk,  saved.wk,  state.wk);
+    restoreSel(sels.mes, saved.mes, state.mes);
+    restoreSel(sels.tri, saved.tri, state.tri);
 
-  function pickLastWeek(RAW, options){
-    var now=new Date(); now.setHours(12,0,0,0);
-    // 1) last by date <= now with activity
-    var withDate=[], cm=curMonthIdx()+1;
-    for(var i=0;i<RAW.length;i++){
-      var r=RAW[i], wk=+r.wk||0; if(!wk) continue;
-      if(options && !has(options, wk)) continue;
-      if(!hasActivity(r)) continue;
-      var dt=parseDate(r.data_wk||r.data); if(!dt || dt>now) continue;
-      withDate.push({wk:wk, dt:+dt});
-    }
-    withDate.sort(function(a,b){return a.dt-b.dt;});
-    if(withDate.length) return withDate[withDate.length-1].wk;
-    // 2) largest WK with activity (restrict month <= current first)
-    var wkByMonth=[], wkAct=[];
-    for(var j=0;j<RAW.length;j++){
-      var r2=RAW[j], w2=+r2.wk||0, m2=+r2.mes||0; if(!w2) continue;
-      if(options && !has(options, w2)) continue;
-      if(hasActivity(r2)){
-        wkAct.push(w2);
-        if(m2>0 && m2<=cm) wkByMonth.push(w2);
-      }
-    }
-    if(wkByMonth.length){ wkByMonth.sort(function(a,b){return a-b;}); return wkByMonth[wkByMonth.length-1]; }
-    if(wkAct.length){ wkAct.sort(function(a,b){return a-b;}); return wkAct[wkAct.length-1]; }
-    // 3) fallback: largest option
-    if(options && options.length) return options[options.length-1];
-    return null;
-  }
-
-  function initialRender(RAW){
-    var selWk=byId('mini-wk'), selMes=byId('mini-mes'), selTri=byId('mini-tri');
-    if(!(selWk && selMes && selTri)) return false;
-    // month & tri
-    var now=new Date(); now.setHours(12,0,0,0);
-    var mf=monthForFilters(now);
-    var mVal=String(mf.m+1);
-    var tVal=String(Math.floor(mf.m/3)+1);
-    // ensure options first
-    ensureMiniOptions(RAW);
-    // set values
-    var optsW = [], i;
-    for(i=0;i<selWk.options.length;i++) optsW.push(+selWk.options[i].value||0);
-    var wk = pickLastWeek(RAW, optsW);
-    if(wk!=null) selWk.value = String(wk);
-    for(i=0;i<selMes.options.length;i++){ if(+selMes.options[i].value===+mVal){ selMes.value=mVal; break; } }
-    for(i=0;i<selTri.options.length;i++){ if(+selTri.options[i].value===+tVal){ selTri.value=tVal; break; } }
-    // render explicitly
-    if(window.renderMini){
-      window.renderMini('semana', +selWk.value);
-      window.renderMini('mes', +selMes.value);
-      window.renderMini('trimestre', +selTri.value);
-    }
-    return true;
-  }
-
-  var tries=0;
-  function boot(){
-    tries++;
-    // prefer the same RAW used by rest of dashboard
-    var RAWref = (window.RAW && window.RAW.length) ? window.RAW
-                : (window.DATA && window.DATA.ledger && window.DATA.ledger.length ? window.DATA.ledger : null);
-    var ready = RAWref && byId('mini-wk') && byId('mini-mes') && byId('mini-tri') && typeof window.renderMini === 'function';
-    if(ready){
-      ensureMiniOptions(RAWref);
-      initialRender(RAWref);
-      return;
-    }
-    if(tries<150) setTimeout(boot, 120);
-  }
-  if(document.readyState === 'complete') boot();
-  else window.addEventListener('load', boot);
-})();
-</script>
-<script>
-(function(){
-  // format numbers pt-BR (keep from previous versions)
-  window.fmt = function(n){
-    var x = +n;
-    if (!isFinite(x)) return '—';
-    return x.toLocaleString('pt-BR');
+    // Bind change handlers (idempotente — substitui o anterior)
+    sels.wk.onchange  = function(){ state.wk  = sels.wk.value;  window.renderMini('semana',    +sels.wk.value); };
+    if(sels.mes) sels.mes.onchange = function(){ state.mes = sels.mes.value; window.renderMini('mes',       +sels.mes.value); };
+    if(sels.tri) sels.tri.onchange = function(){ state.tri = sels.tri.value; window.renderMini('trimestre', +sels.tri.value); };
   };
 
-  function parseDate(d){ if(!d) return null; var dt=new Date(d); return isNaN(+dt)?null:dt; }
-  function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3-d.getDay()+7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
-  function monthForFilters(now){
-    var y=now.getFullYear(), m=now.getMonth();
-    var fw=firstWednesday(y,m);
-    if(now < fw){ if(m===0){ y--; m=11; } else { m--; } }
-    return {y:y, m:m}; // m: 0..11
-  }
+  /* ── 7. Auto-seleção inteligente ao inicializar ── */
+  function autoSelect(){
+    var sels = { wk: byId('mini-wk'), mes: byId('mini-mes'), tri: byId('mini-tri') };
+    if(!sels.wk || !sels.wk.options.length) return false;
 
-  function hasActivity(r){
-    var b=+r.buyin||0, rb=+r.rebuys||0, ko=(+r.kos||+r.KOs||+r.KO||0), pt=+r.pontos||0, sf=+r.saldo_semana_final||0;
-    return (b>0)||(rb>0)||(ko>0)||(pt!==0)||(sf!==0);
-  }
+    // Mês e trimestre pela regra do primeiro domingo do mês
+    var mf = currentMonthForFilters();
+    var mVal = mf.m + 1;  // 1-indexed
+    var tVal = Math.floor(mf.m / 3) + 1;
 
-  // New strict picker: prefer current year and months up to current month, then any date<=now, then largest with activity
-  function pickLastWeekStrictV2(options){
-    var now=new Date(); now.setHours(12,0,0,0);
-    var RAWref = (window.RAW && window.RAW.length) ? window.RAW
-               : (window.DATA && window.DATA.ledger && window.DATA.ledger.length ? window.DATA.ledger : []);
-    var opts = (options && options.length) ? options.slice(0) : [];
-    if(!opts.length && document.getElementById('mini-wk')){
-      opts = Array.from(document.getElementById('mini-wk').options).map(function(o){ return +o.value; }).filter(Boolean);
+    if(sels.mes){
+      var optM = Array.from(sels.mes.options).find(function(o){ return +o.value === mVal; });
+      if(optM){ sels.mes.value = String(mVal); state.mes = String(mVal); }
     }
-    if(!opts.length) return null;
-
-    var curYear = now.getFullYear();
-    var curMonth = monthForFilters(now).m + 1; // 1..12
-
-    // A) records in current year and month <= current month, with activity
-    var A = RAWref.filter(function(r){
-      var wk=+r.wk||0, ano=+r.ano||curYear, mes=+r.mes||0;
-      return wk>0 && opts.indexOf(wk)>=0 && hasActivity(r) && ano===curYear && mes>0 && mes<=curMonth;
-    }).map(function(r){ return +r.wk||0; });
-    if(A.length){
-      A.sort(function(a,b){return a-b;});
-      return A[A.length-1];
+    if(sels.tri){
+      var optT = Array.from(sels.tri.options).find(function(o){ return +o.value === tVal; });
+      if(optT){ sels.tri.value = String(tVal); state.tri = String(tVal); }
     }
 
-    // B) records with valid date <= now and activity
-    var B = [];
-    RAWref.forEach(function(r){
-      var wk=+r.wk||0; if(!wk || opts.indexOf(wk)<0) return;
-      if(!hasActivity(r)) return;
-      var dt = parseDate(r.data_wk||r.data); if(!dt || dt>now) return;
-      B.push({wk:wk, dt:+dt});
-    });
-    if(B.length){
-      B.sort(function(a,b){return a.dt-b.dt;});
-      return B[B.length-1].wk;
+    // Semana: última com atividade (não usa state se já veio de fora)
+    if(!state.wk){
+      var wk = lastActiveWeek();
+      if(wk != null){
+        var optW = Array.from(sels.wk.options).find(function(o){ return +o.value === wk; });
+        if(optW){ sels.wk.value = String(wk); state.wk = String(wk); }
+      }
     }
 
-    // C) largest wk with activity within options
-    var C = RAWref.filter(function(r){ return hasActivity(r); }).map(function(r){ return +r.wk||0; })
-                  .filter(function(w){ return w>0 && opts.indexOf(w)>=0; });
-    if(C.length){
-      C.sort(function(a,b){return a-b;});
-      return C[C.length-1];
-    }
-
-    // D) fallback: largest option
-    opts.sort(function(a,b){return a-b;});
-    return opts[opts.length-1];
+    // Renderiza os três
+    window.renderMini('semana',    +sels.wk.value);
+    if(sels.mes) window.renderMini('mes',       +sels.mes.value);
+    if(sels.tri) window.renderMini('trimestre', +sels.tri.value);
+    return true;
   }
 
-  // Remove "pts" from mini bar labels by patching renderMini (latest override wins)
-  if (typeof window.renderMini === 'function'){
-    (function(){
-      var _renderMini = window.renderMini;
-      window.renderMini = function(per, val){
-        var elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
-        var target = document.getElementById(elId);
-        if(!target) return;
-        // delegate to existing pipeline (which sets target.innerHTML)
-        _renderMini.apply(this, arguments);
-        // Then adjust labels (remove ' pts' and ensure number format)
-        Array.prototype.forEach.call(target.querySelectorAll('.value'), function(v){
-          var t = (v.textContent || '').replace(/\s*pts\s*$/i, '').trim();
-          var n = parseInt(t.replace(/\./g,''),10);
-          if(!isNaN(n)){ v.textContent = fmt(n); }
-          else{ v.textContent = t; }
-        });
-      };
-    })();
+  /* ── 8. Intercepta refresh() global para preservar estado dos mini-cards ── */
+  var _refreshPatched = false;
+  function patchRefresh(){
+    if(_refreshPatched || typeof window.refresh !== 'function') return;
+    _refreshPatched = true;
+    var _orig = window.refresh;
+    window.refresh = function(){
+      var savedState = { wk: state.wk, mes: state.mes, tri: state.tri };
+      var ret = _orig.apply(this, arguments);
+      // Restaura combos e re-renderiza após o refresh global
+      state = savedState;
+      window.initMiniCombos();
+      var sels = { wk: byId('mini-wk'), mes: byId('mini-mes'), tri: byId('mini-tri') };
+      if(state.wk  && sels.wk)  window.renderMini('semana',    +sels.wk.value);
+      if(state.mes && sels.mes) window.renderMini('mes',       +sels.mes.value);
+      if(state.tri && sels.tri) window.renderMini('trimestre', +sels.tri.value);
+      return ret;
+    };
   }
 
-  // Enforce week selection after options are ready
-  function enforceWeek(){
-    var selWk=document.getElementById('mini-wk');
-    if(!selWk) return;
-    var opts = Array.prototype.map.call(selWk.options, function(o){ return +o.value; }).filter(Boolean).sort(function(a,b){return a-b;});
-    if(!opts.length) return;
-    var wk = pickLastWeekStrictV2(opts);
-    if(wk!=null){
-      var opt = Array.prototype.find.call(selWk.options, function(o){ return +o.value===+wk; });
-      if(opt){ selWk.value = String(wk); if(typeof window.renderMini==='function') window.renderMini('semana', +wk); }
-    }
-  }
-
-  // Try a few times after load
-  var tries=0;
+  /* ── 9. Boot: aguarda combos e RAW estarem prontos ── */
+  var tries = 0;
   function boot(){
     tries++;
-    var ready = document.getElementById('mini-wk') &&
-                document.getElementById('mini-mes') &&
-                document.getElementById('mini-tri') &&
-                (typeof window.renderMini === 'function') &&
-                ((window.RAW&&RAW.length) || (window.DATA&&window.DATA.ledger&&window.DATA.ledger.length));
-    if(ready){
-      enforceWeek();
+    var sels = { wk: byId('mini-wk'), mes: byId('mini-mes'), tri: byId('mini-tri') };
+    var combosReady = sels.wk && sels.wk.options.length > 0 &&
+                      sels.mes && sels.mes.options.length > 0 &&
+                      sels.tri && sels.tri.options.length > 0;
+    var renderReady = typeof window.renderMini === 'function' && typeof window.aggregate === 'function';
+
+    if(combosReady && renderReady){
+      patchRefresh();
+      autoSelect();
       return;
     }
-    if(tries<80) setTimeout(boot, 120);
+    // Tenta popular combos se RAW existir mas combos ainda vazios
+    if(!combosReady && (window.RAW||[]).length > 0){
+      window.initMiniCombos();
+    }
+    if(tries < 60) setTimeout(boot, 120);
   }
-  if(document.readyState==='complete') boot();
-  else window.addEventListener('load', boot);
+
+  if(document.readyState === 'complete') boot();
+  else window.addEventListener('load', function(){ setTimeout(boot, 50); });
 })();
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function(){
   function addClassToCard(selectId, cls){
@@ -9085,12 +8370,24 @@ window.addEventListener('load', function(){
       var s = document.createElement('style');
       s.id = styleId;
       s.textContent = [
-        /* ── LAYOUT ── */
+        /* ══════════════════════════════════════
+           MOBILE-FIRST: LAYOUT BASE
+        ══════════════════════════════════════ */
         'header { display: none !important; }',
-        '',
-        '.container { padding-top: 56px !important; }',
-        '.controls { grid-template-columns: 1fr 1fr !important; position: static !important; }',
-        /* ── HIDE DESKTOP-ONLY CARDS ── */
+        '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; height: 52px !important; background: linear-gradient(135deg, #080e1c 0%, #0d1629 100%) !important; border-bottom: 1px solid rgba(59,130,246,0.18) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important; }',
+        '.container { padding-top: 60px !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 110px !important; max-width: 100vw !important; overflow-x: hidden !important; }',
+
+        /* ══════════════════════════════════════
+           CONTROLES: GRADE 2 COLUNAS COMPACTA
+        ══════════════════════════════════════ */
+        '.controls { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 6px !important; position: static !important; background: transparent !important; padding: 0 !important; margin-bottom: 8px !important; transition: opacity 0.25s ease, transform 0.25s ease !important; }',
+        '.controls .card { padding: 6px 8px !important; border-radius: 10px !important; }',
+        '.controls .card-title { font-size: 9px !important; margin-bottom: 3px !important; }',
+        '.controls select { font-size: 11px !important; padding: 4px 6px !important; min-height: 26px !important; border-radius: 8px !important; }',
+
+        /* ══════════════════════════════════════
+           ESCONDER CARDS DESKTOP
+        ══════════════════════════════════════ */
         '#card-dados { display: none !important; }',
         '#card-pix { display: none !important; }',
         '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions, #pixQrImg { display: none !important; }',
@@ -9100,50 +8397,131 @@ window.addEventListener('load', function(){
         '#card-campeoes { display: none !important; }',
         '#card-heatmap { display: none !important; }',
         '#card-premiacoes { display: none !important; }',
-        /* ── CHIPS ── */
-        '.chips { display: flex !important; flex-wrap: wrap !important; max-height: none !important; height: auto !important; overflow: visible !important; }',
-        '#chips-parent { flex-wrap: wrap !important; }',
-        /* ── MINI RANKINGS ── */
-        '.row.mini-ranks { display: flex !important; flex-direction: column !important; }',
-        '.row.mini-ranks .card.mini-card { width: 100% !important; }',
-        /* ── MEDALS ── */
+
+        /* ══════════════════════════════════════
+           FILTRO DE JOGADORES (CHIPS)
+        ══════════════════════════════════════ */
+        '#chips-parent { flex-direction: column !important; gap: 6px !important; flex-wrap: wrap !important; }',
+        '.chip-tools { justify-content: flex-start !important; gap: 6px !important; }',
+        '.chip-tools .btn { font-size: 11px !important; padding: 5px 10px !important; border-radius: 8px !important; }',
+        '.chips { display: flex !important; flex-wrap: wrap !important; max-height: none !important; height: auto !important; overflow: visible !important; gap: 6px !important; padding: 8px !important; border-radius: 10px !important; }',
+        '.chip { font-size: 12px !important; padding: 5px 12px !important; border-radius: 999px !important; touch-action: manipulation !important; min-height: 32px !important; display: flex !important; align-items: center !important; }',
+
+        /* ══════════════════════════════════════
+           MINI RANKINGS — FULL WIDTH CADA UM
+        ══════════════════════════════════════ */
+        '.row.mini-ranks { display: flex !important; flex-direction: column !important; gap: 10px !important; }',
+        '.row.mini-ranks .card.mini-card { width: 100% !important; min-width: 0 !important; padding: 10px 12px !important; border-radius: 14px !important; }',
+        '.row.mini-ranks .card.mini-card .mini-header { display: flex !important; align-items: center !important; justify-content: space-between !important; min-height: auto !important; padding-top: 0 !important; gap: 8px !important; margin-bottom: 10px !important; }',
+        '.row.mini-ranks .card.mini-card .card-title { font-size: 13px !important; white-space: nowrap !important; }',
+        '.row.mini-ranks .card.mini-card .mini-header select { width: auto !important; max-width: 42% !important; font-size: 12px !important; padding: 4px 8px !important; flex: 0 0 auto !important; }',
+        '.row.mini-ranks .card.mini-card .mini-list { margin-top: 6px !important; }',
+        '.mini-item { padding: 7px 10px !important; border-radius: 10px !important; margin-bottom: 4px !important; }',
+        '.mini-item .pos { font-size: 18px !important; width: 28px !important; }',
+        '.mini-item .name { font-size: 14px !important; }',
+        '.mini-item .value, .mini-item .pts { font-size: 14px !important; }',
+        '.mini-prizes { font-size: 12px !important; margin-top: 8px !important; padding-top: 8px !important; }',
+
+        /* ══════════════════════════════════════
+           MEDALHAS — LAYOUT MOBILE OTIMIZADO
+        ══════════════════════════════════════ */
         '.medalhas-flex { flex-direction: column !important; }',
         '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; overflow: visible !important; }',
         '#card-medalhas { height: auto !important; overflow: visible !important; }',
-        '#card-kopontos { height: auto !important; overflow: visible !important; background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; }',
+        '#card-kopontos { height: auto !important; overflow: visible !important; padding: 12px !important; }',
+        '#card-kopontos .card-title { font-size: 14px !important; margin-bottom: 10px !important; }',
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
-        '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; overflow: visible !important; }',
-        '.slot { padding: 6px 4px !important; }',
-        '.slot img, .slot .avatar { width: 70px !important; height: 70px !important; }',
-        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 40px !important; height: 40px !important; }',
-        '.slot .name { font-size: 10px !important; }',
-        '.slot .tally { display: flex !important; flex-direction: column !important; gap: 2px !important; }',
-        '.slot .chip { padding: 2px 4px !important; font-size: 10px !important; }',
-        '.slot .medal { width: 12px !important; height: 12px !important; }',
-        '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
-        '#card-medalhas .list { overflow: visible !important; min-height: 0 !important; height: auto !important; }',
-        '#card-medalhas .row { display: grid !important; grid-template-columns: 36px 1fr 90px !important; gap: 6px !important; align-items: center !important; padding: 6px 8px !important; overflow: visible !important; }',
-        '#card-medalhas .medals { display: flex !important; gap: 6px !important; align-items: center !important; justify-content: flex-end !important; overflow: visible !important; flex-wrap: nowrap !important; min-width: 90px !important; }',
-        '#card-medalhas .medals strong { min-width: 16px !important; text-align: center !important; font-size: 12px !important; }',
-        '#card-medalhas .medals svg, #card-medalhas .medals .medal { width: 14px !important; height: 14px !important; flex-shrink: 0 !important; }',
-        '#card-medalhas .medals { display: flex !important; gap: 4px !important; align-items: center !important; overflow: visible !important; flex-shrink: 0 !important; flex-wrap: nowrap !important; }',
-        '#card-medalhas .medals svg, #card-medalhas .medals .medal { width: 14px !important; height: 14px !important; }',
-        '#card-medalhas .medals strong { font-size: 11px !important; margin: 0 2px !important; }',
-        '#list-4-9 .row { padding: 6px 8px !important; display: flex !important; align-items: center !important; }',
-        '#list-4-9 .medals { display: flex !important; overflow: visible !important; flex-shrink: 0 !important; }',
-        /* ── CHARTS ── */
-        '.grid-charts { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-top: 8px !important; }',
-        '.grid-charts .chart { width: 100% !important; height: auto !important; min-height: 280px !important; overflow: visible !important; }',
-        '.chart.ranking-span { height: 480px !important; min-height: 480px !important; padding-top: 12px !important; padding-bottom: 12px !important; margin-top: 12px !important; }',
-        '#chartRanking { height: 440px !important; min-height: 440px !important; }',
-        '#chartKOs { height: 300px !important; }',
-        '#chartEvolucao { height: 460px !important; }',
-        /* ── TABLES ── */
-        'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
-        /* ── GLOBAL ── */
-        '.card { overflow: visible !important; }',
-        '.container { padding-bottom: 100px !important; }',
-        '#btn-view-toggle { bottom: 8px !important; right: 8px !important; font-size: 10px !important; padding: 5px 10px !important; opacity: 0.75 !important; }'
+
+        /* ══ PÓDIO TOP 3 MOBILE: foto grande + medalhas empilhadas ao lado ══ */
+        '#podium { display: flex !important; flex-direction: column !important; gap: 8px !important; overflow: visible !important; margin-bottom: 10px !important; }',
+
+        /* Cada slot do top3: linha horizontal com foto grande à esq e medalhas à dir */
+        '#card-medalhas .slot { padding: 10px 12px !important; min-height: 84px !important; display: grid !important; grid-template-columns: 80px 1fr !important; grid-template-rows: auto auto !important; align-items: center !important; border-radius: 14px !important; gap: 0 10px !important; position: relative !important; }',
+
+        /* Badge de posição: canto sup esq */
+        '#card-medalhas .slot .rank-badge { position: absolute !important; top: 6px !important; left: 6px !important; font-size: 10px !important; padding: 2px 7px !important; z-index: 2 !important; border-radius: 8px !important; }',
+
+        /* Avatar GRANDE ocupando coluna esquerda */
+        '#card-medalhas .slot .avatar { width: 72px !important; height: 72px !important; font-size: 26px !important; grid-column: 1 !important; grid-row: 1 / span 2 !important; border-width: 2px !important; }',
+
+        /* Nome à direita, linha 1 */
+        '#card-medalhas .slot .name { font-size: 14px !important; font-weight: 700 !important; text-align: left !important; margin: 0 !important; grid-column: 2 !important; grid-row: 1 !important; position: static !important; align-self: end !important; padding-bottom: 4px !important; }',
+
+        /* Medalhas empilhadas à direita, linha 2 — ouro / prata / bronze */
+        '#card-medalhas .slot .tally { display: flex !important; flex-direction: row !important; gap: 6px !important; margin: 0 !important; grid-column: 2 !important; grid-row: 2 !important; align-items: center !important; align-self: start !important; flex-wrap: wrap !important; }',
+        '#card-medalhas .slot .chip { padding: 3px 8px !important; font-size: 12px !important; border-radius: 999px !important; display: flex !important; align-items: center !important; gap: 4px !important; }',
+        '#card-medalhas .slot .medal { width: 14px !important; height: 14px !important; }',
+
+        /* ══ LISTA 4-9: coluna única, medalhas alinhadas em colunas fixas ══ */
+        '#list-4-9 { display: flex !important; flex-direction: column !important; gap: 5px !important; overflow: visible !important; height: auto !important; border: none !important; background: transparent !important; padding: 0 !important; min-height: auto !important; }',
+
+        /* Cada row: pos | foto+nome | 🥇N 🥈N 🥉N alinhados */
+        '#card-medalhas .row { display: grid !important; grid-template-columns: 28px 1fr 110px !important; align-items: center !important; gap: 8px !important; padding: 7px 10px !important; border-radius: 10px !important; border: 1px solid rgba(255,255,255,.08) !important; background: rgba(255,255,255,.02) !important; }',
+        '#card-medalhas .pos { width: 22px !important; height: 22px !important; font-size: 11px !important; flex-shrink: 0 !important; }',
+        '#card-medalhas .who { display: flex !important; align-items: center !important; gap: 7px !important; min-width: 0 !important; overflow: hidden !important; }',
+        '#card-medalhas .who .avatar { width: 30px !important; height: 30px !important; font-size: 12px !important; flex-shrink: 0 !important; }',
+        '#card-medalhas .who .name { font-size: 13px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }',
+
+        /* Medalhas: ícone+número com largura fixa para alinhar colunas */
+        '#card-medalhas .medals { display: grid !important; grid-template-columns: 1fr 1fr 1fr !important; gap: 2px !important; flex-shrink: 0 !important; width: 108px !important; }',
+        '#card-medalhas .medals > svg.medal + strong, #card-medalhas .medals svg + strong { font-size: 12px !important; }',
+        '#card-medalhas .medals .medal { width: 12px !important; height: 12px !important; vertical-align: middle !important; }',
+        '/* inline-medal-align */ #card-medalhas .medals strong { font-size: 12px !important; margin-left: 2px !important; }',
+
+        /* ══════════════════════════════════════
+           GRÁFICOS — COLUNA ÚNICA + ALTURAS IDEAIS
+        ══════════════════════════════════════ */
+        '.grid-charts { display: flex !important; flex-direction: column !important; gap: 10px !important; margin-top: 8px !important; }',
+        '.grid-charts .chart { width: 100% !important; height: auto !important; min-height: 300px !important; overflow: visible !important; border-radius: 14px !important; padding: 10px !important; }',
+        '.grid-charts .chart .title { font-size: 11px !important; }',
+
+        /* Ranking — barra horizontal fica melhor com mais altura */
+        '.grid-charts .chart.ranking-span { min-height: 400px !important; }',
+        '#chartRanking { height: 380px !important; min-height: 380px !important; }',
+
+        /* KOs — compacto */
+        '.grid-charts .chart.kos-small { min-height: 300px !important; }',
+        '#chartKOs { height: 280px !important; min-height: 280px !important; }',
+
+        /* Evolução — precisa de mais espaço */
+        '.grid-charts .chart.evo-span { min-height: 380px !important; }',
+        '#chartEvolucao { height: 360px !important; min-height: 360px !important; }',
+
+        /* Personas/Arquétipos */
+        '#card-personas { min-height: 340px !important; }',
+        '#chartPersonas { height: 300px !important; min-height: 300px !important; }',
+
+        /* ══════════════════════════════════════
+           TABELAS — SCROLL HORIZONTAL
+        ══════════════════════════════════════ */
+        'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; white-space: nowrap !important; font-size: 12px !important; }',
+        'th, td { padding: 6px 8px !important; }',
+
+        /* ══════════════════════════════════════
+           CARDS GERAIS — VISUAL MELHORADO
+        ══════════════════════════════════════ */
+        '.card { overflow: visible !important; border-radius: 14px !important; }',
+        '.card-title { font-size: 11px !important; }',
+
+        /* ══════════════════════════════════════
+           BOTÃO TOGGLE — MENOR E NO CANTO
+        ══════════════════════════════════════ */
+        '#btn-view-toggle { bottom: 16px !important; right: 14px !important; font-size: 11px !important; padding: 8px 14px !important; opacity: 0.88 !important; border-radius: 30px !important; box-shadow: 0 4px 18px rgba(59,130,246,0.45) !important; }',
+
+        /* ══════════════════════════════════════
+           TOPBAR MOBILE — REFINADA
+        ══════════════════════════════════════ */
+        '#mobile-topbar span[style*="font-size:14px"] { font-size: 15px !important; font-weight: 800 !important; letter-spacing: 0.3px !important; }',
+        '#mobile-topbar button { font-size: 11px !important; padding: 6px 12px !important; border-radius: 18px !important; }',
+
+        /* ══════════════════════════════════════
+           ESPAÇAMENTOS E AJUSTES FINOS
+        ══════════════════════════════════════ */
+        'body { font-size: 13px !important; }',
+        '.stacked { flex-wrap: wrap !important; gap: 6px !important; }',
+        '.pill { font-size: 11px !important; padding: 4px 8px !important; }',
+        '.btn { font-size: 12px !important; min-height: 30px !important; }',
+        'select, button { font-size: 12px !important; }'
       ].join(' ');
       document.head.appendChild(s);
 
@@ -9172,15 +8550,29 @@ window.addEventListener('load', function(){
         document.querySelectorAll('.chips').forEach(function(el){
           el.style.maxHeight='none'; el.style.overflow='visible'; el.style.height='auto'; el.style.flexWrap='wrap';
         });
-        // Fix KOs chart height
+        // Fix chart container heights for mobile
         var kChart=document.querySelector('.kos-small');
-        if(kChart){ kChart.style.height='340px'; kChart.style.minHeight='340px'; }
-        // Fix evo chart height
+        if(kChart){ kChart.style.height='300px'; kChart.style.minHeight='300px'; }
         var evoChart=document.querySelector('.evo-span');
-        if(evoChart){ evoChart.style.height='500px'; evoChart.style.minHeight='500px'; }
+        if(evoChart){ evoChart.style.height='380px'; evoChart.style.minHeight='380px'; }
+        var rankChart=document.querySelector('.ranking-span');
+        if(rankChart){ rankChart.style.height='380px'; rankChart.style.minHeight='380px'; }
         // Bottom padding
         var cont=document.getElementById('main-container');
-        if(cont) cont.style.paddingBottom='100px';
+        if(cont) cont.style.paddingBottom='110px';
+        // Force ECharts resize so charts fill new widths
+        setTimeout(function(){
+          if(window.echarts){
+            document.querySelectorAll('[_echarts_instance_]').forEach(function(el){
+              try { echarts.getInstanceByDom(el) && echarts.getInstanceByDom(el).resize(); } catch(e){}
+            });
+            // Also try global resize
+            ['chartRanking','chartKOs','chartEvolucao','chartPersonas','chartRadar','chart-kopontos'].forEach(function(id){
+              var el=document.getElementById(id);
+              if(el){ try{ var inst=echarts.getInstanceByDom(el); if(inst) inst.resize(); }catch(e){} }
+            });
+          }
+        }, 350);
       }, 100);
 
     } else {
@@ -9312,6 +8704,50 @@ window.addEventListener('load', function(){
 })();
 </script>
 
+
+<script id="controls-hide-on-scroll">
+/* Oculta controles ao rolar (mobile) usando IntersectionObserver na sentinela */
+(function(){
+  function init(){
+    var sentinel = document.getElementById('controls-sentinel');
+    var controls = document.getElementById('main-controls');
+    if(!sentinel || !controls) return;
+
+    if(!('IntersectionObserver' in window)){
+      // Fallback para browsers antigos: scroll event
+      var lastY = 0;
+      window.addEventListener('scroll', function(){
+        var y = window.scrollY || window.pageYOffset;
+        if(!document.body.classList.contains('mobile-mode')) return;
+        if(y > 60 && y > lastY){
+          controls.classList.add('controls-hidden');
+        } else if(y < lastY || y < 40){
+          controls.classList.remove('controls-hidden');
+        }
+        lastY = y;
+      }, {passive: true});
+      return;
+    }
+
+    var observer = new IntersectionObserver(function(entries){
+      if(!document.body.classList.contains('mobile-mode')) return;
+      var entry = entries[0];
+      if(entry.isIntersecting){
+        // Sentinela visível = usuário está no topo = mostra controles
+        controls.classList.remove('controls-hidden');
+      } else {
+        // Sentinela saiu da viewport = usuário rolou = esconde controles
+        controls.classList.add('controls-hidden');
+      }
+    }, { threshold: 0, rootMargin: '0px 0px 0px 0px' });
+
+    observer.observe(sentinel);
+  }
+
+  if(document.readyState === 'complete') init();
+  else window.addEventListener('load', init);
+})();
+</script>
 </body>
 </html>
 
