@@ -1071,89 +1071,82 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
     }
   }
 
-/* ── MODO MOBILE MANUAL (class .mobile-mode no body) ── */
+/* ── MODO MOBILE MANUAL ── */
+
+/* Ocultar header original no mobile */
 body.mobile-mode header {
-  padding: 4px 8px !important;
-  min-height: unset !important;
-  flex-wrap: nowrap !important;
-  gap: 4px !important;
-}
-body.mobile-mode header h1 {
-  font-size: 14px !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  max-width: 160px !important;
-}
-/* Ocultar seções do header desnecessárias no mobile */
-body.mobile-mode header .card,
-body.mobile-mode header #pix-section,
-body.mobile-mode header [class*="pix"],
-body.mobile-mode header select,
-body.mobile-mode header .btn:not(#btn-view-toggle) {
   display: none !important;
 }
-/* Manter apenas título e botão Registrar Noite */
-body.mobile-mode header > div:last-child {
+
+/* Barra mobile simples no topo */
+body.mobile-mode #mobile-topbar {
   display: flex !important;
-  gap: 4px !important;
 }
+
+/* Controls mobile: 2 colunas, sem PIX/DADOS */
 body.mobile-mode .controls {
   grid-template-columns: 1fr 1fr !important;
   gap: 6px !important;
 }
-/* Ocultar PIX no mobile, manter DADOS compacto */
-body.mobile-mode #pix-box,
-body.mobile-mode #pix-title {
+body.mobile-mode #card-dados,
+body.mobile-mode #card-pix {
   display: none !important;
 }
-body.mobile-mode #card-dados .upl {
-  grid-template-columns: 1fr !important;
-}
-/* Ocultar botão Carregar XLSX no mobile */
-body.mobile-mode #btn-load {
-  display: none !important;
-}
-/* Status GitHub mais compacto */
-body.mobile-mode #gh-status {
-  display: block !important;
-  font-size: 11px !important;
-}
-/* Status GitHub no mobile - mais compacto */
-body.mobile-mode #gh-status {
-  font-size: 10px !important;
-  max-width: 120px !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  white-space: nowrap !important;
-}
+
+/* Chips: múltiplas linhas */
 body.mobile-mode #chips {
   display: flex !important;
   flex-wrap: wrap !important;
   gap: 5px !important;
   overflow: visible !important;
   width: 100% !important;
-  padding: 4px 0 !important;
 }
 body.mobile-mode .chip {
   flex-shrink: 0 !important;
   font-size: 12px !important;
   padding: 4px 10px !important;
-  white-space: nowrap !important;
 }
+
+/* Rankings empilhados */
 body.mobile-mode .row.mini-ranks {
   display: flex !important;
   flex-direction: column !important;
+  gap: 12px !important;
 }
-body.mobile-mode .row.mini-ranks .card.mini-card { width: 100% !important; }
-body.mobile-mode .kpis { grid-template-columns: 1fr 1fr !important; display: grid !important; }
-body.mobile-mode .grid-charts { grid-template-columns: 1fr !important; }
-body.mobile-mode .heatmap-span { grid-column: 1 !important; }
-body.mobile-mode #card-heatmap { min-height: 420px !important; height: 420px !important; }
-body.mobile-mode #heatmapFrame { width: 100% !important; height: 400px !important; border:none !important; }
-body.mobile-mode .adv-analytics, body.mobile-mode .table-col { display: block !important; width: 100% !important; }
-body.mobile-mode table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }
-body.mobile-mode #card-medalhas .podium { overflow-x: auto !important; }
+body.mobile-mode .row.mini-ranks .card.mini-card {
+  width: 100% !important;
+}
+
+/* KPIs: 2 por linha */
+body.mobile-mode .kpis {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+
+/* Gráficos em coluna */
+body.mobile-mode .grid-charts {
+  display: flex !important;
+  flex-direction: column !important;
+}
+body.mobile-mode .grid-charts .chart {
+  width: 100% !important;
+  height: 280px !important;
+}
+body.mobile-mode #card-heatmap {
+  min-height: 380px !important;
+}
+body.mobile-mode #heatmapFrame {
+  width: 100% !important;
+  height: 360px !important;
+  border: none !important;
+}
+
+/* Tabelas com scroll */
+body.mobile-mode table {
+  display: block !important;
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+}
 
 /* Botão toggle fixo */
 #btn-view-toggle {
@@ -1633,6 +1626,16 @@ html, body { overflow-x: hidden; }
 </div>
 <div id="libwarn" style="width:100%;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
 </header>
+
+<!-- Barra mobile simples -->
+<div id="mobile-topbar" style="display:none;position:sticky;top:0;z-index:1000;background:linear-gradient(135deg,#0d1424,#0a0f1c);border-bottom:1px solid #1e2e46;padding:8px 12px;align-items:center;justify-content:space-between;gap:8px;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span style="font-size:18px;">🃏</span>
+    <span style="color:#e6edf3;font-size:14px;font-weight:700;">Poker do Plaza</span>
+  </div>
+  <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;">➕ Registrar</button>
+</div>
+
 <div class="container">
 <div class="controls" style="padding-top:4px;padding-bottom:4px;">
 <div class="card">
