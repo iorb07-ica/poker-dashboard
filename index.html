@@ -1158,8 +1158,8 @@ body.mobile-mode table {
 /* Botão toggle fixo */
 #btn-view-toggle {
   position: fixed;
-  bottom: 90px;
-  right: 12px;
+  bottom: 24px;
+  right: 20px;
   z-index: 9998;
   background: linear-gradient(135deg, #1a3a6e, #3b82f6);
   color: #fff;
@@ -1711,7 +1711,7 @@ html, body { overflow-x: hidden; }
 
 <div class="card">
 <div class="card-title">Filtro de Jogadores</div>
-<div style="display:flex; gap:10px; align-items:flex-start;">
+<div id="chips-parent" style="display:flex; gap:10px; align-items:flex-start;">
 <div class="chips" id="chips" style="flex:1 1 auto;"></div>
 <div class="chip-tools" style="flex:0 0 auto; align-items:flex-start;">
 <button class="btn" id="btn-all">Marcar todos</button>
@@ -1725,7 +1725,7 @@ html, body { overflow-x: hidden; }
 <div class="card mini-card">
 <div class="mini-header">
 <span class="card-title" style="margin:0">Ranking da Semana</span>
-<select id="mini-wk"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52">WK52</option></select>
+<select id="mini-wk"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52" selected>WK52</option></select>
 </div>
 <div class="mini-list" id="mini-wk-list"></div>
 <div class="mini-prizes" id="mini-wk-prizes"></div><div class="mini-rule" id="mini-wk-rule"></div></div>
@@ -2849,6 +2849,16 @@ function initSelectors(){
   // também atualiza combos de mini-cards e campeões
   initMiniCombos();
   initChampCombos();
+  // Force render last WK after init
+  try{
+    var wksAll = Array.from(new Set(RAW.map(function(r){return +r.wk;}).filter(Boolean))).sort(function(a,b){return a-b;});
+    if(wksAll.length){
+      var lastWK = wksAll[wksAll.length-1];
+      var selWk = document.getElementById('mini-wk');
+      if(selWk){ selWk.value = lastWK; }
+      if(typeof window.renderMini === 'function') window.renderMini('semana', lastWK);
+    }
+  }catch(e){}
 }
 
 function afterDataLoaded(){
@@ -2860,6 +2870,16 @@ function afterDataLoaded(){
   document.getElementById('metrica').value='pontos';
   initMiniCombos();
   initChampCombos();
+  // Force render last WK after init
+  try{
+    var wksAll = Array.from(new Set(RAW.map(function(r){return +r.wk;}).filter(Boolean))).sort(function(a,b){return a-b;});
+    if(wksAll.length){
+      var lastWK = wksAll[wksAll.length-1];
+      var selWk = document.getElementById('mini-wk');
+      if(selWk){ selWk.value = lastWK; }
+      if(typeof window.renderMini === 'function') window.renderMini('semana', lastWK);
+    }
+  }catch(e){}
   // Auto-select last WK in mini ranking card
   try{
     const wks = RAW.map(r=>+r.wk||0).filter(Boolean);
@@ -3051,7 +3071,7 @@ function initMiniCombos(){
   if (!Array.isArray(RAW) || RAW.length === 0 || !sels.wk) return;
   // weeks
   let wks = Array.from(new Set(RAW.map(r=>+r.wk).filter(Boolean))).sort((a,b)=>a-b);
-  sels.wk.innerHTML=''; wks.forEach(w=>{ const o=document.createElement('option'); o.value=w; o.textContent='WK'+String(w).padStart(2,'0'); sels.wk.appendChild(o); }); if(wks.length) sels.wk.value = wks[wks.length-1];
+  sels.wk.innerHTML=''; wks.forEach(w=>{ const o=document.createElement('option'); o.value=w; o.textContent='WK'+String(w).padStart(2,'0'); sels.wk.appendChild(o); }); if(wks.length){ sels.wk.value = wks[wks.length-1]; }
   // months
   const nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   let meses = Array.from(new Set(RAW.map(r=>+r.mes).filter(Boolean))).sort((a,b)=>a-b);
@@ -8836,6 +8856,7 @@ window.ghCarregarDados = function(){
       tryInitCharts();
       refresh();
       window.RAW = RAW || [];
+      try{ initMiniCombos(); }catch(e){}
       ghMostrarStatus('✅ Dados carregados do GitHub!', '#22c55e');
     })
     .catch(function(e){
@@ -8982,8 +9003,8 @@ window.addEventListener('load', function(){
 
 <script>
 (function(){
-  // Auto-detect mobile on load
-  var isMobile = window.innerWidth < 900;
+  // Auto-detect mobile on load - only for small screens
+  var isMobile = window.innerWidth < 768;
   if(isMobile) enableMobileMode(true);
 
   function enableMobileMode(on){
@@ -8991,12 +9012,20 @@ window.addEventListener('load', function(){
       document.body.classList.add('mobile-mode');
       document.getElementById('btn-view-toggle').innerHTML = '🖥️ Desktop';
       localStorage.setItem('viewMode','mobile');
-      // Force hide PIX elements
+      // Force hide PIX and DADOS elements
       ['pix-box','pix-title','card-pix','card-dados'].forEach(function(id){
         var el = document.getElementById(id);
-        if(el) el.style.display = 'none';
+        if(el){ el.style.cssText += ';display:none!important'; }
       });
-      document.querySelectorAll('.pix-box').forEach(function(el){ el.style.display='none'; });
+      document.querySelectorAll('.pix-box, .pix-meta, .pix-actions, .pix-label, .pix-key, .pix-qr').forEach(function(el){
+        el.style.cssText += ';display:none!important';
+      });
+      // Hide entire card containing PIX
+      document.querySelectorAll('.card').forEach(function(card){
+        if(card.querySelector('.pix-box') || card.querySelector('#pix-box')){
+          card.style.cssText += ';display:none!important';
+        }
+      });
     } else {
       document.body.classList.remove('mobile-mode');
       document.getElementById('btn-view-toggle').innerHTML = '📱 Mobile';
@@ -9004,10 +9033,12 @@ window.addEventListener('load', function(){
     }
   }
 
-  // Restore preference
+  // Restore preference only if appropriate for screen size
   var saved = localStorage.getItem('viewMode');
-  if(saved === 'mobile') enableMobileMode(true);
+  var isSmallScreen = window.innerWidth < 768;
+  if(saved === 'mobile' && isSmallScreen) enableMobileMode(true);
   else if(saved === 'desktop') enableMobileMode(false);
+  else if(isSmallScreen) enableMobileMode(true);
 
   window.toggleViewMode = function(){
     var on = !document.body.classList.contains('mobile-mode');
