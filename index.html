@@ -1543,7 +1543,7 @@ body.mobile-mode #mobile-topbar {
 <style id="heatmap-card-css">
 /* Heatmap card sizing & look to match theme */
 .chart.heatmap-span{ grid-column: 1 / 4; grid-row: auto; min-height: 360px; }
-#card-heatmap{ position:relative; }
+#card-heatmap{ position:relative; height:420px; max-height:420px; overflow:hidden; }
 #card-heatmap .title{ position:absolute; left:10px; top:6px; color:#9fb3d4; font-size:12px; letter-spacing:.5px; text-transform:uppercase; }
 #chart-heatmap{ position:absolute; inset:26px 6px 6px 6px; }
 </style>
@@ -1915,8 +1915,8 @@ function setLoadingProgress(pct, msg){
     Sem dados carregados
   </div>
 </div>
-<div class="chart radar-col"><div class="title">Perfil (Radar)</div><div id="chartRadar" style="height:100%"></div></div>
-<div class="chart champ-col">
+<div class="chart radar-col" id="card-radar"><div class="title">Perfil (Radar)</div><div id="chartRadar" style="height:100%"></div></div>
+<div class="chart champ-col" id="card-campeoes">
 <div class="title">Campeões do período (Top 5 + prêmios)</div>
 <div style="position:absolute; right:10px; top:6px; display:flex; gap:6px">
 <select id="champ-period">
@@ -1931,7 +1931,7 @@ function setLoadingProgress(pct, msg){
 <div style="padding:12px 10px"><div class="champ-list" id="champList"></div></div>
 </div>
 </div>
-<div class="heatmap-span chart" id="card-heatmap" style=" display:block"><div class="card-header"><h2>Heatmap</h2></div><div class="card-body"><iframe id="heatmapFrame" srcdoc="
+<div class="heatmap-span chart" id="card-heatmap" style=" display:block"><div class="card-header"><h2>Heatmap</h2></div><div class="card-body"><iframe id="heatmapFrame" style="width:100%;height:380px;max-height:380px;border:none;" srcdoc="
 &lt;!DOCTYPE html&gt;
 
 &lt;html lang=&quot;pt-BR&quot;&gt;
@@ -9083,6 +9083,9 @@ window.addEventListener('load', function(){
         '#kpis-section { display: none !important; }',
         // Hide Hall da Fama
         '#medalhas-right-hall { display: none !important; }',
+        '#card-radar { display: none !important; }',
+        '#card-campeoes { display: none !important; }',
+        '#card-heatmap { display: none !important; }',
         // Medals full width
         '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; }',
         '#podium { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }',
@@ -9105,7 +9108,8 @@ window.addEventListener('load', function(){
         '#card-medalhas { min-height: auto !important; height: auto !important; overflow: visible !important; }',
         '.chart.medal-col { overflow: visible !important; height: auto !important; min-height: 360px !important; }',
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
-        '.chart.ranking-span { margin-top: 0 !important; }',
+        '.chart.ranking-span { margin-top: 0 !important; padding-top: 0 !important; }',
+        '.grid-charts > .chart { margin-top: 0 !important; }',
         '.controls { position: static !important; top: unset !important; }',
         '.grid-charts { gap: 8px !important; }',
         '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
@@ -9169,6 +9173,9 @@ window.addEventListener('load', function(){
         // Hide Hall da Fama
         var hall = document.getElementById('medalhas-right-hall');
         if(hall) hall.style.display='none';
+        ['card-radar','card-campeoes','card-heatmap'].forEach(function(id){
+          var el=document.getElementById(id); if(el) el.style.display='none';
+        });
         // Force show all medal rows
         var list49 = document.getElementById('list-4-9');
         if(list49){ list49.style.display='block'; list49.style.overflow='visible'; list49.style.height='auto'; }
