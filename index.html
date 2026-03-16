@@ -28,7 +28,7 @@
 <script>window.DATA={"ledger": [], "podios": []};
 /* DADOS_EMBUTIDOS */
 // Versão da senha — mude esse número junto com a senha para forçar atualização
-var SENHA_VERSION = '3';
+var SENHA_VERSION = '2';
 if(localStorage.getItem('rn_senha_version') !== SENHA_VERSION) {
   localStorage.removeItem('rn_senha');
   localStorage.setItem('rn_senha_version', SENHA_VERSION);
@@ -2032,6 +2032,15 @@ html body .row.mini-ranks #card-kopontos {
   </div>
 
   <script>
+  function toggleCard(bodyId, arrowId) {
+    var body = document.getElementById(bodyId);
+    var arrow = document.getElementById(arrowId);
+    if(!body) return;
+    var isOpen = body.style.display !== 'none';
+    body.style.display = isOpen ? 'none' : 'block';
+    if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+  }
+
   function avisarWhatsApp() {
     var msg = "🃏 *Poker do Plaza — Dashboard Atualizado!*\n\n";
     msg += "📊 O dashboard foi atualizado com os resultados mais recentes.\n\n";
@@ -2830,16 +2839,20 @@ window.addEventListener('message', (ev) =&gt; {
 
 
 <div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
-  <div class="card" style="padding:22px 18px;">
+  <div class="card" style="padding:0;">
 
-    <!-- Título -->
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">
+    <!-- Título colapsável -->
+    <div onclick="toggleCard('hof-body','hof-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
       <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,215,0,.6));">🏆</span>
-      <div>
+      <div style="flex:1;">
         <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Hall da Fama</div>
         <div style="font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;">Poker do Plaza · Campeonatos Anuais</div>
       </div>
+      <span id="hof-arrow" style="font-size:20px;color:#9fb3d4;transition:transform .3s;">▾</span>
     </div>
+
+    <!-- Corpo colapsável -->
+    <div id="hof-body" style="padding:0 18px 18px;display:none;">
 
     <!-- Legenda -->
     <div style="display:flex;gap:18px;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex-wrap:wrap;">
@@ -2923,6 +2936,114 @@ window.addEventListener('message', (ev) =&gt; {
         </div>
       </div>
     </div>
+    </div><!-- fim hof-body -->
+  </div>
+</div>
+
+<!-- ═══ TORNEIOS ESPECIAIS ═══ -->
+<div id="card-torneios" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+
+    <!-- Título colapsável -->
+    <div onclick="toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
+      <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,140,0,.6));">🎯</span>
+      <div style="flex:1;">
+        <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Torneios Especiais</div>
+        <div style="font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;">Poker do Plaza · Ranking de Títulos</div>
+      </div>
+      <span id="torneios-arrow" style="font-size:20px;color:#9fb3d4;transition:transform .3s;">▾</span>
+    </div>
+
+    <!-- Corpo colapsável -->
+    <div id="torneios-body" style="padding:0 18px 18px;display:none;">
+
+      <!-- Jogadores -->
+      <div>
+
+        <!-- 🥇 Magu — 3 títulos -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,180,0,.05));border:1px solid rgba(255,215,0,.3);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2.5px solid rgba(255,215,0,.6);" data-player="Magu"><span class="hof-init">M</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Magu</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥈 Israel — 2 títulos -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Israel"><span class="hof-init">I</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Israel</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥈 Filipe — 2 títulos -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Filipe"><span class="hof-init">Fi</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Filipe</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥈 Ewe — 2 títulos -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Ewe"><span class="hof-init">E</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Ewe</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥉 Pedro — 1 título -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Pedro"><span class="hof-init">P</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Pedro</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥉 Rafa — 1 título -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Rafa"><span class="hof-init">R</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Rafa</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🥉 Oscar — 1 título -->
+        <div style="display:grid;grid-template-columns:56px 1fr;align-items:center;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:0;">
+          <div style="width:54px;height:54px;border-radius:50%;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);border:2px solid rgba(255,255,255,.2);" data-player="Oscar"><span class="hof-init">O</span></div>
+          <div>
+            <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Oscar</div>
+            <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));">🏆</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- fim torneios-body -->
   </div>
 </div>
 
@@ -8070,7 +8191,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function fmt(v){ return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
   // ── Abrir/fechar ──────────────────────────────────────────
-  // Senha hash (SHA-256 de 'Ica0711' — troque pela sua)
+  // Senha hash (SHA-256 de 'poker2026' — troque pela sua)
   // Para gerar um novo hash: https://emn178.github.io/online-tools/sha256.html
   var RN_SENHA_HASH = '3a1b2c'; // placeholder, será substituído
   var RN_AUTENTICADO = false;
@@ -8105,7 +8226,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!inp) return;
     // Limpar caracteres invisíveis e normalizar (iOS pode inserir espaços especiais)
     var senha = inp.value.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
-    var senhaCorreta = 'Ica0711'; // ← troque aqui para mudar a senha
+    var senhaCorreta = 'poker2026'; // ← troque aqui para mudar a senha
     if(senha === senhaCorreta){
       RN_AUTENTICADO = true;
       document.getElementById('rn-senha-modal').style.display='none';
