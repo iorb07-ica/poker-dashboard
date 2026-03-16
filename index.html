@@ -2014,7 +2014,41 @@ html body .row.mini-ranks #card-kopontos {
     <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-mobile">📱</button>
     <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:rgba(59,130,246,0.35);border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-desktop">🖥️</button>
   </div>
-  <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 14px rgba(34,197,94,.35);display:flex;align-items:center;gap:6px;">➕ Registrar Noite</button>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 14px rgba(34,197,94,.35);display:flex;align-items:center;gap:6px;">➕ Registrar Noite</button>
+    <button onclick="avisarWhatsApp()" title="Avisar grupo no WhatsApp" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:12px;padding:8px 12px;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform 0.15s,box-shadow 0.15s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+    </button>
+  </div>
+
+  <script>
+  function avisarWhatsApp() {
+    var msg = "🃏 *Poker do Plaza — Dashboard Atualizado!*\n\n";
+    msg += "📊 O dashboard foi atualizado com os resultados mais recentes.\n\n";
+    msg += "🔗 Acesse agora:\nhttps://iorb07-ica.github.io/poker-dashboard/\n\n";
+    msg += "_(enviado pelo Dashboard)_";
+    var encoded = encodeURIComponent(msg);
+    window.open("https://wa.me/?text=" + encoded, "_blank");
+  }
+
+  function mostrarPopupWhatsApp(wk, numJogadores) {
+    var old = document.getElementById('wpp-popup');
+    if(old) old.remove();
+    var popup = document.createElement('div');
+    popup.id = 'wpp-popup';
+    popup.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;">'
+      + '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(37,211,102,0.3);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.7);text-align:center;">'
+      + '<div style="font-size:48px;margin-bottom:12px;">📲</div>'
+      + '<div style="font-size:17px;font-weight:800;color:#e6edf3;margin-bottom:8px;">Avisar o grupo?</div>'
+      + '<div style="font-size:13px;color:#9fb3d4;margin-bottom:24px;line-height:1.6;">'
+      + 'WK' + String(wk).padStart(2,'0') + ' registrada com <strong style="color:#25D366;">' + numJogadores + ' jogadores</strong>.<br>Deseja avisar o grupo no WhatsApp?</div>'
+      + '<div style="display:flex;gap:12px;">'
+      + '<button onclick="document.getElementById('wpp-popup').remove()" style="flex:1;background:rgba(255,255,255,0.07);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Não, obrigado</button>'
+      + '<button onclick="avisarWhatsApp();document.getElementById('wpp-popup').remove();" style="flex:1;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(37,211,102,0.4);">✅ Sim, avisar!</button>'
+      + '</div></div></div>';
+    document.body.appendChild(popup);
+  }
+  </script>
 </div>
 <div id="libwarn" style="width:100%;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
 </header>
@@ -2034,7 +2068,12 @@ html body .row.mini-ranks #card-kopontos {
       <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-mobile">📱</button>
       <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-desktop">🖥️</button>
     </div>
-    <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:22px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,0.35);letter-spacing:0.3px;white-space:nowrap;">➕ Registrar</button>
+    <div style="display:flex;align-items:center;gap:6px;">
+      <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:22px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,0.35);letter-spacing:0.3px;white-space:nowrap;">➕ Registrar</button>
+      <button onclick="avisarWhatsApp()" title="Avisar grupo" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:22px;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -8054,9 +8093,9 @@ document.addEventListener('DOMContentLoaded', function(){
     var inp = document.getElementById('rn-senha-input');
     var err = document.getElementById('rn-senha-erro');
     if(!inp) return;
-    var senha = inp.value.trim();
-    // Verificar contra senha salva no localStorage
-    var senhaCorreta = (localStorage.getItem('rn_senha') || 'poker2026').trim();
+    // Limpar caracteres invisíveis e normalizar (iOS pode inserir espaços especiais)
+    var senha = inp.value.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
+    var senhaCorreta = (localStorage.getItem('rn_senha') || 'poker2026').replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
     if(senha === senhaCorreta){
       RN_AUTENTICADO = true;
       document.getElementById('rn-senha-modal').style.display='none';
@@ -8506,6 +8545,11 @@ document.addEventListener('DOMContentLoaded', function(){
     var toast=document.getElementById('rn-toast');
     toast.textContent='✅ WK'+String(wk).padStart(2,'0')+' registrada! '+presentes.length+' jogadores.';
     toast.style.background=''; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},4000);
+
+    // Popup WhatsApp após salvar
+    setTimeout(function(){
+      mostrarPopupWhatsApp(wk, presentes.length);
+    }, 800);
   };
 
 })();
@@ -9078,6 +9122,7 @@ window.addEventListener('load', function(){
     <h3 style="color:#e6edf3;margin:0 0 6px;font-size:18px;">Área restrita</h3>
     <p style="color:#8a9ab8;font-size:13px;margin:0 0 20px;">Digite a senha para registrar ou editar noites.</p>
     <input type="password" id="rn-senha-input" placeholder="Senha..."
+      autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false"
       style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid #1e3a5a;border-radius:12px;color:#e6edf3;padding:12px 16px;font-size:16px;text-align:center;margin-bottom:8px;"/>
     <div id="rn-senha-erro" style="display:none;color:#f87171;font-size:13px;margin-bottom:8px;">❌ Senha incorreta</div>
     <div style="display:flex;gap:10px;justify-content:center;margin-top:8px;">
