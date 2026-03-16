@@ -1197,8 +1197,8 @@ body.mobile-mode #mobile-topbar {
 /* Botão toggle fixo */
 #btn-view-toggle {
   position: fixed;
-  bottom: 24px;
-  right: 20px;
+  bottom: 16px;
+  right: 16px;
   z-index: 9998;
   background: linear-gradient(135deg, #1a3a6e, #3b82f6);
   color: #fff;
@@ -2439,7 +2439,7 @@ window.addEventListener('message', (ev) =&gt; {
 &lt;/html&gt;
 " style="width:100%; height:600px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0b1220;"></iframe></div></div></div>
 <!-- RANKING ANUAL FIXO -->
-<div class="card" style="margin-top:10px">
+<div class="card" id="card-premiacoes" style="margin-top:10px">
 <div class="card-title">Premiações por Jogador</div>
 <div class="chart" id="chartPlayerAwards" style="height:320px"></div>
 </div>
@@ -3420,7 +3420,7 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:95,right:80,top:20,bottom:20},
+      grid:{left:90,right:60,top:10,bottom:10},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
       yAxis:{type:'category',data:names,inverse:true,axisLabel:{
       formatter:function(value,idx){
@@ -3434,7 +3434,7 @@ function refresh(){
       }
     }},
       series:[
-        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:28, z:1, silent:true,
+        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:24, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
         { type:'bar', data: vals, barWidth:27, z:2, realtimeSort: !isSaldo,
           label:{ show:true, color:'#ffffff', position:'inside',
@@ -3622,8 +3622,8 @@ function refresh(){
       series:[{
         name:'KOs por jogador', type:'pie', radius:['20%','42%'], center:['50%','52%'],
         avoidLabelOverlap:true, containLabel:true,
-        label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:11 },
-        labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
+        label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:10 },
+        labelLine:{ length:8, length2:6, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
         data: seriesData
       }]
     });
@@ -6089,7 +6089,7 @@ document.addEventListener('DOMContentLoaded', function(){
         name:'KOs por jogador', type:'pie', radius:['30%','70%'], center:['50%','55%'],
         avoidLabelOverlap:true, containLabel:true,
         label:{ show:true, formatter: '{b}: {c} ({d}%)', color:'#e6edf3', fontSize:12 },
-        labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
+        labelLine:{ length:8, length2:6, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
         data:data
       }]
     }, true);
@@ -9073,19 +9073,21 @@ window.addEventListener('load', function(){
         // Hide header
         'header { display: none !important; }',
         // Show mobile topbar
-        '#mobile-topbar { display: flex !important; position: sticky; top: 0; z-index: 1000; }',
+        '#mobile-topbar { display: flex !important; position: sticky !important; top: 0 !important; z-index: 999 !important; width: 100% !important; }',
         // Hide PIX
         '#pix-box, #pix-title, .pix-box, .pix-meta, .pix-actions { display: none !important; }',
         // Hide DADOS card
         '#card-dados { display: none !important; }',
         '#card-pix { display: none !important; }',
         // Hide KPIs
-        '#kpis-section { display: none !important; }',
+        '#kpis-section { display: none !important; height: 0 !important; margin: 0 !important; padding: 0 !important; overflow: hidden !important; }',
         // Hide Hall da Fama
         '#medalhas-right-hall { display: none !important; }',
         '#card-radar { display: none !important; }',
+        '#card-premiacoes { display: none !important; }',
         '#card-campeoes { display: none !important; }',
         '#card-heatmap { display: none !important; }',
+        '#card-premiacoes { display: none !important; }',
         // Medals full width
         '.medalhas-left { flex: 1 1 100% !important; min-width: 0 !important; width: 100% !important; }',
         '#podium { grid-template-columns: repeat(3, 1fr) !important; gap: 6px !important; }',
@@ -9102,14 +9104,15 @@ window.addEventListener('load', function(){
         '.row.mini-ranks { display: flex !important; flex-direction: column !important; }',
         '.row.mini-ranks .card.mini-card { width: 100% !important; }',
         // Charts stack
-        '.grid-charts { display: flex !important; flex-direction: column !important; }',
-        '.grid-charts .chart { width: 100% !important; height: 400px !important; padding-bottom: 10px !important; }',
+        '.grid-charts { display: flex !important; flex-direction: column !important; gap: 8px !important; margin-top: 0 !important; }',
+        '.grid-charts .chart { width: 100% !important; height: auto !important; min-height: 300px !important; padding-bottom: 16px !important; }',
         '#card-heatmap { min-height: 420px !important; }',
         '#card-medalhas { min-height: auto !important; height: auto !important; overflow: visible !important; }',
         '.chart.medal-col { overflow: visible !important; height: auto !important; min-height: 360px !important; }',
         '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
-        '.chart.ranking-span { margin-top: 0 !important; padding-top: 0 !important; }',
+        '.chart.ranking-span { margin-top: 0 !important; padding-top: 0 !important; min-height: 420px !important; height: auto !important; }',
         '.grid-charts > .chart { margin-top: 0 !important; }',
+        '.grid-charts { padding-top: 0 !important; margin-top: 0 !important; }',
         '.controls { position: static !important; top: unset !important; }',
         '.grid-charts { gap: 8px !important; }',
         '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
@@ -9120,7 +9123,8 @@ window.addEventListener('load', function(){
         // Tables scroll
         'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
         // Toggle button
-        '#btn-view-toggle { bottom: 80px !important; right: 12px !important; font-size: 11px !important; padding: 7px 12px !important; }',
+        /* Toggle button: fixed at top-right in mobile */
+        '#btn-view-toggle { position: fixed !important; top: 8px !important; right: 8px !important; bottom: unset !important; font-size: 10px !important; padding: 4px 10px !important; z-index: 1001 !important; opacity: 0.85 !important; }'
         /* Extra padding at bottom of every card */
         '.card { padding-bottom: 20px !important; overflow: visible !important; }',
         /* Charts need explicit height and no clipping */
@@ -9135,19 +9139,26 @@ window.addEventListener('load', function(){
         '.medalhas-left { width: 100% !important; min-width: 0 !important; overflow: visible !important; }',
         '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
         /* Podium: scroll horizontal to show all 3 */
-        '#podium { display: flex !important; flex-direction: row !important; overflow-x: auto !important; gap: 8px !important; padding-bottom: 8px !important; -webkit-overflow-scrolling: touch !important; }',
-        '.slot { min-width: 120px !important; flex-shrink: 0 !important; padding: 8px 6px !important; }',
-        '.slot img, .slot .avatar { width: 60px !important; height: 60px !important; }',
-        '.slot .name { font-size: 12px !important; }',
-        '.slot .rank-badge { font-size: 11px !important; }',
-        '.slot .tally { gap: 4px !important; flex-wrap: nowrap !important; }',
+        /* Podium: 3 cols visible, no scroll needed */
+        '#podium { display: grid !important; grid-template-columns: repeat(3,1fr) !important; gap: 4px !important; overflow: visible !important; }',
+        '.slot { padding: 6px 4px !important; min-height: unset !important; }',
+        '.slot img, .slot .avatar { width: 50px !important; height: 50px !important; }',
+        '.slot .name { font-size: 10px !important; text-align: center !important; }',
+        '.slot .rank-badge { font-size: 10px !important; }',
+        /* Tally: stack vertically to save horizontal space */
+        '.slot .tally, #card-medalhas .slot .tally { display: flex !important; flex-direction: column !important; gap: 2px !important; align-items: flex-start !important; }',
+        '.slot .chip, #card-medalhas .slot .chip { padding: 2px 4px !important; font-size: 10px !important; }',
+        '.slot .medal, #card-medalhas .slot .medal { width: 12px !important; height: 12px !important; }',
         /* List 4-9: show all */
-        '#list-4-9 { display: block !important; }',
-        '#list-4-9 .row { padding: 8px 10px !important; gap: 8px !important; }',
-        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 32px !important; height: 32px !important; }',
-        '#list-4-9 .row .who .nm { font-size: 13px !important; }',
-        '.tally svg, .tally .medal { width: 16px !important; height: 16px !important; }',
-        '.tally .cnt { font-size: 12px !important; }',
+        '#list-4-9 { display: block !important; overflow: visible !important; }',
+        '#list-4-9 .row { padding: 6px 8px !important; gap: 6px !important; display: flex !important; align-items: center !important; flex-wrap: nowrap !important; overflow: visible !important; }',
+        '#list-4-9 .row .who { flex: 1 !important; min-width: 0 !important; display: flex !important; align-items: center !important; gap: 6px !important; }',
+        '#list-4-9 .row .who img, #list-4-9 .row .who .avatar { width: 28px !important; height: 28px !important; flex-shrink: 0 !important; }',
+        '#list-4-9 .row .who .nm { font-size: 12px !important; }',
+        /* Medals in list: horizontal, compact */
+        '#list-4-9 .medals { display: flex !important; gap: 4px !important; align-items: center !important; flex-shrink: 0 !important; overflow: visible !important; }',
+        '#list-4-9 .medals strong { font-size: 11px !important; }',
+        '#list-4-9 .medals svg, #list-4-9 .medals .medal { width: 13px !important; height: 13px !important; }',
         /* Bottom padding for last card */
         '.container { padding-bottom: 100px !important; }'
       ].join(' ');
@@ -9167,13 +9178,13 @@ window.addEventListener('load', function(){
             card.style.display='none';
           }
         });
-        // Hide KPIs
+        // Hide KPIs completely
         var kpis = document.getElementById('kpis-section');
-        if(kpis){ kpis.style.display='none'; kpis.style.cssText+='display:none!important'; }
+        if(kpis){ kpis.style.cssText='display:none!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden!important;'; }
         // Hide Hall da Fama
         var hall = document.getElementById('medalhas-right-hall');
         if(hall) hall.style.display='none';
-        ['card-radar','card-campeoes','card-heatmap'].forEach(function(id){
+        ['card-radar','card-campeoes','card-heatmap','card-premiacoes'].forEach(function(id){
           var el=document.getElementById(id); if(el) el.style.display='none';
         });
         // Force show all medal rows
@@ -9269,7 +9280,10 @@ window.addEventListener('load', function(){
       try{ if(window.eRanking) window.eRanking.resize(); }catch(e){}
       try{ if(window.eKOs)     window.eKOs.resize(); }catch(e){}
       try{ if(window.eEvo)     window.eEvo.resize(); }catch(e){}
-    }, 150);
+    }, 300);
+    setTimeout(function(){
+      try{ if(window.eRanking) window.eRanking.resize(); }catch(e){}
+    }, 800);
   };
 })();
 </script>
