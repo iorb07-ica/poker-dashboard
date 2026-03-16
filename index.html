@@ -2,21 +2,7 @@
 
 <html lang="pt-br">
 <head>
-<meta chars
-
-/* Ocultar KPIs no mobile */
-body.mobile-mode #kpis-section {
-  display: none !important;
-}
-
-/* Ocultar Hall da Fama no mobile */
-body.mobile-mode #medalhas-right-hall {
-  display: none !important;
-}
-body.mobile-mode .medalhas-left {
-  flex: 1 1 100% !important;
-  min-width: 0 !important;
-}et="utf-8"/>
+<meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Poker do Plaza - Dashboard 2026</title>
 
@@ -63,7 +49,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
     }
     *{box-sizing:border-box}
-    html { overflow: auto; }
+    html { overflow-y: auto; overflow-x: hidden; }
     body{
       margin:0;color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       background:
@@ -777,6 +763,23 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
   max-width: 30% !important;
   width: 30% !important;
 }
+</style><style id="v54_trim_filter_fix">
+/* v54-fix: filtro Trimestre na barra de controles — mesmo tamanho dos outros */
+#main-controls .card select {
+  font-size: 13px !important;
+  padding: 6px 8px !important;
+  min-height: unset !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+/* mini-ranks selects pequenos e discretos */
+.row.mini-ranks .card.mini-card .mini-header select {
+  width: 42% !important;
+  max-width: 42% !important;
+  font-size: 12px !important;
+  padding: 3px 6px !important;
+  min-height: unset !important;
+}
 </style><style id="v55_align_kpis_grid">
 /* v55: Alinha os KPIs exatamente sob os 3 mini-cards e o Fúria de KO */
 .kpis{
@@ -1168,7 +1171,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .tally{margin-top:6px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;font-size:16px}
 #card-medalhas .chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
 #card-medalhas .medal{width:18px;height:18px;vertical-align:middle}
-#card-medalhas .list{margin-top:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:auto;min-height:140px}
+#card-medalhas .list{margin-top:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:visible;height:auto;min-height:0}
 #card-medalhas .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-top:1px solid rgba(255,255,255,.06)}
 #card-medalhas .row:first-child{border-top:none}
 #card-medalhas .pos{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-weight:700}
@@ -1207,7 +1210,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .medal{ width:14px; height:14px; }
 
 /* Compacta a lista 4–9 */
-#card-medalhas .list{ margin-top:6px; border-radius:10px; min-height:110px; }
+#card-medalhas .list{ margin-top:6px; border-radius:10px; min-height:0; overflow:visible; height:auto; }
 #card-medalhas .row{ grid-template-columns:36px 1fr auto; gap:8px; padding:6px 8px; }
 #card-medalhas .pos{ width:26px; height:26px; font-size:12px; }
 #card-medalhas .who .avatar{ width:28px; height:28px; font-size:13px; }
@@ -1500,8 +1503,8 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 .mini-header select{ display:inline-block !important; visibility:visible !important; opacity:1 !important; }
 .card.mini-card .mini-header{ position:relative; z-index:5; }
 /* Avoid any global overflow creating horizontal scrollbar */
-html, body { overflow-x: hidden; }
-.grid-charts { overflow: hidden; }
+body { overflow-x: hidden; }
+.grid-charts { overflow: visible; }
 </style><style>
 .card.mini-card .mini-prizes{margin-top:6px;padding-top:6px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35}
 .card.mini-card .mini-prizes .pos{color:#9fb3d4}
@@ -1831,6 +1834,10 @@ body.mobile-mode .grid-charts .chart {
 <header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
 <h1>🃏 <span>Poker do Plaza - Dashboard 2026</span></h1>
 <div style="display:flex;gap:8px;align-items:center;">
+  <div id="desktop-mode-btns" style="display:flex;gap:4px;background:rgba(255,255,255,0.07);border-radius:10px;padding:3px;">
+    <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-mobile">📱</button>
+    <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:rgba(59,130,246,0.35);border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-desktop">🖥️</button>
+  </div>
   <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 14px rgba(34,197,94,.35);display:flex;align-items:center;gap:6px;">➕ Registrar Noite</button>
 </div>
 <div id="libwarn" style="width:100%;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
@@ -2587,7 +2594,7 @@ window.addEventListener('message', (ev) =&gt; {
 &lt;/html&gt;
 " style="width:100%; height:600px; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:#0b1220;"></iframe></div></div></div>
 <!-- RANKING ANUAL FIXO -->
-<div class="card" style="margin-top:10px">
+<div class="card" id="card-premiacoes" style="margin-top:10px">
 <div class="card-title">Premiações por Jogador</div>
 <div class="chart" id="chartPlayerAwards" style="height:320px"></div>
 </div>
@@ -3092,15 +3099,23 @@ function afterDataLoaded(){
   document.getElementById('metrica').value='pontos';
   (window.initMiniCombos || initMiniCombos)();
   initChampCombos();
-  // Force render last WK after init
+  // Render all 3 mini-cards after init
   try{
     var wksAll = Array.from(new Set(RAW.map(function(r){return +r.wk;}).filter(Boolean))).sort(function(a,b){return a-b;});
+    var _rm = window.renderMini;
+    if(typeof _rm !== 'function') throw 'renderMini not ready';
     if(wksAll.length){
       var lastWK = wksAll[wksAll.length-1];
       var selWk = document.getElementById('mini-wk');
-      if(selWk){ selWk.value = lastWK; }
-      if(typeof window.renderMini === 'function') window.renderMini('semana', lastWK);
+      if(selWk) selWk.value = lastWK;
+      _rm('semana', lastWK);
     }
+    // Renderiza mês
+    var selMes = document.getElementById('mini-mes');
+    if(selMes && selMes.value) setTimeout(function(){ _rm('mes', +selMes.value); }, 30);
+    // Renderiza trimestre com delay maior para garantir que semana/mes já rodaram
+    var selTri = document.getElementById('mini-tri');
+    if(selTri && selTri.value) setTimeout(function(){ _rm('trimestre', +selTri.value); }, 80);
   }catch(e){}
   // Auto-select last WK in mini ranking card
   try{
@@ -3571,9 +3586,9 @@ function refresh(){
       }
     }},
       series:[
-        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barMaxWidth:26, z:1, silent:true,
+        { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:32, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
-        { type:'bar', data: vals, barMaxWidth:25, barCategoryGap:'55%', z:2, realtimeSort: !isSaldo,
+        { type:'bar', data: vals, barWidth:32, barCategoryGap:'22%', z:2, realtimeSort: !isSaldo,
           label:{ show:true, color:'#ffffff', position:'inside',
                   formatter:(p)=> (metric==='saldo'? money(p.value): fmt(Math.round(p.value))) },
           itemStyle:{ borderRadius:[0,12,12,0], shadowBlur:16, shadowColor:'rgba(0,0,0,.35)',
@@ -4845,6 +4860,14 @@ document.addEventListener('DOMContentLoaded', function(){
     sels.wk.onchange  = function(){ state.wk  = sels.wk.value;  window.renderMini('semana',    +sels.wk.value); };
     if(sels.mes) sels.mes.onchange = function(){ state.mes = sels.mes.value; window.renderMini('mes',       +sels.mes.value); };
     if(sels.tri) sels.tri.onchange = function(){ state.tri = sels.tri.value; window.renderMini('trimestre', +sels.tri.value); };
+
+    // Render all 3 mini-cards with staggered timeouts (each period independent)
+    if(typeof window.renderMini === 'function'){
+      var _r = window.renderMini;
+      if(sels.wk.value)  setTimeout(function(){ _r('semana',    +sels.wk.value); },  0);
+      if(sels.mes && sels.mes.value) setTimeout(function(){ _r('mes',       +sels.mes.value); }, 30);
+      if(sels.tri && sels.tri.value) setTimeout(function(){ _r('trimestre', +sels.tri.value); }, 80);
+    }
   };
 
   /* ── 7. Auto-seleção inteligente ao inicializar ── */
@@ -6108,7 +6131,8 @@ document.addEventListener('DOMContentLoaded', function(){
     tableW.innerHTML = html;
   }
   function boot(){
-    render();
+    // Delay initial render so updateMedalCard is defined (it's in a later script)
+    setTimeout(render, 200);
     // re-render on filter changes and after data loads
     document.addEventListener('change', function(ev){
       const t = ev.target; if(!t || t.tagName!=='SELECT') return;
@@ -6174,7 +6198,9 @@ function avatarNode(photo,name){
       return;
     }
     if(empty){ empty.style.display="none"; }
-    podium.style.display="grid"; listEl.style.display="block"; listEl.classList.add("populated");
+    podium.style.display="grid";
+    listEl.style.display = document.body.classList.contains('mobile-mode') ? 'flex' : 'block';
+    listEl.classList.add("populated");
     const sorted=list.slice().sort(sortByMedals);
     const top3=sorted.slice(0,3);
     const rest=sorted.slice(3);
@@ -8441,6 +8467,10 @@ window.addEventListener('load', function(){
   function enableMobileMode(on){
     if(on){
       document.body.classList.add('mobile-mode');
+      // Garantir scroll visível no modo mobile
+      document.documentElement.style.overflowY = 'auto';
+      document.documentElement.style.overflowX = 'hidden';
+      document.body.style.overflowY = 'auto';
       var btn = document.getElementById('btn-view-toggle');
       if(btn) btn.innerHTML = '🖥️ Desktop';
       // Highlight active mode buttons in topbar
@@ -8449,6 +8479,9 @@ window.addEventListener('load', function(){
       if(bM) bM.style.background = 'rgba(59,130,246,0.35)';
       if(bD) bD.style.background = 'transparent';
       localStorage.setItem('viewMode','mobile');
+      // Sync desktop header buttons
+      var hM=document.getElementById('hdr-btn-mobile'); var hD=document.getElementById('hdr-btn-desktop');
+      if(hM) hM.style.background='rgba(59,130,246,0.35)'; if(hD) hD.style.background='transparent';
 
       // ── Inject mobile styles directly via JS (Safari-proof) ──
       var styleId = 'rn-mobile-inject';
@@ -8631,9 +8664,30 @@ window.addEventListener('load', function(){
         document.querySelectorAll('.card').forEach(function(card){
           if(card.querySelector('.pix-box,#pix-box,#pixQrImg')) card.style.display='none';
         });
-        // Show medals list
+        // Show medals list + force re-render if needed
         var list49=document.getElementById('list-4-9');
-        if(list49){ list49.style.display='block'; list49.style.overflow='visible'; list49.style.height='auto'; }
+        if(list49){
+          list49.style.display='flex';
+          list49.style.flexDirection='column';
+          list49.style.overflow='visible';
+          list49.style.height='auto';
+          list49.classList.add('populated');
+        }
+        // Force re-render medals in mobile mode
+        setTimeout(function(){
+          var podium=document.getElementById('podium');
+          if(podium && typeof window.refresh==='function') window.refresh();
+          // Re-check list after refresh
+          var l=document.getElementById('list-4-9');
+          if(l && l.classList.contains('populated')) l.style.display='flex';
+        }, 300);
+        // Re-trigger medal render if podium is empty
+        setTimeout(function(){
+          var podium=document.getElementById('podium');
+          if(podium && !podium.children.length && typeof window.refresh==='function'){
+            window.refresh();
+          }
+        }, 200);
         // Fix medals container
         var medLeft=document.querySelector('.medalhas-left');
         if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; }
@@ -8680,6 +8734,11 @@ window.addEventListener('load', function(){
       if(bM) bM.style.background = 'transparent';
       if(bD) bD.style.background = 'rgba(59,130,246,0.35)';
       localStorage.setItem('viewMode','desktop');
+      // Sync desktop header buttons
+      var hM=document.getElementById('hdr-btn-mobile'); var hD=document.getElementById('hdr-btn-desktop');
+      if(hM) hM.style.background='transparent'; if(hD) hD.style.background='rgba(59,130,246,0.35)';
+      // Fix scroll for desktop
+      document.documentElement.style.overflowY='auto'; document.documentElement.style.overflowX='hidden'; document.body.style.overflow='';
       // Restore elements hidden by JS inline styles
       ['card-dados','kpis-section','medalhas-right-hall'].forEach(function(id){
         var el = document.getElementById(id);
@@ -8689,6 +8748,8 @@ window.addEventListener('load', function(){
         el.style.display = '';
       });
       document.querySelectorAll('.card').forEach(function(card){
+        // Não restaurar card-premiacoes - ele não existe no modo desktop original
+        if(card.id === 'card-premiacoes') return;
         card.style.display = '';
       });
       document.querySelectorAll('.chips').forEach(function(el){
