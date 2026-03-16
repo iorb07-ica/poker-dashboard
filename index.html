@@ -101,7 +101,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
     }
     select:focus{ outline:2px solid #2d7cff; }
     option{ background:#0f1420; color:#ffffff; }
-    .chips{display:flex;flex-wrap:wrap;gap:8px;max-height:84px;overflow:auto;background:#0f1420;border:1px solid #1f2a3a;border-radius:12px;padding:8px}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;max-height:200px;overflow:auto;background:#0f1420;border:1px solid #1f2a3a;border-radius:12px;padding:8px}
     .chip{background:linear-gradient(180deg,#182033,#131a2a);padding:6px 10px;border-radius:999px;border:1px solid #2a3547;cursor:pointer;user-select:none;box-shadow:0 2px 6px rgba(0,0,0,.35)}
     .chip.active{outline:2px solid #2d7cff}
     .chip-tools{display:flex;justify-content:flex-end;gap:8px;margin-top:6px}
@@ -215,7 +215,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 
 
 /* Hall da Fama — layout mais largo e legível */
-.medalhas-flex .medalhas-left{flex:1 1 58% !important; min-width:320px;}
+.medalhas-flex .medalhas-left{flex:1 1 58% !important; min-width:220px;}
 .medalhas-flex .medalhas-right{flex:0 0 42% !important; min-width:330px;}
 .medalhas-flex .medalhas-right > div:first-child{justify-content:center;}
 #hallFame{gap:10px !important;}
@@ -505,7 +505,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 /* === Layout update: KO card to the right of the 3 mini-cards === */
 .row.mini-ranks{ display:grid; grid-template-columns: repeat(6, 1fr); gap: 10px; align-items: stretch; }
 .row.mini-ranks .card.mini-card{ grid-column: span 1; }
-#card-kopontos.mini-slot{ grid-column: 4 / 7; grid-row: 1 / 2; display:flex; flex-direction:column; }
+#card-kopontos.mini-slot{ grid-column: 4 / 7; grid-row: 1 / 2; display:flex; flex-direction:column; align-self: start; overflow: visible; padding-bottom: 16px; }
 #card-kopontos.mini-slot #chart-kopontos{ flex:1 1 auto; height: 100%; min-height: 320px; }
 /* tighten the title/subtitle margins inside this compact slot */
 #card-kopontos.mini-slot .card-title{ margin-bottom: 6px; }
@@ -514,7 +514,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 /* v29 layout: +20% width for first 3 mini-cards, -20% for KO columns */
 .row.mini-ranks{ display:grid; grid-template-columns: 1.2fr 1.2fr 1.2fr 0.8fr 0.8fr 0.8fr; gap: 10px; align-items: stretch; }
 .row.mini-ranks .card.mini-card{ grid-column: span 1; }
-#card-kopontos.mini-slot{ grid-column: 4 / 7; grid-row: 1 / 2; display:flex; flex-direction:column; }
+#card-kopontos.mini-slot{ grid-column: 4 / 7; grid-row: 1 / 2; display:flex; flex-direction:column; align-self: start; overflow: visible; padding-bottom: 16px; }
 #card-kopontos.mini-slot #chart-kopontos{ flex:1 1 auto; height: 100%; min-height: 320px; }
 </style><style>
 /* v30: Espaçamento entre título e barras dos 3 mini-cards */
@@ -1662,6 +1662,32 @@ html, body { overflow-x: hidden; }
 }
 </style>
 
+
+<script>
+var _revealAt = Date.now() + 3000;
+// Animate loading dots
+(function(){
+  var d=document.getElementById('dots'), i=0;
+  if(!d) return;
+  setInterval(function(){ d.textContent=['.','..','...'][i++%3]; }, 500);
+})(); // minimum 3s loading
+function revealDashboard(){
+  var delay = Math.max(0, _revealAt - Date.now());
+  setTimeout(function(){
+    var overlay = document.getElementById('loading-overlay');
+    var container = document.getElementById('main-container');
+    if(overlay){ overlay.style.transition='opacity 0.5s'; overlay.style.opacity='0'; setTimeout(function(){ overlay.style.display='none'; }, 500); }
+    if(container){ container.style.visibility='visible'; container.style.opacity='1'; }
+  }, delay);
+}
+function setLoadingProgress(pct, msg){
+  var bar = document.getElementById('loading-bar');
+  var msgEl = document.getElementById('loading-msg');
+  if(bar) bar.style.width = pct + '%';
+  if(msg && msgEl) msgEl.textContent = msg;
+}
+</script>
+
 </head>
 <body>
 
@@ -1682,7 +1708,16 @@ html, body { overflow-x: hidden; }
   <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;">➕ Registrar</button>
 </div>
 
-<div class="container">
+<div id="loading-overlay" style="position:fixed;inset:0;z-index:9990;background:#060d1a;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;">
+  <div style="font-size:48px;">🃏</div>
+  <div style="color:#e6edf3;font-size:16px;font-weight:700;">Poker do Plaza</div>
+  <div style="color:#4a6080;font-size:13px;" id="loading-msg">Carregando dados<span id="dots">...</span></div>
+  <div style="width:200px;height:3px;background:#1e2e46;border-radius:4px;overflow:hidden;margin-top:8px;">
+    <div id="loading-bar" style="width:0%;height:100%;background:linear-gradient(90deg,#1a6e3a,#22c55e);border-radius:4px;transition:width 0.5s;"></div>
+  </div>
+</div>
+
+<div class="container" id="main-container" style="visibility:hidden;opacity:0;transition:opacity 0.3s">
 <div class="controls" style="padding-top:4px;padding-bottom:4px;">
 <div class="card">
 <div class="card-title">Período</div>
@@ -2426,8 +2461,8 @@ let ANUAL = [];
 
 let eRanking=null, eKOs=null, eEvo=null, eMed=null, eHeat=null, eRadar=null, eAwards=null;
 
-const ROSTER8 = ['Marcus','Israel','Cristiano','Leo','Heron','Magu','Oscar','Pedro'];
-const ROSTER9 = ['Oscar','Pedro','Cristiano','Charles','Leo','Magu','Heron','Marcus','Israel'];
+const ROSTER8 = ['Marcus','Israel','Cristiano','Leo','Heron','Magu','Oscar','Pedro','Charles','Rafa'];
+const ROSTER9 = ['Oscar','Pedro','Cristiano','Charles','Leo','Magu','Heron','Marcus','Israel','Rafa'];
 const norm = s => (s||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim().toLowerCase();
 
 // Normaliza semana: aceita 4, '04', 'WK04', 'wk4' etc.
@@ -3385,7 +3420,7 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:95,right:120,top:30,bottom:20},
+      grid:{left:95,right:120,top:30,bottom:30},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
       yAxis:{type:'category',data:names,inverse:true,axisLabel:{
       formatter:function(value,idx){
@@ -3585,7 +3620,7 @@ function refresh(){
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       tooltip:{trigger:'item', formatter:(p)=>`${p.marker} ${p.name}: <b>${fmt(p.value)}</b> KOs (${p.percent}%)`},
       series:[{
-        name:'KOs por jogador', type:'pie', radius:['24%','60%'], center:['50%','53%'],
+        name:'KOs por jogador', type:'pie', radius:['22%','55%'], center:['50%','50%'],
         avoidLabelOverlap:true,
         label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:12 },
         labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
@@ -3605,7 +3640,7 @@ function refresh(){
     });
     eEvo.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:50,right:20,top:40,bottom:40},
+      grid:{left:50,right:20,top:40,bottom:70},
       xAxis:{type:'category',data:weeks.map(w=>'WK'+String(w).padStart(2,'0')), splitLine:{show:false}},
       yAxis:{type:'value', splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}}},
       series, tooltip:{trigger:'axis', order:'valueDesc'} });
@@ -4894,23 +4929,11 @@ document.addEventListener('DOMContentLoaded', function(){
     return isNaN(+dt) ? null : dt;
   }
   function lastPlayedWeekStrict(){
-    var now = new Date(); now.setHours(12,0,0,0);
+    // Always return max WK available
     var selWk = document.getElementById('mini-wk');
-    if(!selWk) return null;
-    var options = Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-    if(!options.length) return null;
-    // registros com buyin==1
-    var candidates = (window.RAW && window.RAW.length ? window.RAW : (typeof RAW !== 'undefined' ? RAW : [])).filter(r => (+r.buyin||0) >= 1);
-    // com data válida e <= hoje
-    var withDate = candidates.map(r => ({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data)}))
-                             .filter(x => x.wk>0 && x.dt && x.dt<=now && options.includes(x.wk))
-                             .sort((a,b)=> a.dt - b.dt);
-    if(withDate.length) return withDate[withDate.length-1].wk;
-    // senão, maior WK com buyin==1 nas opções
-    var wkWithBuyin = candidates.map(r=>+r.wk||0).filter(w=>w>0 && options.includes(w));
-    if(wkWithBuyin.length) return Math.max.apply(null, wkWithBuyin);
-    // fallback: maior opção
-    return Math.max.apply(null, options);
+    if(!selWk || !selWk.options.length) return null;
+    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
+    return opts.length ? Math.max.apply(null, opts) : null;
   }
   function applyAutoWK(){
     var selWk = document.getElementById('mini-wk');
@@ -4945,18 +4968,11 @@ document.addEventListener('DOMContentLoaded', function(){
   // Reuse previous strict last-week logic
   function parseDate(d){ if(!d) return null; var dt=new Date(d); return isNaN(+dt)?null:dt; }
   function lastPlayedWeekStrict(){
-    var now=new Date(); now.setHours(12,0,0,0);
-    var selWk=document.getElementById('mini-wk'); if(!selWk) return null;
-    var options=Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-    if(!options.length) return null;
-    var candidates=(window.RAW||[]).filter(r=>(+r.buyin||0)>=1);
-    var withDate=candidates.map(r=>({wk:+r.wk||0,dt:parseDate(r.data_wk||r.data)}))
-                           .filter(x=>x.wk>0 && x.dt && x.dt<=now && options.includes(x.wk))
-                           .sort((a,b)=>a.dt-b.dt);
-    if(withDate.length) return withDate[withDate.length-1].wk;
-    var wkWithBuyin=candidates.map(r=>+r.wk||0).filter(w=>w>0 && options.includes(w));
-    if(wkWithBuyin.length) return Math.max.apply(null,wkWithBuyin);
-    return Math.max.apply(null,options);
+    // Always return max WK available
+    var selWk = document.getElementById('mini-wk');
+    if(!selWk || !selWk.options.length) return null;
+    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
+    return opts.length ? Math.max.apply(null, opts) : null;
   }
   function firstWednesday(y,m){ var d=new Date(y,m,1); var add=(3-d.getDay()+7)%7; d.setDate(1+add); d.setHours(12,0,0,0); return d; }
   function monthForFilters(now){ var y=now.getFullYear(),m=now.getMonth(); var fw=firstWednesday(y,m); if(now<fw){ if(m===0){y--;m=11;} else {m--;}} return {y,m}; }
@@ -4977,8 +4993,9 @@ document.addEventListener('DOMContentLoaded', function(){
     var tVal=Math.floor(mf.m/3)+1;
     var optT=Array.from(selTri.options).find(o=>+o.value===+tVal);
     if(optT) selTri.value=String(tVal);
-    // week strict
-    var wk=lastPlayedWeekStrict();
+    // week: always use maximum available
+    var opts=Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
+    var wk=opts.length?Math.max.apply(null,opts):null;
     if(wk!=null){
       var optW=Array.from(selWk.options).find(o=>+o.value===+wk);
       if(optW) selWk.value=String(wk);
@@ -5022,26 +5039,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
   // Seleção de semana robusta
   function lastPlayedWeekStrict(){
-    var now=new Date(); now.setHours(12,0,0,0);
-    var selWk=document.getElementById('mini-wk'); if(!selWk) return null;
-    var options=Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-    if(!options.length) return null;
-    var curM = currentMonthIndex()+1; // 1..12
-    var candidates=(window.RAW||[]).filter(r=>(+r.buyin||0)>=1);
-    // 1) com data válida <= hoje
-    var withDate=candidates.map(r=>({wk:+r.wk||0, dt:parseDate(r.data_wk||r.data), mes:+r.mes||0}))
-                           .filter(x=>x.wk>0 && x.dt && x.dt<=now && options.includes(x.wk))
-                           .sort((a,b)=>a.dt-b.dt);
-    if(withDate.length) return withDate[withDate.length-1].wk;
-    // 2) se sem datas válidas, restringe por mês <= mês corrente
-    var byMonth=candidates.filter(r=> (+r.mes||0) > 0 && (+r.mes||0) <= curM )
-                          .map(r=>+r.wk||0).filter(w=>w>0 && options.includes(w));
-    if(byMonth.length) return Math.max.apply(null, byMonth);
-    // 3) maior WK com buyin==1 nas opções
-    var wkWithBuyin=candidates.map(r=>+r.wk||0).filter(w=>w>0 && options.includes(w));
-    if(wkWithBuyin.length) return Math.max.apply(null,wkWithBuyin);
-    // 4) fallback final
-    return Math.max.apply(null, options);
+    // Always return max WK available
+    var selWk = document.getElementById('mini-wk');
+    if(!selWk || !selWk.options.length) return null;
+    var opts = Array.from(selWk.options).map(function(o){ return +o.value; }).filter(Boolean);
+    return opts.length ? Math.max.apply(null, opts) : null;
   }
 
   // Guarda e restaura seleção local dos mini-cards
@@ -5233,7 +5235,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     if(!window.__miniState.wk || !Array.from(selWk.options).some(o=>o.value==window.__miniState.wk)){
       var options = Array.from(selWk.options).map(o=>+o.value).filter(Boolean);
-      var wk = lastPlayedWeekStrict(options);
+      var wk = options.length ? Math.max.apply(null, options) : null;
       if(wk!=null) window.__miniState.wk = String(wk);
     }
 
@@ -6794,7 +6796,7 @@ function avatarNode(photo,name){
     podium.style.display="grid"; listEl.style.display="block";
     const sorted=list.slice().sort(sortByMedals);
     const top3=sorted.slice(0,3);
-    const rest=sorted.slice(3,9);
+    const rest=sorted.slice(3);
     const ranks=["1º","2º","3º"];
     top3.forEach((p,i)=>{
       const slot=document.createElement("div"); slot.className="slot";
@@ -8901,17 +8903,9 @@ window.ghCarregarDados = function(){
       window.RAW = RAW || [];
       try{ initMiniCombos(); }catch(e){}
       // Force select last WK
-      // Select last WK once after data settles
-      setTimeout(function(){
-        try{
-          var selWK = document.getElementById('mini-wk');
-          if(selWK && selWK.options.length > 0){
-            selWK.selectedIndex = selWK.options.length - 1;
-            selWK.dispatchEvent(new Event('change'));
-          }
-        }catch(e){}
-      }, 600);
+      // WK auto-select handled by lastPlayedWeekStrict (now returns max WK)
       ghMostrarStatus('✅ Dados carregados do GitHub!', '#22c55e');
+      revealDashboard();
     })
     .catch(function(e){
       console.warn('GitHub load failed:', e.message);
@@ -8933,6 +8927,7 @@ window.ghCarregarDados = function(){
           refresh();
           window.RAW = RAW || [];
         }catch(e2){ console.warn('fallback load error:', e2); }
+      revealDashboard();
       }
     });
 };
@@ -9104,15 +9099,37 @@ window.addEventListener('load', function(){
         '.row.mini-ranks .card.mini-card { width: 100% !important; }',
         // Charts stack
         '.grid-charts { display: flex !important; flex-direction: column !important; }',
-        '.grid-charts .chart { width: 100% !important; height: 300px !important; }',
+        '.grid-charts .chart { width: 100% !important; height: 400px !important; padding-bottom: 10px !important; }',
         '#card-heatmap { min-height: 420px !important; }',
+        '#card-medalhas { min-height: auto !important; height: auto !important; overflow: visible !important; }',
+        '.chart.medal-col { overflow: visible !important; height: auto !important; min-height: 360px !important; }',
+        '.mini-slot { align-self: start !important; height: auto !important; overflow: visible !important; }',
+        '#card-kopontos { height: auto !important; overflow: visible !important; min-height: unset !important; }',
+        '#list-4-9 { display: block !important; }',
+        '.medalhas-left { min-height: auto !important; }',
+        '#podium { margin-bottom: 8px !important; }',
         '#heatmapFrame { width: 100% !important; height: 400px !important; border: none !important; }',
         // Tables scroll
         'table { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch !important; }',
         // Toggle button
-        '#btn-view-toggle { bottom: 80px !important; right: 12px !important; font-size: 11px !important; padding: 7px 12px !important; }'
-      ].join('
-');
+        '#btn-view-toggle { bottom: 80px !important; right: 12px !important; font-size: 11px !important; padding: 7px 12px !important; }',
+        /* Extra padding at bottom of every card */
+        '.card { padding-bottom: 20px !important; overflow: visible !important; }',
+        /* Charts need explicit height and no clipping */
+        '.chart { overflow: visible !important; }',
+        '#chartRanking { height: 360px !important; }',
+        '#chartKOs { height: 420px !important; }',
+        '#chartEvolucao { height: 380px !important; }',
+        /* Medal card full height */
+        '.mini-slot { height: auto !important; overflow: visible !important; align-self: start !important; }',
+        '#card-kopontos { height: auto !important; overflow: visible !important; }',
+        '#card-medalhas { height: auto !important; overflow: visible !important; }',
+        '.medalhas-left { width: 100% !important; min-width: 0 !important; overflow: visible !important; }',
+        '#list-4-9 { display: block !important; overflow: visible !important; height: auto !important; }',
+        '#podium { display: grid !important; }',
+        /* Bottom padding for last card */
+        '.container { padding-bottom: 100px !important; }'
+      ].join(' ');
       document.head.appendChild(s);
 
       // Also force via inline styles
@@ -9132,11 +9149,28 @@ window.addEventListener('load', function(){
         // Hide Hall da Fama
         var hall = document.getElementById('medalhas-right-hall');
         if(hall) hall.style.display='none';
+        // Force show all medal rows
+        var list49 = document.getElementById('list-4-9');
+        if(list49){ list49.style.display='block'; list49.style.overflow='visible'; list49.style.height='auto'; }
+        var podium = document.getElementById('podium');
+        if(podium){ podium.style.display='grid'; }
         // Fix medals-left width
         var medLeft = document.querySelector('.medalhas-left');
-        if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; }
+        if(medLeft){ medLeft.style.flex='1 1 100%'; medLeft.style.minWidth='0'; medLeft.style.width='100%'; medLeft.style.overflow='visible'; }
         var medFlex = document.querySelector('.medalhas-flex');
-        if(medFlex){ medFlex.style.flexDirection='column'; }
+        if(medFlex){ medFlex.style.flexDirection='column'; medFlex.style.overflow='visible'; }
+        // Fix kopontos card
+        var kop = document.getElementById('card-kopontos');
+        if(kop){ kop.style.height='auto'; kop.style.overflow='visible'; kop.style.minHeight='unset'; }
+        var miniSlot = document.querySelector('.mini-slot');
+        if(miniSlot){ miniSlot.style.height='auto'; miniSlot.style.overflow='visible'; miniSlot.style.alignSelf='start'; }
+        // Add padding to all cards
+        document.querySelectorAll('.card').forEach(function(c){ c.style.paddingBottom='20px'; c.style.overflow='visible'; });
+        // Fix container bottom
+        var cont = document.getElementById('main-container');
+        if(cont) cont.style.paddingBottom='100px';
+        // Fix all charts
+        document.querySelectorAll('.chart').forEach(function(c){ c.style.overflow='visible'; });
         // Fix chips
         var chips = document.getElementById('chips');
         if(chips){ chips.style.flexWrap='wrap'; chips.style.overflow='visible'; chips.style.maxHeight='none'; chips.style.height='auto'; chips.style.display='flex'; }
@@ -9219,6 +9253,62 @@ window.addEventListener('load', function(){
     <p style="color:#4a6080;font-size:11px;margin-top:16px;">A sessão fica liberada até fechar o navegador.</p>
   </div>
 </div>
+
+<script>
+/* ═══ FORCE MAX WK - final override ═══ */
+(function(){
+  var _busy = false;
+
+  function forceMaxWK(){
+    if(_busy) return;
+    var sel = document.getElementById('mini-wk');
+    if(!sel || !sel.options.length) return;
+    var maxWK = Math.max.apply(null, Array.from(sel.options).map(function(o){ return +o.value||0; }));
+    if(maxWK > 0 && +sel.value !== maxWK){
+      _busy = true;
+      sel.value = String(maxWK);
+      // Update internal state without triggering full re-render chain
+      if(window.__miniState) window.__miniState.wk = String(maxWK);
+      try{ 
+        if(window.renderMini) window.renderMini('semana', maxWK);
+      }catch(e){}
+      _busy = false;
+    }
+  }
+
+  // Patch pickLastWeek to always return max
+  window.pickLastWeek = function(raw, options){
+    if(!options || !options.length) return null;
+    return Math.max.apply(null, options.filter(Boolean));
+  };
+
+  // Watch mini-wk options population (runs once when options are added)
+  var observer = new MutationObserver(function(mutations){
+    var sel = document.getElementById('mini-wk');
+    if(sel && sel.options.length > 0){
+      observer.disconnect(); // run only once
+      setTimeout(forceMaxWK, 50);
+    }
+  });
+
+  function startObserver(){
+    var sel = document.getElementById('mini-wk');
+    if(sel){
+      observer.observe(sel, { childList: true });
+      // Also try immediately if already populated
+      if(sel.options.length > 0) setTimeout(forceMaxWK, 50);
+    } else {
+      setTimeout(startObserver, 100);
+    }
+  }
+
+  // Start after GitHub data loads
+  window.addEventListener('load', function(){
+    setTimeout(startObserver, 200);
+  });
+})();
+</script>
+
 </body>
 </html>
 
