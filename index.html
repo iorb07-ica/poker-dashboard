@@ -66,7 +66,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
       background-size: cover, 240px 240px;
     }
-    header{padding:12px 24px;border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5}
+    header{padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5}
     h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
     #libwarn{display:none;margin-top:8px;padding:8px 10px;border:1px dashed #f59e0b;border-radius:10px;background:rgba(245,158,11,.08);color:#fbbf24;font-size:13px}
     .container{padding:16px;max-width:2400px;margin:0 auto}
@@ -1744,14 +1744,15 @@ html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
     padding-bottom: max(100px, calc(80px + env(safe-area-inset-bottom))) !important;
   }
 
-  /* Topbar com safe area para notch */
+  /* Topbar com safe area para notch / Dynamic Island */
   #mobile-topbar {
     padding-left: max(14px, env(safe-area-inset-left)) !important;
     padding-right: max(14px, env(safe-area-inset-right)) !important;
-    padding-top: env(safe-area-inset-top);
-    height: calc(52px + env(safe-area-inset-top)) !important;
+    padding-top: max(env(safe-area-inset-top), 0px) !important;
+    height: calc(64px + env(safe-area-inset-top)) !important;
+    top: 0 !important;
   }
-  .container { padding-top: calc(60px + env(safe-area-inset-top)) !important; }
+  .container { padding-top: calc(72px + env(safe-area-inset-top)) !important; }
 
   /* Cards com sombra mais marcante no mobile */
   .card {
@@ -8060,7 +8061,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function fmt(v){ return 'R$ '+Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}); }
 
   // ── Abrir/fechar ──────────────────────────────────────────
-  // Senha hash (SHA-256 de 'Ica0711' — troque pela sua)
+  // Senha hash (SHA-256 de 'poker2026' — troque pela sua)
   // Para gerar um novo hash: https://emn178.github.io/online-tools/sha256.html
   var RN_SENHA_HASH = '3a1b2c'; // placeholder, será substituído
   var RN_AUTENTICADO = false;
