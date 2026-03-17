@@ -302,17 +302,15 @@ body.mobile-mode #pontuacao-anual-arrow {
 #list-4-9 .medal-pair {
   display:inline-flex !important;
   align-items:center !important;
-  gap:4px !important;
-  min-width:44px !important;
-  margin-right:10px !important;
-  background:rgba(255,255,255,0.05) !important;
-  border-radius:8px !important;
-  padding:3px 8px !important;
+  gap:2px !important;
+  margin-right:6px !important;
+  background:none !important;
+  padding:0 !important;
 }
 #list-4-9 .medal-pair:last-child { margin-right:0 !important; }
-#list-4-9 .medal-pair .medal-emoji { font-size:16px !important; line-height:1 !important; }
-#list-4-9 .medal-pair strong { font-size:15px !important; font-weight:800 !important; color:#e6edf3 !important; line-height:1 !important; min-width:14px !important; text-align:center !important; }
-#list-4-9 .medals { display:flex !important; align-items:center !important; gap:0 !important; }
+#list-4-9 .medal-pair .medal-emoji { font-size:15px !important; line-height:1 !important; display:inline-block !important; }
+#list-4-9 .medal-pair strong { font-size:14px !important; font-weight:800 !important; color:#e6edf3 !important; line-height:1 !important; min-width:12px !important; text-align:left !important; vertical-align:middle !important; }
+#list-4-9 .medals { display:flex !important; align-items:center !important; gap:0 !important; flex-wrap:nowrap !important; }
 .row.mini-ranks .card.mini-card.half {
   padding: 6px;
 }
@@ -8881,22 +8879,36 @@ document.addEventListener('DOMContentLoaded', function(){
   window.rnAutoPos = function(doSort){
     var rows=document.getElementById('rn-tbody').rows, n=JOGADORES_RN.length;
     var lista=[];
-    for(var i=0;i<n;i++){
-      if(rows[i] && !rows[i].querySelector('.rn-faltou').checked){
-        var f=parseFloat(rows[i].querySelector('.rn-fichas').value);
-        lista.push({idx:i, fichas:(f>0&&!isNaN(f))?f:null});
+    // Ler directamente do DOM (a ordem pode ter mudado)
+    var domRowsL = Array.from(document.getElementById('rn-tbody').rows);
+    domRowsL.forEach(function(tr){
+      if(!tr.querySelector('.rn-faltou').checked){
+        var f=parseFloat(tr.querySelector('.rn-fichas').value);
+        lista.push({idx:0, nome:tr.dataset.jogador, fichas:(f>0&&!isNaN(f))?f:null});
       }
-    }
+    });
     var comF=lista.filter(function(d){return d.fichas!==null;}).sort(function(a,b){return b.fichas-a.fichas;});
     comF.forEach(function(d,r){d.pos=r+1;});
-    for(var i=0;i<n;i++){
-      if(!rows[i]) continue;
-      if(rows[i].querySelector('.rn-faltou').checked) continue;
-      var f=parseFloat(rows[i].querySelector('.rn-fichas').value), temF=f>0&&!isNaN(f);
-      var sel=rows[i].querySelector('.rn-pos'), badge=rows[i].querySelector('.rn-pos-badge');
-      if(temF){ var it=comF.find(function(d){return d.idx===i;}), pos=it?it.pos:null; if(sel){sel.value=pos?String(pos):'';sel.style.display='none';} if(badge){badge.style.display='inline-block';badge.textContent=pos?pos+'º':'—';} }
-      else{ if(sel){sel.style.display='';sel.value='';} if(badge){badge.style.display='none';badge.textContent='—';} }
-    }
+    // Usar rows actuais do DOM (podem ter sido reordenados)
+    var domRows = Array.from(document.getElementById('rn-tbody').rows);
+    domRows.forEach(function(tr){
+      if(tr.querySelector('.rn-faltou').checked) return;
+      var f=parseFloat(tr.querySelector('.rn-fichas').value), temF=f>0&&!isNaN(f);
+      var sel=tr.querySelector('.rn-pos'), badge=tr.querySelector('.rn-pos-badge');
+      var nome=tr.dataset.jogador;
+      var it=comF.find(function(d){return d.nome===nome;});
+      var pos=it?it.pos:null;
+      if(temF && pos){
+        if(sel){sel.value=String(pos);sel.style.display='none';}
+        if(badge){badge.style.display='inline-block';badge.textContent=pos+'º';}
+      } else if(temF && !pos){
+        if(sel){sel.style.display='none';}
+        if(badge){badge.style.display='inline-block';badge.textContent='—';}
+      } else {
+        if(sel){sel.style.display='';sel.value='';}
+        if(badge){badge.style.display='none';badge.textContent='—';}
+      }
+    });
     rnAtualizarContadores(); rnSyncPosicoes();
     if(doSort!==false) rnOrdenarLinhas();
   };
@@ -8924,22 +8936,35 @@ document.addEventListener('DOMContentLoaded', function(){
       return pA-pB;
     });
     rows.forEach(function(r){tbody.appendChild(r);});
-    // Recalcular badges após sort
+    // Recalcular badges — reler rows do DOM para garantir ordem correcta
+    var orderedRows = Array.from(tbody.rows);
     var pos=1;
-    rows.forEach(function(r){
+    orderedRows.forEach(function(r){
       var faltou=r.querySelector('.rn-faltou').checked;
       var fichasInp=r.querySelector('.rn-fichas');
       var fichas=fichasInp?(parseFloat(fichasInp.value)||0):0;
       var badge=r.querySelector('.rn-pos-badge'), sel=r.querySelector('.rn-pos');
-      if(faltou) return;
+      if(faltou){
+        if(badge){badge.textContent='—';badge.style.display='none';}
+        if(sel){sel.value='';sel.style.display='';}
+        return;
+      }
       if(fichas>0){
         if(badge){badge.style.display='inline-block';badge.textContent=pos+'º';}
         if(sel){sel.value=String(pos);sel.style.display='none';}
         pos++;
       } else {
-        if(badge) badge.style.display='none';
-        if(sel) sel.style.display='';
+        if(badge){badge.style.display='none';badge.textContent='—';}
+        if(sel){sel.style.display='';sel.value='';}
       }
+    });
+    // Também actualizar os idx nos oninput/onblur após reordenação
+    orderedRows.forEach(function(r, newIdx){
+      var kEl=r.querySelector('.rn-kos-total');
+      if(kEl) kEl.setAttribute('oninput','rnKOTotalInput('+newIdx+',this)');
+      if(kEl) kEl.setAttribute('onblur','if(this.value===\'\')this.value=\'0\';rnKOTotalInput('+newIdx+',this)');
+      var fEl=r.querySelector('.rn-faltou');
+      if(fEl) fEl.setAttribute('onchange','rnToggleFaltou('+newIdx+')');
     });
   };
 
