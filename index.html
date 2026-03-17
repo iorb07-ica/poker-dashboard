@@ -2387,10 +2387,10 @@ html body .row.mini-ranks #card-kopontos {
         <div onclick="event.stopPropagation()">
           <select id="sf-mes-select" onchange="window.setSaldoMes(this.value)"
               style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
-              <option value="todos">Todos os meses</option>
-              <option value="1">Janeiro</option>
-              <option value="2">Fevereiro</option>
-              <option value="3">Março</option>
+              <option value="todos">Todos</option>
+              <option value="1">Jan</option>
+              <option value="2">Fev</option>
+              <option value="3">Mar</option>
             </select>
         </div>
         <span id="saldo-fin-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
@@ -2433,10 +2433,10 @@ html body .row.mini-ranks #card-kopontos {
         <select id="prem-mes-select" onchange="window.renderPremiosFin()"
           style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
 
-              <option value="todos">Todos os períodos</option>
-              <option value="1">Janeiro</option>
-              <option value="2">Fevereiro</option>
-              <option value="3">Março</option>
+              <option value="todos">Todos</option>
+              <option value="1">Jan</option>
+              <option value="2">Fev</option>
+              <option value="3">Mar</option>
         </select>
         <span id="prem-tip-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
       </div>
@@ -9922,84 +9922,116 @@ window.addEventListener('load', function(){
       if(r.kos!=null&&+r.kos>maxKO) maxKO=+r.kos;
     });
 
-    /* Dimensões responsivas — calc célula quadrada */
-    var contW=wrap.offsetWidth||wrap.parentElement&&wrap.parentElement.offsetWidth||700;
-    if(contW<100) contW=700;
-    var labelW=84;
-    var cellSz=Math.max(24,Math.min(46,Math.floor((contW-labelW-4)/wks.length)));
-    var fontSize=cellSz>=38?13:cellSz>=30?11:9;
+    /* ── Dimensões responsivas ──
+       Mobile: preenche toda a largura disponível sem label lateral
+       Desktop: label lateral de 84px + células quadradas até 46px */
+    var contW = wrap.offsetWidth || (wrap.parentElement&&wrap.parentElement.offsetWidth) || 700;
+    if(contW < 60) contW = 700;
 
-    /* Tooltip info */
+    var isMobile = contW < 500;
+    var labelW   = isMobile ? 60 : 84;
+    /* Mobile: células preenchem toda a largura — dividir espaço igualmente */
+    /* Mobile: dividir espaço restante uniformemente entre as semanas */
+    var cellSz   = isMobile
+      ? Math.floor((contW - labelW) / wks.length)
+      : Math.max(28, Math.min(46, Math.floor((contW - labelW - 8) / wks.length)));
+    cellSz = Math.max(24, cellSz);
+
+    /* Fonte maior no mobile para legibilidade */
+    var fontSize = isMobile
+      ? Math.max(11, Math.min(14, cellSz - 4))
+      : (cellSz>=38?13:cellSz>=30?11:9);
+
+    /* Label do jogador: fonte proporcional */
+    var labelFont = isMobile ? 11 : 12;
+
+    /* Altura da célula = largura (quadrado) */
+    var cellH = cellSz;
+
+    /* Tooltip simples */
     function tooltipText(jog,wk,val,faltou){
       var ws='WK'+String(wk).padStart(2,'0');
-      if(faltou) return jog+' — '+ws+'\nFaltou';
+      if(faltou) return jog+' — '+ws+': Faltou';
       if(val==null) return jog+' — '+ws;
-      if(hmMetric==='posicao') return jog+' — '+ws+'\n'+val+'º lugar';
-      if(hmMetric==='rebuys') return jog+' — '+ws+'\n'+val+' rebuy'+(val!==1?'s':'');
-      return jog+' — '+ws+'\n'+val+' KO'+(val!==1?'s':'');
+      if(hmMetric==='posicao') return jog+' — '+ws+': '+val+'º lugar';
+      if(hmMetric==='rebuys') return jog+' — '+ws+': '+val+' rebuy'+(val!==1?'s':'');
+      return jog+' — '+ws+': '+val+' KO'+(val!==1?'s':'');
     }
 
     /* Montar HTML */
-    var html='<table style="border-collapse:collapse;table-layout:fixed;width:'+(labelW+cellSz*wks.length)+'px;">';
+    /* Largura total da tabela = label + (cellSz * nWks) */
+    /* No mobile, forçar tableW = contW para preencher a linha toda */
+    var tableW = isMobile ? contW : (labelW + cellSz * wks.length);
+    /* Recalcular cellSz final com o espaço real */
+    if(isMobile) cellSz = Math.floor((tableW - labelW) / wks.length);
+    var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
+      + '<table style="border-collapse:collapse;table-layout:fixed;width:'+tableW+'px;min-width:'+tableW+'px;">';
 
-    /* Header WKs (em baixo via caption ou tfoot) */
-    html+='<thead><tr>';
-    html+='<th style="width:'+labelW+'px;"></th>';
+    /* Header WKs no topo */
+    html += '<thead><tr>';
+    html += '<th style="width:'+labelW+'px;padding:0;"></th>';
     wks.forEach(function(wk){
-      html+='<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:9px;font-weight:600;padding:0 0 5px 0;">WK'+String(wk).padStart(2,'0')+'</th>';
+      html += '<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:'
+        +(isMobile?9:9)+'px;font-weight:600;padding:0 0 4px 0;white-space:nowrap;">WK'
+        +String(wk).padStart(2,'0')+'</th>';
     });
-    html+='</tr></thead><tbody>';
+    html += '</tr></thead><tbody>';
 
     jogs.forEach(function(jog){
-      html+='<tr>';
-      html+='<td style="color:#e6edf3;font-size:11px;font-weight:700;text-align:right;padding-right:6px;vertical-align:middle;white-space:nowrap;">'+jog+'</td>';
+      html += '<tr>';
+      /* Label do jogador — truncar no mobile */
+      var displayName = (isMobile && jog.length > 6) ? jog.slice(0,6) : jog;
+      html += '<td style="width:'+labelW+'px;color:#e6edf3;font-size:'+labelFont+'px;font-weight:700;'
+        +'text-align:right;padding-right:5px;vertical-align:middle;white-space:nowrap;">'+displayName+'</td>';
+
       wks.forEach(function(wk){
         var r=idx[jog]?idx[jog][wk]:null;
         var faltou=r&&+r.faltou===1;
         var val=null;
         if(r&&!faltou){
-          if(hmMetric==='posicao')     val=r.posicao!=null?+r.posicao:null;
-          else if(hmMetric==='rebuys') val=r.rebuys!=null?+r.rebuys:0;
-          else                         val=r.kos!=null?+r.kos:0;
+          if(hmMetric==='posicao')      val=r.posicao!=null?+r.posicao:null;
+          else if(hmMetric==='rebuys')  val=r.rebuys!=null?+r.rebuys:0;
+          else                          val=r.kos!=null?+r.kos:0;
         }
         var empty=faltou||val==null;
         var bg=empty?'rgba(255,255,255,0.04)':getBg(hmMetric,val,maxPos,maxKO);
         var fg=empty?'rgba(255,255,255,0.2)':getFg(hmMetric,val);
         var lbl=faltou?'—':val==null?'—':(hmMetric==='posicao'?val+'º':''+val);
         var tip=tooltipText(jog,wk,val,faltou);
-        html+='<td style="padding:1px;" title="'+tip+'">'
-          +'<div style="width:'+(cellSz-2)+'px;height:'+(cellSz-2)+'px;background:'+bg
-          +';border-radius:4px;display:flex;align-items:center;justify-content:center'
-          +';color:'+fg+';font-size:'+fontSize+'px;font-weight:700'
-          +';text-shadow:0 1px 3px rgba(0,0,0,0.8);">'
-          +lbl+'</div></td>';
+        /* padding:0 para células grudadas; 1px de gap via border */
+        html += '<td style="width:'+cellSz+'px;height:'+cellH+'px;padding:1px 0px;" title="'+tip+'">'
+          + '<div style="width:100%;height:'+cellH+'px;background:'+bg
+          + ';border-radius:3px'
+          + ';display:flex;align-items:center;justify-content:center'
+          + ';color:'+fg+';font-size:'+fontSize+'px;font-weight:800'
+          + ';text-shadow:0 1px 3px rgba(0,0,0,0.9);line-height:1;">'
+          + lbl+'</div></td>';
       });
-      html+='</tr>';
+      html += '</tr>';
     });
 
-    html+='</tbody></table>';
-    wrap.innerHTML=html;
+    html += '</tbody></table></div>';
+    wrap.innerHTML = html;
   }
 
-  /* toggleCard hook */
-  /* Usar MutationObserver para detectar quando o body abre */
+  /* MutationObserver — abre o card → renderiza */
   function installHeatmapObserver(){
-    var body = document.getElementById('heatmap-novo-body');
-    if(!body){ setTimeout(installHeatmapObserver, 200); return; }
-    var obs = new MutationObserver(function(mutations){
-      mutations.forEach(function(m){
-        if(m.type==='attributes' && m.attributeName==='style'){
+    var body=document.getElementById('heatmap-novo-body');
+    if(!body){ setTimeout(installHeatmapObserver,200); return; }
+    var obs=new MutationObserver(function(muts){
+      muts.forEach(function(m){
+        if(m.type==='attributes'&&m.attributeName==='style'){
           if(isBodyOpen()){
-            setTimeout(renderHeatmapNovo, 80);
-            setTimeout(renderHeatmapNovo, 300);
+            setTimeout(renderHeatmapNovo,80);
+            setTimeout(renderHeatmapNovo,300);
           }
         }
       });
     });
-    obs.observe(body, {attributes:true, attributeFilter:['style']});
+    obs.observe(body,{attributes:true,attributeFilter:['style']});
   }
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', installHeatmapObserver);
+    document.addEventListener('DOMContentLoaded',installHeatmapObserver);
   } else {
     installHeatmapObserver();
   }
