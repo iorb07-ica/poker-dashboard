@@ -2115,17 +2115,21 @@ html body .row.mini-ranks #card-kopontos {
     if(old) old.remove();
     var popup = document.createElement('div');
     popup.id = 'wpp-popup';
-    popup.innerHTML = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;">'
-      + '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(37,211,102,0.3);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.7);text-align:center;">'
-      + '<div style="font-size:48px;margin-bottom:12px;">📲</div>'
+    popup.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+    var inner = document.createElement('div');
+    inner.style.cssText = 'background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(37,211,102,0.3);border-radius:20px;padding:28px 24px;max-width:340px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.7);text-align:center;';
+    inner.innerHTML = '<div style="font-size:48px;margin-bottom:12px;">📲</div>'
       + '<div style="font-size:17px;font-weight:800;color:#e6edf3;margin-bottom:8px;">Avisar o grupo?</div>'
       + '<div style="font-size:13px;color:#9fb3d4;margin-bottom:24px;line-height:1.6;">'
       + 'WK' + String(wk).padStart(2,'0') + ' registrada com <strong style="color:#25D366;">' + numJogadores + ' jogadores</strong>.<br>Deseja avisar o grupo no WhatsApp?</div>'
       + '<div style="display:flex;gap:12px;">'
-      + '<button onclick="document.getElementById('wpp-popup').remove()" style="flex:1;background:rgba(255,255,255,0.07);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Não, obrigado</button>'
-      + '<button onclick="avisarWhatsApp();document.getElementById('wpp-popup').remove();" style="flex:1;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(37,211,102,0.4);">✅ Sim, avisar!</button>'
-      + '</div></div></div>';
+      + '<button id="btn-nao-wpp" style="flex:1;background:rgba(255,255,255,0.07);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;font-size:14px;font-weight:700;cursor:pointer;">Não, obrigado</button>'
+      + '<button id="btn-sim-wpp" style="flex:1;background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:12px;padding:12px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(37,211,102,0.4);">✅ Sim, avisar!</button>'
+      + '</div>';
+    popup.appendChild(inner);
     document.body.appendChild(popup);
+    document.getElementById('btn-nao-wpp').onclick = function(){ document.getElementById('wpp-popup').remove(); };
+    document.getElementById('btn-sim-wpp').onclick = function(){ avisarWhatsApp(); document.getElementById('wpp-popup').remove(); };
   }
   </script>
 </div>
@@ -2364,16 +2368,7 @@ html body .row.mini-ranks #card-kopontos {
 
 
 
-<script>
-window.toggleCard = function(bodyId, arrowId) {
-  var body = document.getElementById(bodyId);
-  var arrow = document.getElementById(arrowId);
-  if(!body) return;
-  var isOpen = body.style.display !== 'none';
-  body.style.display = isOpen ? 'none' : 'block';
-  if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
-};
-</script>
+
 
 
 <!-- ====== CARD: Evolução do Saldo Financeiro ====== -->
@@ -2485,7 +2480,7 @@ window.toggleCard = function(bodyId, arrowId) {
 
     <!-- Corpo -->
     <div id="heatmap-novo-body" style="padding:0 12px 16px;display:none;">
-      <div id="chartHeatmapNovo" style="width:100%;"></div>
+      <div id="chartHeatmapNovo" style="width:100%;overflow-x:auto;"></div>
     </div>
 
   </div>
@@ -2597,7 +2592,7 @@ window.toggleCard = function(bodyId, arrowId) {
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
-    <div onclick="toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
+    <div onclick="window.toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
       <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,140,0,.6));">🎯</span>
       <div style="flex:1;">
         <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Torneios Especiais</div>
@@ -9478,14 +9473,20 @@ window.addEventListener('load', function(){
       var saldoEfetivo = r2(saldoMesAcum - antecipLedger);
 
       var bgH = saldoEfetivo>=0?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)';
-      html += '<div style="margin-bottom:24px;">';
-
-      /* Cabeçalho do jogador */
-      html += '<div style="display:flex;align-items:center;justify-content:space-between;background:'+bgH
-        +';border-radius:12px 12px 0 0;padding:10px 16px;border:1px solid rgba(255,255,255,0.08);border-bottom:none;">'
+      var jId='tab-jog-'+nome.replace(/\s/g,'_');
+      html+='<div style="margin-bottom:10px;border-radius:12px;overflow:hidden;border:1px solid rgba(255,255,255,0.08);">';
+      /* Cabeçalho colapsável */
+            html+='<div onclick="window.toggleJogador(\''+jId+'\')" '
+        +'style="display:flex;align-items:center;justify-content:space-between;background:'+bgH
+        +';padding:12px 16px;cursor:pointer;user-select:none;">'
         +'<span style="font-size:15px;font-weight:800;color:#e6edf3;">'+nome+'</span>'
-        +'<span style="font-size:15px;font-weight:800;color:'+cor(saldoEfetivo)+';">'
-        +fmtR(saldoEfetivo,true)+' saldo efetivo</span></div>';
+        +'<div style="display:flex;align-items:center;gap:14px;">'
+        +'<span style="font-size:14px;font-weight:800;color:'+cor(saldoEfetivo)+';white-space:nowrap;">'
+        +fmtR(saldoEfetivo,true)+' saldo efetivo</span>'
+        +'<span class="jog-arrow" style="color:#4a6080;font-size:16px;transition:transform .25s;">▼</span>'
+        +'</div></div>'
+        /* Corpo oculto por padrão */
+        +'<div id="'+jId+'" style="display:none;">';
 
       html += '<div style="overflow-x:auto;border:1px solid rgba(255,255,255,0.08);border-radius:0 0 12px 12px;">'
         +'<table style="width:100%;border-collapse:collapse;font-size:12px;min-width:900px;">'
@@ -9610,7 +9611,9 @@ window.addEventListener('load', function(){
         +'<td style="padding:10px 10px;text-align:right;font-weight:900;font-size:15px;color:'+cor(saldoEfetivo)+';">'
         +fmtR(saldoEfetivo,true)+'</td></tr>';
 
-      html += '</tbody></table></div></div>';
+      html += '</tbody></table>';
+      html += '</div>'; /* fecha body colapsável */
+      html += '</div>'; /* fecha card jogador */
     });
 
     wrap.innerHTML = html || '<p style="color:rgba(255,255,255,.4);padding:12px;">Sem dados.</p>';
@@ -9834,9 +9837,8 @@ window.addEventListener('load', function(){
 
 
 <script>
-/* ====== HEATMAP NOVO ====== */
+/* ====== HEATMAP NOVO (HTML Table) ====== */
 (function(){
-  var eHM = null;
   var hmMetric = 'posicao';
 
   function getLedger(){
@@ -9847,7 +9849,7 @@ window.addEventListener('load', function(){
   window.setHeatmapMetric = function(metric){
     hmMetric = metric;
     document.querySelectorAll('.hm-btn').forEach(function(b){
-      var a = b.dataset.hm === metric;
+      var a=b.dataset.hm===metric;
       b.style.background  = a?'rgba(6,182,212,0.15)':'transparent';
       b.style.borderColor = a?'rgba(6,182,212,0.5)':'rgba(255,255,255,0.1)';
       b.style.color       = a?'#67e8f9':'#6b82a0';
@@ -9855,6 +9857,7 @@ window.addEventListener('load', function(){
     renderHeatmapNovo();
   };
 
+  /* ── Interpolação de cor ── */
   function hexRGB(h){ return [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]; }
   function lerpI(a,b,t){ return Math.round(a+(b-a)*t); }
   function blendHex(c1,c2,t){ var a=hexRGB(c1),b=hexRGB(c2); return 'rgb('+lerpI(a[0],b[0],t)+','+lerpI(a[1],b[1],t)+','+lerpI(a[2],b[2],t)+')'; }
@@ -9874,7 +9877,7 @@ window.addEventListener('load', function(){
       if(val===1) return '#C9A227';
       if(val===2) return '#A8A9AD';
       if(val===3) return '#CD7F32';
-      var t = maxPos<=4 ? 1 : (val-4)/(maxPos-4);
+      var t=maxPos<=4?1:(val-4)/(maxPos-4);
       return blendS([[0,'#c0392b'],[0.5,'#9b1c1c'],[1,'#7b0000']],t);
     }
     if(metric==='rebuys'){
@@ -9882,32 +9885,29 @@ window.addEventListener('load', function(){
       var t2=Math.min((val-1)/3,1);
       return blendS([[0,'#e06060'],[0.33,'#c0392b'],[0.66,'#922020'],[1,'#7b0000']],t2);
     }
-    /* kos */
     if(val===0) return '#92740a';
-    var t3 = maxKO<=1 ? 1 : Math.min((val-1)/(maxKO-1),1);
+    var t3=maxKO<=1?1:Math.min((val-1)/(maxKO-1),1);
     return blendS([[0,'#a0960a'],[0.25,'#7aad0a'],[0.5,'#4d9e15'],[0.75,'#1e8a2e'],[1,'#14532d']],t3);
   }
 
   function getFg(metric,val){
-    if(metric==='posicao') return val<=3 ? '#1a1000' : '#ffffff';
-    if(metric==='rebuys')  return val===0 ? '#d1fae5' : '#ffffff';
-    return val===0 ? '#ffe066' : '#d1fae5';
+    if(metric==='posicao') return val<=3?'#1a1000':'#ffffff';
+    if(metric==='rebuys') return val===0?'#d1fae5':'#ffffff';
+    return val===0?'#ffe066':'#d1fae5';
   }
 
   function isBodyOpen(){
-    var b = document.getElementById('heatmap-novo-body');
-    return b && b.style.display !== 'none';
+    var b=document.getElementById('heatmap-novo-body');
+    return b&&b.style.display!=='none';
   }
 
   function renderHeatmapNovo(){
-    var el = document.getElementById('chartHeatmapNovo');
-    if(!el) return;
-    if(!isBodyOpen()) return; /* body colapsado — não renderizar */
+    var wrap=document.getElementById('chartHeatmapNovo');
+    if(!wrap||!isBodyOpen()) return;
 
-    var ledger = getLedger();
+    var ledger=getLedger();
     if(!ledger.length){
-      el.style.height='50px';
-      el.innerHTML='<div style="color:rgba(255,255,255,.3);padding:14px;font-size:12px;text-align:center;">Sem dados</div>';
+      wrap.innerHTML='<div style="color:rgba(255,255,255,.3);padding:14px;font-size:12px;text-align:center;">Sem dados</div>';
       return;
     }
 
@@ -9922,124 +9922,100 @@ window.addEventListener('load', function(){
       if(r.kos!=null&&+r.kos>maxKO) maxKO=+r.kos;
     });
 
-    /* Dimensões responsivas */
-    var contW = el.offsetWidth;
-    if(!contW && el.parentElement) contW = el.parentElement.offsetWidth - 24;
-    if(!contW) contW = 700;
-    var labelW = 90;
-    var cellSz = Math.max(28, Math.min(48, Math.floor((contW - labelW - 16) / wks.length)));
-    var fontSize = cellSz>=40?13:cellSz>=32?11:9;
-    var chartH = jogs.length*(cellSz+2)+50;
-    el.style.height = chartH+'px';
+    /* Dimensões responsivas — calc célula quadrada */
+    var contW=wrap.offsetWidth||wrap.parentElement&&wrap.parentElement.offsetWidth||700;
+    if(contW<100) contW=700;
+    var labelW=84;
+    var cellSz=Math.max(24,Math.min(46,Math.floor((contW-labelW-4)/wks.length)));
+    var fontSize=cellSz>=38?13:cellSz>=30?11:9;
 
-    var sd=[];
-    jogs.forEach(function(jog,ji){
-      wks.forEach(function(wk,wi){
+    /* Tooltip info */
+    function tooltipText(jog,wk,val,faltou){
+      var ws='WK'+String(wk).padStart(2,'0');
+      if(faltou) return jog+' — '+ws+'\nFaltou';
+      if(val==null) return jog+' — '+ws;
+      if(hmMetric==='posicao') return jog+' — '+ws+'\n'+val+'º lugar';
+      if(hmMetric==='rebuys') return jog+' — '+ws+'\n'+val+' rebuy'+(val!==1?'s':'');
+      return jog+' — '+ws+'\n'+val+' KO'+(val!==1?'s':'');
+    }
+
+    /* Montar HTML */
+    var html='<table style="border-collapse:collapse;table-layout:fixed;width:'+(labelW+cellSz*wks.length)+'px;">';
+
+    /* Header WKs (em baixo via caption ou tfoot) */
+    html+='<thead><tr>';
+    html+='<th style="width:'+labelW+'px;"></th>';
+    wks.forEach(function(wk){
+      html+='<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:9px;font-weight:600;padding:0 0 5px 0;">WK'+String(wk).padStart(2,'0')+'</th>';
+    });
+    html+='</tr></thead><tbody>';
+
+    jogs.forEach(function(jog){
+      html+='<tr>';
+      html+='<td style="color:#e6edf3;font-size:11px;font-weight:700;text-align:right;padding-right:6px;vertical-align:middle;white-space:nowrap;">'+jog+'</td>';
+      wks.forEach(function(wk){
         var r=idx[jog]?idx[jog][wk]:null;
         var faltou=r&&+r.faltou===1;
         var val=null;
         if(r&&!faltou){
-          if(hmMetric==='posicao')      val=r.posicao!=null?+r.posicao:null;
-          else if(hmMetric==='rebuys')  val=r.rebuys !=null?+r.rebuys :0;
-          else                          val=r.kos    !=null?+r.kos    :0;
+          if(hmMetric==='posicao')     val=r.posicao!=null?+r.posicao:null;
+          else if(hmMetric==='rebuys') val=r.rebuys!=null?+r.rebuys:0;
+          else                         val=r.kos!=null?+r.kos:0;
         }
-        var empty = faltou||val==null;
-        sd.push({
-          value:[wi,ji,empty?-1:val],
-          _bg: empty?'rgba(255,255,255,0.04)':getBg(hmMetric,val,maxPos,maxKO),
-          _fg: empty?'rgba(255,255,255,0.2)':getFg(hmMetric,val),
-          _lbl: faltou?'—':val==null?'—':(hmMetric==='posicao'?val+'º':''+val),
-          _faltou:faltou,_val:val,_jog:jog,_wk:wk
-        });
+        var empty=faltou||val==null;
+        var bg=empty?'rgba(255,255,255,0.04)':getBg(hmMetric,val,maxPos,maxKO);
+        var fg=empty?'rgba(255,255,255,0.2)':getFg(hmMetric,val);
+        var lbl=faltou?'—':val==null?'—':(hmMetric==='posicao'?val+'º':''+val);
+        var tip=tooltipText(jog,wk,val,faltou);
+        html+='<td style="padding:1px;" title="'+tip+'">'
+          +'<div style="width:'+(cellSz-2)+'px;height:'+(cellSz-2)+'px;background:'+bg
+          +';border-radius:4px;display:flex;align-items:center;justify-content:center'
+          +';color:'+fg+';font-size:'+fontSize+'px;font-weight:700'
+          +';text-shadow:0 1px 3px rgba(0,0,0,0.8);">'
+          +lbl+'</div></td>';
       });
+      html+='</tr>';
     });
 
-    if(eHM){ eHM.dispose(); eHM=null; }
-    eHM = echarts.init(el);
+    html+='</tbody></table>';
+    wrap.innerHTML=html;
+  }
 
-    eHM.setOption({
-      animation:false, backgroundColor:'transparent',
-      tooltip:{trigger:'item',backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.15)',
-        textStyle:{color:'#e6edf3',fontSize:12},
-        formatter:function(p){
-          var d=p.data; if(!d)return'';
-          var ws='WK'+String(d._wk).padStart(2,'0');
-          if(d._faltou) return '<b>'+d._jog+'</b> — '+ws+'<br/>❌ Faltou';
-          if(d._val==null) return '<b>'+d._jog+'</b> — '+ws;
-          if(hmMetric==='posicao'){
-            var m=d._val===1?'🥇':d._val===2?'🥈':d._val===3?'🥉':'';
-            return '<b>'+d._jog+'</b> — '+ws+'<br/>'+m+' <b>'+d._val+'º</b>';
+  /* toggleCard hook */
+  /* Usar MutationObserver para detectar quando o body abre */
+  function installHeatmapObserver(){
+    var body = document.getElementById('heatmap-novo-body');
+    if(!body){ setTimeout(installHeatmapObserver, 200); return; }
+    var obs = new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        if(m.type==='attributes' && m.attributeName==='style'){
+          if(isBodyOpen()){
+            setTimeout(renderHeatmapNovo, 80);
+            setTimeout(renderHeatmapNovo, 300);
           }
-          if(hmMetric==='rebuys') return '<b>'+d._jog+'</b> — '+ws+'<br/>🔄 <b>'+d._val+' rebuy'+(d._val!==1?'s':'')+'</b>';
-          return '<b>'+d._jog+'</b> — '+ws+'<br/>💀 <b>'+d._val+' KO'+(d._val!==1?'s':'')+'</b>';
         }
-      },
-      grid:{left:labelW,right:10,top:8,bottom:36},
-      xAxis:{type:'category',data:wks.map(function(w){return 'WK'+String(w).padStart(2,'0');}),
-        position:'bottom',axisLabel:{color:'#9fb3d4',fontSize:10,fontWeight:600,interval:0},
-        axisTick:{show:false},axisLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}},splitLine:{show:false}},
-      yAxis:{type:'category',data:jogs,
-        axisLabel:{color:'#e6edf3',fontSize:12,fontWeight:700},
-        axisTick:{show:false},axisLine:{show:false},splitLine:{show:false}},
-      series:[{
-        type:'custom',
-        renderItem:function(params,api){
-          var xi=api.value(0),yi=api.value(1);
-          var pt=api.coord([xi,yi]);
-          var sz=api.size([1,1]);
-          var w=Math.min(sz[0]-1,cellSz), h=Math.min(sz[1]-1,cellSz);
-          var d=sd[params.dataIndex];
-          return {type:'group',children:[
-            {type:'rect',
-             shape:{x:pt[0]-w/2,y:pt[1]-h/2,width:w,height:h,r:5},
-             style:{fill:d._bg,stroke:'#0d1629',lineWidth:1}},
-            {type:'text',
-             style:{text:d._lbl,x:pt[0],y:pt[1],
-               fill:d._fg,fontSize:fontSize,fontWeight:'bold',
-               textAlign:'center',textVerticalAlign:'middle',
-               shadowBlur:3,shadowColor:'rgba(0,0,0,0.8)'}}
-          ]};
-        },
-        data:sd,encode:{x:0,y:1}
-      }]
-    },true);
+      });
+    });
+    obs.observe(body, {attributes:true, attributeFilter:['style']});
   }
-
-  /* toggleCard — interceptar ao abrir o heatmap
-     Usar setTimeout para garantir que o toggleCard original já está definido */
-  function installToggleHook(){
-    var _orig = window.toggleCard;
-    window.toggleCard = function(bodyId, arrowId){
-      if(_orig) _orig(bodyId, arrowId);
-      if(bodyId === 'heatmap-novo-body'){
-        setTimeout(function(){
-          if(isBodyOpen()){ renderHeatmapNovo(); }
-        }, 80);
-        setTimeout(function(){
-          if(isBodyOpen()){ renderHeatmapNovo(); }
-        }, 350);
-      }
-    };
-  }
-  /* Instalar após o DOM estar pronto */
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', installToggleHook);
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', installHeatmapObserver);
   } else {
-    installToggleHook();
+    installHeatmapObserver();
   }
 
-  /* Hooks */
+  /* Hooks de dados */
   var _t1=setInterval(function(){
     if(typeof window.afterDataLoaded==='function'){clearInterval(_t1);
       var _o=window.afterDataLoaded;
       window.afterDataLoaded=function(){_o.apply(this,arguments);
-        setTimeout(function(){ if(isBodyOpen()) renderHeatmapNovo(); },400);};}
+        setTimeout(function(){if(isBodyOpen())renderHeatmapNovo();},400);};}
   },200);
   var _t2=setInterval(function(){
     if(typeof window.refresh==='function'){clearInterval(_t2);
       var _o=window.refresh;
       window.refresh=function(){_o.apply(this,arguments);
-        try{ if(isBodyOpen()) renderHeatmapNovo(); }catch(e){};};}
+        try{if(isBodyOpen())renderHeatmapNovo();}catch(e){};};}
   },200);
 
   window.addEventListener('resize',function(){
@@ -10047,6 +10023,149 @@ window.addEventListener('load', function(){
   });
   window.renderHeatmapNovo=renderHeatmapNovo;
 })();
+</script>
+
+
+<script>
+/* ====== PULL-TO-REFRESH (PWA iOS) ====== */
+(function(){
+  /* Só activar em dispositivos touch / PWA */
+  var isTouchDevice = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
+  if(!isTouchDevice) return;
+
+  var THRESHOLD  = 80;   /* px para disparar reload */
+  var MAX_PULL   = 120;  /* max arrastar */
+  var startY     = 0;
+  var pulling    = false;
+  var indicator  = null;
+
+  /* Criar indicador visual */
+  function createIndicator(){
+    var el = document.createElement('div');
+    el.id  = 'ptr-indicator';
+    el.style.cssText = [
+      'position:fixed',
+      'top:0','left:0','right:0',
+      'height:0',
+      'display:flex',
+      'align-items:flex-end',
+      'justify-content:center',
+      'padding-bottom:10px',
+      'background:linear-gradient(180deg,rgba(59,130,246,0.25),transparent)',
+      'z-index:999998',
+      'pointer-events:none',
+      'transition:height 0.1s ease',
+      'overflow:hidden',
+    ].join(';');
+    el.innerHTML = '<div id="ptr-icon" style="'
+      + 'width:36px;height:36px;border-radius:50%;'
+      + 'background:rgba(59,130,246,0.9);'
+      + 'display:flex;align-items:center;justify-content:center;'
+      + 'font-size:18px;'
+      + 'box-shadow:0 4px 16px rgba(59,130,246,0.5);'
+      + 'transition:transform 0.2s,background 0.2s;'
+      + 'transform:scale(0.5);opacity:0;'
+      + '">↓</div>';
+    document.body.appendChild(el);
+    return el;
+  }
+
+  function getIndicator(){
+    if(!indicator) indicator = createIndicator();
+    return indicator;
+  }
+
+  /* Só activar pull quando página está no topo */
+  function atTop(){
+    return (window.scrollY || window.pageYOffset || document.documentElement.scrollTop) <= 2;
+  }
+
+  document.addEventListener('touchstart', function(e){
+    if(!atTop()) return;
+    startY  = e.touches[0].clientY;
+    pulling = false;
+  }, {passive:true});
+
+  document.addEventListener('touchmove', function(e){
+    if(!atTop() && !pulling) return;
+    var dy = e.touches[0].clientY - startY;
+    if(dy <= 0){ return; }
+
+    pulling = true;
+    var pull  = Math.min(dy, MAX_PULL);
+    var ratio = pull / THRESHOLD;          /* 0 → 1 */
+    var ind   = getIndicator();
+    var icon  = document.getElementById('ptr-icon');
+
+    ind.style.height = Math.min(pull, MAX_PULL) + 'px';
+
+    if(icon){
+      var sc    = 0.5 + 0.5 * Math.min(ratio, 1);
+      var op    = Math.min(ratio * 1.5, 1);
+      var rot   = Math.min(ratio * 180, 180);
+      icon.style.transform  = 'scale('+sc+') rotate('+rot+'deg)';
+      icon.style.opacity    = op;
+      icon.style.background = ratio >= 1
+        ? 'rgba(34,197,94,0.95)'     /* verde = pronto */
+        : 'rgba(59,130,246,0.9)';   /* azul = a arrastar */
+      icon.textContent = ratio >= 1 ? '↺' : '↓';
+    }
+  }, {passive:true});
+
+  document.addEventListener('touchend', function(){
+    if(!pulling){ return; }
+    pulling = false;
+
+    var ind  = getIndicator();
+    var icon = document.getElementById('ptr-icon');
+
+    /* Ver se passou o threshold */
+    var h = parseInt(ind.style.height) || 0;
+    if(h >= THRESHOLD){
+      /* Animação de loading antes do reload */
+      if(icon){
+        icon.textContent  = '↺';
+        icon.style.background = 'rgba(34,197,94,0.95)';
+        icon.style.animation  = 'ptr-spin 0.6s linear infinite';
+      }
+      ind.style.height = THRESHOLD + 'px';
+      ind.style.transition = 'none';
+
+      /* Injectar keyframe de spin se não existir */
+      if(!document.getElementById('ptr-style')){
+        var st = document.createElement('style');
+        st.id  = 'ptr-style';
+        st.textContent = '@keyframes ptr-spin{from{transform:scale(1) rotate(0deg)}to{transform:scale(1) rotate(360deg)}}';
+        document.head.appendChild(st);
+      }
+
+      setTimeout(function(){ window.location.reload(); }, 500);
+    } else {
+      /* Recolher indicador */
+      ind.style.transition = 'height 0.3s ease';
+      ind.style.height     = '0px';
+      if(icon){
+        icon.style.transform = 'scale(0.5)';
+        icon.style.opacity   = '0';
+      }
+    }
+  }, {passive:true});
+
+})();
+</script>
+
+<script>
+window.toggleJogador = function(id){
+  var b = document.getElementById(id);
+  if(!b) return;
+  var open = b.style.display !== 'none';
+  b.style.display = open ? 'none' : 'block';
+  var header = b.previousElementSibling;
+  if(header){
+    var arrow = header.querySelector('.jog-arrow');
+    if(arrow) arrow.style.transform = open ? '' : 'rotate(180deg)';
+  }
+};
 </script>
 </body>
 </html>
