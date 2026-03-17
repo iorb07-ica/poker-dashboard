@@ -4322,18 +4322,147 @@ function refresh(){
   (function renderEvo(){
     const weeks = Array.from(new Set(rows.map(r=>+r.wk))).sort((a,b)=>a-b);
     const byPlayer = groupBy(rows,'jogador');
-    const series = Object.keys(byPlayer).map(j=>{
-      const arr=byPlayer[j].slice().sort((a,b)=>a.wk-b.wk);
-      let running=0; const v=[];
-      weeks.forEach(w=>{ const add = arr.filter(r=>+r.wk===w).reduce((a,r)=>a+(+r.pontos_calc||0),0); running += add; v.push(running); });
-      return {name:j, type:'line', smooth:true, data:v, symbol:'circle', showSymbol:true, symbolSize:7, lineStyle:{width:2}, emphasis:{focus:'series'}};
+
+    // Paleta premium: cada jogador tem cor distinta com boa separação visual
+    const PLAYER_COLORS = [
+      '#ff6b6b', // vermelho coral
+      '#ffd93d', // amarelo ouro
+      '#6bcb77', // verde esmeralda
+      '#4d96ff', // azul royal
+      '#ff922b', // laranja fogo
+      '#cc5de8', // roxo vibrante
+      '#20c997', // turquesa
+      '#f06595', // rosa quente
+      '#74c0fc', // azul céu
+      '#a9e34b', // verde limão
+      '#ff8787', // salmão
+      '#63e6be', // menta
+    ];
+
+    // Calcular pontos acumulados por jogador e ordenar por total (líderes no topo)
+    var playerData = Object.keys(byPlayer).map(function(j){
+      var arr = byPlayer[j].slice().sort(function(a,b){return a.wk-b.wk;});
+      var running = 0;
+      var v = [];
+      weeks.forEach(function(w){
+        var add = arr.filter(function(r){return +r.wk===w;}).reduce(function(a,r){return a+(+r.pontos_calc||0);},0);
+        running += add;
+        v.push(running);
+      });
+      return {name:j, values:v, total:running};
     });
+    // Sort by total descending so legend matches leaderboard
+    playerData.sort(function(a,b){return b.total-a.total;});
+
+    var series = playerData.map(function(pd,i){
+      var color = PLAYER_COLORS[i % PLAYER_COLORS.length];
+      var lastIdx = pd.values.length - 1;
+
+      // Dados com símbolo especial no último ponto
+      var data = pd.values.map(function(v, idx){
+        if(idx === lastIdx){
+          return {
+            value: v,
+            symbol: 'circle',
+            symbolSize: 10,
+            itemStyle:{ color: color, borderColor: '#fff', borderWidth: 2, shadowBlur: 12, shadowColor: color }
+          };
+        }
+        return {value: v, symbol: 'circle', symbolSize: 5};
+      });
+
+      return {
+        name: pd.name,
+        type: 'line',
+        smooth: 0.4,
+        data: data,
+        showSymbol: false,
+        symbolSize: 5,
+        sampling: 'lttb',
+        lineStyle:{ width: 2.5, color: color, shadowBlur: 8, shadowColor: color+'55' },
+        itemStyle:{ color: color },
+        areaStyle:{
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {offset: 0, color: color+'44'},
+            {offset: 1, color: color+'03'}
+          ])
+        },
+        emphasis:{
+          focus: 'series',
+          lineStyle:{ width: 3.5, shadowBlur: 16, shadowColor: color+'aa' },
+          areaStyle:{ color: color+'66' }
+        },
+        // Mostrar último valor como label
+        endLabel:{
+          show: true,
+          formatter: function(p){ return p.seriesName; },
+          color: color,
+          fontSize: 11,
+          fontWeight: '700',
+          padding: [2,4],
+          backgroundColor: 'rgba(5,10,22,0.7)',
+          borderRadius: 4
+        }
+      };
+    });
+
     if(eEvo) eEvo.setOption({
-      animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:50,right:20,top:40,bottom:70},
-      xAxis:{type:'category',data:weeks.map(w=>'WK'+String(w).padStart(2,'0')), splitLine:{show:false}},
-      yAxis:{type:'value', splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}}},
-      series, tooltip:{trigger:'axis', order:'valueDesc'} });
+      animationDuration: 1000,
+      animationEasing: 'cubicInOut',
+      animationDurationUpdate: 1200,
+      animationEasingUpdate: 'cubicInOut',
+      backgroundColor: 'transparent',
+      grid:{ left: 70, right: 120, top: 30, bottom: 50, containLabel: false },
+      xAxis:{
+        type: 'category',
+        data: weeks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); }),
+        axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.12)' } },
+        axisTick:{ lineStyle:{ color:'rgba(255,255,255,0.08)' } },
+        axisLabel:{ color:'rgba(200,215,235,0.75)', fontSize:11, fontWeight:'600' },
+        splitLine:{ show: true, lineStyle:{ color:'rgba(255,255,255,0.04)', type:'dashed' } }
+      },
+      yAxis:{
+        type: 'value',
+        axisLine:{ show: false },
+        axisTick:{ show: false },
+        axisLabel:{
+          color:'rgba(200,215,235,0.55)',
+          fontSize:11,
+          formatter: function(v){ return v>=1000?(v/1000).toFixed(0)+'k':v; }
+        },
+        splitLine:{ show: true, lineStyle:{ color:'rgba(255,255,255,0.06)', type:'dashed' } }
+      },
+      tooltip:{
+        trigger: 'axis',
+        order: 'valueDesc',
+        backgroundColor: 'rgba(8,14,28,0.96)',
+        borderColor: 'rgba(255,255,255,0.1)',
+        borderWidth: 1,
+        padding: [10,14],
+        textStyle:{ color:'#e6edf3', fontSize:12 },
+        axisPointer:{
+          type: 'cross',
+          crossStyle:{ color:'rgba(255,255,255,0.2)' },
+          lineStyle:{ color:'rgba(255,255,255,0.15)', type:'dashed' }
+        },
+        formatter: function(params){
+          var wkLabel = params[0] ? params[0].axisValue : '';
+          var header = '<div style="font-weight:800;font-size:13px;color:#c7d8f0;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.1);padding-bottom:6px;">'+wkLabel+'</div>';
+          var rows2 = params.map(function(p,i){
+            var rank = i+1;
+            var medal = rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+            var pts = Number(p.value).toLocaleString('pt-BR');
+            return '<div style="display:flex;align-items:center;gap:8px;margin:3px 0;">'
+              +'<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+p.color+';flex-shrink:0;"></span>'
+              +'<span style="flex:1;color:#c7d8f0;font-size:12px;">'+(medal?medal+' ':'')+p.seriesName+'</span>'
+              +'<span style="font-weight:800;color:'+p.color+';font-size:13px;">'+pts+'</span>'
+              +'</div>';
+          });
+          return header + rows2.join('');
+        }
+      },
+      series: series
+    }, true);
   })();
 
   // Medalhas
