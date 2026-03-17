@@ -64,7 +64,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
     }
     *{box-sizing:border-box}
-    html { overflow-y: auto; overflow-x: hidden; }
+    html { overflow-y: scroll; overflow-x: hidden; }
     body{
       margin:0;color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       background:
@@ -294,22 +294,22 @@ body.mobile-mode #pontuacao-anual-arrow {
 <style>
 /* === Ajustes solicitados: mini-cards pela metade e podium shading === */
 /* Medal emoji sizes */
-#card-medalhas .medal-emoji { font-size:18px; line-height:1; }
+#card-medalhas .medal-emoji { font-size:20px; line-height:1; }
 #card-medalhas .chip .medal-emoji { font-size:20px; }
-#list-4-9 .medals strong { font-size:16px !important; font-weight:800 !important; }
-#list-4-9 .row .pos { font-size:16px !important; font-weight:900 !important; width:42px !important; height:42px !important; }
-#list-4-9 .row .avatar { width:44px !important; height:44px !important; min-width:44px !important; font-size:16px !important; }
+#list-4-9 .medals strong { font-size:15px !important; font-weight:700 !important; color:#e0eaf5 !important; margin:0 !important; padding:0 !important; }
+#list-4-9 .row .pos { font-size:11px !important; font-weight:600 !important; width:30px !important; height:30px !important; }
+#list-4-9 .row .avatar { width:52px !important; height:52px !important; min-width:52px !important; font-size:18px !important; }
 #list-4-9 .medal-pair {
   display:inline-flex !important;
   align-items:center !important;
-  gap:1px !important;
+  gap:0 !important;
   margin-right:0 !important;
   background:none !important;
   padding:0 !important;
 }
-#list-4-9 .medals { display:flex !important; align-items:center !important; gap:8px !important; flex-wrap:nowrap !important; }
-#list-4-9 .medal-pair .medal-emoji { font-size:20px !important; line-height:1 !important; display:inline-block !important; }
-#list-4-9 .medal-pair strong { font-size:17px !important; font-weight:900 !important; color:#e6edf3 !important; line-height:1 !important; min-width:0 !important; text-align:left !important; }
+#list-4-9 .medals { display:flex !important; align-items:center !important; gap:12px !important; flex-wrap:nowrap !important; }
+#list-4-9 .medal-pair .medal-emoji { font-size:21px !important; line-height:1 !important; display:inline-block !important; }
+#list-4-9 .medal-pair strong { font-size:15px !important; font-weight:700 !important; color:#e0eaf5 !important; line-height:1 !important; margin:0 !important; padding:0 0 0 1px !important; min-width:0 !important; text-align:left !important; }
 .row.mini-ranks .card.mini-card.half {
   padding: 6px;
 }
@@ -1055,7 +1055,7 @@ body.mobile-mode #list-4-9.populated { display: flex !important; flex-direction:
    Telas até 768px: layout mobile-first espetacular
 ═══════════════════════════════════════════════════════ */
 @media (max-width: 768px) {
-  body { font-size: 13px; overflow-x: hidden; }
+  body { font-size: 13px; overflow-x: hidden; overflow-y: auto; }
 
   /* ── CONTROLES ── */
   .controls {
@@ -1185,7 +1185,7 @@ body.mobile-mode #list-4-9.populated { display: flex !important; flex-direction:
     align-items: center !important;
   }
   #card-medalhas .medals .medal { width: 12px !important; height: 12px !important; vertical-align: middle !important; }
-  #card-medalhas .medals strong { font-size: 12px !important; margin-left: 2px !important; }
+  #card-medalhas .medals strong { font-size: 15px !important; margin-left: 0 !important; padding: 0 !important; font-weight: 700 !important; }
 
   /* ── KPIS: 2 colunas ── */
   .kpis {
@@ -1275,13 +1275,13 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.08)}
 #card-medalhas .medal{width:18px;height:18px;vertical-align:middle}
 #card-medalhas .list{margin-top:10px;background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:12px;overflow:visible;height:auto;min-height:0}
-#card-medalhas .row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-top:1px solid rgba(255,255,255,.06)}
+#card-medalhas .row{display:grid;grid-template-columns:52px 1fr auto;align-items:center;gap:10px;padding:8px 10px;border-top:1px solid rgba(255,255,255,.06)}
 #card-medalhas .row:first-child{border-top:none}
 #card-medalhas .pos{width:30px;height:30px;display:grid;place-items:center;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);font-weight:700}
 #card-medalhas .who{display:flex;align-items:center;gap:8px}
 #card-medalhas .who .avatar{width:38px;height:38px;font-size:15px}
 #card-medalhas .who .name{margin:0;font-size:16px}
-#card-medalhas .medals{display:flex;gap:8px;align-items:center;font-size:16px}
+#card-medalhas .medals{display:flex;gap:22px;align-items:center;font-size:16px}
 
 .chart.medal-col #chart-kopontos{height:230px !important}
 .chart.medal-col .title{display:block;margin-bottom:6px}
@@ -1318,7 +1318,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .pos{ width:26px; height:26px; font-size:12px; }
 #card-medalhas .who .avatar{ width:28px; height:28px; font-size:13px; }
 #card-medalhas .who .name{ font-size:14px; }
-#card-medalhas .medals{ font-size:14px; gap:6px; }
+#card-medalhas .medals{ font-size:14px; gap:22px; }
 
 /* Reduz margens gerais no card grande */
 #card-kopontos{ padding-top:10px !important; padding-bottom:12px !important; }
@@ -1384,7 +1384,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .pos{ width:30px; height:30px; font-size:13px; }
 #card-medalhas .who .avatar{ width:40px; height:40px; font-size:14px; } /* avatar maior */
 #card-medalhas .who .name{ font-size:15px; }
-#card-medalhas .medals{ font-size:16px; gap:10px; }
+#card-medalhas .medals{ font-size:16px; gap:22px; }
 #card-medalhas .medals .medal{ width:16px; height:16px; }
 
 /* Ajuste fino de espaçamento geral do card para "subir" um pouco */
@@ -1456,7 +1456,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 #card-medalhas .who .name{ font-size:15px; }
 
 /* Medalhas mais próximas dos números (ícone encostado no número) */
-#card-medalhas .medals{ font-size:16px; gap:8px; }
+#card-medalhas .medals{ font-size:16px; gap:22px; }
 #card-medalhas .medals .medal{ width:15px; height:15px; vertical-align:-2px; }
 #card-medalhas .medals strong{ margin-left:4px; } /* ícone -> número mais junto */
 
@@ -1507,7 +1507,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 }
 #card-medalhas .who .avatar{ width:34px; height:34px; }
 #card-medalhas .who .name{ font-size:14px; line-height:1.15; }
-#card-medalhas .medals{ font-size:15px; gap:6px; }
+#card-medalhas .medals{ font-size:15px; gap:22px; }
 #card-medalhas .medals .medal{ width:14px; height:14px; vertical-align:-2px; }
 #card-medalhas .pos{ width:24px; height:24px; font-size:11px; }
 
@@ -1606,7 +1606,7 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 .mini-header select{ display:inline-block !important; visibility:visible !important; opacity:1 !important; }
 .card.mini-card .mini-header{ position:relative; z-index:5; }
 /* Avoid any global overflow creating horizontal scrollbar */
-body { overflow-x: hidden; }
+body { overflow-x: hidden; overflow-y: auto; }
 .grid-charts { overflow: visible; }
 </style><style>
 .card.mini-card .mini-prizes{margin-top:6px;padding-top:6px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35}
@@ -2587,13 +2587,13 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📈</div>
         <div>
           <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Gráfico de Pontuação Anual</div>
-          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados semana a semana</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados</div>
         </div>
       </div>
       <span id="pontuacao-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
     <div id="pontuacao-anual-body" data-open="true" style="padding:0 16px 16px;">
-      <div id="chartEvolucao" style="height:440px;width:100%;"></div>
+      <div id="chartEvolucao" style="height:520px;width:100%;"></div>
     </div>
   </div>
 </div>
@@ -2613,7 +2613,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       <div style="display:flex;align-items:center;gap:10px;">
         <div onclick="event.stopPropagation()">
           <select id="sf-mes-select" onchange="window.setSaldoMes(this.value)"
-              style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
+              style="font-size:12px;padding:5px 12px;min-width:80px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
               <option value="todos">Todos</option>
               <option value="1">Jan</option>
               <option value="2">Fev</option>
@@ -2625,7 +2625,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
     <div id="saldo-fin-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartSaldoFin" style="height:340px;width:100%;"></div>
-      <div id="sf-summary" style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;"></div>
+      <div id="sf-summary" style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"></div>
       <div style="margin-top:8px;font-size:11px;color:#4a6080;letter-spacing:.2px;">* Saldo do período sem considerar antecipações do dealer</div>
       <div style="margin-top:18px;border-top:1px solid rgba(255,255,255,0.07);padding-top:14px;">
         <button onclick="window.sfToggleTabela()" id="sf-tabela-btn"
@@ -2658,7 +2658,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       <div style="display:flex;align-items:center;gap:10px;" onclick="event.stopPropagation()">
         <!-- Filtro de período -->
         <select id="prem-mes-select" onchange="window.renderPremiosFin()"
-          style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
+          style="font-size:12px;padding:4px 8px;min-width:68px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
 
               <option value="todos">Todos</option>
               <option value="1">Jan</option>
@@ -3059,9 +3059,9 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
       <!-- Card picker modal -->
       <div id="eq-picker" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
-        <div style="background:#0d1424;border:1px solid #1e3a5a;border-radius:18px;padding:20px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);">
+        <div style="background:#0d1424;border:1px solid #1e3a5a;border-radius:18px;padding:16px;max-width:min(380px,92vw);width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
           <div style="font-size:14px;font-weight:800;color:#c7d8f0;margin-bottom:14px;">Escolha uma carta</div>
-          <div id="eq-picker-grid" style="display:grid;grid-template-columns:repeat(13,1fr);gap:3px;margin-bottom:12px;"></div>
+          <div id="eq-picker-grid" style="margin-bottom:12px;overflow:hidden;"></div>
           <div style="display:flex;gap:6px;justify-content:flex-end;">
             <button onclick="eqPickNone()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">✕ Limpar</button>
             <button onclick="eqClosePicker()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">Fechar</button>
@@ -4103,19 +4103,13 @@ function refresh(){
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      grid:{left:95,right:80,top:20,bottom:20},
-      xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, splitLine:{show:true, lineStyle:{color:'rgba(255,255,255,0.06)'}} },
-      yAxis:{type:'category',data:names,inverse:true,axisLabel:{
-      formatter:function(value,idx){
-        const r=idx+1;
-        let rk = (r===1)?'🥇':(r===2)?'🥈':(r===3)?'🥉':(r+'.');
-        return '{rank|'+rk+'}{name|  '+value+'}';
+      grid:{left:8,right:8,top:16,bottom:4,containLabel:false},
+      xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, show:false },
+      yAxis:{type:'category',data:names,inverse:true,
+        axisLine:{show:false}, axisTick:{show:false},
+        axisLabel:{ show:false, width:0, fontSize:0, color:'transparent' },
+        z: 0
       },
-      rich:{
-        rank:{width:26,align:'right',color:'#e6edf3',fontWeight:700},
-        name:{align:'left',color:'#e6edf3'}
-      }
-    }},
       series:[
         { type:'bar', data: vals.map(v=> isSaldo? (v>=0? maxAbs : -maxAbs) : maxAbs), barGap:'-100%', barWidth:32, z:1, silent:true,
           itemStyle:{borderRadius:[0,12,12,0], color: new echarts.graphic.LinearGradient(0,0,1,0,[{offset:0,color:'rgba(255,255,255,0.06)'},{offset:1,color:'rgba(0,0,0,0.15)'}])}},
@@ -4238,6 +4232,43 @@ function refresh(){
         }
       }
     });
+
+    // Avatar overlay: draw circular photos on left side of each bar
+    (function drawAvatars(){
+      var el = document.getElementById('chartRanking');
+      if(!el) return;
+      var w = el.offsetWidth, h = el.offsetHeight;
+      var barH = (h - 20 - 4) / names.length;  // approx bar height
+      var avatarSize = Math.min(barH - 6, 38);
+      var graphicItems = names.map(function(name, i){
+        var photo = window.photoFor ? window.photoFor(name) : '';
+        var r = i+1;
+        var rk = r===1?'🥇':r===2?'🥈':r===3?'🥉':(r+'.');
+        var cy = 16 + i * barH + barH/2;
+        var cx = 8 + avatarSize/2;
+        var items = [];
+        if(photo){
+          items.push({
+            type:'image',
+            z: 999,
+            style:{ image:photo, x: cx - avatarSize/2, y: cy - avatarSize/2, width:avatarSize, height:avatarSize },
+            clipPath:{ type:'circle', shape:{ cx: cx, cy: cy, r: avatarSize/2 } }
+          });
+        } else {
+          items.push({
+            type:'circle', z:999,
+            shape:{ cx:cx, cy:cy, r:avatarSize/2 },
+            style:{ fill:'rgba(59,130,246,0.6)', stroke:'rgba(255,255,255,0.3)', lineWidth:1.5 }
+          });
+          items.push({
+            type:'text', z:999,
+            style:{ text:name.slice(0,1), x:cx, y:cy, fontSize:14, fontWeight:700, fill:'#fff', textAlign:'center', textVerticalAlign:'middle' }
+          });
+        }
+        return items;
+      }).flat();
+      eRanking.setOption({ graphic: graphicItems });
+    })();
   })();
 
   
@@ -4431,6 +4462,13 @@ function refresh(){
     // Sort by total descending so legend matches leaderboard
     playerData.sort(function(a,b){return b.total-a.total;});
 
+    var NAME_SHORT = {
+      'Israel':'Isra','Cristiano':'Cris','Heron':'Heron','Rafa':'Rafa',
+      'Magu':'Magu','Oscar':'Osc','Pedro':'Ped','Marcus':'Mar','Charles':'Cha',
+      'Filipe':'Fil','Ewe':'Ewe','Victor':'Vic'
+    };
+    function shortName(n){ return NAME_SHORT[n] || n.slice(0,4); }
+
     var series = playerData.map(function(pd,i){
       var color = PLAYER_COLORS[i % PLAYER_COLORS.length];
       var lastIdx = pd.values.length - 1;
@@ -4449,7 +4487,7 @@ function refresh(){
       });
 
       return {
-        name: pd.name,
+        name: shortName(pd.name),
         type: 'line',
         smooth: 0.4,
         data: data,
@@ -4469,17 +4507,7 @@ function refresh(){
           lineStyle:{ width: 3.5, shadowBlur: 16, shadowColor: color+'aa' },
           areaStyle:{ color: color+'66' }
         },
-        // Mostrar último valor como label
-        endLabel:{
-          show: true,
-          formatter: function(p){ return p.seriesName; },
-          color: color,
-          fontSize: 11,
-          fontWeight: '700',
-          padding: [2,4],
-          backgroundColor: 'rgba(5,10,22,0.7)',
-          borderRadius: 4
-        }
+        endLabel:{ show: false }
       };
     });
 
@@ -4489,7 +4517,43 @@ function refresh(){
       animationDurationUpdate: 1200,
       animationEasingUpdate: 'cubicInOut',
       backgroundColor: 'transparent',
-      grid:{ left: 70, right: 120, top: 30, bottom: 50, containLabel: false },
+      legend:[
+        {
+          // Linha 1: primeiros 5 jogadores (ordenados por total)
+          type: 'plain',
+          selectedMode: true,
+          data: series.slice(0,5).map(function(s){ return s.name; }),
+          top: 12,
+          left: 'center',
+          orient: 'horizontal',
+          itemWidth: 10,
+          itemHeight: 10,
+          icon: 'circle',
+          textStyle:{ color:'#9fb3d4', fontSize:12, fontWeight:'600' },
+          inactiveColor: '#2a3a50',
+          inactiveBorderColor: '#2a3a50',
+          padding: [0,2],
+          itemGap: 10
+        },
+        {
+          // Linha 2: últimos 4 jogadores
+          type: 'plain',
+          selectedMode: true,
+          data: series.slice(5).map(function(s){ return s.name; }),
+          top: 36,
+          left: 'center',
+          orient: 'horizontal',
+          itemWidth: 10,
+          itemHeight: 10,
+          icon: 'circle',
+          textStyle:{ color:'#9fb3d4', fontSize:12, fontWeight:'600' },
+          inactiveColor: '#2a3a50',
+          inactiveBorderColor: '#2a3a50',
+          padding: [0,2],
+          itemGap: 10
+        }
+      ],
+      grid:{ left: 48, right: 8, top: 82, bottom: 46, containLabel: false },
       xAxis:{
         type: 'category',
         data: weeks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); }),
@@ -4609,7 +4673,7 @@ function refresh(){
       vm.min=1; vm.max=9;
       colors = ['#FFD700','#E7F59E','#C9F7A1','#A7F3D0','#FDE68A','#FDBA74','#FCA5A5','#F87171','#B91C1C'];
     } else if(hmName==='kos'){
-      colors = ['#e8f5e9','#a5d6a7','#66bb6a','#43a047','#2e7d32'];
+      colors = ['#dbeafe','#93c5fd','#3b82f6','#1d4ed8','#1e3a8a'];
     } else {
       colors = ['#1e3a8a','#1d4ed8','#60a5fa','#fde68a','#ef4444','#b91c1c'];
     }
@@ -4652,7 +4716,7 @@ function refresh(){
       radar:{ indicator:[
         {name:'Pontos',max:maxP}, {name:'Saldo',max:maxS}, {name:'KOs',max:maxK}, {name:'Medalhas',max:maxM}, {name:'Rebuys',max:maxR}
       ], splitArea:{show:true}, axisName:{color:'#c6d0e0'}},
-      legend:{type:'scroll',textStyle:{color:'#c6d0e0'}},
+      legend:{show:false},
       tooltip:{formatter:(p)=>{
         const v=p.value; return `<b>${p.name}</b><br>Pontos: ${fmt(v[0])}<br>Saldo: ${money(v[1])}<br>KOs: ${fmt(v[2])}<br>Medalhas: ${fmt(v[3])}<br>Rebuys: ${fmt(v[4])}`; }},
       series:[{ type:'radar', areaStyle:{opacity:.08}, lineStyle:{width:2}, symbolSize:6,
@@ -5217,9 +5281,9 @@ function refreshAwards(){
           return lines.join('<br>');
         }
       },
-      legend:{top:0,textStyle:{color:'#c6d0e0'}},
-      grid:{left:50,right:25,top:36,bottom:65},
-      xAxis:{type:'category',data:players,axisLabel:{color:'#c6d0e0',rotate:0, interval:0}},
+      legend:{show:false},
+      grid:{left:50,right:25,top:10,bottom:65},
+      xAxis:{type:'category',data:players.map(n=>n.slice(0,3)),axisLabel:{color:'#c6d0e0',rotate:0, interval:0}},
       yAxis:{type:'value',axisLabel:{color:'#9aa7bd'}},
       dataZoom:[] ,
       series:[
@@ -6481,10 +6545,10 @@ document.addEventListener('DOMContentLoaded', function(){
   var BASE = [
     ['#37474F','#B0BEC5'], // cinza
     ['#1565C0','#90CAF9'], // azul
-    ['#1B5E20','#81C784'], // verde
+    ['#1e3a8a','#3b82f6'], // azul
     ['#B71C1C','#EF9A9A'], // vermelho
     ['#F9A825','#FFF59D'], // amarelo
-    ['#8BC34A','#DCEDC8']  // verde claro
+    ['#1d4ed8','#93c5fd']  // azul claro
   ];
   var OSCAR  = ['#E65100','#FFB74D']; // laranja (Oscar)
   var ISRAEL = ['#0D47A1','#5B8EF1']; // azul escuro (Israel)
@@ -6923,7 +6987,7 @@ function avatarNode(photo,name){
 }
 
 
-  const CHIP_EMOJI = {"svg-gold":"🏆","svg-silver":"🥈","svg-bronze":"🥉"};
+  const CHIP_EMOJI = {"svg-gold":"🥇","svg-silver":"🥈","svg-bronze":"🥉"};
   function chip(iconId,count){
     const span=document.createElement("span");
     const emoji = CHIP_EMOJI[iconId] || medalSVG(iconId);
@@ -6977,7 +7041,7 @@ function avatarNode(photo,name){
       const nm=document.createElement("div"); nm.className="name"; nm.textContent=p.name; who.appendChild(nm);
       const medals=document.createElement("div"); medals.className="medals";
       medals.innerHTML=
-        `<span class="medal-pair"><span class="medal-emoji">🏆</span><strong>${p.gold||0}</strong></span>`+
+        `<span class="medal-pair"><span class="medal-emoji">🥇</span><strong>${p.gold||0}</strong></span>`+
         `<span class="medal-pair"><span class="medal-emoji">🥈</span><strong>${p.silver||0}</strong></span>`+
         `<span class="medal-pair"><span class="medal-emoji">🥉</span><strong>${p.bronze||0}</strong></span>`;
       row.appendChild(who); row.appendChild(medals); listEl.appendChild(row);
@@ -9391,6 +9455,15 @@ window.addEventListener('load', function(){
       document.documentElement.style.overflowY = 'auto';
       document.documentElement.style.overflowX = 'hidden';
       document.body.style.overflowY = 'auto';
+      document.documentElement.style.height = 'auto';
+      document.body.style.height = 'auto';
+      // DevTools mobile preview: enable mouse wheel scroll
+      if(!window._mobileWheelHandler){
+        window._mobileWheelHandler = function(e){
+          window.scrollBy({ top: e.deltaY, behavior: 'auto' });
+        };
+        document.addEventListener('wheel', window._mobileWheelHandler, { passive: true });
+      }
       var btn = document.getElementById('btn-view-toggle');
       if(btn) btn.innerHTML = '🖥️ Desktop';
       // Highlight active mode buttons in topbar
@@ -9416,6 +9489,9 @@ window.addEventListener('load', function(){
         'header { display: none !important; }',
         '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; height: 64px !important; background: linear-gradient(135deg, #060d1a 0%, #0d1629 100%) !important; border-bottom: 1px solid rgba(59,130,246,0.18) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important; }',
         '.container { padding-top: 72px !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 110px !important; max-width: 100vw !important; overflow-x: hidden !important; }',
+        'html, body { overflow-y: scroll !important; overflow-x: hidden !important; height: auto !important; min-height: 100% !important; }',
+        'body { -webkit-overflow-scrolling: touch !important; }',
+        '#main-container, .container { overflow: visible !important; }',
 
         /* ══════════════════════════════════════
            CONTROLES: GRADE 2 COLUNAS COMPACTA
@@ -9498,27 +9574,29 @@ window.addEventListener('load', function(){
         '#list-4-9 { display: flex !important; flex-direction: column !important; gap: 5px !important; overflow: visible !important; height: auto !important; border: none !important; background: transparent !important; padding: 0 !important; min-height: auto !important; }',
 
         /* Cada row: pos | foto+nome | 🥇N 🥈N 🥉N alinhados */
-        '#card-medalhas .row { display: grid !important; grid-template-columns: 36px 1fr 120px !important; align-items: center !important; gap: 10px !important; padding: 12px 14px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,.10) !important; background: rgba(255,255,255,.03) !important; margin-bottom: 4px !important; }',
+        '#card-medalhas .row { display: flex !important; align-items: center !important; gap: 8px !important; padding: 10px 12px !important; border-radius: 12px !important; border: 1px solid rgba(255,255,255,.10) !important; background: rgba(255,255,255,.03) !important; margin-bottom: 4px !important; justify-content: flex-start !important; }',
         '#card-medalhas .pos { width: 22px !important; height: 22px !important; font-size: 11px !important; flex-shrink: 0 !important; }',
-        '#card-medalhas .who { display: flex !important; align-items: center !important; gap: 7px !important; min-width: 0 !important; overflow: hidden !important; }',
+        '#card-medalhas .who { display: flex !important; align-items: center !important; gap: 7px !important; min-width: 0 !important; overflow: hidden !important; flex: 0 0 auto !important; }',
+        '#card-medalhas .who .name { white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; max-width: 90px !important; }',
         '#card-medalhas .who .avatar { width: 38px !important; height: 38px !important; font-size: 14px !important; flex-shrink: 0 !important; }',
         '#card-medalhas .who .name { font-size: 15px !important; overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important; }',
 
-        /* Medalhas: ícone+número com largura fixa para alinhar colunas */
-        /* Medalhas 4-9: bolinha ouro | nº · bolinha prata | nº · bolinha bronze | nº */
-        '#card-medalhas .medals { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 8px !important; flex-shrink: 0 !important; }',  /* gap entre pares de medalhas */
-        '#card-medalhas .medals .medal-pair { display: inline-flex !important; align-items: center !important; gap: 1px !important; min-width: 0 !important; }',  /* gap mínimo entre emoji e número */
+        /* Medalhas: gap entre pares maior, número leve e fino */
+        /* === MEDALHAS 4-9: layout compacto à esquerda === */
+        '#card-medalhas .medals { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 12px !important; flex-shrink: 0 !important; margin-left: 4px !important; }',
+        '#card-medalhas .medals .medal-pair { display: inline-flex !important; align-items: center !important; gap: 0 !important; min-width: 0 !important; }',
+        '#card-medalhas .medals .medal-pair strong { margin: 0 !important; padding: 0 !important; }',
         '#card-medalhas .medals .medal { width: 14px !important; height: 14px !important; vertical-align: middle !important; flex-shrink: 0 !important; }',
-        /* Emoji tamanho maior nas rows e chips */
-        '#card-medalhas .medal-emoji { font-size: 20px !important; line-height: 1 !important; }',
-        '#card-medalhas .chip .medal-emoji { font-size: 20px !important; }',
-        /* Número de medalhas maior nos 4º+ */
-        '#list-4-9 .medals strong { font-size: 17px !important; font-weight: 900 !important; min-width: 0 !important; line-height: 1 !important; }', /* número bem próximo do emoji */
-        /* Posição maior nos 4º+ */
-        '#list-4-9 .row .pos { font-size: 16px !important; font-weight: 900 !important; width: 42px !important; height: 42px !important; }',
-        /* Avatar maior nos 4º+ */
-        '#list-4-9 .row .avatar { width: 44px !important; height: 44px !important; min-width: 44px !important; font-size: 16px !important; }',
-        '#card-medalhas .medals strong { font-size: 17px !important; font-weight: 900 !important; min-width: 0 !important; text-align: left !important; line-height: 1 !important; }', /* proporcional ao emoji */
+        '#card-medalhas .medal-emoji { font-size: 21px !important; line-height: 1 !important; }',
+        '#card-medalhas .chip .medal-emoji { font-size: 21px !important; }',
+        '#list-4-9 .medals { gap: 12px !important; flex-shrink: 0 !important; }',
+        '#list-4-9 .medal-pair { display: inline-flex !important; align-items: center !important; gap: 0 !important; }',
+        '#list-4-9 .medal-pair .medal-emoji { display: inline-flex !important; }',
+        '#list-4-9 .medal-pair strong { font-size: 15px !important; font-weight: 700 !important; color: #e0eaf5 !important; line-height: 1 !important; margin: 0 !important; padding: 0 0 0 1px !important; }',
+        '#list-4-9 .medals strong { font-size: 15px !important; font-weight: 700 !important; color: #e0eaf5 !important; min-width: 0 !important; line-height: 1 !important; margin: 0 !important; padding: 0 !important; }',
+        '#list-4-9 .row .pos { font-size: 11px !important; font-weight: 600 !important; width: 30px !important; height: 30px !important; }',
+        '#list-4-9 .row .avatar { width: 52px !important; height: 52px !important; min-width: 52px !important; font-size: 18px !important; }',
+        '#card-medalhas .medals strong { font-size: 15px !important; font-weight: 700 !important; color: #e0eaf5 !important; min-width: 0 !important; text-align: left !important; line-height: 1 !important; margin: 0 !important; padding: 0 !important; }',
 
         /* ══════════════════════════════════════
            GRÁFICOS — COLUNA ÚNICA + ALTURAS IDEAIS
@@ -9537,7 +9615,8 @@ window.addEventListener('load', function(){
 
         /* Evolução — precisa de mais espaço */
         '.grid-charts .chart.evo-span { min-height: 380px !important; }',
-        '#chartEvolucao { height: 360px !important; min-height: 360px !important; }',
+        '#chartEvolucao { height: 440px !important; min-height: 440px !important; }',
+        '#card-pontuacao-anual #pontuacao-anual-body { padding: 0 4px 12px !important; }',
 
         /* Personas/Arquétipos */
 
@@ -9999,7 +10078,7 @@ window.addEventListener('load', function(){
         var acc=0;
         vals = raw.map(function(v){if(v==null)return null;acc+=v;return parseFloat(acc.toFixed(2));});
       }
-      return{name:nome,type:'line',smooth:0.4,data:vals,connectNulls:false,
+      return{name:nome.slice(0,3),type:'line',smooth:0.4,data:vals,connectNulls:false,
         lineStyle:{width:2.5,color:c},itemStyle:{color:c},symbolSize:7,
         markLine:{silent:true,lineStyle:{color:'rgba(255,80,80,0.3)',type:'dashed',width:1.5},data:[{yAxis:0}],label:{show:false}}};
     });
@@ -10017,7 +10096,9 @@ window.addEventListener('load', function(){
           });
           return h;
         }},
-      legend:{type:'scroll',bottom:4,textStyle:{color:'#9fb3d4',fontSize:11},icon:'circle'},
+      legend:{type:'scroll',bottom:4,textStyle:{color:'#9fb3d4',fontSize:11},icon:'circle',
+        formatter:function(name){ return name.slice(0,3); }
+      },
       grid:{left:70,right:20,top:20,bottom:52},
       xAxis:{type:'category',data:meses,axisLabel:{color:'rgba(230,237,243,0.7)',formatter:function(v){return MESES[v-1]||v;}},splitLine:{show:false}},
       yAxis:{type:'value',axisLabel:{color:'rgba(230,237,243,0.6)',
@@ -10035,10 +10116,11 @@ window.addEventListener('load', function(){
       }).sort(function(a,b){return b.total-a.total;});
       su.innerHTML = tots.map(function(p){
         var c=cor(p.total); var bg=p.total>=0?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)'; var br=p.total>=0?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)';
-        return'<div style="background:'+bg+';border:1px solid '+br+';border-radius:12px;padding:10px 14px">'
-          +'<div style="font-size:11px;color:#6b82a0;font-weight:600;text-transform:uppercase;letter-spacing:.4px;">'+(p.total>=0?'📈':'📉')+' '+p.nome+'</div>'
-          +'<div style="font-size:9px;color:#4a6080;margin-top:1px;letter-spacing:.3px;">Saldo</div>'
-          +'<div style="font-size:18px;font-weight:800;color:'+c+';margin-top:4px;">'+(p.total>=0?'+':'-')+'R$ '+Math.abs(p.total).toFixed(2).replace('.',',')+'</div></div>';
+        var iconUp='<svg width="18" height="12" viewBox="0 0 18 12" fill="none"><polyline points="1,11 6,5 10,8 17,1" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="13,1 17,1 17,5" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+        var iconDn='<svg width="18" height="12" viewBox="0 0 18 12" fill="none"><polyline points="1,1 6,7 10,4 17,11" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="13,11 17,11 17,7" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
+        var icon=p.total>=0?iconUp:iconDn;
+        var nameColor=p.total>=0?'#86efac':'#fca5a5';
+        return'<div style="background:'+bg+';border:1px solid '+br+';border-radius:10px;padding:6px 8px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;">'          +'<div style="margin-bottom:2px;">'+icon+'</div>'          +'<div style="font-size:10px;color:'+nameColor+';font-weight:700;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;">'+p.nome+'</div>'          +'<div style="font-size:8px;color:#4a6080;letter-spacing:.2px;">Saldo</div>'          +'<div style="font-size:14px;font-weight:800;color:'+c+';margin-top:1px;">'+(p.total>=0?'+':'-')+'R$'+Math.abs(p.total).toFixed(2).replace('.',',')+'</div></div>';
       }).join('');
     }
   }
@@ -10165,18 +10247,16 @@ window.addEventListener('load', function(){
         }
       });
 
-      // Saldo efetivo = soma(saldo_mes_total) - soma(antecipacao_total) do mensal
-      // saldo_mes_total já inclui: semanas + prêmio mensal + ajuste KO real
-      // saldo_mes_total já inclui: semanas + prêmio mensal + ajuste KO real
-      // Antecipações: usar LEDGER como fonte (mensal.antecipacao_total tem erros)
+      // Saldo efetivo = soma(saldo_mes_total) por mês
+      // saldo_mes_total já inclui: semanas + prêmio mensal + ajuste KO + antecipações
+      // É a fonte correta e definitiva — não reprocessar componentes individualmente
       var saldoMesAcum = 0;
       Object.keys(wkFechaMes).map(Number).forEach(function(mes){
         var mRec = idxMen[nome] ? idxMen[nome][mes] : null;
         if(mRec && mRec.saldo_mes_total != null) saldoMesAcum += r2(mRec.saldo_mes_total);
       });
-      var antecipLedger = 0;
-      getLedger().forEach(function(r){ if(r.jogador===nome) antecipLedger += r2(r.antecipacao_dealer); });
-      var saldoEfetivo = r2(saldoMesAcum - antecipLedger);
+      // Prêmios trimestrais e anuais ainda não fechados: somar separadamente quando existirem
+      var saldoEfetivo = r2(saldoMesAcum + totPremTri + totPremAno);
 
       var bgH = saldoEfetivo>=0?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)';
       var jId='tab-jog-'+nome.replace(/\s/g,'_');
@@ -10307,7 +10387,7 @@ window.addEventListener('load', function(){
 
       /* Linha SALDO EFETIVO */
       var nColsEf = 13 + (mostrarTri?1:0) + (mostrarAno?1:0);
-      var descEfetivo = 'soma saldo_mes_total − antecipações ao dealer'
+      var descEfetivo = 'soma saldo_mes_total por mês'
         +(mostrarTri?' + prêm. tri':'')+(mostrarAno?' + prêm. ano':'');
       html += '<tr style="background:'+(saldoEfetivo>=0?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)')
         +';border-top:2px solid '+(saldoEfetivo>=0?'rgba(34,197,94,0.4)':'rgba(239,68,68,0.4)')+'">'
@@ -10504,13 +10584,12 @@ window.addEventListener('load', function(){
           return h;
         }
       },
-      legend:{bottom:0, textStyle:{color:'#9fb3d4',fontSize:11}, icon:'roundRect', itemWidth:12, itemHeight:8},
-      grid:{left:80, right:20, top:16, bottom:40},
+      legend:{show:false},
+      grid:{left:80, right:20, top:16, bottom:16},
       xAxis:{
         type:'value',
-        axisLabel:{color:'rgba(230,237,243,0.6)',
-          formatter:function(v){return(v>=0?'R$':'-R$')+Math.abs(v).toLocaleString('pt-BR',{minimumFractionDigits:0});}},
-        splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}
+        show: false,
+        splitLine:{show:false}
       },
       yAxis:{
         type:'category', data:jogs,
@@ -10589,15 +10668,15 @@ window.addEventListener('load', function(){
       var t2=Math.min((val-1)/3,1);
       return blendS([[0,'#e06060'],[0.33,'#c0392b'],[0.66,'#922020'],[1,'#7b0000']],t2);
     }
-    if(val===0) return '#92740a';
+    if(val===0) return '#dbeafe';
     var t3=maxKO<=1?1:Math.min((val-1)/(maxKO-1),1);
-    return blendS([[0,'#a0960a'],[0.25,'#7aad0a'],[0.5,'#4d9e15'],[0.75,'#1e8a2e'],[1,'#14532d']],t3);
+    return blendS([[0,'#93c5fd'],[0.33,'#3b82f6'],[0.66,'#1d4ed8'],[1,'#1e3a8a']],t3);
   }
 
   function getFg(metric,val){
     if(metric==='posicao') return '#ffffff';
     if(metric==='rebuys') return val===0?'#d1fae5':'#ffffff';
-    return val===0?'#ffe066':'#d1fae5';
+    return val===0?'rgba(148,163,184,0.45)':'#ffffff';
   }
 
   function isBodyOpen(){
@@ -10709,7 +10788,7 @@ window.addEventListener('load', function(){
         var empty=faltou||val==null;
         var bg=empty?'rgba(255,255,255,0.04)':getBg(hmMetric,val,maxPos,maxKO);
         var fg=empty?'rgba(255,255,255,0.2)':getFg(hmMetric,val);
-        var lbl=faltou?'—':val==null?'—':(hmMetric==='posicao'?val+'º':''+val);
+        var lbl=faltou?'–':val==null?'–':(hmMetric==='kos'&&val===0?'–':(hmMetric==='posicao'?val+'º':''+val));
         var tip=tooltipText(jog,wk,val,faltou);
 
         html += '<td style="width:'+cellSz+'px;height:'+cellSz+'px;padding:0;background:'+bg
@@ -10717,7 +10796,7 @@ window.addEventListener('load', function(){
           + '<div style="width:100%;height:'+cellSz+'px;'
           + 'display:flex;align-items:center;justify-content:center;'
           + 'color:'+fg+';font-size:'+fontSize+'px;font-weight:800;'
-          + 'text-shadow:0 1px 2px rgba(0,0,0,0.9);line-height:1;">'
+          + (hmMetric==='kos'&&val===0?'font-size:'+(fontSize-2)+'px;':'text-shadow:0 1px 2px rgba(0,0,0,0.9);')+'line-height:1;">'
           + lbl+'</div></td>';
       });
       html += '</tr>';
@@ -12120,8 +12199,8 @@ function runSimulation(players, board, nSims){
 /* ── UI Helpers ───────────────────────────────────── */
 function cardHtml(card, slotId, size){
   size = size || 'normal';
-  var w = size==='small'?36:44, h = size==='small'?52:64;
-  var fs = size==='small'?12:15, fs2 = size==='small'?16:22;
+  var w = size==='small'?36:56, h = size==='small'?52:80;
+  var fs = size==='small'?12:18, fs2 = size==='small'?16:28;
   if(!card){
     return '<div onclick="eqOpenPicker(\''+slotId+'\')" style="width:'+w+'px;height:'+h+'px;border-radius:8px;border:2px dashed #1e3a5a;background:#060d1a;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#2a4a6a;font-size:18px;flex-shrink:0;">+</div>';
   }
@@ -12200,31 +12279,36 @@ window.eqOpenPicker = function(slotId){
   var grid = document.getElementById('eq-picker-grid');
   grid.innerHTML = '';
 
-  // Header: suits
-  var headerRow = '<div></div>' + SUITS.map(function(s){
-    var col = (s==='♥'||s==='♦')?'#ff6b6b':'#a0c4ff';
-    return '<div style="text-align:center;font-size:16px;color:'+col+'">'+s+'</div>';
-  }).join('');
-
-  // Rows: ranks
-  RANKS.slice().reverse().forEach(function(r){
-    grid.innerHTML += '<div style="font-size:11px;font-weight:700;color:#6b82a0;text-align:center;line-height:28px;">'+r+'</div>';
-    SUITS.forEach(function(s){
+  // 4 colunas (uma por naipe), scroll horizontal, cartas 56x60px com rank+naipe visíveis
+  var SUITS_ORDER = ['\u2660','\u2665','\u2666','\u2663'];
+  var html = '<div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;justify-content:center;">';
+  SUITS_ORDER.forEach(function(s){
+    var col = (s==='\u2665'||s==='\u2666') ? '#ff6b6b' : '#a0c4ff';
+    html += '<div style="display:flex;flex-direction:column;gap:5px;flex-shrink:0;">';
+    html += '<div style="text-align:center;font-size:22px;color:'+col+';padding:2px 0 4px;">'+s+'</div>';
+    RANKS.slice().reverse().forEach(function(r){
       var card = r+s;
       var isUsed = used.indexOf(card)>=0;
-      var col = (s==='♥'||s==='♦')?'#ff6b6b':'#a0c4ff';
-      var bg = isUsed ? '#1a0a0a' : '#0b1422';
-      var border = isUsed ? '#3a1a1a' : '#1e3a5a';
-      var opacity = isUsed ? '0.3' : '1';
-      grid.innerHTML += '<div onclick="'+(isUsed?'':'eqPickCard(\''+card+'\')')
-        +'" style="width:26px;height:28px;border-radius:5px;background:'+bg+';border:1px solid '+border
-        +';display:flex;align-items:center;justify-content:center;cursor:'+(isUsed?'not-allowed':'pointer')
-        +';opacity:'+opacity+';font-size:10px;font-weight:700;color:'+col+';">'+r+'</div>';
+      var bg = isUsed ? '#120808' : '#0b1422';
+      var border = isUsed ? '#2a1010' : col+'55';
+      var opacity = isUsed ? '0.28' : '1';
+      var cursor = isUsed ? 'not-allowed' : 'pointer';
+      var onclick = isUsed ? '' : "eqPickCard('"+card+"')";
+      html += '<div onclick="'+onclick+'" style="width:58px;height:58px;border-radius:10px;background:'+bg
+        +';border:1.5px solid '+border+';display:flex;flex-direction:column;align-items:center;'
+        +'justify-content:center;gap:1px;cursor:'+cursor+';opacity:'+opacity+';flex-shrink:0;'
+        +'box-shadow:0 2px 6px rgba(0,0,0,.4);">'
+        +'<span style="font-size:17px;font-weight:800;color:'+col+';line-height:1;">'+(r==='T'?'10':r)+'</span>'
+        +'<span style="font-size:20px;line-height:1;">'+s+'</span>'
+        +'</div>';
     });
+    html += '</div>';
   });
+  html += '</div>';
+  grid.innerHTML = html;
 
   document.getElementById('eq-picker').style.display = 'flex';
-};
+}
 
 window.eqPickCard = function(card){
   if(!_eqPickTarget) return;
