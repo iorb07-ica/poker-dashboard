@@ -937,7 +937,7 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
   margin-bottom: 14px !important;/* space above footer */
 }
 </style><style id="v70_kopie_fillrow">
-.grid-charts .chart.kos-small{height:100% !important; align-self:stretch !important;}
+.grid-charts .chart.kos-small{height:340px !important; align-self:start !important;}
 #chartKOs{height:calc(100% - 56px) !important; margin-top:8px !important; margin-bottom:12px !important;}
 
 #chartKOs{min-height:260px;}
@@ -1766,7 +1766,9 @@ function revealDashboard(){
     var overlay = document.getElementById('loading-overlay');
     var container = document.getElementById('main-container');
     if(overlay){ overlay.style.transition='opacity 0.5s'; overlay.style.opacity='0'; setTimeout(function(){ overlay.style.display='none'; }, 500); }
-    if(container){ container.style.visibility='visible'; container.style.opacity='1'; }
+    if(container){ container.style.visibility='visible'; container.style.opacity='1'; 
+      /* Activar animações APÓS o container estar visível */
+      setTimeout(function(){ container.classList.add('fade-ready'); }, 50); }
     setTimeout(function(){
       try{ [window.eRanking,window.eKOs,window.eEvo,window.eMed,window.eRadar,window.eAwards,window.eRisk].forEach(function(c){if(c&&c.resize)c.resize();}); }catch(e){}
     }, 100);
@@ -2070,6 +2072,212 @@ html body .row.mini-ranks #card-kopontos {
   overflow: visible !important;
 }
 </style>
+
+<style id="card-fade-animations">
+/* ── Fade-in escalonado — activado via JS após reveal ── */
+@keyframes cardFadeUp {
+  from { opacity:0; transform:translateY(14px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+/* A classe .fade-ready é adicionada via JS após o reveal do dashboard */
+/* Os cards só ficam opacity:0 quando têm essa classe */
+.fade-ready .grid-charts .chart          { animation: cardFadeUp 0.4s ease forwards; }
+.fade-ready .mini-card                   { animation: cardFadeUp 0.4s ease forwards; }
+.fade-ready #card-ranking-anual          { animation: cardFadeUp 0.4s ease 0.06s forwards; }
+.fade-ready #card-perfis                 { animation: cardFadeUp 0.4s ease 0.12s forwards; }
+.fade-ready #card-saldo-financeiro       { animation: cardFadeUp 0.4s ease 0.18s forwards; }
+.fade-ready #card-premiacoes-tipologia   { animation: cardFadeUp 0.4s ease 0.24s forwards; }
+.fade-ready #card-heatmap-novo           { animation: cardFadeUp 0.4s ease 0.30s forwards; }
+.fade-ready #card-momento                { animation: cardFadeUp 0.4s ease 0.36s forwards; }
+.fade-ready #card-previsao               { animation: cardFadeUp 0.4s ease 0.42s forwards; }
+.fade-ready #card-recordes               { animation: cardFadeUp 0.4s ease 0.48s forwards; }
+.fade-ready #card-quitacao               { animation: cardFadeUp 0.4s ease 0.52s forwards; }
+.fade-ready #card-hall-da-fama           { animation: cardFadeUp 0.4s ease 0.56s forwards; }
+.fade-ready #card-torneios               { animation: cardFadeUp 0.4s ease 0.62s forwards; }
+.fade-ready .row.mini-ranks > .card:nth-child(1) { animation: cardFadeUp 0.4s ease 0.06s forwards; }
+.fade-ready .row.mini-ranks > .card:nth-child(2) { animation: cardFadeUp 0.4s ease 0.12s forwards; }
+.fade-ready .row.mini-ranks > .card:nth-child(3) { animation: cardFadeUp 0.4s ease 0.18s forwards; }
+.fade-ready #medal-standalone-row .card  { animation: cardFadeUp 0.4s ease 0.24s forwards; }
+.fade-ready .grid-charts .chart:nth-child(1) { animation-delay: 0.05s; }
+.fade-ready .grid-charts .chart:nth-child(2) { animation-delay: 0.10s; }
+.fade-ready .grid-charts .chart:nth-child(3) { animation-delay: 0.15s; }
+.fade-ready .grid-charts .chart:nth-child(4) { animation-delay: 0.20s; }
+
+/* Antes de fade-ready: tudo visível normalmente */
+.grid-charts .chart,
+.mini-card,
+#card-saldo-financeiro,
+#card-premiacoes-tipologia,
+#card-heatmap-novo,
+#card-momento, #card-previsao, #card-recordes,
+#card-quitacao, #card-hall-da-fama, #card-torneios, #card-perfis,
+#card-ranking-anual, .row.mini-ranks > .card,
+#medal-standalone-row .card { opacity: 1; }
+
+/* Durante animação (quando fade-ready está activo): iniciar em 0 */
+.fade-ready .grid-charts .chart,
+.fade-ready .mini-card,
+.fade-ready #card-saldo-financeiro,
+.fade-ready #card-premiacoes-tipologia,
+.fade-ready #card-heatmap-novo,
+.fade-ready #card-momento, .fade-ready #card-previsao,
+.fade-ready #card-recordes, .fade-ready #card-quitacao,
+.fade-ready #card-hall-da-fama, .fade-ready #card-torneios,
+.fade-ready #card-perfis, .fade-ready #card-ranking-anual,
+.fade-ready .row.mini-ranks > .card,
+.fade-ready #medal-standalone-row .card { opacity: 0; }
+
+/* Não animar em modo mobile */
+body.mobile-mode .grid-charts .chart,
+body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important; }
+</style>
+
+
+<style id="rn-mobile-css">
+/* ── Modal de registro — versão mobile ── */
+@media (max-width: 600px), (pointer: coarse) {
+  #rn-overlay { padding: 0 !important; align-items: flex-end !important; }
+
+  #rn-box {
+    border-radius: 24px 24px 0 0 !important;
+    max-height: 92vh !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 20px 16px 32px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  #rn-box h2 {
+    font-size: 22px !important;
+    margin-bottom: 14px !important;
+  }
+
+  /* Meta fields — uma coluna no mobile */
+  .rn-meta {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* Labels maiores */
+  .rn-field label {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Inputs touch-friendly */
+  .rn-field input,
+  .rn-field select,
+  #rn-box input,
+  #rn-box select {
+    font-size: 16px !important; /* evita zoom no iOS */
+    min-height: 44px !important;
+    padding: 10px 12px !important;
+    border-radius: 10px !important;
+  }
+
+  /* Tabela de jogadores — cards grandes */
+  #rn-tabela { display: flex !important; flex-direction: column !important; gap: 0 !important; }
+  #rn-tabela thead { display: none !important; }
+  #rn-tabela tbody { display: flex !important; flex-direction: column !important; gap: 8px !important; }
+  #rn-tabela tr {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr 1fr 1fr !important;
+    gap: 6px !important;
+    background: rgba(255,255,255,0.04) !important;
+    border-radius: 12px !important;
+    padding: 10px !important;
+    border: 1px solid rgba(255,255,255,0.08) !important;
+    align-items: center !important;
+  }
+  #rn-tabela td { border: none !important; padding: 0 !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
+  #rn-tabela td:first-child {
+    grid-column: 1 / -1 !important;
+    flex-direction: row !important;
+    gap: 8px !important;
+    font-size: 15px !important;
+    font-weight: 800 !important;
+    color: #e6edf3 !important;
+    margin-bottom: 4px !important;
+    align-items: center !important;
+  }
+
+  /* Inputs de posição, rebuys, KOs — grandes e centrados */
+  #rn-tabela input[type="number"] {
+    width: 100% !important;
+    font-size: 18px !important;
+    font-weight: 800 !important;
+    text-align: center !important;
+    min-height: 44px !important;
+    border-radius: 10px !important;
+    padding: 8px 4px !important;
+  }
+
+  /* Labels das colunas */
+  #rn-tabela td::before {
+    font-size: 10px !important;
+    color: #4a6080 !important;
+    font-weight: 600 !important;
+    margin-bottom: 3px !important;
+    text-transform: uppercase !important;
+  }
+  #rn-tabela td:nth-child(2)::before { content: "Pos"; }
+  #rn-tabela td:nth-child(3)::before { content: "Rebuy"; }
+  #rn-tabela td:nth-child(4)::before { content: "KOs"; }
+  #rn-tabela td:nth-child(5)::before { content: "Faltou"; }
+
+  /* Checkboxes maiores */
+  #rn-tabela input[type="checkbox"] {
+    width: 28px !important;
+    height: 28px !important;
+    min-height: 28px !important;
+    cursor: pointer !important;
+  }
+
+  /* Botões de ação — grandes */
+  #rn-box .rn-actions button,
+  #rn-box button[type="submit"],
+  #rn-box .btn-salvar {
+    min-height: 52px !important;
+    font-size: 17px !important;
+    border-radius: 14px !important;
+    font-weight: 900 !important;
+  }
+
+  /* Botão fechar — area maior */
+  #rn-close-btn {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 20px !important;
+  }
+
+  /* Carregar semana — simples no mobile */
+  #rn-edit-wk {
+    font-size: 14px !important;
+    min-height: 40px !important;
+  }
+
+  /* Contador de rebuys — maior */
+  #rn-rebuys-total {
+    width: 100px !important;
+    font-size: 20px !important;
+    min-height: 48px !important;
+    text-align: center !important;
+  }
+
+  /* Calendário — maior no mobile */
+  #rn-cal {
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 300px !important;
+    font-size: 14px !important;
+  }
+  #rn-cal-grid { gap: 6px !important; font-size: 14px !important; }
+}
+</style>
+
 </head>
 <body>
 
@@ -2097,8 +2305,26 @@ html body .row.mini-ranks #card-kopontos {
     if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
     /* Construir gráficos dos novos cards ao abrir */
     if(!isOpen){
-      if(bodyId==='momento-body')  setTimeout(function(){ if(window.buildMomento)  window.buildMomento();  },80);
-      if(bodyId==='previsao-body') setTimeout(function(){ if(window.buildPrevisao) window.buildPrevisao(); },80);
+      if(bodyId==='momento-body'){
+      /* Destruir instância antiga, aguardar layout, recriar */
+      if(window.eMomento){ try{window.eMomento.dispose();}catch(e){} window.eMomento=null; }
+      var _elMom = document.getElementById('chartMomento');
+      if(_elMom) _elMom.innerHTML = '';
+      setTimeout(function(){
+        if(window.buildMomento) window.buildMomento();
+        setTimeout(function(){ if(window.eMomento) window.eMomento.resize(); }, 150);
+      }, 200);
+    }
+    if(bodyId==='previsao-body'){
+      /* Destruir instância antiga, aguardar layout, recriar */
+      if(window.ePrevisao){ try{window.ePrevisao.dispose();}catch(e){} window.ePrevisao=null; }
+      var _elPrev = document.getElementById('chartPrevisao');
+      if(_elPrev) _elPrev.innerHTML = '';
+      setTimeout(function(){
+        if(window.buildPrevisao) window.buildPrevisao();
+        setTimeout(function(){ if(window.ePrevisao) window.ePrevisao.resize(); }, 150);
+      }, 200);
+    }
       if(bodyId==='recordes-body') setTimeout(function(){ if(window.buildRecordes) window.buildRecordes(); },80);
     }
   };
@@ -2235,7 +2461,7 @@ html body .row.mini-ranks #card-kopontos {
     <span id="perfis-arrow" style="color:#4a6080;font-size:16px;transition:transform .25s;">▼</span>
   </div>
   <div id="perfis-body" style="display:none;padding:0 16px 16px;">
-    <div id="perfis-grid" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+    <div id="perfis-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
   </div>
 </div>
 
@@ -2542,6 +2768,47 @@ html body .row.mini-ranks #card-kopontos {
       <div id="recordes-content">
         <div style="color:rgba(255,255,255,.3);font-size:12px;padding:20px;text-align:center;">Carregando recordes...</div>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====== CARD: Quitação Mensal ====== -->
+<div id="card-quitacao" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div onclick="window.toggleCard('quitacao-body','quitacao-arrow')"
+         style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0a2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(34,197,94,0.4);">✅</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;">Quitação Mensal</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Controle de pagamentos — marque quem quitou o saldo</div>
+        </div>
+      </div>
+      <span id="quitacao-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="quitacao-body" style="padding:0 16px 16px;display:none;">
+      <!-- Filtro de mês -->
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:#6b82a0;font-weight:600;">Mês:</span>
+        <select id="quit-mes-select" onchange="window.renderQuitacao()"
+          style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
+          <option value="1">Janeiro</option>
+          <option value="2">Fevereiro</option>
+          <option value="3">Março</option>
+          <option value="4">Abril</option>
+          <option value="5">Maio</option>
+          <option value="6">Junho</option>
+          <option value="7">Julho</option>
+          <option value="8">Agosto</option>
+          <option value="9">Setembro</option>
+          <option value="10">Outubro</option>
+          <option value="11">Novembro</option>
+          <option value="12">Dezembro</option>
+        </select>
+        <button onclick="window.resetQuitacao()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:#f87171;cursor:pointer;font-weight:600;">🔄 Limpar mês</button>
+      </div>
+      <div id="quitacao-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
     </div>
   </div>
 </div>
@@ -3238,7 +3505,7 @@ function buildPlayerChips(players){
       var cor = CORES[pi % CORES.length];
       var card = document.createElement('div');
       card.title = 'Ver perfil de ' + p;
-      card.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 14px;'
+      card.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 8px;'
         +'border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);'
         +'cursor:pointer;transition:all .2s;min-width:70px;';
       card.onmouseover = function(){
@@ -3274,13 +3541,13 @@ function buildPlayerChips(players){
       /* Nome */
       var nome = document.createElement('div');
       nome.textContent = p;
-      nome.style.cssText = 'font-size:11px;font-weight:700;color:#e6edf3;text-align:center;'
+      nome.style.cssText = 'font-size:13px;font-weight:700;color:#e6edf3;text-align:center;'
         +'white-space:nowrap;max-width:70px;overflow:hidden;text-overflow:ellipsis;';
 
       /* Label "ver perfil" */
       var label = document.createElement('div');
       label.textContent = 'perfil →';
-      label.style.cssText = 'font-size:9px;font-weight:600;color:'+cor+';opacity:0.7;text-align:center;';
+      label.style.cssText = 'font-size:10px;font-weight:700;color:'+cor+';opacity:0.85;text-align:center;';
 
       card.appendChild(avatar);
       card.appendChild(nome);
@@ -3960,55 +4227,24 @@ function refresh(){
     const agg = aggregate(rows).sort((a,b)=> b.kos - a.kos);
     const data = agg.map(r=>({name:r.jogador, value:r.kos}));
     const ec = echarts;
-    
-    // Distinct palette pairs (including lilac, pink, blue, green, cyan, amber, etc.)
-    
-    // Distinct vivid palette (no pink/lilac); dark outer + bright inner for glossy feel
-    
-    // Distinct palette: prioritize blues/greys/cyans; keep only 1 orange + 1 amber + 2 greens.
     const PAIRS = [
-      ['#0D47A1','#64B5F6'], // deep blue
-      ['#1565C0','#90CAF9'], // royal blue
-      ['#1E88E5','#90CAF9'], // steel blue
-      ['#0277BD','#81D4FA'], // azure blue
-      ['#00838F','#80DEEA'], // cyan
-      ['#006064','#4DD0E1'], // deep cyan
-      ['#2C3E50','#95A5A6'], // dark slate grey
-      ['#37474F','#B0BEC5'], // blue grey
-      ['#455A64','#CFD8DC'], // slate grey light
-      ['#2E86C1','#85C1E9'], // bright azure
-      ['#117A65','#73C6B6'], // deep teal (1/2 greenish)
-      ['#1B5E20','#81C784'], // forest green (2/2 greenish)
-      ['#E65100','#FFB74D'], // deep orange (1/2 warm)
-      ['#FF6F00','#FFB300'], // amber (2/2 warm)
-      ['#283593','#9FA8DA'], // indigo
-      ['#3F51B5','#9FA8DA'], // indigo 2
-      ['#2C3E50','#7F8C8D'], // gunmetal-grey
-      ['#22313F','#95A5A6']  // mid grey
+      ['#0D47A1','#64B5F6'],['#1565C0','#90CAF9'],['#1E88E5','#90CAF9'],
+      ['#0277BD','#81D4FA'],['#00838F','#80DEEA'],['#006064','#4DD0E1'],
+      ['#2C3E50','#95A5A6'],['#37474F','#B0BEC5'],['#455A64','#CFD8DC'],
+      ['#2E86C1','#85C1E9'],['#117A65','#73C6B6'],['#1B5E20','#81C784'],
+      ['#E65100','#FFB74D'],['#FF6F00','#FFB300'],['#283593','#9FA8DA'],
+      ['#3F51B5','#9FA8DA'],['#2C3E50','#7F8C8D'],['#22313F','#95A5A6']
     ];
-
-    // Build gradients for each slice
     let grads = data.map((_,i)=> {
       const p = PAIRS[i % PAIRS.length];
-      return new ec.graphic.RadialGradient(0.5,0.5,0.9,[
-        {offset:0, color:p[1]}, // inner bright
-        {offset:1, color:p[0]}  // outer dark
-      ]);
+      return new ec.graphic.RadialGradient(0.5,0.5,0.9,[{offset:0,color:p[1]},{offset:1,color:p[0]}]);
     });
-
-    // Force a strong lilac for Marcus (only him), overriding the gradient at his index
     const marcIdx = data.findIndex(d => String(d.name||'').toLowerCase().includes('marcus'));
     if(marcIdx >= 0){
-      grads[marcIdx] = new ec.graphic.RadialGradient(0.5,0.5,0.9,[
-        {offset:0, color:'#D1C4E9'}, // light lilac inside
-        {offset:1, color:'#7B1FA2'}  // strong lilac/purple outside
-      ]);
+      grads[marcIdx] = new ec.graphic.RadialGradient(0.5,0.5,0.9,[{offset:0,color:'#D1C4E9'},{offset:1,color:'#7B1FA2'}]);
     }
-
-    
-
     const seriesData = data.map((d,i)=> ({...d, itemStyle:{ color: grads[i], borderColor:'rgba(255,255,255,0.25)', borderWidth:1 }}));
-    eKOs.setOption({ color: [ '#e74c3c','#f39c12','#f1c40f','#27ae60','#16a085','#1abc9c','#2ecc71','#3498db','#2980b9','#9b59b6','#8e44ad','#c0392b','#d35400','#2c3e50','#7f8c8d','#95a5a6','#3F51B5','#009688','#FF9800' ], 
+    if(eKOs) eKOs.setOption({ color: ['#e74c3c','#f39c12','#f1c40f','#27ae60','#16a085','#1abc9c','#2ecc71','#3498db','#2980b9','#9b59b6','#8e44ad','#c0392b','#d35400','#2c3e50','#7f8c8d','#95a5a6','#3F51B5','#009688','#FF9800'],
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       tooltip:{trigger:'item', formatter:(p)=>`${p.marker} ${p.name}: <b>${fmt(p.value)}</b> KOs (${p.percent}%)`},
       series:[{
@@ -4020,7 +4256,7 @@ function refresh(){
       }]
     });
   })();
-    // Evolução
+        // Evolução
   (function renderEvo(){
     const weeks = Array.from(new Set(rows.map(r=>+r.wk))).sort((a,b)=>a-b);
     const byPlayer = groupBy(rows,'jogador');
@@ -4030,7 +4266,7 @@ function refresh(){
       weeks.forEach(w=>{ const add = arr.filter(r=>+r.wk===w).reduce((a,r)=>a+(+r.pontos_calc||0),0); running += add; v.push(running); });
       return {name:j, type:'line', smooth:true, data:v, symbol:'circle', showSymbol:true, symbolSize:7, lineStyle:{width:2}, emphasis:{focus:'series'}};
     });
-    eEvo.setOption({
+    if(eEvo) eEvo.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       grid:{left:50,right:20,top:40,bottom:70},
       xAxis:{type:'category',data:weeks.map(w=>'WK'+String(w).padStart(2,'0')), splitLine:{show:false}},
@@ -4055,7 +4291,7 @@ function refresh(){
     const namesM = arrM.map(x=>x.name);
     const scoreM = arrM.map(x=> x.g*10000 + x.s*100 + x.b);
 
-    eMed.setOption({
+    if(eMed) eMed.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       grid:{left:90,right:170,top:30,bottom:30},
       xAxis:{type:'value', axisLabel:{show:false}, splitLine:{lineStyle:{color:'rgba(255,255,255,.08)'}}},
@@ -4143,7 +4379,7 @@ function refresh(){
     const maxK = Math.max(1,...agg.map(r=>r.kos));
     const maxM = Math.max(1,...agg.map(r=>r.medalhas));
     const maxR = Math.max(1,...agg.map(r=>r.rebuys));
-    eRadar.setOption({
+    if(eRadar) eRadar.setOption({
       animationDuration:700, animationEasing:'cubicOut', animationDurationUpdate:900, animationEasingUpdate:'cubicOut',
       radar:{ indicator:[
         {name:'Pontos',max:maxP}, {name:'Saldo',max:maxS}, {name:'KOs',max:maxK}, {name:'Medalhas',max:maxM}, {name:'Rebuys',max:maxR}
@@ -4180,6 +4416,8 @@ function refresh(){
       body.appendChild(tr);
     });
   })();
+
+
 
   // Mini ranking do ANO (fixo)
   // Campeões (Top 5)
@@ -4681,7 +4919,7 @@ function refreshAwards(){
     const projAnnual = totalSoFar.map(v=> +(v/monthsN*12).toFixed(2));
     const useAnnualSheet = seriesAnual.some(v=>v>0);
 
-    eAwards.setOption({
+    if(eAwards) eAwards.setOption({
       animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
       tooltip:{
         trigger:'axis',
@@ -10083,14 +10321,18 @@ window.addEventListener('load', function(){
     var tableW = isMobile ? contW : (labelW + cellSz * wks.length);
     /* Recalcular cellSz final com o espaço real */
     if(isMobile) cellSz = Math.floor((tableW - labelW) / wks.length);
+    /* No mobile: usar % para preencher toda a linha sem overflow */
+    var tableStyle = isMobile
+      ? 'border-collapse:collapse;table-layout:fixed;width:100%;'
+      : 'border-collapse:collapse;table-layout:fixed;width:'+tableW+'px;min-width:'+tableW+'px;';
     var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
-      + '<table style="border-collapse:collapse;table-layout:fixed;width:'+tableW+'px;min-width:'+tableW+'px;">';
+      + '<table style="'+tableStyle+'">';
 
     /* Header WKs no topo */
     html += '<thead><tr>';
     html += '<th style="width:'+labelW+'px;padding:0;"></th>';
     wks.forEach(function(wk){
-      html += '<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:'
+      html += '<th style="width:'+cellSz+'px;max-width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:'
         +(isMobile?9:9)+'px;font-weight:600;padding:0 0 4px 0;white-space:nowrap;">WK'
         +String(wk).padStart(2,'0')+'</th>';
     });
@@ -10118,7 +10360,7 @@ window.addEventListener('load', function(){
         var lbl=faltou?'—':val==null?'—':(hmMetric==='posicao'?val+'º':''+val);
         var tip=tooltipText(jog,wk,val,faltou);
         /* padding:0 para células grudadas; 1px de gap via border */
-        html += '<td style="width:'+cellSz+'px;height:'+cellH+'px;padding:1px 0px;" title="'+tip+'">'
+        html += '<td style="'+(isMobile?'padding:0;height:'+cellH+'px;width:'+cellSz+'px;':'width:'+cellSz+'px;height:'+cellH+'px;padding:1px 0px;')+'" title="'+tip+'">'
           + '<div style="width:100%;height:'+cellH+'px;background:'+bg
           + ';border-radius:3px'
           + ';display:flex;align-items:center;justify-content:center'
@@ -10617,6 +10859,7 @@ function buildRecordes(){
    FEATURE 7 — PREVISÃO DO TRIMESTRE
    ═══════════════════════════════════════ */
 var ePrevisao=null;
+window.ePrevisao=null;
 function buildPrevisao(){
   var el=document.getElementById('chartPrevisao');
   if(!el||!window.echarts) return;
@@ -10634,7 +10877,9 @@ function buildPrevisao(){
     return {jog:j,acum:Math.round(acum),med:Math.round(med),proj:Math.round(acum+med*wksRest)};
   }).sort(function(a,b){ return b.proj-a.proj; });
   var CORES=['#C9A227','#A8A9AD','#CD7F32','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444'];
-  if(!ePrevisao) ePrevisao=echarts.init(el);
+  /* Sempre destruir e recriar para garantir dimensões correctas */
+  if(ePrevisao){ try{ePrevisao.dispose();}catch(e){} ePrevisao=null; window.ePrevisao=null; }
+  ePrevisao = echarts.init(el); window.ePrevisao = ePrevisao;
   ePrevisao.setOption({
     animation:true,backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3',fontSize:12},
@@ -10655,6 +10900,7 @@ function buildPrevisao(){
    FEATURE 6 — MOMENTO DO TORNEIO
    ═══════════════════════════════════════ */
 var eMomento=null;
+window.eMomento=null;
 function buildMomento(){
   var el=document.getElementById('chartMomento');
   if(!el||!window.echarts) return;
@@ -10672,7 +10918,9 @@ function buildMomento(){
     });
     return {name:j,type:'line',data:data,connectNulls:false,smooth:false,symbol:'circle',symbolSize:7,lineStyle:{width:2.5},itemStyle:{color:CORES[ji%CORES.length]},emphasis:{focus:'series'}};
   });
-  if(!eMomento) eMomento=echarts.init(el);
+  /* Sempre destruir e recriar para garantir dimensões correctas */
+  if(eMomento){ try{eMomento.dispose();}catch(e){} eMomento=null; window.eMomento=null; }
+  eMomento = echarts.init(el); window.eMomento = eMomento;
   eMomento.setOption({
     animation:true,backgroundColor:'transparent',
     tooltip:{trigger:'axis',backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3',fontSize:12},
@@ -10732,6 +10980,207 @@ window.buildRecordes=buildRecordes;
 </script>
 
 
+
+<script>
+/* ====== QUITAÇÃO MENSAL ====== */
+(function(){
+  /* Chave no localStorage: quit_YYYY_MM_Jogador */
+  function qKey(ano, mes, jog){ return 'quit_'+ano+'_'+mes+'_'+jog.replace(/\s/g,'_'); }
+
+  function getMensal(){ return (typeof MENSAL!=='undefined'&&MENSAL.length)?MENSAL:(window.DATA&&window.DATA.mensal)||[]; }
+  function getLedger(){ return (typeof RAW!=='undefined'&&RAW.length)?RAW:(window.DATA&&window.DATA.ledger)||[]; }
+
+  function getAnoAtual(){
+    var ledger = getLedger();
+    if(!ledger.length) return new Date().getFullYear();
+    return Math.max.apply(null, ledger.map(function(r){ return parseInt(r.ano)||0; }));
+  }
+
+  function getMesAtual(){
+    var sel = document.getElementById('quit-mes-select');
+    return sel ? parseInt(sel.value) : new Date().getMonth()+1;
+  }
+
+  window.renderQuitacao = function(){
+    var grid = document.getElementById('quitacao-grid');
+    if(!grid) return;
+
+    var mensal = getMensal();
+    var ledger = getLedger();
+    var ano    = getAnoAtual();
+    var mes    = getMesAtual();
+
+    /* Jogadores com dados nesse mês */
+    var jogadores = [];
+    if(mensal.length){
+      jogadores = mensal.filter(function(r){ return parseInt(r.mes)===mes; })
+        .map(function(r){ return { jog:r.jogador, saldo: parseFloat(r.saldo_mes_total)||0 }; });
+    }
+    if(!jogadores.length){
+      /* Fallback: ledger */
+      var uniq = Array.from(new Set(ledger.filter(function(r){ return parseInt(r.mes)===mes; }).map(function(r){ return r.jogador; })));
+      jogadores = uniq.map(function(j){ return {jog:j, saldo:0}; });
+    }
+    jogadores.sort(function(a,b){ return a.jog.localeCompare(b.jog,'pt-BR'); });
+
+    if(!jogadores.length){
+      grid.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:13px;padding:20px;text-align:center;">Sem dados para este mês</div>';
+      return;
+    }
+
+    var meses = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+    var html = '';
+    jogadores.forEach(function(d){
+      var key    = qKey(ano, mes, d.jog);
+      var quitou = localStorage.getItem(key) === '1';
+      var saldo  = d.saldo;
+      var devePagar = saldo < 0;
+      var valorStr = (saldo >= 0 ? '+' : '') + 'R$ ' + Math.abs(saldo).toFixed(2).replace('.',',');
+      var corSaldo = saldo >= 0 ? '#22c55e' : '#ef4444';
+
+      html += '<div style="background:'+(quitou?'rgba(34,197,94,0.08)':'rgba(255,255,255,0.03)')+';border:1.5px solid '+(quitou?'rgba(34,197,94,0.4)':'rgba(255,255,255,0.08)')+';border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;transition:all .2s;">'
+        + '<div style="display:flex;align-items:center;gap:8px;">'
+        + '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a3a6e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;overflow:hidden;">'
+        + (function(){ var f=window.photoFor?window.photoFor(d.jog):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[d.jog]); return f?'<img src="'+f+'" style="width:100%;height:100%;object-fit:cover;">':d.jog[0]; })()
+        + '</div>'
+        + '<div style="flex:1;min-width:0;">'
+        + '<div style="font-size:13px;font-weight:800;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+d.jog+'</div>'
+        + '<div style="font-size:11px;font-weight:700;color:'+corSaldo+';">'+valorStr+'</div>'
+        + '</div></div>'
+        + '<button onclick="window.toggleQuitacao(''+key+'', this)" '
+        + 'style="width:100%;padding:8px;border-radius:10px;border:none;font-size:12px;font-weight:800;cursor:pointer;transition:all .2s;'
+        + (quitou ? 'background:rgba(34,197,94,0.2);color:#22c55e;' : 'background:rgba(255,255,255,0.07);color:#9fb3d4;')
+        + '">'
+        + (quitou ? '✅ Quitado' : '⭕ Pendente — marcar')
+        + '</button>'
+        + '</div>';
+    });
+    grid.innerHTML = html;
+  };
+
+  window.toggleQuitacao = function(key, btn){
+    var atual = localStorage.getItem(key) === '1';
+    if(atual){
+      localStorage.removeItem(key);
+    } else {
+      localStorage.setItem(key, '1');
+    }
+    /* Re-renderizar card desse jogador */
+    window.renderQuitacao();
+  };
+
+  window.resetQuitacao = function(){
+    var ano = getAnoAtual();
+    var mes = getMesAtual();
+    var ledger = getLedger();
+    var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; })));
+    jogs.forEach(function(j){ localStorage.removeItem(qKey(ano,mes,j)); });
+    window.renderQuitacao();
+  };
+
+  /* Inicializar mês actual no select */
+  function initQuitacaoMes(){
+    var sel = document.getElementById('quit-mes-select');
+    if(!sel) return;
+    var mes = new Date().getMonth()+1;
+    sel.value = String(mes);
+  }
+
+  /* Hook no toggleCard */
+  var _origToggle = window.toggleCard;
+  window.toggleCard = function(bodyId, arrowId){
+    if(_origToggle) _origToggle(bodyId, arrowId);
+    if(bodyId === 'quitacao-body'){
+      var body = document.getElementById('quitacao-body');
+      if(body && body.style.display !== 'none') setTimeout(window.renderQuitacao, 80);
+    }
+  };
+
+  /* Hooks de dados */
+  var _t = setInterval(function(){
+    if(typeof window.afterDataLoaded==='function'){clearInterval(_t);
+      var _o=window.afterDataLoaded;
+      window.afterDataLoaded=function(){_o.apply(this,arguments);
+        initQuitacaoMes();
+        setTimeout(function(){
+          var body=document.getElementById('quitacao-body');
+          if(body&&body.style.display!=='none') window.renderQuitacao();
+        },500);
+      };}
+  },200);
+
+  document.addEventListener('DOMContentLoaded', initQuitacaoMes);
+})();
+</script>
+
+
+<script>
+/* Ranking Anual standalone — chamada pelo refresh() e pelo load */
+window._buildRankingAnual = function(rows){
+  try{
+    var el   = document.getElementById('ranking-anual-list');
+    var lbl  = document.getElementById('ranking-anual-label');
+    var priz = document.getElementById('ranking-anual-prizes');
+    var rule = document.getElementById('ranking-anual-rule');
+    if(!el) return;
+
+    var agg2 = (typeof aggregate==='function') ? aggregate(rows||[]).sort(function(a,b){ return b.pontos-a.pontos; }) : [];
+    var per  = document.getElementById('periodo')?.value || 'ano';
+    var granEl = document.getElementById('granular');
+    var gran = (granEl?.selectedOptions?.[0]?.text) || (granEl?.value) || '';
+
+    if(lbl) lbl.textContent = per==='ano'?'Ano':per==='mes'?'Mês: '+gran:per==='trimestre'?'T'+gran:'WK'+gran;
+
+    el.innerHTML = agg2.map(function(r,i){
+      var badge = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.';
+      return '<div class="mini-item"><div class="pos">'+badge+'</div><div class="name">'+r.jogador+'</div>'
+        +'<div class="pts">'+Math.round(r.pontos).toLocaleString('pt-BR')+' pts</div></div>';
+    }).join('') || '<div style="padding:10px;color:#4a6080;font-size:12px;">Sem dados</div>';
+
+    if(typeof computePot==='function' && typeof rankPoints==='function' && rows?.length){
+      var pot    = computePot(per, rows);
+      var rank2  = rankPoints(rows);
+      var pct2   = (typeof splitPrizePerc==='function') ? splitPrizePerc(rank2) : [];
+      var award2 = rank2.slice(0,5).map(function(r,i){ return {jog:r.jogador, premio:+(pot*(pct2[i]||0)).toFixed(2)}; });
+      if(priz) priz.innerHTML = award2.map(function(r,i){
+        var cls = i===0?'g':i===1?'s':i===2?'b':'';
+        return '<span class="mini-prize '+cls+'">'+(i+1)+'º '+r.jog+' – R$ '+r.premio.toFixed(2).replace('.',',')+' </span>';
+      }).join('');
+      if(rule) rule.innerHTML = '<span style="font-size:10px;color:#4a6080;">1º(40%) · 2º(30%) · 3º(15%) · 4º(10%) · 5º(5%)</span>';
+    }
+  }catch(e){ console.warn('_buildRankingAnual erro:', e); }
+};
+
+/* Chamar após dados carregados */
+(function(){
+  var _t = setInterval(function(){
+    if(typeof window.afterDataLoaded==='function'){
+      clearInterval(_t);
+      var _o = window.afterDataLoaded;
+      window.afterDataLoaded = function(){
+        _o.apply(this, arguments);
+        setTimeout(function(){
+          var rows = (typeof filterData==='function') ? filterData() : [];
+          window._buildRankingAnual(rows);
+        }, 600);
+      };
+    }
+  }, 200);
+  var _t2 = setInterval(function(){
+    if(typeof window.refresh==='function'){
+      clearInterval(_t2);
+      var _o2 = window.refresh;
+      window.refresh = function(){
+        _o2.apply(this, arguments);
+        try{
+          var rows2 = (typeof filterData==='function') ? filterData() : [];
+          window._buildRankingAnual(rows2);
+        }catch(e){}
+      };
+    }
+  }, 200);
+})();
+</script>
 </body>
 </html>
 
