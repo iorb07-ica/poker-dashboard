@@ -2647,10 +2647,20 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
           <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Total de eliminações por jogador no período</div>
         </div>
       </div>
-      <span id="ranking-kos-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+      <div style="display:flex;align-items:center;gap:10px;" onclick="event.stopPropagation()">
+        <select id="ko-mes-select" onchange="window.setKOMes(this.value)"
+          style="font-size:12px;padding:5px 12px;min-width:80px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
+          <option value="todos">Todos</option>
+          <option value="1">Jan</option>
+          <option value="2">Fev</option>
+          <option value="3">Mar</option>
+        </select>
+        <span id="ranking-kos-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+      </div>
     </div>
     <div id="ranking-kos-body" data-open="true" style="padding:0 16px 16px;">
-      <div id="chartKOs" style="height:380px;width:100%;"></div>
+      <div id="chartKOs" style="height:380px;width:100%;display:none;"></div>
+      <div id="ko-arena" style="width:100%;padding:4px 0 8px;"></div>
     </div>
   </div>
 </div>
@@ -4397,8 +4407,19 @@ function refresh(){
 /* removed broken risk profile block */
 ;
 // KOs (PIE)
+  // Filtro de mês para KOs
+  if(typeof window._koMesFiltro === 'undefined') window._koMesFiltro = 'todos';
+  window.setKOMes = function(mes){
+    window._koMesFiltro = (mes==='todos') ? 'todos' : +mes;
+    if(typeof refresh==='function') refresh();
+  };
+
   (function renderKOs(){
-    const agg = aggregate(rows).sort((a,b)=> b.kos - a.kos);
+    // Aplicar filtro de mês próprio do card
+    var koRows = (window._koMesFiltro && window._koMesFiltro!=='todos')
+      ? rows.filter(function(r){ return +r.mes===window._koMesFiltro; })
+      : rows;
+    const agg = aggregate(koRows).sort((a,b)=> b.kos - a.kos);
     const data = agg.map(r=>({name:r.jogador, value:r.kos}));
     const ec = echarts;
     const PAIRS = [
@@ -4544,6 +4565,78 @@ function refresh(){
         ]
       });
     })();
+
+      // ── ARENA DE BATALHA ─────────────────────────────────
+      (function renderArena(){
+        var arena = document.getElementById('ko-arena');
+        if(!arena) return;
+        var sorted = agg.filter(function(d){ return d.kos>0; }).sort(function(a,b){ return b.kos-a.kos; });
+        if(!sorted.length){ arena.innerHTML=''; return; }
+        var maxKO = sorted[0].kos;
+        var total = sorted.reduce(function(s,d){ return s+d.kos; },0);
+
+        var CORES = [
+          {bar:'#ef4444',glow:'rgba(239,68,68',bg:'rgba(239,68,68,0.12)'},
+          {bar:'#f97316',glow:'rgba(249,115,22',bg:'rgba(249,115,22,0.10)'},
+          {bar:'#eab308',glow:'rgba(234,179,8',bg:'rgba(234,179,8,0.10)'},
+          {bar:'#22c55e',glow:'rgba(34,197,94',bg:'rgba(34,197,94,0.08)'},
+          {bar:'#3b82f6',glow:'rgba(59,130,246',bg:'rgba(59,130,246,0.08)'},
+          {bar:'#8b5cf6',glow:'rgba(139,92,246',bg:'rgba(139,92,246,0.08)'},
+          {bar:'#ec4899',glow:'rgba(236,72,153',bg:'rgba(236,72,153,0.08)'},
+          {bar:'#06b6d4',glow:'rgba(6,182,212',bg:'rgba(6,182,212,0.08)'},
+          {bar:'#84cc16',glow:'rgba(132,204,22',bg:'rgba(132,204,22,0.08)'},
+        ];
+
+        var MEDALS = ['💀','⚔️','🗡️','🔪','🏹','💣','🪃','🎯','🔫'];
+
+        var mesFiltroLabel = (window._koMesFiltro && window._koMesFiltro!=='todos')
+          ? ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][window._koMesFiltro]
+          : 'Todos os meses';
+        var html = '<style>'
+          +'@keyframes bar-fill{from{width:0}}'
+          +'@keyframes flicker{0%,100%{opacity:1;text-shadow:0 0 8px #ef4444,0 0 20px #f97316}50%{opacity:.85;text-shadow:0 0 4px #ef4444,0 0 10px #f97316}}'
+          +'@keyframes pulse-glow{0%,100%{box-shadow:0 0 8px currentColor}50%{box-shadow:0 0 20px currentColor}}'
+          +'@keyframes rank-in{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:translateX(0)}}'
+          +'.ko-row{display:flex;align-items:center;gap:10px;padding:7px 12px;border-radius:12px;margin-bottom:6px;transition:all .2s;cursor:default;animation:rank-in .4s ease both}'
+          +'.ko-row:hover{filter:brightness(1.15);transform:translateX(3px)}'
+          +'.ko-rank{font-size:18px;width:28px;text-align:center;flex-shrink:0}'
+          +'.ko-name{font-size:13px;font-weight:800;color:#e6edf3;width:72px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}'
+          +'.ko-bar-wrap{flex:1;background:rgba(255,255,255,0.06);border-radius:999px;height:14px;overflow:hidden;position:relative}'
+          +'.ko-bar{height:100%;border-radius:999px;animation:bar-fill .8s cubic-bezier(.4,0,.2,1) both}'
+          +'.ko-count{font-size:14px;font-weight:900;width:36px;text-align:right;flex-shrink:0}'
+          +'.ko-pct{font-size:10px;color:#6b82a0;width:36px;text-align:right;flex-shrink:0}'
+          +'.ko-fire{animation:flicker 1.2s ease-in-out infinite}'
+          +'</style>';
+
+        // Header
+        html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 12px 10px;">'
+          +'<div style="font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">💀 '+total+' KOs — '+mesFiltroLabel+'</div>'
+          +'<div style="font-size:11px;color:#6b82a0;">Líder: <b style="color:#ef4444;">'+sorted[0].jogador+'</b> ('+sorted[0].kos+')</div>'
+          +'</div>';
+
+        sorted.forEach(function(d, i){
+          var cor = CORES[i % CORES.length];
+          var pct = ((d.kos/maxKO)*100).toFixed(1);
+          var pctTotal = ((d.kos/total)*100).toFixed(0);
+          var isLider = i===0;
+          var medal = MEDALS[i] || '💀';
+          var delay = (i*0.07).toFixed(2);
+
+          html += '<div class="ko-row" style="background:'+cor.bg+';border:1px solid '+(isLider?cor.bar+'44':'rgba(255,255,255,0.05)')+';animation-delay:'+delay+'s">'
+            +'<div class="ko-rank'+(isLider?' ko-fire':'')+'">'+medal+'</div>'
+            +'<div class="ko-name">'+d.jogador+'</div>'
+            +'<div class="ko-bar-wrap">'
+            +'<div class="ko-bar" style="width:'+pct+'%;background:linear-gradient(90deg,'+cor.bar+'cc,'+cor.bar+');'
+            +(isLider?'box-shadow:0 0 10px '+cor.glow+',0.6);':'')
+            +'animation-delay:'+delay+'s"></div>'
+            +'</div>'
+            +'<div class="ko-count" style="color:'+cor.bar+'">'+d.kos+'</div>'
+            +'<div class="ko-pct">'+pctTotal+'%</div>'
+            +'</div>';
+        });
+
+        arena.innerHTML = html;
+      })();
   })();
         // Evolução
   (function renderEvo(){
@@ -10695,6 +10788,8 @@ window.addEventListener('load', function(){
     // Inicializar filtro no mês atual
     var selSF = document.getElementById('sf-mes-select');
     if(selSF){ var mesAtual = new Date().getMonth()+1; selSF.value = mesAtual; }
+    var selKO = document.getElementById('ko-mes-select');
+    if(selKO){ selKO.value = new Date().getMonth()+1; window._koMesFiltro = new Date().getMonth()+1; }
     setTimeout(window.renderSaldoFin,1000);
   });
   window.addEventListener('resize', function(){ if(eSF) eSF.resize(); });
