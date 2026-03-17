@@ -1870,10 +1870,6 @@ html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
   }
 
   /* Personas/scatter: tamanho útil */
-  body.mobile-mode #card-personas {
-    min-height: 320px !important;
-  }
-
   /* Chip-tools no mobile: botões full-width empilhados não */
   body.mobile-mode #chips-parent {
     gap: 8px !important;
@@ -2099,6 +2095,12 @@ html body .row.mini-ranks #card-kopontos {
     var isOpen = body.style.display !== 'none';
     body.style.display = isOpen ? 'none' : 'block';
     if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    /* Construir gráficos dos novos cards ao abrir */
+    if(!isOpen){
+      if(bodyId==='momento-body')  setTimeout(function(){ if(window.buildMomento)  window.buildMomento();  },80);
+      if(bodyId==='previsao-body') setTimeout(function(){ if(window.buildPrevisao) window.buildPrevisao(); },80);
+      if(bodyId==='recordes-body') setTimeout(function(){ if(window.buildRecordes) window.buildRecordes(); },80);
+    }
   };
 
   function avisarWhatsApp() {
@@ -2133,7 +2135,7 @@ html body .row.mini-ranks #card-kopontos {
   }
   </script>
 </div>
-<div id="libwarn" style="width:100%;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
+<div id="libwarn" style="width:100%;display:none;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
 </header>
 
 <!-- Barra mobile simples -->
@@ -2191,33 +2193,17 @@ html body .row.mini-ranks #card-kopontos {
 
 <select id="premioPlayer" style="display:none"></select>
 
-<div class="card" id="card-dados">
-<div class="card-title">Dados</div>
-<div class="upl" style="display:grid;grid-template-columns:1fr;gap:6px">
-<button class="btn" id="btn-load">Carregar XLSX</button>
-<button class="btn" id="btn-save-html" onclick="salvarHTML()" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;border:none;border-radius:10px;padding:7px 16px;font-size:13px;font-weight:700;cursor:pointer;margin-left:6px;">💾 Salvar</button>
-<button onclick="abrirConfigGH()" title="Configurar GitHub Token" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:10px;padding:7px 10px;font-size:14px;cursor:pointer;margin-left:4px;">⚙️</button>
-<span id="gh-status" style="font-size:11px;color:#4a6080;margin-left:8px;white-space:nowrap;"></span>
+<div class="card" id="card-dados" style="display:flex;align-items:center;gap:8px;padding:10px 14px;">
+<button class="btn" id="btn-load" style="white-space:nowrap;font-size:12px;padding:6px 12px;">📂 Carregar XLSX</button>
+<button id="btn-save-html" onclick="salvarHTML()" title="Salvar dashboard" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;border:none;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">💾 Salvar</button>
+<button onclick="abrirConfigGH()" title="Configurar GitHub Token" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:5px 8px;font-size:12px;cursor:pointer;flex-shrink:0;line-height:1;">⚙️</button>
+<span id="gh-status" style="font-size:11px;color:#4a6080;white-space:nowrap;"></span>
 <button class="btn" id="btn-save" style="display:none">Salvar HTML com dados</button>
-<span class="drop" id="drop" style="border:1px dashed #2a3547;border-radius:12px;padding:8px 10px;color:#9aa7bd"></span>
-</div>
+<span class="drop" id="drop" style="display:none"></span>
 <input accept=".xlsx,.xls" id="file" style="display:none" type="file"/>
 </div>
 
-<div class="card card-pix">
-<div class="card-title" id="pix-title">PIX</div>
-<div class="pix-box" id="pix-box" data-mobile-hide="true">
-  <img class="pix-qr" id="pixQrImg" src="data:image/jpeg;base64,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" alt="QR Pix"/>
-  <div class="pix-meta">
-    <div class="pix-label">Chave</div>
-    <div class="pix-key" id="pixKeyText"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f29b9d8090b29a9d869f939b9edc919d9f">[email&#160;protected]</a></div>
-    <div class="pix-actions">
-      <button class="btn" id="btnCopyPix">Copiar chave</button>
-      <button class="btn btn-outline" id="btnPixConfig">Configurar</button>
-    </div>
-  </div>
-</div>
-</div>
+
 </div>
 <select id="heatmetric" style="display:none">
 <option value="posicao" selected>Posição</option>
@@ -2234,7 +2220,25 @@ html body .row.mini-ranks #card-kopontos {
 <button class="btn" id="btn-none">Desmarcar todos</button>
 </div>
 </div>
+
 </div>
+
+<!-- ====== CARD: Perfil dos Jogadores ====== -->
+<div class="card" id="card-perfis" style="margin-top:10px;padding:0;">
+  <div onclick="window.toggleCard('perfis-body','perfis-arrow')"
+       style="display:flex;align-items:center;justify-content:space-between;padding:12px 18px;cursor:pointer;user-select:none;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span style="font-size:18px;">👤</span>
+      <span style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Perfil dos Jogadores</span>
+      <span style="font-size:11px;color:#4a6080;font-weight:500;">— clique para ver estatísticas</span>
+    </div>
+    <span id="perfis-arrow" style="color:#4a6080;font-size:16px;transition:transform .25s;">▼</span>
+  </div>
+  <div id="perfis-body" style="display:none;padding:0 16px 16px;">
+    <div id="perfis-grid" style="display:flex;flex-wrap:wrap;gap:10px;"></div>
+  </div>
+</div>
+
 <!-- ADV ANALYTICS: Consistência × Potência & Top KO vs Pontos -->
 <!-- MINI RANKS: Semana / Mês / Trimestre -->
 <div class="row mini-ranks">
@@ -2353,14 +2357,7 @@ html body .row.mini-ranks #card-kopontos {
 <div class="chart ranking-span"><div class="title">Ranking Anual</div><div id="chartRanking" style="height:100%"></div></div>
 <div class="chart kos-small"><div class="title">KOs por jogador</div><div id="chartKOs" style="height:100%"></div></div>
 <div class="chart evo-span"><div class="title">Evolução (Pontos Acumulados)</div><div id="chartEvolucao" style="height:100%"></div></div>
-<div class="chart medal-col" id="card-personas" style="position:relative;">
-  <div class="title">Arquétipos do Plaza</div>
-  <div class="small-note" style="display:none;">Rebuys/Jogo (X) × KOs/Jogo (Y). Cortes = mediana do período. Bolha = pontos.</div>
-  <div id="chartPersonas" style="height:100%; width:100%;"></div>
-  <div id="personaEmpty" style="display:none; position:absolute; inset:46px 14px 14px 14px; align-items:center; justify-content:center; color:rgba(255,255,255,.55); font-weight:600; letter-spacing:.2px; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:rgba(255,255,255,.03);">
-    Sem dados carregados
-  </div>
-</div>
+
 
 
 
@@ -2485,6 +2482,70 @@ html body .row.mini-ranks #card-kopontos {
 
   </div>
 </div>
+
+<!-- ====== CARD: Momento do Torneio (Feature 6) ====== -->
+<div id="card-momento" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('momento-body','momento-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a1a4a,rgba(139,92,246,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(139,92,246,0.4);">📈</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Momento do Torneio</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Posição semana a semana — consistência vs picos</div>
+        </div>
+      </div>
+      <span id="momento-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="momento-body" style="padding:0 16px 16px;display:none;">
+      <div id="chartMomento" style="height:340px;width:100%;min-height:340px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CARD: Previsão do Trimestre (Feature 7) ====== -->
+<div id="card-previsao" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('previsao-body','previsao-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0a2a1a,rgba(34,197,94,0.2));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(34,197,94,0.35);">🔮</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Previsão do Trimestre</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Projeção baseada nas últimas 3 semanas · T1</div>
+        </div>
+      </div>
+      <span id="previsao-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="previsao-body" style="padding:0 16px 16px;display:none;">
+      <div id="chartPrevisao" style="height:320px;width:100%;min-height:320px;"></div>
+      <div style="margin-top:8px;font-size:11px;color:#4a6080;">* Projeção baseada na média das últimas 3 WKs · área sólida = acumulado real · área transparente = estimativa</div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== CARD: Recordes do Plaza (Feature 8) ====== -->
+<div id="card-recordes" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('recordes-body','recordes-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2a1a0a,rgba(201,162,39,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(201,162,39,0.4);">⭐</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Recordes do Plaza</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Maiores feitos da história — Poker Series 2026</div>
+        </div>
+      </div>
+      <span id="recordes-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="recordes-body" style="padding:0 16px 16px;display:none;">
+      <div id="recordes-content">
+        <div style="color:rgba(255,255,255,.3);font-size:12px;padding:20px;text-align:center;">Carregando recordes...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
 
@@ -2961,8 +3022,6 @@ function tryInitCharts(){
     eRanking = echarts.init(document.getElementById('chartRanking'));
     eKOs     = echarts.init(document.getElementById('chartKOs'));
     eEvo     = echarts.init(document.getElementById('chartEvolucao'));
-    const _elMed = document.getElementById('chartMedalhas');
-      eMed = _elMed ? echarts.init(_elMed) : null;
     const _elHeat = document.getElementById('chartHeatmap');
       eHeat = _elHeat ? echarts.init(_elHeat) : null;
     eRadar   = echarts.init(document.getElementById('chartRadar'));
@@ -3154,7 +3213,9 @@ function buildPlayerChips(players){
     div.className='chip active';
     div.textContent = p;
     div.dataset.player = p;
+    div.title = 'Clique para filtrar · Duplo clique para ver perfil';
     div.onclick = ()=>{ div.classList.toggle('active'); refresh(); };
+    div.ondblclick = (e)=>{ e.stopPropagation(); if(window.abrirPerfil) window.abrirPerfil(p); };
     wrap.appendChild(div);
   });
   document.getElementById('btn-all').onclick = ()=>{ document.querySelectorAll('#chips .chip').forEach(c=>c.classList.add('active')); refresh(); };
@@ -3166,6 +3227,67 @@ function buildPlayerChips(players){
   { const o=document.createElement('option'); o.value='__CONSOLIDADO__'; o.textContent='Consolidado (todos)'; sel.appendChild(o); }
   players.forEach(p=>{ const o=document.createElement('option'); o.value=p; o.textContent=p; sel.appendChild(o); });
   sel.onchange = refreshAwards;
+
+  /* Grid de perfis — bolinhas com avatar */
+  var grid = document.getElementById('perfis-grid');
+  if(grid){
+    grid.innerHTML = '';
+    /* Cores por inicial */
+    var CORES = ['#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316'];
+    players.forEach(function(p, pi){
+      var cor = CORES[pi % CORES.length];
+      var card = document.createElement('div');
+      card.title = 'Ver perfil de ' + p;
+      card.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 14px;'
+        +'border-radius:14px;border:1px solid rgba(255,255,255,0.07);background:rgba(255,255,255,0.03);'
+        +'cursor:pointer;transition:all .2s;min-width:70px;';
+      card.onmouseover = function(){
+        this.style.background='rgba(255,255,255,0.07)';
+        this.style.borderColor='rgba(255,255,255,0.15)';
+        this.style.transform='translateY(-2px)';
+      };
+      card.onmouseout = function(){
+        this.style.background='rgba(255,255,255,0.03)';
+        this.style.borderColor='rgba(255,255,255,0.07)';
+        this.style.transform='';
+      };
+      card.onclick = function(){ if(window.abrirPerfil) window.abrirPerfil(p); };
+
+      /* Avatar — foto se existir, senão inicial */
+      var avatar = document.createElement('div');
+      avatar.style.cssText = 'width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,'
+        +cor+'44,'+cor+'22);border:2px solid '+cor+'66;display:flex;align-items:center;justify-content:center;'
+        +'font-size:18px;font-weight:800;color:'+cor+';overflow:hidden;flex-shrink:0;';
+
+      /* Tentar foto */
+      var foto = window.photoFor ? window.photoFor(p) : (window.PLAYER_PHOTOS && window.PLAYER_PHOTOS[p]);
+      if(foto){
+        var img = document.createElement('img');
+        img.src = foto;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:50%;';
+        img.onerror = function(){ this.parentNode.textContent = p[0]; };
+        avatar.appendChild(img);
+      } else {
+        avatar.textContent = p[0];
+      }
+
+      /* Nome */
+      var nome = document.createElement('div');
+      nome.textContent = p;
+      nome.style.cssText = 'font-size:11px;font-weight:700;color:#e6edf3;text-align:center;'
+        +'white-space:nowrap;max-width:70px;overflow:hidden;text-overflow:ellipsis;';
+
+      /* Label "ver perfil" */
+      var label = document.createElement('div');
+      label.textContent = 'perfil →';
+      label.style.cssText = 'font-size:9px;font-weight:600;color:'+cor+';opacity:0.7;text-align:center;';
+
+      card.appendChild(avatar);
+      card.appendChild(nome);
+      card.appendChild(label);
+      grid.appendChild(card);
+    });
+  }
 }
 
 function initSelectors(){
@@ -8832,8 +8954,6 @@ window.addEventListener('load', function(){
         '#chartEvolucao { height: 360px !important; min-height: 360px !important; }',
 
         /* Personas/Arquétipos */
-        '#card-personas { min-height: 340px !important; }',
-        '#chartPersonas { height: 300px !important; min-height: 300px !important; }',
 
         /* ══════════════════════════════════════
            TABELAS — SCROLL HORIZONTAL
@@ -9823,7 +9943,6 @@ window.addEventListener('load', function(){
       var _o=window.refresh;
       window.refresh=function(){
         _o.apply(this,arguments);
-        if(premiosAberto) try{desenharPremios();}catch(e){}
       };
     }
   },300);
@@ -9891,7 +10010,7 @@ window.addEventListener('load', function(){
   }
 
   function getFg(metric,val){
-    if(metric==='posicao') return val<=3?'#1a1000':'#ffffff';
+    if(metric==='posicao') return '#ffffff'; /* branco em todas as posições */
     if(metric==='rebuys') return val===0?'#d1fae5':'#ffffff';
     return val===0?'#ffe066':'#d1fae5';
   }
@@ -10199,6 +10318,420 @@ window.toggleJogador = function(id){
   }
 };
 </script>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   FEATURE 2: Modal "Meu Perfil"
+   FEATURE 6: Momento do Torneio
+   FEATURE 7: Previsão do Trimestre
+   FEATURE 8: Recordes do Plaza
+   ═══════════════════════════════════════════════════════════════ */
+(function(){
+
+function fv(v){ return (v!=null&&v!=='')?parseFloat(v)||0:0; }
+function money(v){ return (v>=0?'+':'')+' R$ '+Math.abs(v).toFixed(2).replace('.',','); }
+function fmt(v){ return Math.round(v).toLocaleString('pt-BR'); }
+function getLedger(){ return (typeof RAW!=='undefined'&&RAW.length)?RAW:(window.DATA&&window.DATA.ledger)||[]; }
+function getMensal(){ return (typeof MENSAL!=='undefined'&&MENSAL.length)?MENSAL:(window.DATA&&window.DATA.mensal)||[]; }
+function getPhoto(nome){
+  return (window.photoFor ? window.photoFor(nome) : null)
+      || (window.PLAYER_PHOTOS && window.PLAYER_PHOTOS[nome])
+      || null;
+}
+
+/* ═══════════════════════════════════════
+   FEATURE 2 — MODAL MEU PERFIL
+   ═══════════════════════════════════════ */
+var ePerfilEvo = null;
+
+window.abrirPerfil = function(jogadorNome){
+  var ledger = getLedger();
+  if(!ledger.length){ alert('Sem dados carregados.'); return; }
+
+  var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+  var wks  = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){ return a-b; });
+
+  var rows = ledger.filter(function(r){ return r.jogador===jogadorNome && fv(r.faltou)!==1; });
+  var all  = ledger.filter(function(r){ return r.jogador===jogadorNome; });
+  var jogos = rows.length;
+  var faltas = all.length - jogos;
+  var pts_total = rows.reduce(function(s,r){ return s+fv(r.pontos_calc); },0);
+  var kos_total = rows.reduce(function(s,r){ return s+fv(r.kos); },0);
+  var reb_total = rows.reduce(function(s,r){ return s+fv(r.rebuys); },0);
+  var saldo_total = all.reduce(function(s,r){ return s+fv(r.saldo_semana_final); },0);
+  var posicoes = rows.map(function(r){ return fv(r.posicao); }).filter(function(v){ return v>0; });
+  var pos_media = posicoes.length ? posicoes.reduce(function(s,v){ return s+v; },0)/posicoes.length : 0;
+  var vitorias = rows.filter(function(r){ return fv(r.posicao)===1; }).length;
+
+  /* ranking */
+  var rankMap = {};
+  jogs.forEach(function(j){
+    rankMap[j] = ledger.filter(function(r){ return r.jogador===j&&fv(r.faltou)!==1; })
+                       .reduce(function(s,r){ return s+fv(r.pontos_calc); },0);
+  });
+  var ranking = Object.entries(rankMap).sort(function(a,b){ return b[1]-a[1]; });
+  var posRank = ranking.findIndex(function(e){ return e[0]===jogadorNome; })+1;
+  var medalRank = posRank===1?'🥇':posRank===2?'🥈':posRank===3?'🥉':posRank+'º';
+
+  /* média do grupo por WK para gráfico */
+  var mediaGrupo = {};
+  wks.forEach(function(wk){
+    var r2 = ledger.filter(function(r){ return +r.wk===wk&&fv(r.faltou)!==1; });
+    mediaGrupo[wk] = r2.length ? r2.reduce(function(s,r){ return s+fv(r.pontos_calc); },0)/r2.length : 0;
+  });
+
+  var ptsAcumJog = [], ptsAcumGrupo = [];
+  var acumJ=0, acumG=0;
+  wks.forEach(function(wk){
+    var r = rows.find(function(x){ return +x.wk===wk; });
+    acumJ += r ? fv(r.pontos_calc) : 0;
+    acumG += mediaGrupo[wk];
+    ptsAcumJog.push(r ? acumJ : null);
+    ptsAcumGrupo.push(Math.round(acumG));
+  });
+
+  var corSaldo = saldo_total>=0?'#22c55e':'#ef4444';
+  var foto = getPhoto(jogadorNome);
+  var CORES = ['#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316'];
+  var cor = CORES[jogs.indexOf(jogadorNome)%CORES.length];
+
+  /* Remover modal anterior */
+  var old = document.getElementById('perfil-modal');
+  if(old) old.remove();
+  if(ePerfilEvo){ try{ePerfilEvo.dispose();}catch(e){} ePerfilEvo=null; }
+
+  /* Criar modal */
+  var modal = document.createElement('div');
+  modal.id = 'perfil-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);';
+  modal.addEventListener('click', function(e){ if(e.target===modal) window.fecharPerfil(); });
+
+  /* Estrutura principal */
+  var box = document.createElement('div');
+  box.style.cssText = 'background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(255,255,255,0.12);border-radius:20px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 60px rgba(0,0,0,0.8);';
+
+  /* ── Cabeçalho ── */
+  var header = document.createElement('div');
+  header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0;';
+
+  /* Avatar */
+  var avatarWrap = document.createElement('div');
+  avatarWrap.style.cssText = 'display:flex;align-items:center;gap:14px;';
+
+  var avatarEl = document.createElement('div');
+  avatarEl.style.cssText = 'width:60px;height:60px;border-radius:50%;overflow:hidden;border:2.5px solid '+cor+';flex-shrink:0;background:linear-gradient(135deg,#1a3a6e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;color:#fff;';
+  if(foto){
+    var img = document.createElement('img');
+    img.src = foto;
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+    img.onerror = function(){ this.parentNode.removeChild(this); avatarEl.textContent = jogadorNome[0]; };
+    avatarEl.appendChild(img);
+  } else {
+    avatarEl.textContent = jogadorNome[0];
+  }
+
+  var avatarInfo = document.createElement('div');
+  avatarInfo.innerHTML = '<div style="font-size:20px;font-weight:900;color:#e6edf3;">'+jogadorNome+'</div>'
+    +'<div style="font-size:13px;color:#9fb3d4;margin-top:2px;">'+medalRank+' no ranking anual &nbsp;·&nbsp; '+jogos+' jogos &nbsp;·&nbsp; '+faltas+' falta'+(faltas!==1?'s':'')+'</div>';
+
+  /* Botão fechar */
+  var btnClose = document.createElement('button');
+  btnClose.textContent = '✕';
+  btnClose.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;width:36px;height:36px;color:#9fb3d4;font-size:18px;cursor:pointer;flex-shrink:0;';
+  btnClose.onclick = window.fecharPerfil;
+
+  avatarWrap.appendChild(avatarEl);
+  avatarWrap.appendChild(avatarInfo);
+  header.appendChild(avatarWrap);
+  header.appendChild(btnClose);
+
+  /* ── KPIs ── */
+  var kpisData = [
+    {emoji:'🏆', titulo:'Pontos',     valor:fmt(pts_total),     sub:'pts totais',       cor:'#3b82f6'},
+    {emoji:'📍', titulo:'Pos. Média', valor:pos_media.toFixed(1),sub:'lugar médio',      cor:'#06b6d4'},
+    {emoji:'💰', titulo:'Saldo',      valor:money(saldo_total),  sub:'acumulado',        cor:corSaldo},
+    {emoji:'💀', titulo:'KOs',        valor:kos_total.toFixed(0),sub:'totais ('+( jogos?(kos_total/jogos).toFixed(1):0)+'/jogo)',cor:'#f59e0b'},
+    {emoji:'🔄', titulo:'Rebuys',     valor:reb_total.toFixed(1),sub:( jogos?(reb_total/jogos).toFixed(1):0)+' por jogo',cor:'#8b5cf6'},
+    {emoji:'🥇', titulo:'Vitórias',   valor:''+vitorias,         sub:'1º lugar',         cor:'#C9A227'},
+  ];
+
+  var kpisGrid = document.createElement('div');
+  kpisGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 20px;';
+  kpisData.forEach(function(k){
+    var c = document.createElement('div');
+    c.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px;';
+    c.innerHTML = '<div style="font-size:16px;margin-bottom:3px;">'+k.emoji+'</div>'
+      +'<div style="font-size:10px;color:#6b82a0;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">'+k.titulo+'</div>'
+      +'<div style="font-size:16px;font-weight:800;color:'+k.cor+';">'+k.valor+'</div>'
+      +'<div style="font-size:10px;color:#9fb3d4;margin-top:1px;">'+k.sub+'</div>';
+    kpisGrid.appendChild(c);
+  });
+
+  /* ── Gráfico evolução ── */
+  var chartLabel = document.createElement('div');
+  chartLabel.style.cssText = 'padding:0 20px 8px;';
+  chartLabel.innerHTML = '<div style="font-size:12px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Evolução de Pontos — vs Média do Grupo</div>'
+    +'<div id="perfil-chart-evo" style="height:180px;width:100%;"></div>';
+
+  /* ── Tabela semanas ── */
+  var tabelaWrap = document.createElement('div');
+  tabelaWrap.style.cssText = 'padding:0 20px 20px;';
+  var tabelaHtml = '<div style="font-size:12px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Resultado por semana</div>'
+    +'<div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;font-size:12px;">'
+    +'<thead><tr style="border-bottom:1px solid rgba(255,255,255,0.1);">'
+    +'<th style="padding:6px 8px;text-align:left;color:#6b82a0;">WK</th>'
+    +'<th style="padding:6px 8px;text-align:center;color:#6b82a0;">Pos</th>'
+    +'<th style="padding:6px 8px;text-align:right;color:#3b82f6;">Pts</th>'
+    +'<th style="padding:6px 8px;text-align:center;color:#f59e0b;">KOs</th>'
+    +'<th style="padding:6px 8px;text-align:center;color:#8b5cf6;">Reb</th>'
+    +'<th style="padding:6px 8px;text-align:right;color:#22c55e;">Saldo</th>'
+    +'</tr></thead><tbody>';
+
+  wks.forEach(function(wk, wi){
+    var r = all.find(function(x){ return +x.wk===wk; });
+    var faltou = r && fv(r.faltou)===1;
+    var pos = r&&!faltou ? fv(r.posicao) : null;
+    var medal = pos===1?'🥇':pos===2?'🥈':pos===3?'🥉':(pos?pos+'º':'');
+    var bg = wi%2===0?'transparent':'rgba(255,255,255,0.02)';
+    var sSaldo = r ? fv(r.saldo_semana_final) : null;
+    var cSaldo = sSaldo!=null ? (sSaldo>=0?'#22c55e':'#ef4444') : '#6b82a0';
+    tabelaHtml += '<tr style="background:'+bg+';border-bottom:1px solid rgba(255,255,255,0.04);">'
+      +'<td style="padding:5px 8px;color:#9fb3d4;font-weight:600;">WK'+String(wk).padStart(2,'0')+'</td>'
+      +'<td style="padding:5px 8px;text-align:center;font-size:13px;">'+(faltou?'<span style="color:#4a6080">faltou</span>':medal||'—')+'</td>'
+      +'<td style="padding:5px 8px;text-align:right;color:#3b82f6;font-weight:700;">'+(r&&!faltou?fmt(fv(r.pontos_calc)):'—')+'</td>'
+      +'<td style="padding:5px 8px;text-align:center;color:#f59e0b;">'+(r&&!faltou?(fv(r.kos)||'0'):'—')+'</td>'
+      +'<td style="padding:5px 8px;text-align:center;color:#8b5cf6;">'+(r&&!faltou?(fv(r.rebuys)||'0'):'—')+'</td>'
+      +'<td style="padding:5px 8px;text-align:right;font-weight:700;color:'+cSaldo+'">'+(sSaldo!=null?money(sSaldo):'—')+'</td>'
+      +'</tr>';
+  });
+  tabelaHtml += '</tbody></table></div>';
+  tabelaWrap.innerHTML = tabelaHtml;
+
+  /* Montar */
+  box.appendChild(header);
+  box.appendChild(kpisGrid);
+  box.appendChild(chartLabel);
+  box.appendChild(tabelaWrap);
+  modal.appendChild(box);
+  document.body.appendChild(modal);
+
+  /* Gráfico ECharts */
+  setTimeout(function(){
+    var elEvo = document.getElementById('perfil-chart-evo');
+    if(!elEvo||!window.echarts) return;
+    ePerfilEvo = echarts.init(elEvo);
+    ePerfilEvo.setOption({
+      animation:true, backgroundColor:'transparent',
+      tooltip:{trigger:'axis',backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3'}},
+      legend:{bottom:0,textStyle:{color:'#9fb3d4',fontSize:10},icon:'roundRect',itemWidth:10,itemHeight:8},
+      grid:{left:52,right:12,top:8,bottom:36},
+      xAxis:{type:'category',data:wks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); }),
+        axisLabel:{color:'#9fb3d4',fontSize:9},axisTick:{show:false},axisLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}},
+      yAxis:{type:'value',axisLabel:{color:'rgba(230,237,243,0.5)',fontSize:9,
+        formatter:function(v){ return fmt(v); }},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
+      series:[
+        {name:jogadorNome,type:'line',data:ptsAcumJog,smooth:true,
+          lineStyle:{width:2.5,color:cor},itemStyle:{color:cor},symbol:'circle',symbolSize:5,
+          areaStyle:{color:cor.replace(')',',0.1)').replace('rgb','rgba')||'rgba(59,130,246,0.1)'}},
+        {name:'Média grupo',type:'line',data:ptsAcumGrupo,smooth:true,
+          lineStyle:{width:1.5,color:'#9fb3d4',type:'dashed'},itemStyle:{color:'#9fb3d4'},symbol:'none'}
+      ]
+    },true);
+  },80);
+};
+
+window.fecharPerfil = function(){
+  var m = document.getElementById('perfil-modal');
+  if(m) m.remove();
+  if(ePerfilEvo){ try{ePerfilEvo.dispose();}catch(e){} ePerfilEvo=null; }
+};
+
+/* ═══════════════════════════════════════
+   FEATURE 8 — RECORDES DO PLAZA
+   ═══════════════════════════════════════ */
+function buildRecordes(){
+  var ledger = getLedger();
+  if(!ledger.length) return;
+  var todos = ledger.filter(function(r){ return fv(r.faltou)!==1; });
+  if(!todos.length) return;
+
+  var maxPts = todos.reduce(function(m,r){ return fv(r.pontos_calc)>fv(m.pontos_calc)?r:m; });
+  var maxKOs = todos.reduce(function(m,r){ return fv(r.kos)>fv(m.kos)?r:m; });
+  var maxReb = todos.reduce(function(m,r){ return fv(r.rebuys)>fv(m.rebuys)?r:m; });
+
+  var saldos = {};
+  ledger.forEach(function(r){ saldos[r.jogador]=(saldos[r.jogador]||0)+fv(r.saldo_semana_final); });
+  var melhorSaldo = Object.entries(saldos).sort(function(a,b){ return b[1]-a[1]; })[0]||['—',0];
+
+  var vits = {};
+  todos.forEach(function(r){ if(fv(r.posicao)===1) vits[r.jogador]=(vits[r.jogador]||0)+1; });
+  var maisVit = Object.entries(vits).sort(function(a,b){ return b[1]-a[1]; })[0]||['—',0];
+
+  var jogs2 = Array.from(new Set(ledger.map(function(r){ return r.jogador; })));
+  var wks2  = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).sort(function(a,b){ return a-b; });
+  var bestStreak={jog:'—',val:0};
+  jogs2.forEach(function(j){
+    var streak=0,best=0;
+    wks2.forEach(function(wk){
+      var r=ledger.find(function(x){ return x.jogador===j&&+x.wk===wk&&fv(x.faltou)!==1; });
+      if(r&&fv(r.posicao)===1){streak++;if(streak>best)best=streak;}else{streak=0;}
+    });
+    if(best>bestStreak.val) bestStreak={jog:j,val:best};
+  });
+
+  var kosTot={};
+  todos.forEach(function(r){ kosTot[r.jogador]=(kosTot[r.jogador]||0)+fv(r.kos); });
+  var maisKOsTot=Object.entries(kosTot).sort(function(a,b){ return b[1]-a[1]; })[0]||['—',0];
+
+  var posMedia={},jogosCnt={};
+  todos.forEach(function(r){ if(fv(r.posicao)>0){posMedia[r.jogador]=(posMedia[r.jogador]||0)+fv(r.posicao);jogosCnt[r.jogador]=(jogosCnt[r.jogador]||0)+1;}});
+  var consistente=Object.entries(posMedia).filter(function(e){ return jogosCnt[e[0]]>=5; }).map(function(e){ return {jog:e[0],val:e[1]/jogosCnt[e[0]]}; }).sort(function(a,b){ return a.val-b.val; })[0]||{jog:'—',val:0};
+
+  var itens=[
+    {emoji:'🏆',titulo:'Maior pontuação numa noite', valor:fmt(fv(maxPts.pontos_calc))+' pts', detalhe:maxPts.jogador+' — WK'+String(maxPts.wk).padStart(2,'0')},
+    {emoji:'💀',titulo:'Mais KOs numa noite',         valor:fv(maxKOs.kos)+' KOs',             detalhe:maxKOs.jogador+' — WK'+String(maxKOs.wk).padStart(2,'0')},
+    {emoji:'🔄',titulo:'Mais rebuys numa noite',      valor:fv(maxReb.rebuys)+' rebuys',       detalhe:maxReb.jogador+' — WK'+String(maxReb.wk).padStart(2,'0')},
+    {emoji:'🥇',titulo:'Mais vitórias no ano',        valor:maisVit[1]+' vitórias',             detalhe:maisVit[0]},
+    {emoji:'⚡',titulo:'Maior streak de vitórias',    valor:bestStreak.val+' seguidas',         detalhe:bestStreak.jog},
+    {emoji:'💀',titulo:'Mais KOs totais no ano',      valor:Math.round(maisKOsTot[1])+' KOs',  detalhe:maisKOsTot[0]},
+    {emoji:'💰',titulo:'Melhor saldo acumulado',      valor:money(melhorSaldo[1]),              detalhe:melhorSaldo[0]},
+    {emoji:'🎯',titulo:'Mais consistente',            valor:consistente.val.toFixed(2)+' pos média',detalhe:consistente.jog+' (≥5 jogos)'},
+  ];
+
+  var el=document.getElementById('recordes-content');
+  if(!el) return;
+  var html='<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;">';
+  itens.forEach(function(it){
+    html+='<div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px 16px;">'
+      +'<div style="font-size:22px;margin-bottom:6px;">'+it.emoji+'</div>'
+      +'<div style="font-size:11px;color:#6b82a0;font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;">'+it.titulo+'</div>'
+      +'<div style="font-size:18px;font-weight:800;color:#e6edf3;margin-bottom:2px;">'+it.valor+'</div>'
+      +'<div style="font-size:12px;color:#9fb3d4;font-weight:600;">'+it.detalhe+'</div>'
+      +'</div>';
+  });
+  html+='</div>';
+  el.innerHTML=html;
+}
+
+/* ═══════════════════════════════════════
+   FEATURE 7 — PREVISÃO DO TRIMESTRE
+   ═══════════════════════════════════════ */
+var ePrevisao=null;
+function buildPrevisao(){
+  var el=document.getElementById('chartPrevisao');
+  if(!el||!window.echarts) return;
+  var ledger=getLedger();
+  if(!ledger.length) return;
+  var jogs=Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+  var wks=Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){ return a-b; });
+  var last3=wks.slice(-3);
+  var wksRest=3;
+  var res=jogs.map(function(j){
+    var rows=ledger.filter(function(r){ return r.jogador===j&&fv(r.faltou)!==1; });
+    var acum=rows.reduce(function(s,r){ return s+fv(r.pontos_calc); },0);
+    var rec=rows.filter(function(r){ return last3.includes(+r.wk); });
+    var med=rec.length?rec.reduce(function(s,r){ return s+fv(r.pontos_calc); },0)/rec.length:0;
+    return {jog:j,acum:Math.round(acum),med:Math.round(med),proj:Math.round(acum+med*wksRest)};
+  }).sort(function(a,b){ return b.proj-a.proj; });
+  var CORES=['#C9A227','#A8A9AD','#CD7F32','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444'];
+  if(!ePrevisao) ePrevisao=echarts.init(el);
+  ePrevisao.setOption({
+    animation:true,backgroundColor:'transparent',
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3',fontSize:12},
+      formatter:function(params){ var d=res[params[0].dataIndex]; return '<b>'+d.jog+'</b><br/>Acumulado: <b>'+fmt(d.acum)+' pts</b><br/>Projeção: <b>'+fmt(d.proj)+' pts</b><br/>Média recente: '+fmt(d.med)+' pts/WK'; }},
+    grid:{left:90,right:20,top:16,bottom:40},
+    xAxis:{type:'value',axisLabel:{color:'rgba(230,237,243,0.5)',fontSize:10,formatter:function(v){ return fmt(v); }},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
+    yAxis:{type:'category',data:res.map(function(r){ return r.jog; }),axisLabel:{color:'#e6edf3',fontWeight:700,fontSize:12},axisTick:{show:false},axisLine:{show:false}},
+    series:[
+      {name:'Acumulado real',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.9}}; }),barWidth:26,label:{show:false}},
+      {name:'Projeção',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.proj-r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.3}}; }),barWidth:26,
+        label:{show:true,position:'right',color:'#e6edf3',fontSize:11,fontWeight:700,formatter:function(p){ return fmt(res[p.dataIndex].proj); }}}
+    ],
+    legend:{bottom:0,data:['Acumulado real','Projeção'],textStyle:{color:'#9fb3d4',fontSize:11}}
+  },true);
+}
+
+/* ═══════════════════════════════════════
+   FEATURE 6 — MOMENTO DO TORNEIO
+   ═══════════════════════════════════════ */
+var eMomento=null;
+function buildMomento(){
+  var el=document.getElementById('chartMomento');
+  if(!el||!window.echarts) return;
+  var ledger=getLedger();
+  if(!ledger.length) return;
+  var jogs=Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+  var wks=Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){ return a-b; });
+  var idx2={};
+  ledger.forEach(function(r){ if(!idx2[r.jogador])idx2[r.jogador]={}; idx2[r.jogador][+r.wk]=r; });
+  var CORES=['#C9A227','#A8A9AD','#CD7F32','#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444'];
+  var series=jogs.map(function(j,ji){
+    var data=wks.map(function(wk){
+      var r=idx2[j]&&idx2[j][wk];
+      return (!r||fv(r.faltou)===1)?null:fv(r.posicao)||null;
+    });
+    return {name:j,type:'line',data:data,connectNulls:false,smooth:false,symbol:'circle',symbolSize:7,lineStyle:{width:2.5},itemStyle:{color:CORES[ji%CORES.length]},emphasis:{focus:'series'}};
+  });
+  if(!eMomento) eMomento=echarts.init(el);
+  eMomento.setOption({
+    animation:true,backgroundColor:'transparent',
+    tooltip:{trigger:'axis',backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3',fontSize:12},
+      formatter:function(params){
+        var wk=params[0].axisValue;
+        var lines='<div style="font-weight:700;margin-bottom:6px;color:#9fb3d4;">'+wk+'</div>';
+        var valid=params.filter(function(p){ return p.value!=null; }).sort(function(a,b){ return a.value-b.value; });
+        valid.forEach(function(p){ var m=p.value===1?'🥇':p.value===2?'🥈':p.value===3?'🥉':''; lines+='<div style="display:flex;justify-content:space-between;gap:12px;margin:1px 0"><span>'+p.marker+' '+p.seriesName+'</span><span style="font-weight:700;">'+m+' '+p.value+'º</span></div>'; });
+        return lines;
+      }},
+    legend:{type:'scroll',bottom:0,textStyle:{color:'#9fb3d4',fontSize:11},icon:'circle',itemWidth:10,itemHeight:10},
+    grid:{left:36,right:16,top:16,bottom:52},
+    xAxis:{type:'category',data:wks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); }),axisLabel:{color:'#9fb3d4',fontSize:10},axisTick:{show:false},axisLine:{lineStyle:{color:'rgba(255,255,255,0.07)'}}},
+    yAxis:{type:'value',inverse:true,min:1,max:function(v){ return Math.ceil(v.max)+1; },
+      axisLabel:{color:'rgba(230,237,243,0.6)',fontSize:10,formatter:function(v){ return v===1?'🥇':v===2?'🥈':v===3?'🥉':v+'º'; }},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
+    series:series
+  },true);
+}
+
+/* ── Patch ranking clicável ── */
+function patchRankingClicavel(){
+  var _t=setInterval(function(){
+    if(window.eRanking){
+      clearInterval(_t);
+      window.eRanking.off('click');
+      window.eRanking.on('click',function(params){
+        if(params.componentType==='series'&&params.name) window.abrirPerfil(params.name);
+      });
+    }
+  },400);
+}
+patchRankingClicavel();
+
+/* ── Hooks ── */
+function buildAll(){ buildRecordes(); buildPrevisao(); buildMomento(); }
+
+var _t3=setInterval(function(){
+  if(typeof window.afterDataLoaded==='function'){clearInterval(_t3);
+    var _o=window.afterDataLoaded;
+    window.afterDataLoaded=function(){_o.apply(this,arguments);setTimeout(buildAll,500);};}
+},200);
+var _t4=setInterval(function(){
+  if(typeof window.refresh==='function'){clearInterval(_t4);
+    var _o=window.refresh;
+    window.refresh=function(){_o.apply(this,arguments);try{buildAll();}catch(e){};};}
+},200);
+
+window.addEventListener('load',function(){setTimeout(buildAll,1400);});
+window.addEventListener('resize',function(){
+  if(ePrevisao) ePrevisao.resize();
+  if(eMomento)  eMomento.resize();
+});
+window.buildPrevisao=buildPrevisao;
+window.buildMomento=buildMomento;
+window.buildRecordes=buildRecordes;
+})();
+</script>
+
+
 </body>
 </html>
 
