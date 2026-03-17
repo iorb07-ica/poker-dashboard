@@ -8051,7 +8051,7 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
     </div>
     <div class="rn-field">
       <label>Dealer (antecipa R$200)</label>
-      <select id="rn-dealer" onchange="rnAtualizarContadores()">
+      <select id="rn-dealer" onchange="rnAtualizarContadores();rnRecalcular();">
         <option value="">— nenhum —</option>
       </select>
     </div>
@@ -11011,7 +11011,18 @@ window._buildRankingAnual = function(rows){
           var orig = tbody.rows[+this.dataset.idx];
           if(orig){ var o = orig.querySelector('.'+cls); if(o) o.value = this.value; }
           if(window.rnAtualizarContadores) rnAtualizarContadores();
+          /* Para fichas: recalcular posição automática e reordenar cards */
+          if(cls === 'rn-fichas'){
+            if(window.rnAutoPos) rnAutoPos(false);
+            setTimeout(function(){ rnSyncMobileFromTabela(); rnOrdenarCardsM(); }, 60);
+          }
           if(window.rnRecalcular) rnRecalcular();
+        });
+        inp.addEventListener('blur', function(){
+          if(cls === 'rn-fichas'){
+            if(window.rnAutoPos) rnAutoPos(true);
+            setTimeout(function(){ rnSyncMobileFromTabela(); rnOrdenarCardsM(); }, 60);
+          }
         });
         w.appendChild(l); w.appendChild(inp);
         return w;
@@ -11076,6 +11087,36 @@ window._buildRankingAnual = function(rows){
     }
   };
 
+  /* Reordenar cards mobile por fichas (maior → menor), igual ao desktop */
+  window.rnOrdenarCardsM = function(){
+    var mpl = document.getElementById('rn-mobile-players');
+    var tbody = document.getElementById('rn-tbody');
+    if(!mpl || !tbody) return;
+    var cards = Array.from(mpl.children);
+    /* Calcular fichas de cada card */
+    var ordem = cards.map(function(card, ci){
+      var ficEl = card.querySelector('.rn-fichas');
+      var faltouEl = card.querySelector('.rn-mc-faltou');
+      var faltou = faltouEl && faltouEl.checked;
+      var fichas = ficEl ? (parseFloat(ficEl.value)||0) : 0;
+      return { card:card, fichas: faltou ? -1 : fichas, idx:ci };
+    });
+    /* Ordenar: quem tem fichas > 0 vem primeiro por ordem decrescente,
+       depois quem tem 0 fichas, depois faltou */
+    ordem.sort(function(a,b){
+      if(a.fichas < 0 && b.fichas >= 0) return 1;
+      if(b.fichas < 0 && a.fichas >= 0) return -1;
+      if(a.fichas === 0 && b.fichas > 0) return 1;
+      if(b.fichas === 0 && a.fichas > 0) return -1;
+      return b.fichas - a.fichas;
+    });
+    /* Re-inserir na nova ordem com animação */
+    ordem.forEach(function(item, newPos){
+      item.card.style.transition = 'transform .2s,opacity .2s';
+      mpl.appendChild(item.card);
+    });
+  };
+
   /* Sincronizar previews da tabela → cards */
   window.rnSyncMobilePreviews = function(){
     var tbody = document.getElementById('rn-tbody');
@@ -11091,7 +11132,15 @@ window._buildRankingAnual = function(rows){
         +'<span style="color:#f59e0b;font-weight:700;">'+premio+'</span>'
         +'<span style="color:'+(saldo&&saldo.includes('-')?'#ef4444':'#22c55e')+';font-weight:700;">'+saldo+'</span>';
       var posEl = document.getElementById('rn-mc-pos-'+idx);
-      if(posEl && badge !== '—') posEl.innerHTML = '<span style="color:#C9A227;font-weight:700;">'+badge+' lugar</span>';
+      if(posEl){
+        if(badge && badge !== '—'){
+          var medal = badge==='1º'?'🥇':badge==='2º'?'🥈':badge==='3º'?'🥉':'📍';
+          posEl.innerHTML = '<span style="color:#C9A227;font-weight:800;font-size:13px;">'+medal+' '+badge+' lugar</span>';
+        } else {
+          posEl.textContent = 'insira as fichas para calcular';
+          posEl.style.color = '#4a6080';
+        }
+      }
     });
   };
 
