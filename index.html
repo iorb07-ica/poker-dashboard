@@ -2993,6 +2993,86 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 </div>
 
 
+
+<!-- ====== CARD: Calculador de Equity ====== -->
+<div id="card-equity-calc" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('equity-calc-body','equity-calc-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(239,68,68,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🃏</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Calculador de Equity</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Equity exacta — até 4 jogadores · Pre-flop · Flop · Turn · River</div>
+        </div>
+      </div>
+      <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+    </div>
+    <div id="equity-calc-body" data-open="true" style="padding:0 16px 20px;">
+
+      <!-- Jogadores -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;">Jogadores</span>
+          <div style="display:flex;gap:6px;">
+            <button onclick="eqAddPlayer()" style="background:#1e3a5a;color:#66a6d4;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">+ Jogador</button>
+            <button onclick="eqRemovePlayer()" style="background:#2a1a1a;color:#f87171;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">− Remover</button>
+          </div>
+        </div>
+        <div id="eq-players-wrap" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <!-- Board -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Board</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <div id="eq-board-cards" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+          <div style="font-size:11px;color:#4a6080;margin-top:2px;">Flop (3) · Turn (4) · River (5)</div>
+        </div>
+      </div>
+
+      <!-- Simulations -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;color:#6b82a0;">Simulações:</span>
+          <select id="eq-sims" style="background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:4px 8px;font-size:13px;">
+            <option value="10000">10.000 (rápido)</option>
+            <option value="50000" selected>50.000 (normal)</option>
+            <option value="200000">200.000 (preciso)</option>
+          </select>
+        </div>
+        <button onclick="eqCalculate()" id="eq-calc-btn"
+          style="background:linear-gradient(135deg,#1a4a8a,#3b82f6);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,.3);">
+          ▶ Calcular Equity
+        </button>
+        <button onclick="eqReset()"
+          style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;">
+          ↺ Limpar
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div id="eq-results" style="display:none;">
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:14px;"></div>
+        <div id="eq-results-inner"></div>
+      </div>
+
+      <!-- Card picker modal -->
+      <div id="eq-picker" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
+        <div style="background:#0d1424;border:1px solid #1e3a5a;border-radius:18px;padding:20px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);">
+          <div style="font-size:14px;font-weight:800;color:#c7d8f0;margin-bottom:14px;">Escolha uma carta</div>
+          <div id="eq-picker-grid" style="display:grid;grid-template-columns:repeat(13,1fr);gap:3px;margin-bottom:12px;"></div>
+          <div style="display:flex;gap:6px;justify-content:flex-end;">
+            <button onclick="eqPickNone()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">✕ Limpar</button>
+            <button onclick="eqClosePicker()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">Fechar</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let RAW = window.DATA.ledger || [];
 let PODIOS = window.DATA.podios || [];
@@ -11378,7 +11458,7 @@ window._buildRankingAnual = function(rows){
       nameWrap.style.cssText = 'flex:1;min-width:0;';
       nameWrap.innerHTML =
         '<div style="font-size:17px;font-weight:800;color:#e6edf3;">'+nome+'</div>'
-        +'<div id="rn-mc-pos-'+idx+'" style="font-size:12px;color:#4a6080;margin-top:2px;">insira as fichas para calcular</div>';
+        +'<div id="rn-mc-pos-'+idx+'" class="rn-mc-pos-label" style="font-size:12px;color:#4a6080;margin-top:2px;">insira as fichas para calcular</div>';
 
       /* Toggle Faltou */
       var faltouWrap = document.createElement('label');
@@ -11391,11 +11471,18 @@ window._buildRankingAnual = function(rows){
       faltouChk.addEventListener('change', function(){
         var i = +this.dataset.idx;
         /* Sync tabela oculta */
-        var origTr = tbody.rows[i];
+        /* Encontrar o row correcto por nome após reordenação */
+        var _cardEl = document.getElementById('rn-mc-'+i);
+        var _nd = _cardEl ? _cardEl.querySelector('[style*="font-size:17px"]') : null;
+        var _nome = _nd ? _nd.textContent.trim() : null;
+        var origTr = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) origTr=r; }); }
+        else { origTr = tbody.rows[i]; }
         if(origTr){
           var origChk = origTr.querySelector('.rn-faltou');
           if(origChk){ origChk.checked = this.checked; }
-          if(window.rnToggleFaltou) rnToggleFaltou(i);
+          var rowIdx = Array.from(tbody.rows).indexOf(origTr);
+          if(window.rnToggleFaltou) rnToggleFaltou(rowIdx >= 0 ? rowIdx : i);
         }
         var c = document.getElementById('rn-mc-'+i);
         if(c){
@@ -11466,9 +11553,13 @@ window._buildRankingAnual = function(rows){
       var ficField = mkField('Fichas');
       var ficInp = mkInput('rn-fichas','','#06b6d4','—');
       ficInp.value = '';
+      ficInp.dataset.nome = nome; /* para matching por nome após reordenação */
       ficInp.addEventListener('input', function(){
-        /* Sync tabela oculta */
-        var orig = tbody.rows[+this.dataset.idx];
+        /* Sync tabela oculta — usar nome para matching robusto */
+        var _nome = this.dataset.nome;
+        var orig = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) orig=r; }); }
+        if(!orig) orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-fichas'); if(o) o.value=this.value; }
         /* Recalcular posições SEM reordenar DOM — não mover cards enquanto digita */
         if(window.rnAutoPos) rnAutoPos(false);
@@ -11478,7 +11569,10 @@ window._buildRankingAnual = function(rows){
         setTimeout(window.rnSyncMobileData, 60);
       });
       ficInp.addEventListener('blur', function(){
-        var orig = tbody.rows[+this.dataset.idx];
+        var _nome = this.dataset.nome;
+        var orig = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) orig=r; }); }
+        if(!orig) orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-fichas'); if(o) o.value=this.value||''; }
         if(window.rnAutoPos) rnAutoPos(true);
         if(window.rnRecalcular) rnRecalcular();
@@ -11530,6 +11624,7 @@ window._buildRankingAnual = function(rows){
       /* Preview pts/prêmio/saldo */
       var prevDiv = document.createElement('div');
       prevDiv.id = 'rn-mc-prev-'+idx;
+      prevDiv.className = 'rn-mc-prev';
       prevDiv.style.cssText = 'margin-top:10px;display:flex;justify-content:space-between;font-size:12px;color:#6b82a0;padding:0 2px;';
       prevDiv.innerHTML = '<span>Pts: —</span><span>Prêmio: —</span><span>Saldo: —</span>';
 
@@ -11604,26 +11699,42 @@ window._buildRankingAnual = function(rows){
     var mpl   = document.getElementById('rn-mobile-players');
     if(!tbody || !mpl) return;
 
-    /* 1. Actualizar cada card com dados da tabela oculta */
-    Array.from(tbody.rows).forEach(function(tr, idx){
+    /* 1. Actualizar cada card com dados da tabela oculta
+          — usar dataset.jogador para matching robusto após reordenações */
+    var allCards = Array.from(mpl.children);
+    allCards.forEach(function(card){
+      /* Encontrar o nome do jogador deste card */
+      var ficElCard = card.querySelector('.rn-fichas');
+      var nome = ficElCard ? ficElCard.dataset.nome : null;
+      if(!nome){
+        /* Fallback: ler do nameWrap */
+        var nameDiv = card.querySelector('[style*="font-size:17px"]');
+        nome = nameDiv ? nameDiv.textContent.trim() : null;
+      }
+      if(!nome) return;
+
+      /* Encontrar o row correcto na tabela por nome */
+      var tr = null;
+      Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador === nome) tr = r; });
+      if(!tr) return;
+
       var pts    = (tr.querySelector('.rn-pts-preview')    || {}).textContent || '—';
       var premio = (tr.querySelector('.rn-premio-preview') || {}).textContent || '—';
       var saldo  = (tr.querySelector('.rn-saldo-preview')  || {}).textContent || '—';
       var _badgeEl = tr.querySelector('.rn-pos-badge');
-      /* Só considerar o badge se estiver visível e tiver valor real */
       var badge = (_badgeEl && _badgeEl.style.display !== 'none' && _badgeEl.textContent && _badgeEl.textContent !== '—')
                   ? _badgeEl.textContent : '—';
       var faltou = tr.querySelector('.rn-faltou') && tr.querySelector('.rn-faltou').checked;
 
       /* Preview */
-      var prevEl = document.getElementById('rn-mc-prev-'+idx);
+      var prevEl = card.querySelector('.rn-mc-prev');
       if(prevEl) prevEl.innerHTML =
         '<span style="color:#3b82f6;font-weight:700;">'+pts+'</span>'
         +'<span style="color:#f59e0b;font-weight:700;">'+premio+'</span>'
         +'<span style="color:'+(saldo&&saldo.includes('-')?'#ef4444':'#22c55e')+';font-weight:700;">'+saldo+'</span>';
 
       /* Badge posição */
-      var posEl = document.getElementById('rn-mc-pos-'+idx);
+      var posEl = card.querySelector('.rn-mc-pos-label');
       if(posEl){
         if(!faltou && badge && badge !== '—'){
           var medal = badge==='1º'?'🥇':badge==='2º'?'🥈':badge==='3º'?'🥉':'📍';
@@ -11636,33 +11747,39 @@ window._buildRankingAnual = function(rows){
         }
       }
 
-      /* Select de posição — actualizar valor */
-      var card = document.getElementById('rn-mc-'+idx);
-      if(card){
-        var posSel = card.querySelector('.rn-mc-pos-sel');
-        if(posSel && !faltou){
-          var posVal = badge && badge !== '—' ? badge.replace('º','') : '';
-          if(posSel.value !== posVal) posSel.value = posVal;
-          /* Feedback visual no select quando posição calculada */
-          posSel.style.color = posVal ? '#C9A227' : 'rgba(255,255,255,0.3)';
-        }
+      /* Select de posição */
+      var posSel = card.querySelector('.rn-mc-pos-sel');
+      if(posSel && !faltou){
+        var posVal = badge && badge !== '—' ? badge.replace('º','') : '';
+        if(posSel.value !== posVal) posSel.value = posVal;
+        posSel.style.color = posVal ? '#C9A227' : 'rgba(255,255,255,0.3)';
       }
     });
 
-    /* 2. Reordenar cards: maior fichas primeiro, faltou por último */
+    /* 2. Reordenar cards: maior fichas primeiro, faltou por último
+          — usar dataset.jogador para matching correcto */
     var cards = Array.from(mpl.children);
     var ordem = cards.map(function(card){
       var ficEl    = card.querySelector('.rn-fichas');
       var faltouEl = card.querySelector('.rn-mc-faltou');
       var faltou   = faltouEl && faltouEl.checked;
-      /* Ler fichas do input mobile OU da tabela oculta */
+      /* Ler fichas do input mobile */
       var fichas   = ficEl ? (parseFloat(ficEl.value) || 0) : 0;
-      /* Ler a posição calculada pelo rnAutoPos */
-      var posIdMatch = card.id.match(/rn-mc-(\d+)/);
-      var posIdx = posIdMatch ? +posIdMatch[1] : -1;
-      var origTr = document.getElementById('rn-tbody') && document.getElementById('rn-tbody').rows[posIdx];
-      var origFic = origTr && origTr.querySelector('.rn-fichas') ? parseFloat(origTr.querySelector('.rn-fichas').value)||0 : fichas;
-      return { card:card, fichas:origFic, faltou:faltou };
+      /* Buscar fichas do row correcto por nome */
+      var nome = ficEl ? ficEl.dataset.nome : null;
+      if(!nome){
+        var nd = card.querySelector('[style*="font-size:17px"]');
+        nome = nd ? nd.textContent.trim() : null;
+      }
+      if(nome){
+        Array.from(tbody.rows).forEach(function(r){
+          if(r.dataset.jogador === nome){
+            var o = r.querySelector('.rn-fichas');
+            if(o) fichas = parseFloat(o.value) || 0;
+          }
+        });
+      }
+      return { card:card, fichas:fichas, faltou:faltou };
     });
 
     ordem.sort(function(a,b){
@@ -11829,6 +11946,383 @@ window.rnPublicarGitHub = function(){
       };
     }
   }, 200);
+})();
+</script>
+
+<script id="poker-equity-calc-js">
+(function(){
+'use strict';
+
+/* ═══════════════════════════════════════════════════
+   POKER EQUITY CALCULATOR — Monte Carlo
+   ═══════════════════════════════════════════════════ */
+
+var RANKS  = ['2','3','4','5','6','7','8','9','T','J','Q','K','A'];
+var SUITS  = ['♠','♥','♦','♣'];
+var SUIT_COLOR = {'♠':'#a0c4ff','♥':'#ff6b6b','♦':'#ff6b6b','♣':'#a0c4ff'};
+var RANK_VAL = {};
+RANKS.forEach(function(r,i){ RANK_VAL[r] = i+2; });
+
+var EQ_PLAYERS = [];
+var EQ_BOARD   = [null,null,null,null,null]; // 5 board slots
+var _eqPickTarget = null; // {type:'player'|'board', pIdx, cIdx}
+
+/* ── Deck helpers ─────────────────────────────────── */
+function fullDeck(){
+  var d = [];
+  RANKS.forEach(function(r){ SUITS.forEach(function(s){ d.push(r+s); }); });
+  return d;
+}
+function shuffle(arr){
+  for(var i=arr.length-1;i>0;i--){
+    var j=Math.floor(Math.random()*(i+1));
+    var tmp=arr[i]; arr[i]=arr[j]; arr[j]=tmp;
+  }
+  return arr;
+}
+function rankVal(card){ return RANK_VAL[card[0]]||0; }
+function suit(card){ return card.slice(1); }
+
+/* ── Hand evaluator (7-card best 5) ──────────────── */
+function evalHand(cards){
+  // Returns numeric score: higher = better
+  // cards = array of 7 card strings
+  var best = 0;
+  var combos = combinations(cards, 5);
+  for(var i=0;i<combos.length;i++){
+    var s = score5(combos[i]);
+    if(s > best) best = s;
+  }
+  return best;
+}
+
+function combinations(arr, k){
+  if(k===0) return [[]];
+  if(arr.length===0) return [];
+  var first = arr[0], rest = arr.slice(1);
+  var withFirst = combinations(rest, k-1).map(function(c){ return [first].concat(c); });
+  var withoutFirst = combinations(rest, k);
+  return withFirst.concat(withoutFirst);
+}
+
+function score5(cards){
+  // Returns a number encoding hand strength
+  var ranks = cards.map(rankVal).sort(function(a,b){return b-a;});
+  var suits5 = cards.map(suit);
+  var isFlush = suits5.every(function(s){return s===suits5[0];});
+
+  // Check straight
+  var isStraight = false;
+  var straightHigh = 0;
+  if(ranks[0]-ranks[4]===4 && new Set(ranks).size===5){
+    isStraight = true; straightHigh = ranks[0];
+  }
+  // Wheel A-2-3-4-5
+  if(!isStraight && ranks[0]===14){
+    var low = [5,4,3,2,1].every(function(v,i){
+      return v===1 ? ranks[0]===14 : ranks[i+1]===v;
+    });
+    if(JSON.stringify(ranks.slice(1))===JSON.stringify([5,4,3,2])){
+      isStraight = true; straightHigh = 5;
+    }
+  }
+
+  // Count ranks
+  var cnt = {};
+  ranks.forEach(function(r){ cnt[r]=(cnt[r]||0)+1; });
+  var counts = Object.values(cnt).sort(function(a,b){return b-a;});
+  var grouped = {};
+  for(var r in cnt){ (grouped[cnt[r]]=grouped[cnt[r]]||[]).push(+r); }
+  for(var k in grouped){ grouped[k].sort(function(a,b){return b-a;}); }
+
+  var CAT, sub=0;
+  if(isFlush && isStraight){
+    CAT = straightHigh===14 ? 9 : 8; // Royal / Straight flush
+    sub = straightHigh;
+  } else if(counts[0]===4){
+    CAT=7; sub = encodeKickers([grouped[4][0]], grouped[1]||[]);
+  } else if(counts[0]===3 && counts[1]===2){
+    CAT=6; sub = grouped[3][0]*100 + grouped[2][0];
+  } else if(isFlush){
+    CAT=5; sub = encodeKickers(ranks,[]);
+  } else if(isStraight){
+    CAT=4; sub = straightHigh;
+  } else if(counts[0]===3){
+    CAT=3; sub = encodeKickers([grouped[3][0]], grouped[1]||[]);
+  } else if(counts[0]===2 && counts[1]===2){
+    var pairs = (grouped[2]||[]).sort(function(a,b){return b-a;});
+    CAT=2; sub = pairs[0]*10000 + pairs[1]*100 + ((grouped[1]||[])[0]||0);
+  } else if(counts[0]===2){
+    CAT=1; sub = encodeKickers([grouped[2][0]], grouped[1]||[]);
+  } else {
+    CAT=0; sub = encodeKickers(ranks,[]);
+  }
+  return CAT * 1e13 + sub;
+}
+
+function encodeKickers(main, kickers){
+  var all = main.concat(kickers).slice(0,5);
+  var s=0;
+  all.forEach(function(v,i){ s += v * Math.pow(100, 4-i); });
+  return s;
+}
+
+function handName(score){
+  var cat = Math.floor(score / 1e13);
+  return ['High Card','Par','Dois Pares','Trinca','Sequência','Flush','Full House','Quadra','Straight Flush','Royal Flush'][cat];
+}
+
+/* ── Monte Carlo ─────────────────────────────────── */
+function runSimulation(players, board, nSims){
+  var known = [];
+  players.forEach(function(p){ p.forEach(function(c){ if(c) known.push(c); }); });
+  board.forEach(function(c){ if(c) known.push(c); });
+
+  var boardCount = board.filter(Boolean).length;
+  var wins = new Array(players.length).fill(0);
+  var ties = 0;
+
+  for(var sim=0; sim<nSims; sim++){
+    // Build remaining deck
+    var deck = fullDeck().filter(function(c){ return known.indexOf(c)<0; });
+    shuffle(deck);
+    var idx = 0;
+
+    // Fill player holes
+    var hands = players.map(function(p){
+      return p.map(function(c){
+        return c || deck[idx++];
+      });
+    });
+
+    // Fill board
+    var runBoard = board.map(function(c){
+      return c || deck[idx++];
+    });
+
+    // Evaluate each player's best 7-card hand
+    var scores = hands.map(function(h){
+      return evalHand(h.concat(runBoard));
+    });
+
+    var maxScore = Math.max.apply(null, scores);
+    var winners = scores.reduce(function(acc, s, i){ if(s===maxScore) acc.push(i); return acc; }, []);
+    if(winners.length===1){
+      wins[winners[0]]++;
+    } else {
+      wins.forEach(function(_,i){ if(winners.indexOf(i)>=0) wins[i]+=1/winners.length; });
+    }
+  }
+
+  return wins.map(function(w){ return w/nSims; });
+}
+
+/* ── UI Helpers ───────────────────────────────────── */
+function cardHtml(card, slotId, size){
+  size = size || 'normal';
+  var w = size==='small'?36:44, h = size==='small'?52:64;
+  var fs = size==='small'?12:15, fs2 = size==='small'?16:22;
+  if(!card){
+    return '<div onclick="eqOpenPicker(\''+slotId+'\')" style="width:'+w+'px;height:'+h+'px;border-radius:8px;border:2px dashed #1e3a5a;background:#060d1a;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#2a4a6a;font-size:18px;flex-shrink:0;">+</div>';
+  }
+  var r = card[0], s = card.slice(1);
+  var col = SUIT_COLOR[s]||'#e6edf3';
+  var bg = (s==='♥'||s==='♦') ? 'linear-gradient(135deg,#2a0808,#1a0505)' : 'linear-gradient(135deg,#08142a,#05100a)';
+  return '<div onclick="eqOpenPicker(\''+slotId+'\')" style="width:'+w+'px;height:'+h+'px;border-radius:8px;background:'+bg+';border:1px solid '+col+'44;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;flex-shrink:0;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.4);">'
+    +'<span style="font-size:'+fs+'px;font-weight:800;color:'+col+';line-height:1;">'+r+'</span>'
+    +'<span style="font-size:'+fs2+'px;line-height:1;">'+s+'</span>'
+    +'</div>';
+}
+
+function usedCards(){
+  var used = [];
+  EQ_PLAYERS.forEach(function(p){ p.forEach(function(c){ if(c) used.push(c); }); });
+  EQ_BOARD.forEach(function(c){ if(c) used.push(c); });
+  return used;
+}
+
+/* ── Render ───────────────────────────────────────── */
+function renderPlayers(){
+  var wrap = document.getElementById('eq-players-wrap');
+  if(!wrap) return;
+  var colors = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff922b','#cc5de8'];
+  wrap.innerHTML = EQ_PLAYERS.map(function(p,pi){
+    var col = colors[pi % colors.length];
+    return '<div style="background:#080f1e;border:1px solid #1e2e46;border-radius:12px;padding:10px 12px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+      +'<div style="width:28px;height:28px;border-radius:50%;background:'+col+'22;border:2px solid '+col+';display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:'+col+';flex-shrink:0;">'+(pi+1)+'</div>'
+      +'<span style="font-size:13px;font-weight:700;color:#8a9ab8;min-width:60px;">Jogador '+(pi+1)+'</span>'
+      +'<div style="display:flex;gap:6px;">'
+        + cardHtml(p[0],'p'+pi+'c0','normal')
+        + cardHtml(p[1],'p'+pi+'c1','normal')
+      +'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderBoard(){
+  var wrap = document.getElementById('eq-board-cards');
+  if(!wrap) return;
+  var labels = ['Flop 1','Flop 2','Flop 3','Turn','River'];
+  wrap.innerHTML = EQ_BOARD.map(function(c,i){
+    return '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;">'
+      + cardHtml(c,'b'+i,'normal')
+      +'<span style="font-size:9px;color:#4a6080;white-space:nowrap;">'+labels[i]+'</span>'
+      +'</div>';
+  }).join('');
+}
+
+function renderResults(equities){
+  var colors = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff922b','#cc5de8'];
+  var el = document.getElementById('eq-results-inner');
+  var boardCount = EQ_BOARD.filter(Boolean).length;
+  var phase = boardCount===0?'Pre-Flop':boardCount===3?'Flop':boardCount===4?'Turn':'River';
+
+  el.innerHTML = '<div style="font-size:13px;font-weight:700;color:#6b82a0;margin-bottom:10px;">Resultado — '+phase+'</div>'
+    + equities.map(function(eq,i){
+        var col = colors[i % colors.length];
+        var pct = (eq*100).toFixed(1);
+        return '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+          +'<span style="width:70px;font-size:13px;font-weight:700;color:'+col+';">Jog. '+(i+1)+'</span>'
+          +'<div style="flex:1;background:#0a1525;border-radius:6px;height:20px;overflow:hidden;">'
+            +'<div style="height:100%;width:'+pct+'%;background:'+col+';border-radius:6px;transition:width .5s ease;"></div>'
+          +'</div>'
+          +'<span style="width:52px;text-align:right;font-size:15px;font-weight:900;color:'+col+';">'+pct+'%</span>'
+          +'</div>';
+      }).join('');
+
+  document.getElementById('eq-results').style.display = 'block';
+}
+
+/* ── Picker ───────────────────────────────────────── */
+window.eqOpenPicker = function(slotId){
+  _eqPickTarget = slotId;
+  var used = usedCards();
+  var grid = document.getElementById('eq-picker-grid');
+  grid.innerHTML = '';
+
+  // Header: suits
+  var headerRow = '<div></div>' + SUITS.map(function(s){
+    var col = (s==='♥'||s==='♦')?'#ff6b6b':'#a0c4ff';
+    return '<div style="text-align:center;font-size:16px;color:'+col+'">'+s+'</div>';
+  }).join('');
+
+  // Rows: ranks
+  RANKS.slice().reverse().forEach(function(r){
+    grid.innerHTML += '<div style="font-size:11px;font-weight:700;color:#6b82a0;text-align:center;line-height:28px;">'+r+'</div>';
+    SUITS.forEach(function(s){
+      var card = r+s;
+      var isUsed = used.indexOf(card)>=0;
+      var col = (s==='♥'||s==='♦')?'#ff6b6b':'#a0c4ff';
+      var bg = isUsed ? '#1a0a0a' : '#0b1422';
+      var border = isUsed ? '#3a1a1a' : '#1e3a5a';
+      var opacity = isUsed ? '0.3' : '1';
+      grid.innerHTML += '<div onclick="'+(isUsed?'':'eqPickCard(\''+card+'\')')
+        +'" style="width:26px;height:28px;border-radius:5px;background:'+bg+';border:1px solid '+border
+        +';display:flex;align-items:center;justify-content:center;cursor:'+(isUsed?'not-allowed':'pointer')
+        +';opacity:'+opacity+';font-size:10px;font-weight:700;color:'+col+';">'+r+'</div>';
+    });
+  });
+
+  document.getElementById('eq-picker').style.display = 'flex';
+};
+
+window.eqPickCard = function(card){
+  if(!_eqPickTarget) return;
+  var t = _eqPickTarget;
+  if(t[0]==='p'){
+    var pi = parseInt(t[1]), ci = parseInt(t[3]);
+    EQ_PLAYERS[pi][ci] = card;
+  } else if(t[0]==='b'){
+    var bi = parseInt(t[1]);
+    EQ_BOARD[bi] = card;
+  }
+  eqClosePicker();
+  renderPlayers();
+  renderBoard();
+};
+
+window.eqPickNone = function(){
+  var t = _eqPickTarget;
+  if(!t) return;
+  if(t[0]==='p'){
+    var pi=parseInt(t[1]),ci=parseInt(t[3]);
+    EQ_PLAYERS[pi][ci]=null;
+  } else {
+    EQ_BOARD[parseInt(t[1])]=null;
+  }
+  eqClosePicker();
+  renderPlayers();
+  renderBoard();
+};
+
+window.eqClosePicker = function(){ document.getElementById('eq-picker').style.display='none'; _eqPickTarget=null; };
+
+/* ── Actions ─────────────────────────────────────── */
+window.eqAddPlayer = function(){
+  if(EQ_PLAYERS.length>=4){ alert('Máximo 4 jogadores'); return; }
+  EQ_PLAYERS.push([null,null]);
+  renderPlayers();
+};
+
+window.eqRemovePlayer = function(){
+  if(EQ_PLAYERS.length<=2){ alert('Mínimo 2 jogadores'); return; }
+  EQ_PLAYERS.pop();
+  renderPlayers();
+};
+
+window.eqCalculate = function(){
+  var boardCount = EQ_BOARD.filter(Boolean).length;
+  if(boardCount!==0 && boardCount!==3 && boardCount!==4 && boardCount!==5){
+    alert('O board deve ter 0, 3, 4 ou 5 cartas (Pré-flop, Flop, Turn ou River).');
+    return;
+  }
+
+  var btn = document.getElementById('eq-calc-btn');
+  btn.textContent = '⏳ Calculando...';
+  btn.disabled = true;
+
+  var nSims = parseInt(document.getElementById('eq-sims').value)||50000;
+
+  setTimeout(function(){
+    try{
+      var equities = runSimulation(EQ_PLAYERS, EQ_BOARD, nSims);
+      renderResults(equities);
+    }catch(e){
+      alert('Erro: '+e.message);
+    }
+    btn.textContent = '▶ Calcular Equity';
+    btn.disabled = false;
+  }, 30);
+};
+
+window.eqReset = function(){
+  EQ_PLAYERS = [[null,null],[null,null]];
+  EQ_BOARD = [null,null,null,null,null];
+  document.getElementById('eq-results').style.display='none';
+  renderPlayers();
+  renderBoard();
+};
+
+/* ── Init ─────────────────────────────────────────── */
+function init(){
+  EQ_PLAYERS = [[null,null],[null,null]];
+  EQ_BOARD   = [null,null,null,null,null];
+  renderPlayers();
+  renderBoard();
+}
+
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded', init);
+} else {
+  setTimeout(init, 100);
+}
+
+// Close picker on backdrop click
+document.addEventListener('click', function(e){
+  var picker = document.getElementById('eq-picker');
+  if(picker && e.target===picker) eqClosePicker();
+});
+
 })();
 </script>
 
