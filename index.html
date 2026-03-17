@@ -278,9 +278,28 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 #card-torneios .trophy-pulse, #card-hall-da-fama .trophy-pulse:nth-child(4) { animation-delay: 0.9s; }
 #card-hall-da-fama .hof-icons span:nth-child(5),
 #card-torneios .trophy-pulse, #card-hall-da-fama .trophy-pulse:nth-child(5) { animation-delay: 1.2s; }
+
+/* No mobile, os cards de gráficos ficam abertos por defeito */
+body.mobile-mode #ranking-anual-body,
+body.mobile-mode #ranking-kos-body,
+body.mobile-mode #pontuacao-anual-body {
+  display: block !important;
+}
+body.mobile-mode #ranking-anual-arrow,
+body.mobile-mode #ranking-kos-arrow,
+body.mobile-mode #pontuacao-anual-arrow {
+  transform: rotate(180deg);
+}
 </style>
 <style>
 /* === Ajustes solicitados: mini-cards pela metade e podium shading === */
+/* Medal emoji sizes */
+#card-medalhas .medal-emoji { font-size:18px; line-height:1; }
+#card-medalhas .chip .medal-emoji { font-size:20px; }
+#list-4-9 .medals strong { font-size:16px !important; font-weight:800 !important; }
+#list-4-9 .row .pos { font-size:16px !important; font-weight:900 !important; width:42px !important; height:42px !important; }
+#list-4-9 .row .avatar { width:44px !important; height:44px !important; min-width:44px !important; font-size:16px !important; }
+#list-4-9 .medal-pair { gap:5px !important; min-width:36px !important; }
 .row.mini-ranks .card.mini-card.half {
   padding: 6px;
 }
@@ -2183,6 +2202,18 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     var isOpen = body.style.display !== 'none';
     body.style.display = isOpen ? 'none' : 'block';
     if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    if(!isOpen){
+      var _em={'ranking-anual-body':'eRanking','ranking-kos-body':'eKOs','pontuacao-anual-body':'eEvo'};
+      var _wk=_em[bodyId];
+      if(_wk) setTimeout(function(){
+        window.eRanking=eRanking; window.eKOs=eKOs; window.eEvo=eEvo;
+        try{
+          if(window[_wk]) window[_wk].resize();
+          var _o=window[_wk]&&window[_wk].getOption&&window[_wk].getOption();
+          if(!_o||!_o.series||!_o.series.length) refresh();
+        }catch(e){ try{refresh();}catch(_){} }
+      },200);
+    }
     /* Construir gráficos dos novos cards ao abrir */
     if(!isOpen){
       if(bodyId==='momento-body'){
@@ -2374,9 +2405,21 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 <template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
 <template id="svg-bronze"><svg aria-hidden="true" class="medal b" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradB)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradB"><stop offset="0%" stop-color="#ffd3b0"></stop><stop offset="60%" stop-color="#cd7f32"></stop><stop offset="100%" stop-color="#8c4f1e"></stop></radialgradient></defs></svg></template>
 </div>
-<div class="row" id="medal-standalone-row" style="margin-top:20px; margin-bottom:0; padding-bottom:0;">
-<div class="card mini-slot" id="card-kopontos" style="padding-bottom:8px;">
-<span class="card-title">🏅 Medalhas do Período</span>
+<!-- ====== CARD: Medalhas do Período ====== -->
+<div id="card-medalhas-periodo" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('medalhas-periodo-body','medalhas-periodo-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#3a2a0d,rgba(201,162,39,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏅</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Medalhas do Período</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Pódio e ranking de ouros, pratas e bronzes por jogador</div>
+        </div>
+      </div>
+      <span id="medalhas-periodo-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="medalhas-periodo-body" style="padding:0 16px 16px;">
 <div id="card-medalhas" style="height:auto;overflow:visible;">
 <div class="card-header" style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
 <span class="pill" id="periodo-label">Ano</span>
@@ -2459,10 +2502,11 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 <div class="kpi kpi-saldo"><h3>Saldo dos selecionados</h3><div class="val" id="kpi-saldo">—</div><div class="sub">prêmios + fichas − custos ± dealer/antecip.</div></div>
 <div class="kpi kpi-media"><h3>Média de posição</h3><div class="val" id="kpi-media-pos">—</div><div class="sub">entre os presentes</div></div>
 </div>
+    </div>
+  </div>
+</div>
+
 <div class="grid-charts">
-<div class="chart ranking-span"><div class="title">Ranking Anual</div><div id="chartRanking" style="height:100%"></div></div>
-<div class="chart kos-small"><div class="title">KOs por jogador</div><div id="chartKOs" style="height:100%"></div></div>
-<div class="chart evo-span"><div class="title">Evolução (Pontos Acumulados)</div><div id="chartEvolucao" style="height:100%"></div></div>
 
 
 
@@ -2473,6 +2517,69 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
 
 
+
+
+<!-- ====== CARD: Ranking Anual ====== -->
+<div id="card-ranking-anual" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('ranking-anual-body','ranking-anual-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(59,130,246,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🥇</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Ranking Anual</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Classificação geral por pontuação acumulada no ano</div>
+        </div>
+      </div>
+      <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="ranking-anual-body" style="padding:0 16px 16px;display:none;">
+      <div id="chartRanking" style="height:420px;width:100%;"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====== CARD: Ranking KOs ====== -->
+<div id="card-ranking-kos" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('ranking-kos-body','ranking-kos-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2a0d0d,rgba(239,68,68,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💀</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Ranking KOs</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Total de eliminações por jogador no período</div>
+        </div>
+      </div>
+      <span id="ranking-kos-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="ranking-kos-body" style="padding:0 16px 16px;display:none;">
+      <div id="chartKOs" style="height:380px;width:100%;"></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ====== CARD: Gráfico de Pontuação Anual ====== -->
+<div id="card-pontuacao-anual" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('pontuacao-anual-body','pontuacao-anual-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📈</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Gráfico de Pontuação Anual</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados semana a semana</div>
+        </div>
+      </div>
+      <span id="pontuacao-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+    </div>
+    <div id="pontuacao-anual-body" style="padding:0 16px 16px;display:none;">
+      <div id="chartEvolucao" style="height:440px;width:100%;"></div>
+    </div>
+  </div>
+</div>
 
 <!-- ====== CARD: Evolução do Saldo Financeiro ====== -->
 <div id="card-saldo-financeiro" style="margin-top:16px;width:100%;box-sizing:border-box;">
@@ -2887,6 +2994,8 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
 <div class="footer">Feito com ♥ — arquivo único v4.7</div>
 </div>
+
+
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let RAW = window.DATA.ledger || [];
 let PODIOS = window.DATA.podios || [];
@@ -3130,6 +3239,7 @@ function tryInitCharts(){
     eRanking = echarts.init(document.getElementById('chartRanking'));
     eKOs     = echarts.init(document.getElementById('chartKOs'));
     eEvo     = echarts.init(document.getElementById('chartEvolucao'));
+    window.eRanking = eRanking; window.eKOs = eKOs; window.eEvo = eEvo;
     const _elHeat = document.getElementById('chartHeatmap');
       eHeat = _elHeat ? echarts.init(_elHeat) : null;
     eRadar   = echarts.init(document.getElementById('chartRadar'));
@@ -4081,17 +4191,132 @@ function refresh(){
       grads[marcIdx] = new ec.graphic.RadialGradient(0.5,0.5,0.9,[{offset:0,color:'#D1C4E9'},{offset:1,color:'#7B1FA2'}]);
     }
     const seriesData = data.map((d,i)=> ({...d, itemStyle:{ color: grads[i], borderColor:'rgba(255,255,255,0.25)', borderWidth:1 }}));
-    if(eKOs) eKOs.setOption({ color: ['#e74c3c','#f39c12','#f1c40f','#27ae60','#16a085','#1abc9c','#2ecc71','#3498db','#2980b9','#9b59b6','#8e44ad','#c0392b','#d35400','#2c3e50','#7f8c8d','#95a5a6','#3F51B5','#009688','#FF9800'],
-      animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
-      tooltip:{trigger:'item', formatter:(p)=>`${p.marker} ${p.name}: <b>${fmt(p.value)}</b> KOs (${p.percent}%)`},
-      series:[{
-        name:'KOs por jogador', type:'pie', radius:['10%','28%'], center:['50%','52%'],
-        avoidLabelOverlap:true, containLabel:true,
-        label:{ show:true, formatter: '{b}: {c}', color:'#e6edf3', fontSize:11 },
-        labelLine:{ length:12, length2:10, lineStyle:{ color:'rgba(255,255,255,0.25)' } },
-        data: seriesData
-      }]
-    });
+    if(eKOs) (function(){
+      // Paleta premium: gradientes radiais por jogador (sem lilás repetitivo)
+      var KO_PALETTE = [
+        ['#ff6b6b','#c0392b'], // vermelho vivo
+        ['#ffd93d','#e67e22'], // amarelo-laranja
+        ['#6bcb77','#1a6e3a'], // verde esmeralda
+        ['#4d96ff','#1a4a8a'], // azul royal
+        ['#ff922b','#b05000'], // laranja fogo
+        ['#51cf66','#1e7e34'], // verde limão
+        ['#339af0','#0056b3'], // azul celeste
+        ['#ff6bd6','#8b0057'], // rosa quente
+        ['#a9e34b','#4a7c00'], // verde-amarelo
+        ['#74c0fc','#1864ab'], // azul claro
+        ['#ffa94d','#7d3a00'], // âmbar
+        ['#63e6be','#0a6e4d'], // teal
+      ];
+      var ec = window.echarts;
+      var koData = seriesData.slice().sort(function(a,b){return b.value-a.value;});
+      var total = koData.reduce(function(s,d){return s+(+d.value||0);},0);
+      
+      var richData = koData.map(function(d,i){
+        var pair = KO_PALETTE[i % KO_PALETTE.length];
+        var pct = total>0?((d.value/total)*100).toFixed(1):'0';
+        return {
+          name: d.name,
+          value: d.value,
+          pct: pct,
+          itemStyle:{
+            color: new ec.graphic.RadialGradient(0.4, 0.3, 1, [
+              {offset:0, color: pair[0]},
+              {offset:1, color: pair[1]}
+            ]),
+            borderColor: 'rgba(255,255,255,0.18)',
+            borderWidth: 1.5,
+            shadowBlur: 12,
+            shadowColor: pair[1]+'88'
+          },
+          emphasis:{
+            itemStyle:{
+              shadowBlur: 28,
+              shadowColor: pair[0]+'cc',
+              borderWidth: 2.5,
+              borderColor: 'rgba(255,255,255,0.45)'
+            },
+            scaleSize: 10,
+            scale: true
+          }
+        };
+      });
+
+      // Anel externo decorativo (marcas de tick)
+      var tickData = koData.map(function(d,i){
+        var pair = KO_PALETTE[i % KO_PALETTE.length];
+        return {
+          value: d.value,
+          itemStyle:{ color: pair[0], opacity:0.55 }
+        };
+      });
+
+      eKOs.setOption({
+        backgroundColor: 'transparent',
+        animationDuration: 900,
+        animationEasing: 'cubicInOut',
+        animationDurationUpdate: 1000,
+        animationEasingUpdate: 'cubicInOut',
+        graphic: [],
+        tooltip:{
+          trigger:'item',
+          backgroundColor: 'rgba(10,14,22,0.95)',
+          borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1,
+          textStyle:{ color:'#e6edf3', fontSize:13 },
+          formatter: function(p){
+            var rank = koData.findIndex(function(d){return d.name===p.name;})+1;
+            return '<div style="font-weight:800;font-size:14px;margin-bottom:6px;">'+p.marker+' '+p.name+'</div>'
+              +'<div style="color:#f59e0b;">💀 <b>'+p.value+'</b> KOs</div>'
+              +'<div style="color:#9fb3d4;">'+p.percent+'% do total</div>'
+              +'<div style="color:#6b82a0;font-size:11px;margin-top:4px;">#'+rank+' no ranking</div>';
+          }
+        },
+        legend: { show: false },
+        series:[
+          // Anel principal
+          {
+            name:'KOs por jogador',
+            type:'pie',
+            radius:['36%','66%'],
+            center:['50%','50%'],
+            avoidLabelOverlap: true,
+            padAngle: 2,
+            itemStyle:{ borderRadius: 6 },
+            label:{
+              show: true,
+              position: 'outside',
+              formatter: function(p){
+                return '{name|'+p.name+'}: {val|'+p.value+'}';
+              },
+              rich:{
+                name:{ color:'#c7d8f0', fontSize:12, fontWeight:'700' },
+                val:{ color:'#f59e0b', fontSize:12, fontWeight:'800' }
+              },
+              color:'#e6edf3',
+              fontSize:12
+            },
+            labelLine:{
+              length:10,
+              length2:12,
+              smooth: true,
+              lineStyle:{ color:'rgba(255,255,255,0.22)', width:1.5 }
+            },
+            data: richData
+          },
+          // Anel externo decorativo
+          {
+            name:'_tick',
+            type:'pie',
+            radius:['68%','70%'],
+            center:['50%','48%'],
+            silent: true,
+            label:{ show:false },
+            labelLine:{ show:false },
+            data: tickData
+          }
+        ]
+      });
+    })();
   })();
         // Evolução
   (function renderEvo(){
@@ -4455,6 +4680,8 @@ animation: false,
 
   // Arquétipos do Plaza (substitui Perfil de Risco)
   try{ if (typeof window.renderPersonasCard === 'function') window.renderPersonasCard(rows); }catch(e){ console.warn('renderPersonasCard', e); }
+  window.eRanking=eRanking; window.eKOs=eKOs; window.eEvo=eEvo;
+  setTimeout(function(){ try{window.eRanking=eRanking;window.eKOs=eKOs;window.eEvo=eEvo;['eRanking','eKOs','eEvo'].forEach(function(n){try{if(window[n])window[n].resize();}catch(e){}});}catch(e){} },200);
 }
 
 
@@ -6490,9 +6717,12 @@ function avatarNode(photo,name){
 }
 
 
+  const CHIP_EMOJI = {"svg-gold":"🏆","svg-silver":"🥈","svg-bronze":"🥉"};
   function chip(iconId,count){
     const span=document.createElement("span");
-    span.className="chip"; span.innerHTML=medalSVG(iconId)+"<strong>"+(count||0)+"</strong>";
+    const emoji = CHIP_EMOJI[iconId] || medalSVG(iconId);
+    span.className="chip";
+    span.innerHTML='<span class="medal-emoji">'+emoji+'</span>'+"<strong>"+(count||0)+"</strong>";
     return span;
   }
   function sortByMedals(a,b){
@@ -6541,9 +6771,9 @@ function avatarNode(photo,name){
       const nm=document.createElement("div"); nm.className="name"; nm.textContent=p.name; who.appendChild(nm);
       const medals=document.createElement("div"); medals.className="medals";
       medals.innerHTML=
-        `<span class="medal-pair">${medalSVG("svg-gold")}<strong>${p.gold||0}</strong></span>`+
-        `<span class="medal-pair">${medalSVG("svg-silver")}<strong>${p.silver||0}</strong></span>`+
-        `<span class="medal-pair">${medalSVG("svg-bronze")}<strong>${p.bronze||0}</strong></span>`;
+        `<span class="medal-pair"><span class="medal-emoji">🏆</span><strong>${p.gold||0}</strong></span>`+
+        `<span class="medal-pair"><span class="medal-emoji">🥈</span><strong>${p.silver||0}</strong></span>`+
+        `<span class="medal-pair"><span class="medal-emoji">🥉</span><strong>${p.bronze||0}</strong></span>`;
       row.appendChild(who); row.appendChild(medals); listEl.appendChild(row);
     });
   }
@@ -8137,6 +8367,30 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
 </div>
 <div class="rn-success-toast" id="rn-toast">✅ Noite registrada!</div>
 
+<!-- Painel pós-registro: publicar no GitHub -->
+<div id="rn-publish-panel" style="display:none;position:fixed;inset:0;z-index:99998;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);">
+  <div style="background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(255,255,255,0.15);border-radius:24px;padding:28px 24px;max-width:420px;width:100%;text-align:center;">
+    <div style="font-size:48px;margin-bottom:12px;">✅</div>
+    <div id="rn-publish-wk-label" style="font-size:16px;font-weight:800;color:#e6edf3;margin-bottom:6px;"></div>
+    <div style="font-size:13px;color:#6b82a0;margin-bottom:24px;">Publique agora para actualizar o dashboard para todos</div>
+
+    <!-- Botão principal: Publicar -->
+    <button onclick="rnPublicarGitHub()" id="rn-btn-publicar"
+      style="width:100%;min-height:56px;background:linear-gradient(135deg,#0a3a1a,#22c55e);color:#fff;border:none;border-radius:16px;font-size:18px;font-weight:900;cursor:pointer;margin-bottom:12px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 20px rgba(34,197,94,0.35);">
+      🚀 Publicar no GitHub
+    </button>
+
+    <!-- Estado da publicação -->
+    <div id="rn-publish-status" style="font-size:13px;min-height:20px;margin-bottom:16px;color:#6b82a0;"></div>
+
+    <!-- Botão secundário: fechar sem publicar -->
+    <button onclick="rnFecharPublishPanel()"
+      style="width:100%;min-height:44px;background:rgba(255,255,255,0.06);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;">
+      Agora não
+    </button>
+  </div>
+</div>
+
 
 <script>
 /* ═══════════ REGISTRAR NOITE ═══════════ */
@@ -8635,9 +8889,21 @@ document.addEventListener('DOMContentLoaded', function(){
     try{window.syncHeatmapFromMain&&window.syncHeatmapFromMain();}catch(e){}
     window.fecharRegistroNoite();
     try{window.rnPopularEditBar&&window.rnPopularEditBar();}catch(e){}
-    var toast=document.getElementById('rn-toast');
-    toast.textContent='✅ WK'+String(wk).padStart(2,'0')+' registrada! '+presentes.length+' jogadores.';
-    toast.style.background=''; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},4000);
+    /* Mostrar painel de acção pós-registro */
+    var wkStr = 'WK'+String(wk).padStart(2,'0');
+    window._lastRegisteredWK = wkStr;
+    window._lastRegisteredN  = presentes.length;
+
+    /* Mostrar o painel de publicar */
+    var panel = document.getElementById('rn-publish-panel');
+    if(panel){
+      document.getElementById('rn-publish-wk-label').textContent = wkStr + ' registrada — ' + presentes.length + ' jogadores';
+      panel.style.display = 'flex';
+    } else {
+      /* Fallback: toast simples */
+      var toast=document.getElementById('rn-toast');
+      if(toast){ toast.textContent='✅ '+wkStr+' registrada!'; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},4000); }
+    }
 
     // Popup WhatsApp após salvar
     setTimeout(function(){
@@ -9010,6 +9276,15 @@ window.addEventListener('load', function(){
         '#card-medalhas .medals { display: flex !important; flex-direction: row !important; align-items: center !important; gap: 6px !important; flex-shrink: 0 !important; }',
         '#card-medalhas .medals .medal-pair { display: flex !important; align-items: center !important; gap: 3px !important; min-width: 28px !important; }',
         '#card-medalhas .medals .medal { width: 14px !important; height: 14px !important; vertical-align: middle !important; flex-shrink: 0 !important; }',
+        /* Emoji tamanho maior nas rows e chips */
+        '#card-medalhas .medal-emoji { font-size: 18px !important; line-height: 1 !important; }',
+        '#card-medalhas .chip .medal-emoji { font-size: 20px !important; }',
+        /* Número de medalhas maior nos 4º+ */
+        '#list-4-9 .medals strong { font-size: 16px !important; font-weight: 800 !important; min-width: 16px !important; }',
+        /* Posição maior nos 4º+ */
+        '#list-4-9 .row .pos { font-size: 16px !important; font-weight: 900 !important; width: 42px !important; height: 42px !important; }',
+        /* Avatar maior nos 4º+ */
+        '#list-4-9 .row .avatar { width: 44px !important; height: 44px !important; min-width: 44px !important; font-size: 16px !important; }',
         '#card-medalhas .medals strong { font-size: 13px !important; font-weight: 700 !important; min-width: 12px !important; text-align: right !important; }',
 
         /* ══════════════════════════════════════
@@ -11017,15 +11292,7 @@ window._buildRankingAnual = function(rows){
         inp.style.cssText = 'font-size:22px;font-weight:800;text-align:center;min-height:54px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:'+(color||'#e6edf3')+';width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;padding:0;';
         inp.addEventListener('focus', function(){ if(this.value==='0') this.value=''; });
         inp.addEventListener('blur',  function(){
-          /* Sync tabela oculta ANTES de normalizar para '0' */
-          if(this.className.includes('rn-fichas')){
-            var orig = document.getElementById('rn-tbody') && document.getElementById('rn-tbody').rows[+this.dataset.idx];
-            if(orig){ var o=orig.querySelector('.rn-fichas'); if(o) o.value=this.value||''; }
-            if(window.rnAutoPos) rnAutoPos(true);
-            if(window.rnRecalcular) rnRecalcular();
-            setTimeout(window.rnSyncMobileAll, 60);
-          }
-          /* Não normalizar fichas para '0' — deixar vazio para indicar "não inserido" */
+          /* Normalizar para 0 apenas campos que não sejam fichas */
           if(!this.className.includes('rn-fichas') && this.value==='') this.value='0';
         });
         return inp;
@@ -11047,22 +11314,23 @@ window._buildRankingAnual = function(rows){
       var ficInp = mkInput('rn-fichas','','#06b6d4','—');
       ficInp.value = '';
       ficInp.addEventListener('input', function(){
-        /* 1. sync tabela oculta */
+        /* Sync tabela oculta */
         var orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-fichas'); if(o) o.value=this.value; }
-        /* 2. recalcular posições automáticas (sem reordenar ainda) */
+        /* Recalcular posições SEM reordenar DOM — não mover cards enquanto digita */
         if(window.rnAutoPos) rnAutoPos(false);
         if(window.rnAtualizarContadores) rnAtualizarContadores();
         if(window.rnRecalcular) rnRecalcular();
-        /* 3. actualizar badges + select + reordenar */
-        setTimeout(window.rnSyncMobileAll, 60);
+        /* Actualizar só badges/pts — NÃO chamar rnSyncMobileAll (que reordena) */
+        setTimeout(window.rnSyncMobileData, 60);
       });
       ficInp.addEventListener('blur', function(){
         var orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-fichas'); if(o) o.value=this.value||''; }
         if(window.rnAutoPos) rnAutoPos(true);
         if(window.rnRecalcular) rnRecalcular();
-        setTimeout(window.rnSyncMobileAll, 60);
+        /* Agora sim reordenar — utilizador saiu do campo */
+        setTimeout(window.rnSyncMobileAll, 80);
       });
       ficField.appendChild(ficInp);
 
@@ -11124,12 +11392,60 @@ window._buildRankingAnual = function(rows){
       var _orig = window.rnRecalcular;
       if(_orig) window.rnRecalcular = function(){
         _orig.apply(this, arguments);
-        setTimeout(window.rnSyncMobileAll, 70);
+        /* Só dados — não reordenar (evita perda de foco no mobile) */
+        setTimeout(window.rnSyncMobileData, 70);
       };
     }
   };
 
-  /* ── Sincronizar TUDO: previews + badges + select pos + reordenar ── */
+  /* ── Sincronizar só dados (badges/pts/saldo) — sem mover cards ── */
+  window.rnSyncMobileData = function(){
+    var tbody = document.getElementById('rn-tbody');
+    if(!tbody) return;
+    Array.from(tbody.rows).forEach(function(tr, idx){
+      var pts    = (tr.querySelector('.rn-pts-preview')    || {}).textContent || '—';
+      var premio = (tr.querySelector('.rn-premio-preview') || {}).textContent || '—';
+      var saldo  = (tr.querySelector('.rn-saldo-preview')  || {}).textContent || '—';
+      var _badgeEl = tr.querySelector('.rn-pos-badge');
+      var badge = (_badgeEl && _badgeEl.style.display !== 'none' && _badgeEl.textContent && _badgeEl.textContent !== '—')
+                  ? _badgeEl.textContent : '—';
+      var faltou = tr.querySelector('.rn-faltou') && tr.querySelector('.rn-faltou').checked;
+
+      /* Preview */
+      var prevEl = document.getElementById('rn-mc-prev-'+idx);
+      if(prevEl) prevEl.innerHTML =
+        '<span style="color:#3b82f6;font-weight:700;">'+pts+'</span>'
+        +'<span style="color:#f59e0b;font-weight:700;">'+premio+'</span>'
+        +'<span style="color:'+(saldo&&saldo.includes('-')?'#ef4444':'#22c55e')+';font-weight:700;">'+saldo+'</span>';
+
+      /* Badge posição */
+      var posEl = document.getElementById('rn-mc-pos-'+idx);
+      if(posEl){
+        if(!faltou && badge !== '—'){
+          var medal = badge==='1º'?'🥇':badge==='2º'?'🥈':badge==='3º'?'🥉':'📍';
+          posEl.innerHTML = '<span style="color:#C9A227;font-weight:800;font-size:13px;">'+medal+' '+badge+' lugar</span>';
+        } else if(faltou){
+          posEl.innerHTML = '<span style="color:#ef4444;font-size:12px;">Faltou</span>';
+        } else {
+          posEl.textContent = 'insira as fichas para calcular';
+          posEl.style.color = '#4a6080';
+        }
+      }
+
+      /* Select posição */
+      var card = document.getElementById('rn-mc-'+idx);
+      if(card){
+        var posSel = card.querySelector('.rn-mc-pos-sel');
+        if(posSel && !faltou){
+          var posVal = badge !== '—' ? badge.replace('º','') : '';
+          if(posSel.value !== posVal) posSel.value = posVal;
+          posSel.style.color = posVal ? '#C9A227' : 'rgba(255,255,255,0.3)';
+        }
+      }
+    });
+  };
+
+  /* ── Sincronizar TUDO: dados + reordenar cards ── */
   window.rnSyncMobileAll = function(){
     var tbody = document.getElementById('rn-tbody');
     var mpl   = document.getElementById('rn-mobile-players');
@@ -11241,6 +11557,127 @@ window._buildRankingAnual = function(rows){
 })();
 </script>
 
+
+
+<script id="rn-publish-js">
+/* ── Painel de publicação pós-registro ── */
+
+window.rnFecharPublishPanel = function(){
+  var p = document.getElementById('rn-publish-panel');
+  if(p) p.style.display = 'none';
+};
+
+window.rnPublicarGitHub = function(){
+  var btn    = document.getElementById('rn-btn-publicar');
+  var status = document.getElementById('rn-publish-status');
+
+  /* Verificar token */
+  var token = localStorage.getItem('gh_token') || window.GH_TOKEN || '';
+  if(!token){
+    /* Guardar pedido pendente e abrir config */
+    localStorage.setItem('gh_publish_pending','1');
+    window.rnFecharPublishPanel();
+    window.abrirConfigGH && window.abrirConfigGH();
+    return;
+  }
+
+  if(btn){ btn.disabled=true; btn.innerHTML='⏳ Publicando...'; btn.style.opacity='0.7'; }
+  if(status){ status.textContent='A publicar no GitHub...'; status.style.color='#66a6d4'; }
+
+  var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+  if(!raw.length){
+    if(status){ status.textContent='❌ Sem dados para publicar.'; status.style.color='#f87171'; }
+    if(btn){ btn.disabled=false; btn.innerHTML='🚀 Publicar no GitHub'; btn.style.opacity='1'; }
+    return;
+  }
+
+  var allData = window.DATA || {};
+  var payload = {
+    ledger:    raw,
+    mensal:    allData.mensal    || [],
+    trimestre: allData.trimestre || [],
+    anual:     allData.anual     || [],
+    podios:    allData.podios    || [],
+    updated:   new Date().toISOString()
+  };
+
+  var GH_USER = window.GH_USER || 'iorb07-ica';
+  var GH_REPO = window.GH_REPO || 'poker-dashboard';
+  var GH_FILE = window.GH_FILE || 'dados.json';
+  var apiUrl  = 'https://api.github.com/repos/'+GH_USER+'/'+GH_REPO+'/contents/'+GH_FILE;
+  var content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+
+  /* Obter SHA actual para update */
+  fetch(apiUrl, {
+    headers: {
+      'Authorization': 'token '+token,
+      'Accept': 'application/vnd.github.v3+json'
+    }
+  })
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(existing){
+    var body = {
+      message: '🃏 ' + (window._lastRegisteredWK||'WK') + ' — ' + new Date().toLocaleDateString('pt-BR'),
+      content: content
+    };
+    if(existing && existing.sha) body.sha = existing.sha;
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token '+token,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(r){
+    if(!r.ok) return r.text().then(function(t){ throw new Error(t.slice(0,120)); });
+    return r.json();
+  })
+  .then(function(){
+    var wks = Array.from(new Set((raw||[]).map(function(r){ return r.wk; }))).length;
+    if(btn){
+      btn.innerHTML = '✅ Publicado!';
+      btn.style.background = 'linear-gradient(135deg,#0a3a1a,#16a34a)';
+    }
+    if(status){
+      status.innerHTML = raw.length+' registros · '+wks+' WKs · <span style="color:#22c55e">Live em segundos</span>';
+      status.style.color = '#22c55e';
+    }
+    /* Actualizar o status do topo */
+    var ghSt = document.getElementById('gh-status');
+    if(ghSt){ ghSt.textContent='✅ Publicado!'; ghSt.style.color='#22c55e'; }
+    /* Fechar automaticamente após 3s */
+    setTimeout(window.rnFecharPublishPanel, 3000);
+  })
+  .catch(function(e){
+    if(btn){ btn.disabled=false; btn.innerHTML='🚀 Tentar novamente'; btn.style.opacity='1'; }
+    if(status){ status.textContent='❌ '+e.message; status.style.color='#f87171'; }
+    console.error('Publish error:', e);
+  });
+};
+
+/* Se havia publicação pendente após configurar o token */
+(function(){
+  var t = setInterval(function(){
+    if(typeof window.salvarConfigGH === 'function'){
+      clearInterval(t);
+      var _orig = window.salvarConfigGH;
+      window.salvarConfigGH = function(){
+        _orig.apply(this, arguments);
+        /* Se havia pedido pendente, publicar agora */
+        if(localStorage.getItem('gh_publish_pending')==='1'){
+          localStorage.removeItem('gh_publish_pending');
+          var panel = document.getElementById('rn-publish-panel');
+          if(panel) panel.style.display='flex';
+          setTimeout(window.rnPublicarGitHub, 300);
+        }
+      };
+    }
+  }, 200);
+})();
+</script>
 
 </body>
 </html>
