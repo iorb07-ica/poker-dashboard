@@ -299,7 +299,20 @@ body.mobile-mode #pontuacao-anual-arrow {
 #list-4-9 .medals strong { font-size:16px !important; font-weight:800 !important; }
 #list-4-9 .row .pos { font-size:16px !important; font-weight:900 !important; width:42px !important; height:42px !important; }
 #list-4-9 .row .avatar { width:44px !important; height:44px !important; min-width:44px !important; font-size:16px !important; }
-#list-4-9 .medal-pair { gap:5px !important; min-width:36px !important; }
+#list-4-9 .medal-pair {
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:4px !important;
+  min-width:44px !important;
+  margin-right:10px !important;
+  background:rgba(255,255,255,0.05) !important;
+  border-radius:8px !important;
+  padding:3px 8px !important;
+}
+#list-4-9 .medal-pair:last-child { margin-right:0 !important; }
+#list-4-9 .medal-pair .medal-emoji { font-size:16px !important; line-height:1 !important; }
+#list-4-9 .medal-pair strong { font-size:15px !important; font-weight:800 !important; color:#e6edf3 !important; line-height:1 !important; min-width:14px !important; text-align:center !important; }
+#list-4-9 .medals { display:flex !important; align-items:center !important; gap:0 !important; }
 .row.mini-ranks .card.mini-card.half {
   padding: 6px;
 }
@@ -2199,19 +2212,26 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     var body = document.getElementById(bodyId);
     var arrow = document.getElementById(arrowId);
     if(!body) return;
-    var isOpen = body.style.display !== 'none';
+    /* Usar data-open para rastrear estado — evita conflito com style vazio vs 'none' */
+    var isOpen = body.getAttribute('data-open') !== 'false';
+    body.setAttribute('data-open', isOpen ? 'false' : 'true');
     body.style.display = isOpen ? 'none' : 'block';
     if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
     if(!isOpen){
-      var _em={'ranking-anual-body':'eRanking','ranking-kos-body':'eKOs','pontuacao-anual-body':'eEvo'};
-      var _wk=_em[bodyId];
-      if(_wk) setTimeout(function(){
-        window.eRanking=eRanking; window.eKOs=eKOs; window.eEvo=eEvo;
+      var _elMap={'ranking-anual-body':'chartRanking','ranking-kos-body':'chartKOs','pontuacao-anual-body':'chartEvolucao'};
+      var _elId=_elMap[bodyId];
+      if(_elId) setTimeout(function(){
         try{
-          if(window[_wk]) window[_wk].resize();
-          var _o=window[_wk]&&window[_wk].getOption&&window[_wk].getOption();
-          if(!_o||!_o.series||!_o.series.length) refresh();
-        }catch(e){ try{refresh();}catch(_){} }
+          var el=document.getElementById(_elId);
+          if(!el) return;
+          var inst = window.echarts && window.echarts.getInstanceByDom(el);
+          if(inst && !inst.isDisposed()){
+            inst.resize();
+          } else {
+            /* Sem instância — pedir refresh para recriar */
+            if(window.refresh) window.refresh();
+          }
+        }catch(e){}
       },200);
     }
     /* Construir gráficos dos novos cards ao abrir */
@@ -2371,7 +2391,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
     <span id="perfis-arrow" style="color:#4a6080;font-size:16px;transition:transform .25s;">▼</span>
   </div>
-  <div id="perfis-body" style="display:none;padding:0 16px 16px;">
+  <div id="perfis-body" data-open="false" style="display:none;padding:0 16px 16px;">
     <div id="perfis-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;"></div>
   </div>
 </div>
@@ -2419,7 +2439,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       </div>
       <span id="medalhas-periodo-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
     </div>
-    <div id="medalhas-periodo-body" style="padding:0 16px 16px;">
+    <div id="medalhas-periodo-body" data-open="true" style="padding:0 16px 16px;">
 <div id="card-medalhas" style="height:auto;overflow:visible;">
 <div class="card-header" style="display:flex;gap:10px;align-items:center;margin-bottom:10px">
 <span class="pill" id="periodo-label">Ano</span>
@@ -2531,9 +2551,9 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
           <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Classificação geral por pontuação acumulada no ano</div>
         </div>
       </div>
-      <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+      <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
-    <div id="ranking-anual-body" style="padding:0 16px 16px;display:none;">
+    <div id="ranking-anual-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartRanking" style="height:420px;width:100%;"></div>
     </div>
   </div>
@@ -2552,9 +2572,9 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
           <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Total de eliminações por jogador no período</div>
         </div>
       </div>
-      <span id="ranking-kos-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+      <span id="ranking-kos-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
-    <div id="ranking-kos-body" style="padding:0 16px 16px;display:none;">
+    <div id="ranking-kos-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartKOs" style="height:380px;width:100%;"></div>
     </div>
   </div>
@@ -2573,9 +2593,9 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
           <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados semana a semana</div>
         </div>
       </div>
-      <span id="pontuacao-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
+      <span id="pontuacao-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
-    <div id="pontuacao-anual-body" style="padding:0 16px 16px;display:none;">
+    <div id="pontuacao-anual-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartEvolucao" style="height:440px;width:100%;"></div>
     </div>
   </div>
@@ -2606,7 +2626,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
         <span id="saldo-fin-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
       </div>
     </div>
-    <div id="saldo-fin-body" style="padding:0 16px 16px;">
+    <div id="saldo-fin-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartSaldoFin" style="height:340px;width:100%;"></div>
       <div id="sf-summary" style="margin-top:14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;"></div>
       <div style="margin-top:8px;font-size:11px;color:#4a6080;letter-spacing:.2px;">* Saldo do período sem considerar antecipações do dealer</div>
@@ -2653,7 +2673,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
 
     <!-- Corpo -->
-    <div id="prem-tip-body" style="padding:0 16px 16px;">
+    <div id="prem-tip-body" data-open="true" style="padding:0 16px 16px;">
       <div id="chartPremios" style="height:360px;width:100%;"></div>
     </div>
 
@@ -2689,7 +2709,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
 
     <!-- Corpo -->
-    <div id="heatmap-novo-body" style="padding:0 12px 16px;display:none;">
+    <div id="heatmap-novo-body" data-open="false" style="padding:0 12px 16px;display:none;">
       <div id="chartHeatmapNovo" style="width:100%;overflow-x:auto;"></div>
     </div>
 
@@ -2710,7 +2730,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       </div>
       <span id="momento-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
     </div>
-    <div id="momento-body" style="padding:0 16px 16px;display:none;">
+    <div id="momento-body" data-open="false" style="padding:0 16px 16px;display:none;">
       <div id="chartMomento" style="height:340px;width:100%;min-height:340px;"></div>
     </div>
   </div>
@@ -2730,7 +2750,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       </div>
       <span id="previsao-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
     </div>
-    <div id="previsao-body" style="padding:0 16px 16px;display:none;">
+    <div id="previsao-body" data-open="false" style="padding:0 16px 16px;display:none;">
       <div id="chartPrevisao" style="height:320px;width:100%;min-height:320px;"></div>
       <div style="margin-top:8px;font-size:11px;color:#4a6080;">* Projeção baseada na média das últimas 3 WKs · área sólida = acumulado real · área transparente = estimativa</div>
     </div>
@@ -2751,7 +2771,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       </div>
       <span id="recordes-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
     </div>
-    <div id="recordes-body" style="padding:0 16px 16px;display:none;">
+    <div id="recordes-body" data-open="false" style="padding:0 16px 16px;display:none;">
       <div id="recordes-content">
         <div style="color:rgba(255,255,255,.3);font-size:12px;padding:20px;text-align:center;">Carregando recordes...</div>
       </div>
@@ -2775,7 +2795,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
 
     <!-- Corpo colapsável -->
-    <div id="hof-body" style="padding:0 18px 18px;display:none;">
+    <div id="hof-body" data-open="false" style="padding:0 18px 18px;display:none;">
 
     <!-- Legenda -->
     <div style="display:flex;gap:18px;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex-wrap:wrap;">
@@ -2878,7 +2898,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     </div>
 
     <!-- Corpo colapsável -->
-    <div id="torneios-body" style="padding:0 18px 18px;display:none;">
+    <div id="torneios-body" data-open="false" style="padding:0 18px 18px;display:none;">
 
       <!-- Jogadores -->
       <div>
