@@ -279,6 +279,40 @@ window.DATA.anual = [{"jogador": "Marcus", "saldo_semanas": -339.9, "premios_men
 #card-hall-da-fama .hof-icons span:nth-child(5),
 #card-torneios .trophy-pulse, #card-hall-da-fama .trophy-pulse:nth-child(5) { animation-delay: 1.2s; }
 
+/* ═══ HALL DA FAMA — efeito dourado especial ═══ */
+@keyframes hofGlow {
+  0%,100% { box-shadow: 0 0 18px rgba(255,215,0,0.25), 0 0 40px rgba(255,180,0,0.10); }
+  50%      { box-shadow: 0 0 32px rgba(255,215,0,0.55), 0 0 70px rgba(255,180,0,0.25); }
+}
+@keyframes hofBorderShimmer {
+  0%   { border-color: rgba(255,215,0,0.30); }
+  50%  { border-color: rgba(255,215,0,0.75); }
+  100% { border-color: rgba(255,215,0,0.30); }
+}
+@keyframes hofStarSpin {
+  0%   { transform: rotate(0deg) scale(1);   opacity:1; }
+  50%  { transform: rotate(180deg) scale(1.3); opacity:0.8; }
+  100% { transform: rotate(360deg) scale(1);  opacity:1; }
+}
+@keyframes hofTitlePulse {
+  0%,100% { text-shadow: 0 0 8px rgba(255,215,0,0.4); color: #e6edf3; }
+  50%     { text-shadow: 0 0 20px rgba(255,215,0,0.9); color: #ffd700; }
+}
+#card-hall-da-fama .card {
+  background: linear-gradient(145deg, rgba(30,20,0,0.95) 0%, rgba(15,10,0,0.98) 100%) !important;
+  border: 1.5px solid rgba(255,215,0,0.35) !important;
+  animation: hofGlow 2.8s ease-in-out infinite, hofBorderShimmer 2.8s ease-in-out infinite !important;
+}
+#card-hall-da-fama .hof-title {
+  animation: hofTitlePulse 2.8s ease-in-out infinite !important;
+}
+.hof-star {
+  display:inline-block;
+  animation: hofStarSpin 3s linear infinite;
+  font-size: 14px;
+  margin: 0 3px;
+}
+
 /* No mobile, os cards de gráficos ficam abertos por defeito */
 body.mobile-mode #ranking-anual-body,
 body.mobile-mode #ranking-kos-body,
@@ -1852,7 +1886,7 @@ html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
     align-items: flex-end !important;
     padding-bottom: 10px !important;
   }
-  .container { padding-top: calc(80px + env(safe-area-inset-top)) !important; }
+  .container { padding-top: calc(64px + env(safe-area-inset-top) + 20px) !important; }
 
   /* Cards com sombra mais marcante no mobile */
   .card {
@@ -2293,13 +2327,13 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 </header>
 
 <!-- Barra mobile simples -->
-<div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:0 16px;align-items:center;justify-content:space-between;gap:10px;height:64px;box-shadow:0 3px 24px rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
+<div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:env(safe-area-inset-top) 16px 0;align-items:flex-end;justify-content:space-between;gap:10px;min-height:64px;height:calc(64px + env(safe-area-inset-top));box-shadow:0 3px 24px rgba(0,0,0,0.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);">
   <div style="display:flex;align-items:center;gap:11px;">
     <img src="data:image/jpeg;base64,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" alt="Logo" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="width:44px;height:44px;border-radius:12px;object-fit:cover;border:1.5px solid rgba(255,255,255,0.15);box-shadow:0 2px 10px rgba(0,0,0,0.4);">
     <div style="display:none;width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#1a3a6e,#3b82f6);align-items:center;justify-content:center;font-size:22px;border:1.5px solid rgba(255,255,255,0.15);">🃏</div>
     <div style="display:flex;flex-direction:column;gap:1px;">
-      <span style="color:#e6edf3;font-size:17px;font-weight:800;letter-spacing:0.1px;line-height:1.15;">Poker do Plaza</span>
-      <span style="color:rgba(102,217,239,0.75);font-size:10px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;">Dashboard 2026</span>
+      <span style="color:#e6edf3;font-size:18px;font-weight:800;letter-spacing:0.1px;line-height:1.2;white-space:nowrap;">Poker do Plaza</span>
+      <span style="color:rgba(102,217,239,0.75);font-size:11px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;line-height:1.3;white-space:nowrap;">Dashboard <span style="color:rgba(102,217,239,0.55);">2026</span></span>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
@@ -2308,7 +2342,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
       <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-desktop">🖥️</button>
     </div>
     <div style="display:flex;align-items:center;gap:6px;">
-      <button onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:22px;padding:9px 16px;font-size:12px;font-weight:800;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,0.35);letter-spacing:0.3px;white-space:nowrap;">➕ Registrar</button>
+      <button onclick="abrirRegistroNoite()" title="Registrar noite" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:50%;width:36px;height:36px;font-size:32px;font-weight:200;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;padding-bottom:2px;">+</button>
       <button onclick="avisarWhatsApp()" title="Avisar grupo" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:22px;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
       </button>
@@ -2328,7 +2362,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 <div class="container" id="main-container" style="visibility:hidden;opacity:0;transition:opacity 0.3s">
 <div id="controls-sentinel" style="height:1px;width:100%;pointer-events:none;visibility:hidden;"></div>
 <div class="controls" id="main-controls" style="padding-top:4px;padding-bottom:4px;">
-<div class="card">
+<div class="card" style="display:none;">
 <div class="card-title">Período</div>
 <select id="periodo">
 <option value="semana">Semana</option>
@@ -2338,7 +2372,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 </select>
 </div>
 
-<div class="card">
+<div class="card" style="display:none;">
 <div class="card-title" id="label-escolha">Ano</div>
 <select id="granular"></select>
 </div>
@@ -2599,6 +2633,26 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 </div>
 
 <!-- ====== CARD: Evolução do Saldo Financeiro ====== -->
+<!-- ====== CARD: Calculadora "Quanto Preciso?" ====== -->
+<div id="card-calculadora" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('calc-body','calc-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(99,102,241,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(99,102,241,0.3);">🧮</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;">Calculadora — Quanto Preciso?</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Pontos necessários por semana para alcançar cada posição</div>
+        </div>
+      </div>
+      <span id="calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+    </div>
+    <div id="calc-body" data-open="true" style="padding:0 16px 20px;">
+      <div id="calc-content" style="font-size:13px;color:#9fb3d4;"></div>
+    </div>
+  </div>
+</div>
+
 <div id="card-saldo-financeiro" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
@@ -2758,115 +2812,90 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
 
 
-<div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
+<div id="card-equity-calc" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
-
-    <!-- Título colapsável -->
-    <div onclick="window.toggleCard('hof-body','hof-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
-      <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,215,0,.6));">🏆</span>
-      <div style="flex:1;">
-        <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Hall da Fama</div>
-        <div style="font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;">Poker do Plaza · Campeonatos Anuais</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
+         onclick="window.toggleCard('equity-calc-body','equity-calc-arrow')">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(239,68,68,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🃏</div>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Calculador de Equity</div>
+          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Equity exacta — até 4 jogadores · Pre-flop · Flop · Turn · River</div>
+        </div>
       </div>
-      <span id="hof-arrow" style="font-size:20px;color:#9fb3d4;transition:transform .3s;">▾</span>
+      <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
+    <div id="equity-calc-body" data-open="true" style="padding:0 16px 20px;">
 
-    <!-- Corpo colapsável -->
-    <div id="hof-body" data-open="false" style="padding:0 18px 18px;display:none;">
+      <!-- Jogadores -->
+      <div style="margin-bottom:14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <span style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;">Jogadores</span>
+          <div style="display:flex;gap:6px;">
+            <button onclick="eqAddPlayer()" style="background:#1e3a5a;color:#66a6d4;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">+ Jogador</button>
+            <button onclick="eqRemovePlayer()" style="background:#2a1a1a;color:#f87171;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">− Remover</button>
+          </div>
+        </div>
+        <div id="eq-players-wrap" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
 
-    <!-- Legenda -->
-    <div style="display:flex;gap:18px;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex-wrap:wrap;">
-      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🏆</span>Campeão</span>
-      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🥈</span>Vice</span>
-      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🥉</span>3º lugar</span>
+      <!-- Board -->
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Board</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+          <div id="eq-board-cards" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
+          <div style="font-size:11px;color:#4a6080;margin-top:2px;">Flop (3) · Turn (4) · River (5)</div>
+        </div>
+      </div>
+
+      <!-- Simulations -->
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="font-size:12px;color:#6b82a0;">Simulações:</span>
+          <select id="eq-sims" style="background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:4px 8px;font-size:13px;">
+            <option value="10000">10.000 (rápido)</option>
+            <option value="50000" selected>50.000 (normal)</option>
+            <option value="200000">200.000 (preciso)</option>
+          </select>
+        </div>
+        <button onclick="eqCalculate()" id="eq-calc-btn"
+          style="background:linear-gradient(135deg,#1a4a8a,#3b82f6);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,.3);">
+          ▶ Calcular Equity
+        </button>
+        <button onclick="eqReset()"
+          style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;">
+          ↺ Limpar
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div id="eq-results" style="display:none;">
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:14px;"></div>
+        <div id="eq-results-inner"></div>
+      </div>
+
+      <!-- Card picker modal -->
+      <div id="eq-picker" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
+        <div style="background:#0d1424;border:1px solid #1e3a5a;border-radius:18px;padding:16px;max-width:min(380px,92vw);width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
+          <div style="font-size:14px;font-weight:800;color:#c7d8f0;margin-bottom:14px;">Escolha uma carta</div>
+          <div id="eq-picker-grid" style="margin-bottom:12px;overflow:hidden;"></div>
+          <div style="display:flex;gap:6px;justify-content:flex-end;">
+            <button onclick="eqPickNone()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">✕ Limpar</button>
+            <button onclick="eqClosePicker()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">Fechar</button>
+          </div>
+        </div>
+      </div>
+
     </div>
-
-    <!-- Jogadores -->
-    <div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,180,0,.05));border:1px solid rgba(255,215,0,.3);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2.5px solid rgba(255,215,0,.6);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Israel">
-          <span class="hof-init">I</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Israel</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Magu">
-          <span class="hof-init">M</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Magu</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Marcus">
-          <span class="hof-init">M</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Marcus</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Cristiano">
-          <span class="hof-init">C</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Cristiano</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Pedro">
-          <span class="hof-init">P</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Pedro</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Rafa">
-          <span class="hof-init">R</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Rafa</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Filipe">
-          <span class="hof-init">F</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Filipe</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
-        </div>
-      </div>
-      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
-        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Oscar">
-          <span class="hof-init">O</span>
-        </div>
-        <div>
-          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Oscar</div>
-          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
-        </div>
-      </div>
-    </div>
-    </div><!-- fim hof-body -->
   </div>
 </div>
 
-<!-- ═══ TORNEIOS ESPECIAIS ═══ -->
 <div id="card-torneios" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
     <div onclick="window.toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
-      <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,140,0,.6));">🎯</span>
+      <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,80,0,.7));">🥩</span>
       <div style="flex:1;">
         <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Torneios Especiais</div>
         <div style="font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;">Poker do Plaza · Ranking de Títulos</div>
@@ -2995,84 +3024,113 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
 
 <!-- ====== CARD: Calculador de Equity ====== -->
-<div id="card-equity-calc" style="margin-top:16px;width:100%;box-sizing:border-box;">
+<div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('equity-calc-body','equity-calc-arrow')">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(239,68,68,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🃏</div>
+
+    <!-- Título colapsável -->
+    <div onclick="window.toggleCard('hof-body','hof-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;background:linear-gradient(135deg,rgba(255,215,0,0.08) 0%,transparent 100%);border-radius:16px 16px 0 0;">
+      <span style="font-size:44px;line-height:1;filter:drop-shadow(0 4px 20px rgba(255,215,0,.9));animation:trophyPulse 2.4s ease-in-out infinite;">🏆</span>
+      <div style="flex:1;">
+        <div class="hof-title" style="font-size:20px;font-weight:900;letter-spacing:.3px;display:flex;align-items:center;gap:6px;">
+          <span class="hof-star">✦</span>
+          Hall da Fama
+          <span class="hof-star" style="animation-delay:.5s;">✦</span>
+        </div>
+        <div style="font-size:11px;color:rgba(255,215,0,0.6);text-transform:uppercase;letter-spacing:.9px;margin-top:3px;">Poker do Plaza · Campeonatos Anuais</div>
+      </div>
+      <span id="hof-arrow" style="font-size:20px;color:#ffd700;transition:transform .3s;opacity:0.7;">▾</span>
+    </div>
+
+    <!-- Corpo colapsável -->
+    <div id="hof-body" data-open="false" style="padding:0 18px 18px;display:none;">
+
+    <!-- Legenda -->
+    <div style="display:flex;gap:18px;margin-bottom:18px;padding:10px 14px;background:rgba(255,255,255,.04);border-radius:12px;border:1px solid rgba(255,255,255,.07);flex-wrap:wrap;">
+      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🏆</span>Campeão</span>
+      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🥈</span>Vice</span>
+      <span style="font-size:13px;color:#ccd8ea;display:flex;align-items:center;gap:7px;"><span style="font-size:22px;">🥉</span>3º lugar</span>
+    </div>
+
+    <!-- Jogadores -->
+    <div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,180,0,.05));border:1px solid rgba(255,215,0,.3);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2.5px solid rgba(255,215,0,.6);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Israel">
+          <span class="hof-init">I</span>
+        </div>
         <div>
-          <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Calculador de Equity</div>
-          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Equity exacta — até 4 jogadores · Pre-flop · Flop · Turn · River</div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Israel</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
         </div>
       </div>
-      <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Magu">
+          <span class="hof-init">M</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Magu</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Marcus">
+          <span class="hof-init">M</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Marcus</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:30px;line-height:1;filter:drop-shadow(0 3px 8px rgba(255,215,0,.6));" class="trophy-pulse">🏆</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Cristiano">
+          <span class="hof-init">C</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Cristiano</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(200,220,255,.5));">🥈</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Pedro">
+          <span class="hof-init">P</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Pedro</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Rafa">
+          <span class="hof-init">R</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Rafa</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span> <span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Filipe">
+          <span class="hof-init">F</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Filipe</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:56px 1fr;align-items:flex-start;gap:14px;padding:16px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);margin-bottom:10px;">
+        <div style="width:54px;height:54px;border-radius:50%;overflow:hidden;border:2px solid rgba(255,255,255,.2);flex-shrink:0;background:linear-gradient(145deg,#1a1f3e,#252b52);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#e6edf3;box-shadow:0 4px 14px rgba(0,0,0,.5);" data-player="Oscar">
+          <span class="hof-init">O</span>
+        </div>
+        <div>
+          <div style="font-weight:800;font-size:17px;color:#e6edf3;margin-bottom:8px;">Oscar</div>
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span style="font-size:28px;line-height:1;filter:drop-shadow(0 2px 6px rgba(205,127,50,.5));">🥉</span></div>
+        </div>
+      </div>
     </div>
-    <div id="equity-calc-body" data-open="true" style="padding:0 16px 20px;">
-
-      <!-- Jogadores -->
-      <div style="margin-bottom:14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <span style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;">Jogadores</span>
-          <div style="display:flex;gap:6px;">
-            <button onclick="eqAddPlayer()" style="background:#1e3a5a;color:#66a6d4;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">+ Jogador</button>
-            <button onclick="eqRemovePlayer()" style="background:#2a1a1a;color:#f87171;border:none;border-radius:8px;padding:4px 10px;font-size:12px;cursor:pointer;font-weight:700;">− Remover</button>
-          </div>
-        </div>
-        <div id="eq-players-wrap" style="display:flex;flex-direction:column;gap:8px;"></div>
-      </div>
-
-      <!-- Board -->
-      <div style="margin-bottom:14px;">
-        <div style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Board</div>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <div id="eq-board-cards" style="display:flex;gap:6px;flex-wrap:wrap;"></div>
-          <div style="font-size:11px;color:#4a6080;margin-top:2px;">Flop (3) · Turn (4) · River (5)</div>
-        </div>
-      </div>
-
-      <!-- Simulations -->
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span style="font-size:12px;color:#6b82a0;">Simulações:</span>
-          <select id="eq-sims" style="background:#0b1020;border:1px solid #1e2e46;border-radius:8px;color:#e6edf3;padding:4px 8px;font-size:13px;">
-            <option value="10000">10.000 (rápido)</option>
-            <option value="50000" selected>50.000 (normal)</option>
-            <option value="200000">200.000 (preciso)</option>
-          </select>
-        </div>
-        <button onclick="eqCalculate()" id="eq-calc-btn"
-          style="background:linear-gradient(135deg,#1a4a8a,#3b82f6);color:#fff;border:none;border-radius:10px;padding:8px 20px;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 14px rgba(59,130,246,.3);">
-          ▶ Calcular Equity
-        </button>
-        <button onclick="eqReset()"
-          style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:10px;padding:8px 14px;font-size:13px;cursor:pointer;">
-          ↺ Limpar
-        </button>
-      </div>
-
-      <!-- Results -->
-      <div id="eq-results" style="display:none;">
-        <div style="height:1px;background:rgba(255,255,255,0.06);margin-bottom:14px;"></div>
-        <div id="eq-results-inner"></div>
-      </div>
-
-      <!-- Card picker modal -->
-      <div id="eq-picker" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;">
-        <div style="background:#0d1424;border:1px solid #1e3a5a;border-radius:18px;padding:16px;max-width:min(380px,92vw);width:100%;box-shadow:0 20px 60px rgba(0,0,0,.7);max-height:90vh;display:flex;flex-direction:column;overflow:hidden;">
-          <div style="font-size:14px;font-weight:800;color:#c7d8f0;margin-bottom:14px;">Escolha uma carta</div>
-          <div id="eq-picker-grid" style="margin-bottom:12px;overflow:hidden;"></div>
-          <div style="display:flex;gap:6px;justify-content:flex-end;">
-            <button onclick="eqPickNone()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">✕ Limpar</button>
-            <button onclick="eqClosePicker()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:6px 14px;font-size:13px;cursor:pointer;">Fechar</button>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    </div><!-- fim hof-body -->
   </div>
 </div>
 
+<!-- ═══ TORNEIOS ESPECIAIS ═══ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 let RAW = window.DATA.ledger || [];
 let PODIOS = window.DATA.podios || [];
@@ -4102,7 +4160,7 @@ function refresh(){
     const maxAbs = Math.max(1, ...vals.map(v=>Math.abs(v)));
     const isSaldo = (metric==='saldo');
     eRanking.setOption({
-      animationDuration: 700, animationEasing: 'cubicOut', animationDurationUpdate: 900, animationEasingUpdate: 'cubicOut',
+      animationDuration: 1200, animationEasing: 'cubicOut', animationDurationUpdate: 1400, animationEasingUpdate: 'cubicInOut',
       grid:{left:8,right:8,top:16,bottom:4,containLabel:false},
       xAxis:{ type:'value', min: isSaldo? -maxAbs : 0, max: maxAbs, show:false },
       yAxis:{type:'category',data:names,inverse:true,
@@ -9487,8 +9545,8 @@ window.addEventListener('load', function(){
            MOBILE-FIRST: LAYOUT BASE
         ══════════════════════════════════════ */
         'header { display: none !important; }',
-        '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; height: 64px !important; background: linear-gradient(135deg, #060d1a 0%, #0d1629 100%) !important; border-bottom: 1px solid rgba(59,130,246,0.18) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important; }',
-        '.container { padding-top: 72px !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 110px !important; max-width: 100vw !important; overflow-x: hidden !important; }',
+        '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; min-height: 64px !important; padding-top: env(safe-area-inset-top) !important; background: linear-gradient(135deg, #060d1a 0%, #0d1629 100%) !important; border-bottom: 1px solid rgba(59,130,246,0.18) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important; }',
+        '.container { padding-top: calc(64px + env(safe-area-inset-top) + 20px) !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 110px !important; max-width: 100vw !important; overflow-x: hidden !important; }',
         'html, body { overflow-y: scroll !important; overflow-x: hidden !important; height: auto !important; min-height: 100% !important; }',
         'body { -webkit-overflow-scrolling: touch !important; }',
         '#main-container, .container { overflow: visible !important; }',
@@ -10116,11 +10174,18 @@ window.addEventListener('load', function(){
       }).sort(function(a,b){return b.total-a.total;});
       su.innerHTML = tots.map(function(p){
         var c=cor(p.total); var bg=p.total>=0?'rgba(34,197,94,0.08)':'rgba(239,68,68,0.08)'; var br=p.total>=0?'rgba(34,197,94,0.2)':'rgba(239,68,68,0.2)';
-        var iconUp='<svg width="18" height="12" viewBox="0 0 18 12" fill="none"><polyline points="1,11 6,5 10,8 17,1" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="13,1 17,1 17,5" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-        var iconDn='<svg width="18" height="12" viewBox="0 0 18 12" fill="none"><polyline points="1,1 6,7 10,4 17,11" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="13,11 17,11 17,7" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>';
-        var icon=p.total>=0?iconUp:iconDn;
-        var nameColor=p.total>=0?'#86efac':'#fca5a5';
-        return'<div style="background:'+bg+';border:1px solid '+br+';border-radius:10px;padding:6px 8px 7px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:1px;">'          +'<div style="margin-bottom:2px;">'+icon+'</div>'          +'<div style="font-size:10px;color:'+nameColor+';font-weight:700;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;">'+p.nome+'</div>'          +'<div style="font-size:8px;color:#4a6080;letter-spacing:.2px;">Saldo</div>'          +'<div style="font-size:14px;font-weight:800;color:'+c+';margin-top:1px;">'+(p.total>=0?'+':'-')+'R$'+Math.abs(p.total).toFixed(2).replace('.',',')+'</div></div>';
+        var isPos = p.total >= 0;
+        // Elegant gradient card
+        var gradBg = isPos
+          ? 'linear-gradient(145deg, rgba(16,185,129,0.18) 0%, rgba(6,95,70,0.08) 100%)'
+          : 'linear-gradient(145deg, rgba(239,68,68,0.18) 0%, rgba(127,29,29,0.08) 100%)';
+        var borderClr = isPos ? 'rgba(52,211,153,0.35)' : 'rgba(248,113,113,0.35)';
+        var accentClr = isPos ? '#34d399' : '#f87171';
+        var valueClr  = isPos ? '#6ee7b7' : '#fca5a5';
+        var arrowSvg = isPos
+          ? '<svg width="16" height="10" viewBox="0 0 16 10" fill="none"><polyline points="1,9 5,4 9,7 15,1" stroke="'+accentClr+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="11,1 15,1 15,5" stroke="'+accentClr+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          : '<svg width="16" height="10" viewBox="0 0 16 10" fill="none"><polyline points="1,1 5,6 9,3 15,9" stroke="'+accentClr+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="11,9 15,9 15,5" stroke="'+accentClr+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        return '<div style="background:'+gradBg+';border:1px solid '+borderClr+';border-radius:14px;padding:10px 8px 11px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:3px;box-shadow:0 2px 12px rgba(0,0,0,0.25);">'          +'<div style="margin-bottom:1px;">'+arrowSvg+'</div>'          +'<div style="font-size:11px;color:'+accentClr+';font-weight:700;letter-spacing:.4px;white-space:nowrap;text-transform:uppercase;">'+p.nome+'</div>'          +'<div style="width:24px;height:1px;background:'+borderClr+';margin:1px 0;"></div>'          +'<div style="font-size:15px;font-weight:800;color:'+valueClr+';letter-spacing:.2px;">'+(isPos?'+':'')+p.total.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'</div></div>';
       }).join('');
     }
   }
@@ -10676,7 +10741,7 @@ window.addEventListener('load', function(){
   function getFg(metric,val){
     if(metric==='posicao') return '#ffffff';
     if(metric==='rebuys') return val===0?'#d1fae5':'#ffffff';
-    return val===0?'rgba(148,163,184,0.45)':'#ffffff';
+    return val===0?'rgba(148,163,184,0.85)':'#ffffff';
   }
 
   function isBodyOpen(){
@@ -11104,12 +11169,13 @@ window.abrirPerfil = function(jogadorNome){
 
   var avatarInfo = document.createElement('div');
   avatarInfo.innerHTML = '<div style="font-size:20px;font-weight:900;color:#e6edf3;">'+jogadorNome+'</div>'
-    +'<div style="font-size:13px;color:#9fb3d4;margin-top:2px;">'+medalRank+' no ranking anual &nbsp;·&nbsp; '+jogos+' jogos &nbsp;·&nbsp; '+faltas+' falta'+(faltas!==1?'s':'')+'</div>';
+    +'<div style="font-size:13px;color:#9fb3d4;margin-top:2px;">'+medalRank+' no ranking anual &nbsp;·&nbsp; '+jogos+' jogos</div>'
+    +'<div style="font-size:12px;color:#f59e0b;margin-top:1px;">'+faltas+' falta'+(faltas!==1?'s':'')+(faltas>0?' ⚠️':'')+'</div>';
 
   /* Botão fechar */
   var btnClose = document.createElement('button');
   btnClose.textContent = '✕';
-  btnClose.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;width:36px;height:36px;color:#9fb3d4;font-size:18px;cursor:pointer;flex-shrink:0;';
+  btnClose.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:10px;width:38px;height:38px;color:#fca5a5;font-size:18px;font-weight:800;cursor:pointer;flex-shrink:0;transition:all .15s;';
   btnClose.onclick = window.fecharPerfil;
 
   avatarWrap.appendChild(avatarEl);
@@ -11131,11 +11197,15 @@ window.abrirPerfil = function(jogadorNome){
   kpisGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px 20px;';
   kpisData.forEach(function(k){
     var c = document.createElement('div');
-    c.style.cssText = 'background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:10px;padding:10px 12px;';
-    c.innerHTML = '<div style="font-size:16px;margin-bottom:3px;">'+k.emoji+'</div>'
-      +'<div style="font-size:10px;color:#6b82a0;font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin-bottom:2px;">'+k.titulo+'</div>'
-      +'<div style="font-size:16px;font-weight:800;color:'+k.cor+';">'+k.valor+'</div>'
-      +'<div style="font-size:10px;color:#9fb3d4;margin-top:1px;">'+k.sub+'</div>';
+    // Elegant gradient card centered
+    c.style.cssText = 'background:linear-gradient(145deg,rgba(255,255,255,0.06) 0%,rgba(255,255,255,0.02) 100%);'
+      +'border:1px solid rgba(255,255,255,0.10);border-radius:14px;padding:12px 8px;'
+      +'text-align:center;display:flex;flex-direction:column;align-items:center;gap:2px;'
+      +'box-shadow:0 2px 12px rgba(0,0,0,0.2);';
+    c.innerHTML = '<div style="font-size:20px;margin-bottom:4px;filter:drop-shadow(0 2px 6px '+k.cor+'66);">'+k.emoji+'</div>'
+      +'<div style="font-size:9px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.6px;">'+k.titulo+'</div>'
+      +'<div style="font-size:17px;font-weight:800;color:'+k.cor+';line-height:1.2;margin-top:2px;">'+k.valor+'</div>'
+      +'<div style="font-size:10px;color:#9fb3d4;margin-top:1px;font-weight:500;">'+k.sub+'</div>';
     kpisGrid.appendChild(c);
   });
 
@@ -11376,9 +11446,7 @@ function patchRankingClicavel(){
     if(window.eRanking){
       clearInterval(_t);
       window.eRanking.off('click');
-      window.eRanking.on('click',function(params){
-        if(params.componentType==='series'&&params.name) window.abrirPerfil(params.name);
-      });
+      // click disabled: não abre perfil ao clicar nas barras
     }
   },400);
 }
@@ -12407,6 +12475,130 @@ document.addEventListener('click', function(e){
   if(picker && e.target===picker) eqClosePicker();
 });
 
+})();
+</script>
+
+<script id="calculadora-js">
+(function(){
+  var TOTAL_WKS = 52;
+
+  function renderCalc(){
+    var el = document.getElementById('calc-content');
+    if(!el) return;
+    var RAW = window.DATA && window.DATA.ledger;
+    if(!RAW || !RAW.length){ el.innerHTML='<p style="opacity:.5;padding:8px 0;">Sem dados.</p>'; return; }
+
+    // Pontos acumulados e semanas jogadas por jogador (excluindo faltas)
+    var byJ = {}, wksByJ = {};
+    RAW.forEach(function(r){
+      if(!r.jogador) return;
+      if(!byJ[r.jogador]){ byJ[r.jogador]=0; wksByJ[r.jogador]=0; }
+      byJ[r.jogador] += (+r.pontos_calc || 0);
+      if((+r.faltou||0)===0 && r.posicao!=null) wksByJ[r.jogador]++;
+    });
+
+    var wksPlayed = Array.from(new Set(RAW.map(function(r){ return +r.wk; }).filter(Boolean))).length;
+    var wksLeft = Math.max(1, TOTAL_WKS - wksPlayed);
+
+    var ranking = Object.keys(byJ).map(function(j){
+      var jogos = wksByJ[j] || 1;
+      return {nome:j, pts: byJ[j], media: byJ[j]/jogos, jogos: jogos};
+    }).sort(function(a,b){ return b.pts - a.pts; });
+
+    // Ranking by media (separate sort)
+    var rankingByMedia = ranking.slice().sort(function(a,b){ return b.media - a.media; });
+    var mediaRankMap = {};
+    rankingByMedia.forEach(function(p,i){ mediaRankMap[p.nome] = i+1; });
+
+    var leader = ranking[0];
+
+    var html = '<div style="margin-bottom:14px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;background:rgba(255,255,255,0.03);border-radius:10px;border:1px solid rgba(255,255,255,0.06);">'
+      + '<span style="font-size:12px;color:#6b82a0;">⏱ Semanas jogadas: <b style="color:#e6edf3;">'+wksPlayed+'</b></span>'
+      + '<span style="font-size:12px;color:#6b82a0;">•  Restantes: <b style="color:#a78bfa;">'+wksLeft+'</b></span>'
+      + '<span style="font-size:12px;color:#6b82a0;">•  Líder: <b style="color:#ffd700;">'+leader.nome+'</b></span>'
+      + '</div>';
+
+    html += '<div style="display:flex;flex-direction:column;gap:6px;">';
+
+    // Uniform colors: leader gold, all others same blue-grey scheme
+    var defaultColor = {bg:'rgba(59,130,246,0.06)', border:'rgba(59,130,246,0.15)', gFrom:'rgba(59,130,246,0.06)', gTo:'rgba(15,25,50,0.0)', accent:'#93c5fd'};
+    var leaderColor  = {bg:'rgba(255,215,0,0.08)',  border:'rgba(255,215,0,0.30)',  gFrom:'rgba(255,215,0,0.08)',  gTo:'rgba(30,20,0,0.0)',   accent:'#ffd700'};
+    var posColors = [leaderColor];
+    for(var _i=1;_i<9;_i++) posColors.push(defaultColor);
+
+    ranking.forEach(function(p, idx){
+      var pos = idx+1;
+      var ptsAcima = idx > 0 ? Math.round(ranking[idx-1].pts - p.pts) : 0;
+      var ptsLider = Math.round(leader.pts - p.pts);
+      var isLeader = idx===0;
+      var pc = posColors[Math.min(idx, posColors.length-1)];
+      var posLabel = pos===1?'1º':pos===2?'2º':pos===3?'3º':(pos+'º');
+
+      // Avatar — larger
+      var photo = window.photoFor ? window.photoFor(p.nome) : '';
+      var avatarSize = 52;
+      var avatarHtml = photo
+        ? '<img src="'+photo+'" style="width:'+avatarSize+'px;height:'+avatarSize+'px;border-radius:50%;object-fit:cover;border:2px solid '+pc.accent+'55;flex-shrink:0;box-shadow:0 2px 10px rgba(0,0,0,0.4);">'
+        : '<div style="width:'+avatarSize+'px;height:'+avatarSize+'px;border-radius:50%;background:linear-gradient(135deg,#1a3a6e,#3b82f6);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;color:#fff;flex-shrink:0;">'+p.nome.slice(0,1)+'</div>';
+
+      // Gradient card
+      html += '<div style="background:linear-gradient(135deg,'+pc.gFrom+','+pc.gTo+');border:1px solid '+pc.border+';border-radius:14px;padding:12px 14px;">';
+      html += '<div style="display:flex;align-items:center;gap:12px;">';
+
+      // Avatar + pos badge + full name below
+      html += '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;width:'+(avatarSize+4)+'px;">'
+        +'<div style="position:relative;">'+avatarHtml
+        +'<span style="position:absolute;bottom:-3px;right:-5px;font-size:12px;background:#0d1629;border-radius:999px;padding:1px 3px;font-weight:800;color:'+pc.accent+';">'+posLabel+'</span>'
+        +'</div>'
+        +'<span style="font-size:10px;color:#9fb3d4;font-weight:600;letter-spacing:.2px;text-align:center;white-space:nowrap;">'+p.nome+'</span>'
+        +'</div>';
+
+      // Center: pts + media on separate line
+      var mRank = mediaRankMap[p.nome];
+      var mRankTxt = mRank===1?'1º':mRank===2?'2º':mRank===3?'3º':(mRank+'º');
+      html += '<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:14px;font-weight:800;color:#e6edf3;margin-bottom:2px;">'+Math.round(p.pts).toLocaleString('pt-BR')+' pts</div>'
+        +'<div style="font-size:11px;color:#9fb3d4;">Média: <b style="color:'+pc.accent+';">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</b></div>'
+        +'<div style="font-size:11px;color:#6b82a0;margin-top:1px;"><span style="color:#a78bfa;font-weight:600;">'+mRankTxt+' em média</span> ('+p.jogos+' jogos)</div>'
+        +'</div>';
+
+      // Right: gap info
+      html += '<div style="text-align:right;flex-shrink:0;">';
+      if(isLeader){
+        html += '<div style="font-size:13px;color:#ffd700;font-weight:800;">👑 Líder</div>';
+        html += '<div style="font-size:11px;color:#6b82a0;margin-top:2px;">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</div>';
+      } else {
+        if(ptsAcima > 0){
+          html += '<div style="font-size:12px;color:'+pc.accent+';font-weight:700;">⬆️ Faltam<br>'+ptsAcima.toLocaleString('pt-BR')+' pts</div>';
+        }
+        if(ptsLider > 0 && ptsLider !== ptsAcima){
+          html += '<div style="font-size:11px;color:#60a5fa;margin-top:3px;">🏁 '+ptsLider.toLocaleString('pt-BR')+'<br>pts p/ líder</div>';
+        }
+      }
+      html += '</div>';
+      html += '</div></div>';
+    });
+
+    html += '</div>';
+    el.innerHTML = html;
+  }
+
+  var _t = setInterval(function(){
+    if(typeof window.afterDataLoaded==='function'){
+      clearInterval(_t);
+      var _o=window.afterDataLoaded;
+      window.afterDataLoaded=function(){_o.apply(this,arguments);setTimeout(renderCalc,600);};
+    }
+  },200);
+  var _t2 = setInterval(function(){
+    if(typeof window.refresh==='function'){
+      clearInterval(_t2);
+      var _o=window.refresh;
+      window.refresh=function(){_o.apply(this,arguments);setTimeout(renderCalc,300);};
+    }
+  },200);
+  window.addEventListener('load',function(){setTimeout(renderCalc,1500);});
+  window.renderCalc=renderCalc;
 })();
 </script>
 
