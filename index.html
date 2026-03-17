@@ -2092,7 +2092,6 @@ html body .row.mini-ranks #card-kopontos {
 .fade-ready #card-momento                { animation: cardFadeUp 0.4s ease 0.36s forwards; }
 .fade-ready #card-previsao               { animation: cardFadeUp 0.4s ease 0.42s forwards; }
 .fade-ready #card-recordes               { animation: cardFadeUp 0.4s ease 0.48s forwards; }
-.fade-ready #card-quitacao               { animation: cardFadeUp 0.4s ease 0.52s forwards; }
 .fade-ready #card-hall-da-fama           { animation: cardFadeUp 0.4s ease 0.56s forwards; }
 .fade-ready #card-torneios               { animation: cardFadeUp 0.4s ease 0.62s forwards; }
 .fade-ready .row.mini-ranks > .card:nth-child(1) { animation: cardFadeUp 0.4s ease 0.06s forwards; }
@@ -2111,7 +2110,7 @@ html body .row.mini-ranks #card-kopontos {
 #card-premiacoes-tipologia,
 #card-heatmap-novo,
 #card-momento, #card-previsao, #card-recordes,
-#card-quitacao, #card-hall-da-fama, #card-torneios, #card-perfis,
+#card-hall-da-fama, #card-torneios, #card-perfis,
 #card-ranking-anual, .row.mini-ranks > .card,
 #medal-standalone-row .card { opacity: 1; }
 
@@ -2122,8 +2121,7 @@ html body .row.mini-ranks #card-kopontos {
 .fade-ready #card-premiacoes-tipologia,
 .fade-ready #card-heatmap-novo,
 .fade-ready #card-momento, .fade-ready #card-previsao,
-.fade-ready #card-recordes, .fade-ready #card-quitacao,
-.fade-ready #card-hall-da-fama, .fade-ready #card-torneios,
+.fade-ready #card-recordes, .fade-ready #card-hall-da-fama, .fade-ready #card-torneios,
 .fade-ready #card-perfis, .fade-ready #card-ranking-anual,
 .fade-ready .row.mini-ranks > .card,
 .fade-ready #medal-standalone-row .card { opacity: 0; }
@@ -2135,146 +2133,28 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 
 
 <style id="rn-mobile-css">
-/* ── Modal de registro — versão mobile ── */
-@media (max-width: 600px), (pointer: coarse) {
-  #rn-overlay { padding: 0 !important; align-items: flex-end !important; }
-
+@media (max-width: 640px), (pointer: coarse) {
+  #rn-overlay { padding:0!important; align-items:flex-end!important; }
   #rn-box {
-    border-radius: 24px 24px 0 0 !important;
-    max-height: 92vh !important;
-    overflow-y: auto !important;
-    -webkit-overflow-scrolling: touch !important;
-    padding: 20px 16px 32px !important;
-    width: 100% !important;
-    max-width: 100% !important;
+    border-radius:22px 22px 0 0!important; max-height:95dvh!important;
+    overflow-y:auto!important; -webkit-overflow-scrolling:touch!important;
+    padding:18px 14px 40px!important; width:100%!important; max-width:100%!important;
+    box-sizing:border-box!important;
   }
-
-  #rn-box h2 {
-    font-size: 22px !important;
-    margin-bottom: 14px !important;
+  #rn-box h2 { font-size:20px!important; margin-bottom:10px!important; }
+  .rn-meta { display:grid!important; grid-template-columns:1fr 1fr!important; gap:8px!important; margin-bottom:10px!important; }
+  .rn-field label { font-size:11px!important; font-weight:700!important; color:#6b82a0!important; text-transform:uppercase!important; letter-spacing:.4px!important; }
+  .rn-field input, .rn-field select { font-size:15px!important; min-height:42px!important; padding:8px 10px!important; border-radius:10px!important; width:100%!important; box-sizing:border-box!important; }
+  #rn-rebuys-total { width:90px!important; font-size:22px!important; min-height:48px!important; text-align:center!important; font-weight:800!important; }
+  /* Esconder tabela e mostrar cards no mobile */
+  #rn-table-wrap { display:none!important; }
+  #rn-mobile-players { display:flex!important; flex-direction:column!important; gap:8px!important; margin-bottom:10px!important; }
+  /* Botões grandes */
+  #rn-btn-confirmar, #rn-btn-cancelar, #rn-actions button {
+    min-height:52px!important; font-size:16px!important; border-radius:14px!important; font-weight:900!important;
   }
-
-  /* Meta fields — uma coluna no mobile */
-  .rn-meta {
-    grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
-  }
-
-  /* Labels maiores */
-  .rn-field label {
-    font-size: 13px !important;
-    font-weight: 700 !important;
-    margin-bottom: 5px !important;
-  }
-
-  /* Inputs touch-friendly */
-  .rn-field input,
-  .rn-field select,
-  #rn-box input,
-  #rn-box select {
-    font-size: 16px !important; /* evita zoom no iOS */
-    min-height: 44px !important;
-    padding: 10px 12px !important;
-    border-radius: 10px !important;
-  }
-
-  /* Tabela de jogadores — cards grandes */
-  #rn-tabela { display: flex !important; flex-direction: column !important; gap: 0 !important; }
-  #rn-tabela thead { display: none !important; }
-  #rn-tabela tbody { display: flex !important; flex-direction: column !important; gap: 8px !important; }
-  #rn-tabela tr {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr 1fr 1fr !important;
-    gap: 6px !important;
-    background: rgba(255,255,255,0.04) !important;
-    border-radius: 12px !important;
-    padding: 10px !important;
-    border: 1px solid rgba(255,255,255,0.08) !important;
-    align-items: center !important;
-  }
-  #rn-tabela td { border: none !important; padding: 0 !important; display: flex !important; flex-direction: column !important; align-items: center !important; }
-  #rn-tabela td:first-child {
-    grid-column: 1 / -1 !important;
-    flex-direction: row !important;
-    gap: 8px !important;
-    font-size: 15px !important;
-    font-weight: 800 !important;
-    color: #e6edf3 !important;
-    margin-bottom: 4px !important;
-    align-items: center !important;
-  }
-
-  /* Inputs de posição, rebuys, KOs — grandes e centrados */
-  #rn-tabela input[type="number"] {
-    width: 100% !important;
-    font-size: 18px !important;
-    font-weight: 800 !important;
-    text-align: center !important;
-    min-height: 44px !important;
-    border-radius: 10px !important;
-    padding: 8px 4px !important;
-  }
-
-  /* Labels das colunas */
-  #rn-tabela td::before {
-    font-size: 10px !important;
-    color: #4a6080 !important;
-    font-weight: 600 !important;
-    margin-bottom: 3px !important;
-    text-transform: uppercase !important;
-  }
-  #rn-tabela td:nth-child(2)::before { content: "Pos"; }
-  #rn-tabela td:nth-child(3)::before { content: "Rebuy"; }
-  #rn-tabela td:nth-child(4)::before { content: "KOs"; }
-  #rn-tabela td:nth-child(5)::before { content: "Faltou"; }
-
-  /* Checkboxes maiores */
-  #rn-tabela input[type="checkbox"] {
-    width: 28px !important;
-    height: 28px !important;
-    min-height: 28px !important;
-    cursor: pointer !important;
-  }
-
-  /* Botões de ação — grandes */
-  #rn-box .rn-actions button,
-  #rn-box button[type="submit"],
-  #rn-box .btn-salvar {
-    min-height: 52px !important;
-    font-size: 17px !important;
-    border-radius: 14px !important;
-    font-weight: 900 !important;
-  }
-
-  /* Botão fechar — area maior */
-  #rn-close-btn {
-    width: 44px !important;
-    height: 44px !important;
-    font-size: 20px !important;
-  }
-
-  /* Carregar semana — simples no mobile */
-  #rn-edit-wk {
-    font-size: 14px !important;
-    min-height: 40px !important;
-  }
-
-  /* Contador de rebuys — maior */
-  #rn-rebuys-total {
-    width: 100px !important;
-    font-size: 20px !important;
-    min-height: 48px !important;
-    text-align: center !important;
-  }
-
-  /* Calendário — maior no mobile */
-  #rn-cal {
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 300px !important;
-    font-size: 14px !important;
-  }
-  #rn-cal-grid { gap: 6px !important; font-size: 14px !important; }
+  #rn-edit-wk { font-size:14px!important; min-height:40px!important; }
+  #rn-cal { left:50%!important; transform:translateX(-50%)!important; width:min(320px,90vw)!important; }
 }
 </style>
 
@@ -2773,45 +2653,6 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 </div>
 
 
-<!-- ====== CARD: Quitação Mensal ====== -->
-<div id="card-quitacao" style="margin-top:16px;width:100%;box-sizing:border-box;">
-  <div class="card" style="padding:0;">
-    <div onclick="window.toggleCard('quitacao-body','quitacao-arrow')"
-         style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0a2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(34,197,94,0.4);">✅</div>
-        <div>
-          <div style="font-size:16px;font-weight:800;color:#e6edf3;">Quitação Mensal</div>
-          <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Controle de pagamentos — marque quem quitou o saldo</div>
-        </div>
-      </div>
-      <span id="quitacao-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
-    </div>
-    <div id="quitacao-body" style="padding:0 16px 16px;display:none;">
-      <!-- Filtro de mês -->
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap;">
-        <span style="font-size:12px;color:#6b82a0;font-weight:600;">Mês:</span>
-        <select id="quit-mes-select" onchange="window.renderQuitacao()"
-          style="font-size:12px;padding:5px 10px;border-radius:10px;border:1px solid rgba(255,255,255,0.12);background:#0d1629;color:#9fb3d4;cursor:pointer;font-weight:600;outline:none;">
-          <option value="1">Janeiro</option>
-          <option value="2">Fevereiro</option>
-          <option value="3">Março</option>
-          <option value="4">Abril</option>
-          <option value="5">Maio</option>
-          <option value="6">Junho</option>
-          <option value="7">Julho</option>
-          <option value="8">Agosto</option>
-          <option value="9">Setembro</option>
-          <option value="10">Outubro</option>
-          <option value="11">Novembro</option>
-          <option value="12">Dezembro</option>
-        </select>
-        <button onclick="window.resetQuitacao()" style="font-size:11px;padding:4px 10px;border-radius:8px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:#f87171;cursor:pointer;font-weight:600;">🔄 Limpar mês</button>
-      </div>
-      <div id="quitacao-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;"></div>
-    </div>
-  </div>
-</div>
 
 <div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
@@ -8274,6 +8115,9 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
   </table>
   </div>
 
+  <!-- Cards mobile jogadores -->
+  <div id="rn-mobile-players" style="display:none;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+
   <!-- Resumo -->
   <div id="rn-resumo">
     <div class="rn-resumo-linha"><span>Entradas totais (buy-ins + rebuys)</span><span id="rr-entradas">—</span></div>
@@ -8567,6 +8411,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.getElementById('rn-rebuys-total').value='0';
     try{rnPopularEditBar();}catch(e){}
     rnAtualizarContadores(); rnAutoPos(false); rnRecalcular();
+    if(window.rnBuildMobileCards) setTimeout(window.rnBuildMobileCards,50);
   }
 
   // ── Toggle Faltou ─────────────────────────────────────────
@@ -10980,137 +10825,6 @@ window.buildRecordes=buildRecordes;
 
 
 
-<script>
-/* ====== QUITAÇÃO MENSAL ====== */
-(function(){
-  /* Chave no localStorage: quit_YYYY_MM_Jogador */
-  function qKey(ano, mes, jog){ return 'quit_'+ano+'_'+mes+'_'+jog.replace(/\s/g,'_'); }
-
-  function getMensal(){ return (typeof MENSAL!=='undefined'&&MENSAL.length)?MENSAL:(window.DATA&&window.DATA.mensal)||[]; }
-  function getLedger(){ return (typeof RAW!=='undefined'&&RAW.length)?RAW:(window.DATA&&window.DATA.ledger)||[]; }
-
-  function getAnoAtual(){
-    var ledger = getLedger();
-    if(!ledger.length) return new Date().getFullYear();
-    return Math.max.apply(null, ledger.map(function(r){ return parseInt(r.ano)||0; }));
-  }
-
-  function getMesAtual(){
-    var sel = document.getElementById('quit-mes-select');
-    return sel ? parseInt(sel.value) : new Date().getMonth()+1;
-  }
-
-  window.renderQuitacao = function(){
-    var grid = document.getElementById('quitacao-grid');
-    if(!grid) return;
-
-    var mensal = getMensal();
-    var ledger = getLedger();
-    var ano    = getAnoAtual();
-    var mes    = getMesAtual();
-
-    /* Jogadores com dados nesse mês */
-    var jogadores = [];
-    if(mensal.length){
-      jogadores = mensal.filter(function(r){ return parseInt(r.mes)===mes; })
-        .map(function(r){ return { jog:r.jogador, saldo: parseFloat(r.saldo_mes_total)||0 }; });
-    }
-    if(!jogadores.length){
-      /* Fallback: ledger */
-      var uniq = Array.from(new Set(ledger.filter(function(r){ return parseInt(r.mes)===mes; }).map(function(r){ return r.jogador; })));
-      jogadores = uniq.map(function(j){ return {jog:j, saldo:0}; });
-    }
-    jogadores.sort(function(a,b){ return a.jog.localeCompare(b.jog,'pt-BR'); });
-
-    if(!jogadores.length){
-      grid.innerHTML = '<div style="color:rgba(255,255,255,.3);font-size:13px;padding:20px;text-align:center;">Sem dados para este mês</div>';
-      return;
-    }
-
-    var meses = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    var html = '';
-    jogadores.forEach(function(d){
-      var key    = qKey(ano, mes, d.jog);
-      var quitou = localStorage.getItem(key) === '1';
-      var saldo  = d.saldo;
-      var devePagar = saldo < 0;
-      var valorStr = (saldo >= 0 ? '+' : '') + 'R$ ' + Math.abs(saldo).toFixed(2).replace('.',',');
-      var corSaldo = saldo >= 0 ? '#22c55e' : '#ef4444';
-
-      html += '<div style="background:'+(quitou?'rgba(34,197,94,0.08)':'rgba(255,255,255,0.03)')+';border:1.5px solid '+(quitou?'rgba(34,197,94,0.4)':'rgba(255,255,255,0.08)')+';border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;transition:all .2s;">'
-        + '<div style="display:flex;align-items:center;gap:8px;">'
-        + '<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a3a6e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;overflow:hidden;">'
-        + (function(){ var f=window.photoFor?window.photoFor(d.jog):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[d.jog]); return f?'<img src="'+f+'" style="width:100%;height:100%;object-fit:cover;">':d.jog[0]; })()
-        + '</div>'
-        + '<div style="flex:1;min-width:0;">'
-        + '<div style="font-size:13px;font-weight:800;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+d.jog+'</div>'
-        + '<div style="font-size:11px;font-weight:700;color:'+corSaldo+';">'+valorStr+'</div>'
-        + '</div></div>'
-        + '<button onclick="window.toggleQuitacao(''+key+'', this)" '
-        + 'style="width:100%;padding:8px;border-radius:10px;border:none;font-size:12px;font-weight:800;cursor:pointer;transition:all .2s;'
-        + (quitou ? 'background:rgba(34,197,94,0.2);color:#22c55e;' : 'background:rgba(255,255,255,0.07);color:#9fb3d4;')
-        + '">'
-        + (quitou ? '✅ Quitado' : '⭕ Pendente — marcar')
-        + '</button>'
-        + '</div>';
-    });
-    grid.innerHTML = html;
-  };
-
-  window.toggleQuitacao = function(key, btn){
-    var atual = localStorage.getItem(key) === '1';
-    if(atual){
-      localStorage.removeItem(key);
-    } else {
-      localStorage.setItem(key, '1');
-    }
-    /* Re-renderizar card desse jogador */
-    window.renderQuitacao();
-  };
-
-  window.resetQuitacao = function(){
-    var ano = getAnoAtual();
-    var mes = getMesAtual();
-    var ledger = getLedger();
-    var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; })));
-    jogs.forEach(function(j){ localStorage.removeItem(qKey(ano,mes,j)); });
-    window.renderQuitacao();
-  };
-
-  /* Inicializar mês actual no select */
-  function initQuitacaoMes(){
-    var sel = document.getElementById('quit-mes-select');
-    if(!sel) return;
-    var mes = new Date().getMonth()+1;
-    sel.value = String(mes);
-  }
-
-  /* Hook no toggleCard */
-  var _origToggle = window.toggleCard;
-  window.toggleCard = function(bodyId, arrowId){
-    if(_origToggle) _origToggle(bodyId, arrowId);
-    if(bodyId === 'quitacao-body'){
-      var body = document.getElementById('quitacao-body');
-      if(body && body.style.display !== 'none') setTimeout(window.renderQuitacao, 80);
-    }
-  };
-
-  /* Hooks de dados */
-  var _t = setInterval(function(){
-    if(typeof window.afterDataLoaded==='function'){clearInterval(_t);
-      var _o=window.afterDataLoaded;
-      window.afterDataLoaded=function(){_o.apply(this,arguments);
-        initQuitacaoMes();
-        setTimeout(function(){
-          var body=document.getElementById('quitacao-body');
-          if(body&&body.style.display!=='none') window.renderQuitacao();
-        },500);
-      };}
-  },200);
-
-  document.addEventListener('DOMContentLoaded', initQuitacaoMes);
-})();
-</script>
 
 
 <script>
@@ -11180,6 +10894,233 @@ window._buildRankingAnual = function(rows){
   }, 200);
 })();
 </script>
+<script id="rn-mobile-cards-js">
+/* ── Cards mobile por jogador no modal de registro ── */
+(function(){
+
+  function isMobileRN(){
+    return window.innerWidth <= 640 || ('ontouchstart' in window && window.innerWidth < 900);
+  }
+
+  function syncMobileUI(){
+    var wrap = document.getElementById('rn-table-wrap');
+    var mpl  = document.getElementById('rn-mobile-players');
+    if(!wrap||!mpl) return;
+    if(isMobileRN()){
+      wrap.style.display = 'none';
+      mpl.style.display  = 'flex';
+    } else {
+      wrap.style.display = '';
+      mpl.style.display  = 'none';
+    }
+  }
+
+  window.rnBuildMobileCards = function(){
+    syncMobileUI();
+    var mpl = document.getElementById('rn-mobile-players');
+    var tbody = document.getElementById('rn-tbody');
+    if(!mpl||!tbody) return;
+    mpl.innerHTML = '';
+
+    var CORES = ['#3b82f6','#8b5cf6','#06b6d4','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316'];
+    var rows = Array.from(tbody.rows);
+    var nJogs = rows.length;
+
+    rows.forEach(function(tr, idx){
+      var nome = tr.dataset.jogador || (tr.cells[0]&&tr.cells[0].textContent.trim()) || ('J'+(idx+1));
+      var foto = window.photoFor ? window.photoFor(nome) : (window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[nome]);
+      var cor = CORES[idx % CORES.length];
+
+      var card = document.createElement('div');
+      card.id = 'rn-mc-' + idx;
+      card.style.cssText = 'background:rgba(255,255,255,0.04);border:1.5px solid rgba(255,255,255,0.08);border-radius:16px;padding:14px;transition:all .2s;';
+
+      /* ── Cabeçalho ── */
+      var hdr = document.createElement('div');
+      hdr.style.cssText = 'display:flex;align-items:center;gap:12px;margin-bottom:14px;';
+
+      var av = document.createElement('div');
+      av.style.cssText = 'width:48px;height:48px;border-radius:50%;border:2px solid '+cor+'66;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,'+cor+'33,'+cor+'11);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:'+cor+';';
+      if(foto){
+        var img = document.createElement('img');
+        img.src = foto;
+        img.style.cssText = 'width:100%;height:100%;object-fit:cover;object-position:top center;';
+        img.onerror = function(){ this.style.display='none'; av.textContent=nome[0]; };
+        av.appendChild(img);
+      } else { av.textContent = nome[0]; }
+
+      var nameWrap = document.createElement('div');
+      nameWrap.style.cssText = 'flex:1;min-width:0;';
+      nameWrap.innerHTML = '<div style="font-size:17px;font-weight:800;color:#e6edf3;">'+nome+'</div>'
+        +'<div id="rn-mc-pos-'+idx+'" style="font-size:12px;color:#6b82a0;margin-top:2px;">posição não definida</div>';
+
+      var faltouLabel = document.createElement('label');
+      faltouLabel.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex-shrink:0;';
+      var faltouChk = document.createElement('input');
+      faltouChk.type = 'checkbox';
+      faltouChk.className = 'rn-mc-faltou';
+      faltouChk.style.cssText = 'width:32px;height:32px;cursor:pointer;accent-color:#ef4444;';
+      faltouChk.dataset.idx = idx;
+      faltouChk.addEventListener('change', function(){
+        var i = +this.dataset.idx;
+        var origTr = tbody.rows[i];
+        if(origTr){
+          var origChk = origTr.querySelector('.rn-faltou');
+          if(origChk){ origChk.checked = this.checked; }
+          if(window.rnToggleFaltou) rnToggleFaltou(i);
+        }
+        var c = document.getElementById('rn-mc-'+i);
+        if(c){
+          c.style.opacity = this.checked ? '0.4' : '1';
+          c.style.borderColor = this.checked ? 'rgba(239,68,68,0.35)' : 'rgba(255,255,255,0.08)';
+          c.querySelectorAll('.rn-mc-input').forEach(function(inp){ inp.disabled = this.checked; }.bind(this));
+          c.querySelector('.rn-mc-pos') && (c.querySelector('.rn-mc-pos').disabled = this.checked);
+        }
+      });
+      var faltouSpan = document.createElement('span');
+      faltouSpan.textContent = 'Faltou';
+      faltouSpan.style.cssText = 'font-size:9px;font-weight:700;color:#6b82a0;text-transform:uppercase;letter-spacing:.3px;';
+      faltouLabel.appendChild(faltouChk);
+      faltouLabel.appendChild(faltouSpan);
+
+      hdr.appendChild(av);
+      hdr.appendChild(nameWrap);
+      hdr.appendChild(faltouLabel);
+
+      /* ── Grid de inputs ── */
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(4,1fr);gap:8px;';
+
+      function mkInp(lbl, cls, defaultVal, color){
+        var w = document.createElement('div');
+        w.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
+        var l = document.createElement('div');
+        l.textContent = lbl;
+        l.style.cssText = 'font-size:10px;font-weight:700;color:#6b82a0;text-align:center;text-transform:uppercase;letter-spacing:.3px;';
+        var inp = document.createElement('input');
+        inp.type = 'number';
+        inp.className = cls + ' rn-mc-input';
+        inp.setAttribute('inputmode','numeric');
+        inp.setAttribute('pattern','[0-9]*');
+        inp.value = defaultVal;
+        inp.min = '0';
+        inp.dataset.idx = idx;
+        inp.style.cssText = 'font-size:22px;font-weight:800;text-align:center;min-height:54px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:'+(color||'#e6edf3')+';width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;padding:0;';
+        inp.addEventListener('focus', function(){ this.select(); });
+        inp.addEventListener('input', function(){
+          var orig = tbody.rows[+this.dataset.idx];
+          if(orig){ var o = orig.querySelector('.'+cls); if(o) o.value = this.value; }
+          if(window.rnAtualizarContadores) rnAtualizarContadores();
+          if(window.rnRecalcular) rnRecalcular();
+        });
+        w.appendChild(l); w.appendChild(inp);
+        return w;
+      }
+
+      var rebWrap = mkInp('Rebuy','rn-rebuys', '0', '#e6edf3');
+      var ficWrap = mkInp('Fichas','rn-fichas', '', '#06b6d4');
+      ficWrap.querySelector('input').placeholder = '—';
+
+      /* Posição */
+      var posDiv = document.createElement('div');
+      posDiv.style.cssText = 'display:flex;flex-direction:column;gap:4px;';
+      var posLbl = document.createElement('div');
+      posLbl.textContent = 'Pos';
+      posLbl.style.cssText = 'font-size:10px;font-weight:700;color:#6b82a0;text-align:center;text-transform:uppercase;letter-spacing:.3px;';
+      var posSel = document.createElement('select');
+      posSel.className = 'rn-mc-pos';
+      posSel.dataset.idx = idx;
+      posSel.style.cssText = 'font-size:20px;font-weight:800;text-align:center;min-height:54px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:#C9A227;width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;';
+      posSel.innerHTML = '<option value="">—</option>'
+        + Array.from({length:nJogs},function(_,i){ return '<option value="'+(i+1)+'">'+(i+1)+'</option>'; }).join('');
+      posSel.addEventListener('change', function(){
+        var orig = tbody.rows[+this.dataset.idx];
+        if(orig){
+          var os = orig.querySelector('.rn-pos');
+          if(os){ os.value = this.value; os.dispatchEvent(new Event('change')); }
+        }
+        if(window.rnRecalcular) rnRecalcular();
+      });
+      posDiv.appendChild(posLbl); posDiv.appendChild(posSel);
+
+      var koWrap = mkInp('KOs','rn-kos-total','0','#22c55e');
+      koWrap.querySelector('input').addEventListener('input', function(){
+        this.style.color = (+this.value > 0) ? '#22c55e' : '#9fb3d4';
+      });
+
+      grid.appendChild(rebWrap);
+      grid.appendChild(ficWrap);
+      grid.appendChild(posDiv);
+      grid.appendChild(koWrap);
+
+      /* Preview pts/saldo */
+      var prev = document.createElement('div');
+      prev.id = 'rn-mc-prev-'+idx;
+      prev.style.cssText = 'margin-top:10px;display:flex;justify-content:space-between;font-size:12px;color:#6b82a0;padding:0 2px;';
+      prev.innerHTML = '<span>Pts: —</span><span>Prêmio: —</span><span>Saldo: —</span>';
+
+      card.appendChild(hdr);
+      card.appendChild(grid);
+      card.appendChild(prev);
+      mpl.appendChild(card);
+    });
+
+    /* Patch rnRecalcular para actualizar previews */
+    if(!window._rnMcPatched){
+      window._rnMcPatched = true;
+      var _orig = window.rnRecalcular;
+      if(_orig) window.rnRecalcular = function(){
+        _orig.apply(this,arguments);
+        setTimeout(window.rnSyncMobilePreviews, 60);
+      };
+    }
+  };
+
+  /* Sincronizar previews da tabela → cards */
+  window.rnSyncMobilePreviews = function(){
+    var tbody = document.getElementById('rn-tbody');
+    if(!tbody) return;
+    Array.from(tbody.rows).forEach(function(tr, idx){
+      var pts    = (tr.querySelector('.rn-pts-preview')||{}).textContent || '—';
+      var premio = (tr.querySelector('.rn-premio-preview')||{}).textContent || '—';
+      var saldo  = (tr.querySelector('.rn-saldo-preview')||{}).textContent || '—';
+      var badge  = (tr.querySelector('.rn-pos-badge')||{}).textContent || '—';
+      var prev = document.getElementById('rn-mc-prev-'+idx);
+      if(prev) prev.innerHTML =
+        '<span style="color:#3b82f6;font-weight:700;">'+pts+'</span>'
+        +'<span style="color:#f59e0b;font-weight:700;">'+premio+'</span>'
+        +'<span style="color:'+(saldo&&saldo.includes('-')?'#ef4444':'#22c55e')+';font-weight:700;">'+saldo+'</span>';
+      var posEl = document.getElementById('rn-mc-pos-'+idx);
+      if(posEl && badge !== '—') posEl.innerHTML = '<span style="color:#C9A227;font-weight:700;">'+badge+' lugar</span>';
+    });
+  };
+
+  /* Resize handler */
+  window.addEventListener('resize', function(){
+    var wrap=document.getElementById('rn-table-wrap');
+    var mpl=document.getElementById('rn-mobile-players');
+    if(!wrap||!mpl) return;
+    if(isMobileRN()){ wrap.style.display='none'; mpl.style.display='flex'; }
+    else { wrap.style.display=''; mpl.style.display='none'; }
+  });
+
+  /* Hook no _abrirRegistroNoiteReal */
+  var _t = setInterval(function(){
+    if(typeof window._abrirRegistroNoiteReal==='function'){
+      clearInterval(_t);
+      var _o = window._abrirRegistroNoiteReal;
+      window._abrirRegistroNoiteReal = function(){
+        _o.apply(this,arguments);
+        setTimeout(function(){
+          if(isMobileRN() && window.rnBuildMobileCards) window.rnBuildMobileCards();
+        }, 150);
+      };
+    }
+  }, 200);
+
+})();
+</script>
+
 </body>
 </html>
 
