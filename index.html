@@ -1814,11 +1814,23 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 /* ══ Bloco 77 ══ */
 
 @media (max-width: 640px), (pointer: coarse) {
-  #rn-overlay { padding:0!important; align-items:flex-end!important; }
+  #rn-overlay {
+    padding:0!important;
+    align-items:flex-end!important;
+    overflow-y:hidden!important; /* scroll só no rn-box */
+    touch-action:none!important;
+  }
   #rn-box {
-    border-radius:22px 22px 0 0!important; max-height:95dvh!important;
-    overflow-y:auto!important; -webkit-overflow-scrolling:touch!important;
-    padding:18px 14px 40px!important; width:100%!important; max-width:100%!important;
+    border-radius:22px 22px 0 0!important;
+    max-height:95dvh!important;
+    height:95dvh!important;
+    overflow-y:scroll!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior:contain!important;
+    touch-action:pan-y!important;
+    padding:18px 14px 40px!important;
+    width:100%!important;
+    max-width:100%!important;
     box-sizing:border-box!important;
   }
   #rn-box h2 { font-size:20px!important; margin-bottom:10px!important; }
@@ -8491,8 +8503,32 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
 
     <!-- Botão secundário: fechar sem publicar -->
     <button onclick="rnFecharPublishPanel()"
-      style="width:100%;min-height:44px;background:rgba(255,255,255,0.06);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;">
+      style="width:100%;min-height:44px;background:rgba(255,255,255,0.06);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;">
       Agora não
+    </button>
+
+    <!-- Botão deletar WK -->
+    <button onclick="window.abrirDeletarWK()"
+      style="width:100%;min-height:40px;background:rgba(239,68,68,0.08);color:#f87171;border:1px solid rgba(239,68,68,0.2);border-radius:12px;font-size:12px;font-weight:600;cursor:pointer;">
+      🗑️ Apagar uma WK dos dados
+    </button>
+  </div>
+</div>
+
+<!-- Modal deletar WK -->
+<div id="rn-deletar-wk-modal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,0.8);">
+  <div style="background:linear-gradient(145deg,#1a0a0a,#1f1111);border:1px solid rgba(239,68,68,0.3);border-radius:20px;padding:24px;max-width:360px;width:100%;text-align:center;">
+    <div style="font-size:36px;margin-bottom:10px;">🗑️</div>
+    <div style="font-size:16px;font-weight:800;color:#fca5a5;margin-bottom:6px;">Apagar WK dos dados</div>
+    <div style="font-size:12px;color:#6b82a0;margin-bottom:18px;">Selecione a semana que deseja remover permanentemente</div>
+    <select id="rn-deletar-wk-sel" style="width:100%;background:#0d1629;border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#e6edf3;padding:10px;font-size:15px;font-weight:700;margin-bottom:16px;"></select>
+    <button onclick="window.confirmarDeletarWK()"
+      style="width:100%;min-height:48px;background:linear-gradient(135deg,#7f1d1d,#ef4444);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:10px;">
+      ⚠️ Confirmar exclusão
+    </button>
+    <button onclick="document.getElementById('rn-deletar-wk-modal').style.display='none'"
+      style="width:100%;min-height:40px;background:rgba(255,255,255,0.06);color:#9fb3d4;border:1px solid rgba(255,255,255,0.1);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">
+      Cancelar
     </button>
   </div>
 </div>
@@ -12418,9 +12454,13 @@ window._buildRankingAnual = function(rows){
       posSel.style.cssText = 'font-size:20px;font-weight:800;text-align:center;min-height:54px;border-radius:12px;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:#C9A227;width:100%;box-sizing:border-box;-webkit-appearance:none;appearance:none;';
       posSel.innerHTML = '<option value="">—</option>'
         +Array.from({length:nJogs},function(_,i){ return '<option value="'+(i+1)+'">'+(i+1)+'º</option>'; }).join('');
+      posSel.dataset.nome = nome; /* sync robusto por nome */
       posSel.addEventListener('change', function(){
-        /* Sync com select oculto da tabela */
-        var orig = tbody.rows[+this.dataset.idx];
+        /* Sync com select oculto da tabela — usar nome para matching robusto */
+        var _nome = this.dataset.nome || nome;
+        var orig = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) orig=r; }); }
+        if(!orig) orig = tbody.rows[+this.dataset.idx];
         if(orig){
           var os = orig.querySelector('.rn-pos');
           if(os){ os.value=this.value; os.style.display='none'; }
@@ -12432,7 +12472,7 @@ window._buildRankingAnual = function(rows){
         /* Atualizar selects de todos os cards após mudança de posição */
         setTimeout(function(){
           if(window.rnSyncPosicoes) rnSyncPosicoes();
-          if(window.rnSyncMobileAll) rnSyncMobileAll();
+          if(window.rnSyncMobileData) rnSyncMobileData();
         }, 30);
       });
       posField.appendChild(posSel);
@@ -12484,10 +12524,13 @@ window._buildRankingAnual = function(rows){
   };
 
   /* ── Sincronizar só dados (badges/pts/saldo) — sem mover cards ── */
+  /* ── Sincronizar só dados (badges/pts/saldo) por NOME — sem mover cards ── */
   window.rnSyncMobileData = function(){
     var tbody = document.getElementById('rn-tbody');
-    if(!tbody) return;
-    Array.from(tbody.rows).forEach(function(tr, idx){
+    var mpl   = document.getElementById('rn-mobile-players');
+    if(!tbody || !mpl) return;
+    Array.from(tbody.rows).forEach(function(tr){
+      var nome   = tr.dataset.jogador; if(!nome) return;
       var pts    = (tr.querySelector('.rn-pts-preview')    || {}).textContent || '—';
       var premio = (tr.querySelector('.rn-premio-preview') || {}).textContent || '—';
       var saldo  = (tr.querySelector('.rn-saldo-preview')  || {}).textContent || '—';
@@ -12496,17 +12539,25 @@ window._buildRankingAnual = function(rows){
                   ? _badgeEl.textContent : '—';
       var faltou = tr.querySelector('.rn-faltou') && tr.querySelector('.rn-faltou').checked;
 
+      /* Encontrar card pelo nome do jogador */
+      var card = null;
+      Array.from(mpl.children).forEach(function(c){
+        var fi = c.querySelector('.rn-fichas');
+        if(fi && fi.dataset.nome === nome) card = c;
+      });
+      if(!card) return;
+
       /* Preview */
-      var prevEl = document.getElementById('rn-mc-prev-'+idx);
+      var prevEl = card.querySelector('.rn-mc-prev');
       if(prevEl) prevEl.innerHTML =
         '<span style="color:#3b82f6;font-weight:700;">'+pts+'</span>'
         +'<span style="color:#f59e0b;font-weight:700;">'+premio+'</span>'
         +'<span style="color:'+(saldo&&saldo.includes('-')?'#ef4444':'#22c55e')+';font-weight:700;">'+saldo+'</span>';
 
       /* Badge posição */
-      var posEl = document.getElementById('rn-mc-pos-'+idx);
+      var posEl = card.querySelector('.rn-mc-pos-label');
       if(posEl){
-        if(!faltou && badge !== '—'){
+        if(!faltou && badge && badge !== '—'){
           var medal = badge==='1º'?'🥇':badge==='2º'?'🥈':badge==='3º'?'🥉':'📍';
           posEl.innerHTML = '<span style="color:#C9A227;font-weight:800;font-size:13px;">'+medal+' '+badge+' lugar</span>';
         } else if(faltou){
@@ -12517,15 +12568,12 @@ window._buildRankingAnual = function(rows){
         }
       }
 
-      /* Select posição */
-      var card = document.getElementById('rn-mc-'+idx);
-      if(card){
-        var posSel = card.querySelector('.rn-mc-pos-sel');
-        if(posSel && !faltou){
-          var posVal = badge !== '—' ? badge.replace('º','') : '';
-          if(posSel.value !== posVal) posSel.value = posVal;
-          posSel.style.color = posVal ? '#C9A227' : 'rgba(255,255,255,0.3)';
-        }
+      /* Select de posição */
+      var posSel = card.querySelector('.rn-mc-pos-sel');
+      if(posSel && !faltou){
+        var posVal = badge && badge !== '—' ? badge.replace('º','') : '';
+        if(posSel.value !== posVal) posSel.value = posVal;
+        posSel.style.color = posVal ? '#C9A227' : 'rgba(255,255,255,0.3)';
       }
     });
   };
@@ -13864,6 +13912,42 @@ window.addEventListener('load', function(){
     if(hofData) renderHOFDynamic(JSON.parse(hofData));
   },1500);
 });
+
+
+/* ═══ Deletar WK ═══ */
+window.abrirDeletarWK = function(){
+  pedirSenha(function(){
+    var modal = document.getElementById('rn-deletar-wk-modal');
+    var sel   = document.getElementById('rn-deletar-wk-sel');
+    if(!modal || !sel) return;
+    var raw = window.RAW || [];
+    var wks = Array.from(new Set(raw.map(function(r){ return +r.wk; }).filter(Boolean))).sort(function(a,b){return a-b;});
+    sel.innerHTML = wks.map(function(w){ return '<option value="'+w+'">WK'+String(w).padStart(2,'0')+'</option>'; }).join('');
+    modal.style.display = 'flex';
+  });
+};
+
+window.confirmarDeletarWK = function(){
+  var sel = document.getElementById('rn-deletar-wk-sel');
+  if(!sel || !sel.value) return;
+  var wk = +sel.value;
+  if(!confirm('Apagar WK'+String(wk).padStart(2,'0')+' definitivamente?')) return;
+  window.RAW = (window.RAW||[]).filter(function(r){ return +r.wk !== wk; });
+  if(window.DATA) window.DATA.ledger = window.RAW;
+  // Salvar no localStorage
+  try{ localStorage.setItem('plaza_raw_backup', JSON.stringify(window.RAW)); }catch(e){}
+  // Fechar modal
+  document.getElementById('rn-deletar-wk-modal').style.display = 'none';
+  // Publicar automaticamente
+  if(window.ghSalvarDados){
+    var tok = sessionStorage.getItem('gh_token') || localStorage.getItem('gh_token') || window.GH_TOKEN || '';
+    if(tok){ window.GH_TOKEN = tok; window.ghSalvarDados(); }
+  }
+  // Atualizar dashboard
+  try{ window.afterDataLoaded&&window.afterDataLoaded(); }catch(e){}
+  try{ window.refresh&&window.refresh(); }catch(e){}
+  alert('WK'+String(wk).padStart(2,'0')+' removida! Publique para salvar no GitHub.');
+};
 
 window.abrirEdicaoAdmin=function(tipo){
   pedirSenha(function(){
