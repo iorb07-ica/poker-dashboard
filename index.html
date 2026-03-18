@@ -9318,10 +9318,31 @@ window.salvarHTML = function(){
         var pubBtn = document.getElementById('plaza-restore-pub-btn');
         var okBtn  = document.getElementById('plaza-restore-ok-btn');
         if(pubBtn) pubBtn.addEventListener('click', function(){
-          this.textContent = 'Publicando...';
-          this.disabled = true;
-          if(window.ghSalvarDados){ window.ghSalvarDados(); }
-          else{ alert('Configure o token GitHub primeiro (botão ⚙️).'); }
+          var self = this;
+          // Garantir que o token está carregado antes de publicar
+          var tok = sessionStorage.getItem('gh_token') || localStorage.getItem('gh_token') || window.GH_TOKEN || '';
+          if(!tok){
+            alert('Token GitHub não configurado. Use o botão ⚙️ para configurar.');
+            return;
+          }
+          // Forçar token na variável global
+          window.GH_TOKEN = tok;
+          self.textContent = 'Publicando...';
+          self.disabled = true;
+          if(window.ghSalvarDados){
+            window.ghSalvarDados();
+            // Verificar se publicou após 10s
+            setTimeout(function(){
+              if(self.textContent === 'Publicando...'){
+                self.textContent = '☁️ Publicar agora';
+                self.disabled = false;
+              }
+            }, 10000);
+          } else {
+            alert('Função de publicar não disponível. Aguarde o dashboard carregar.');
+            self.textContent = '☁️ Publicar agora';
+            self.disabled = false;
+          }
         });
         if(okBtn) okBtn.addEventListener('click', function(){
           banner.remove();
