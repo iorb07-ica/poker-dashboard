@@ -9178,6 +9178,13 @@ document.addEventListener('DOMContentLoaded', function(){
   // ── Confirmar ─────────────────────────────────────────────
   window.confirmarRegistroNoite = function(){
     var alertEl=document.getElementById('rn-alert'); alertEl.classList.remove('show');
+    // Forcar sync mobile->tabela antes de confirmar
+    try{
+      if(window.rnSyncMobileAll) window.rnSyncMobileAll();
+      if(window.rnSyncPosicoes) window.rnSyncPosicoes();
+    }catch(e){}
+    // Recalcular com dados sincronizados
+    try{ if(window.rnRecalcular) window.rnRecalcular(); }catch(e){}
     var dados=window._rnDados||[], meta=window._rnMeta||{};
     var data=document.getElementById('rn-data').value, wk=parseInt(document.getElementById('rn-wk').value)||1;
     var mes=parseInt(document.getElementById('rn-mes').value)||1, tri=parseInt(document.getElementById('rn-tri').value)||1, ano=parseInt(document.getElementById('rn-ano').value)||2026;
@@ -9218,10 +9225,12 @@ document.addEventListener('DOMContentLoaded', function(){
       // rebT = campo global de rebuys (fonte de verdade)
       var rebT=parseInt(document.getElementById('rn-rebuys-total').value)||0;
 
-      // — Validação: fichas
+      // — Validação: fichas (pular se substituindo WK existente com dados zerados)
       var ficE=(presentes.length+rebT)*FICHAS_INI;
       var ficI=presentes.reduce(function(s,d){return s+(d.fichas||0);},0);
-      if(ficI!==ficE){
+      var wkJaExiste = (window.RAW||[]).some(function(r){return +r.wk===wk&&+r.ano===ano;});
+      var fichasZeradas = ficI === 0 && presentes.length > 0;
+      if(ficI!==ficE && !(wkJaExiste && fichasZeradas)){
         var ficDiff=ficI-ficE;
         var ficDiffAbs=Math.abs(ficDiff).toLocaleString('pt-BR');
         erros.push({
@@ -9399,60 +9408,56 @@ window.salvarHTML = function(){
         var okBtn  = document.getElementById('plaza-restore-ok-btn');
         if(pubBtn) pubBtn.addEventListener('click', function(){
           var self = this;
-          // Garantir token
           var tok = sessionStorage.getItem('gh_token') || localStorage.getItem('gh_token') || window.GH_TOKEN || '';
-          if(!tok){
-            alert('Token GitHub não configurado. Use o botão ⚙️ para configurar.');
-            return;
-          }
+          if(!tok){ alert('Token GitHub não configurado. Use o botão ⚙️ para configurar.'); return; }
           window.GH_TOKEN = tok;
-          self.textContent = '⏳ Publicando...';
+
+          // Ler SEMPRE do localStorage — nunca de window.RAW que pode estar desatualizado
+          var backupStr = localStorage.getItem('plaza_raw_backup');
+          if(!backupStr){ banner.remove(); return; }
+          var backupData;
+          try{ backupData = JSON.parse(backupStr); }catch(e){ alert('Erro ao ler backup.'); return; }
+          if(!Array.isArray(backupData) || !backupData.length){ alert('Backup vazio.'); return; }
+
+          var maxWkBackup = Math.max.apply(null, backupData.map(function(r){ return +r.wk||0; }));
+          self.textContent = '⏳ Publicando WK'+maxWkBackup+'...';
           self.disabled = true;
 
-          // Publicar diretamente — forçando RAW do backup
-          var backupStr = localStorage.getItem('plaza_raw_backup');
-          if(backupStr){
-            try{
-              var backupData = JSON.parse(backupStr);
-              if(Array.isArray(backupData) && backupData.length > 0){
-                window.RAW = backupData;
-                if(window.DATA) window.DATA.ledger = backupData;
-              }
-            }catch(e){}
-          }
-
-          if(!window.ghSalvarDados){
-            alert('Aguarde o dashboard carregar completamente.');
-            self.textContent = '☁️ Publicar agora';
-            self.disabled = false;
-            return;
-          }
-
-          // Hook temporário para detectar sucesso/erro
-          var origStatus = window.ghMostrarStatus;
-          window.ghMostrarStatus = function(msg, cor){
-            if(origStatus) origStatus(msg, cor);
-            if(msg.indexOf('✅') >= 0){
-              self.textContent = '✅ Publicado!';
-              setTimeout(function(){ if(banner && banner.parentNode) banner.remove(); }, 2000);
-              window.ghMostrarStatus = origStatus;
-            } else if(msg.indexOf('❌') >= 0){
-              self.textContent = '❌ Erro — tente de novo';
-              self.disabled = false;
-              window.ghMostrarStatus = origStatus;
-            }
+          // Publicar DIRETAMENTE via API — bypassa window.RAW completamente
+          var allData = window.DATA || {};
+          var payload = {
+            ledger:    backupData,
+            mensal:    allData.mensal    || [],
+            trimestre: allData.trimestre || [],
+            anual:     allData.anual     || [],
+            podios:    allData.podios    || [],
+            updated:   new Date().toISOString()
           };
+          var content64 = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+          var apiUrl = 'https://api.github.com/repos/'+window.GH_USER+'/'+window.GH_REPO+'/contents/'+window.GH_FILE;
 
-          window.ghSalvarDados();
-
-          // Timeout de segurança
-          setTimeout(function(){
-            window.ghMostrarStatus = origStatus;
-            if(self.disabled && self.textContent.indexOf('Publicando') >= 0){
-              self.textContent = '☁️ Publicar agora';
-              self.disabled = false;
-            }
-          }, 15000);
+          fetch(apiUrl, { headers:{ 'Authorization':'token '+tok, 'Accept':'application/vnd.github.v3+json' }})
+          .then(function(r){ return r.ok ? r.json() : null; })
+          .then(function(existing){
+            var body = { message:'Update dados.json WK'+maxWkBackup+' - '+new Date().toLocaleDateString('pt-BR'), content: content64 };
+            if(existing && existing.sha) body.sha = existing.sha;
+            return fetch(apiUrl, { method:'PUT', headers:{ 'Authorization':'token '+tok, 'Content-Type':'application/json', 'Accept':'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
+          })
+          .then(function(r){ if(!r.ok) return r.text().then(function(t){ throw new Error(t); }); return r.json(); })
+          .then(function(){
+            self.textContent = '✅ Publicado! ('+backupData.length+' registros)';
+            // Atualizar window.RAW com os dados corretos
+            window.RAW = backupData;
+            if(window.DATA) window.DATA.ledger = backupData;
+            localStorage.removeItem('plaza_raw_backup');
+            localStorage.removeItem('plaza_raw_backup_ts');
+            setTimeout(function(){ if(banner && banner.parentNode) banner.remove(); }, 3000);
+          })
+          .catch(function(e){
+            self.textContent = '❌ Erro — tente de novo';
+            self.disabled = false;
+            console.error('Banner publish error:', e);
+          });
         });
         if(okBtn) okBtn.addEventListener('click', function(){
           banner.remove();
