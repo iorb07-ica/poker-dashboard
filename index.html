@@ -9067,6 +9067,16 @@ document.addEventListener('DOMContentLoaded', function(){
       dica:'Escolha quem foi o dealer/organizador desta noite.'
     });
 
+    // — Validação: todos os presentes têm posição
+    var semPosicao = presentes.filter(function(d){ return !d.pos || d.pos <= 0; });
+    if(semPosicao.length > 0) erros.push({
+      icon:'📋',
+      msg:'Classificação incompleta. '+(semPosicao.length === 1
+        ? semPosicao[0].nome+' está sem posição.'
+        : semPosicao.length+' jogadores sem posição: '+semPosicao.map(function(d){return d.nome;}).join(', ')+'.'),
+      dica:'Todo jogador presente precisa ter uma posição final. Preencha as fichas dos sobreviventes ou atribua a posição manualmente para os eliminados.'
+    });
+
     // — Validação: data e WK
     if(!data){ erros.push({icon:'📅', msg:'Data do jogo não informada.', dica:'Preencha a data da partida.'}); }
     else{
@@ -12244,8 +12254,13 @@ window._buildRankingAnual = function(rows){
       /* REBUY */
       var rebField = mkField('Rebuy');
       var rebInp = mkInput('rn-rebuys','0');
+      rebInp.dataset.nome = nome; /* para sync robusto por nome após reordenação */
       rebInp.addEventListener('input', function(){
-        var orig = tbody.rows[+this.dataset.idx];
+        /* Sync tabela oculta — usar nome para matching robusto (igual fichas) */
+        var _nome = this.dataset.nome;
+        var orig = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) orig=r; }); }
+        if(!orig) orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-rebuys'); if(o) o.value=this.value; }
         if(window.rnAtualizarContadores) rnAtualizarContadores();
         if(window.rnRecalcular) rnRecalcular();
@@ -12310,9 +12325,13 @@ window._buildRankingAnual = function(rows){
       /* KOS */
       var koField = mkField('KOs');
       var koInp = mkInput('rn-kos-total','0','#22c55e');
+      koInp.dataset.nome = nome; /* sync robusto por nome */
       koInp.addEventListener('input', function(){
         this.style.color = (+this.value>0) ? '#22c55e' : '#9fb3d4';
-        var orig = tbody.rows[+this.dataset.idx];
+        var _nome = this.dataset.nome;
+        var orig = null;
+        if(_nome){ Array.from(tbody.rows).forEach(function(r){ if(r.dataset.jogador===_nome) orig=r; }); }
+        if(!orig) orig = tbody.rows[+this.dataset.idx];
         if(orig){ var o=orig.querySelector('.rn-kos-total'); if(o) o.value=this.value; }
         if(window.rnAtualizarContadores) rnAtualizarContadores();
         if(window.rnRecalcular) rnRecalcular();
