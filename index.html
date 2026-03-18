@@ -2047,13 +2047,13 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 .rn-pos-badge{display:inline-block;background:#0f1c30;border:1px solid #1e3a5a;border-radius:8px;padding:6px 12px;font-size:15px;font-weight:700;color:#66d9ef;min-width:48px;text-align:center;}
 
 
-/* ── Animações Brasões ── */
+/* ── Animações Relíquias ── */
 /* old brasao keyframe removed */
 /* old brasao keyframe removed */
 /* old brasao keyframe removed */
 /* brasao-anim classes overridden by JS-injected CSS */
 
-/* ── Animações ícones botões brasões ── */
+/* ── Animações ícones botões relíquias ── */
 @keyframes btn-faisca-icon {
   0%,100% { transform: scale(1); }
   50%      { transform: scale(1.3) rotate(-8deg); }
@@ -13070,7 +13070,7 @@ window.abrirPerfil = function(jogadorNome){
   header.appendChild(btnClose);
 
   /* ══════════════════════════════════════════════════════
-     SISTEMA DE BRASÕES - 3 níveis: Faísca / Chama / Inferno
+     SISTEMA DE RELÍQUIAS - 3 níveis: Faísca / Chama / Inferno
      ══════════════════════════════════════════════════════ */
   (function(){
     var ledger = getLedger();
@@ -13301,7 +13301,7 @@ window.abrirPerfil = function(jogadorNome){
     var ETERNOS_CONFIRMADOS = ['Israel'];
     var eterno = ETERNOS_CONFIRMADOS.indexOf(jogadorNome) !== -1;
 
-    // ── Definição dos brasões por nível ──────────────────
+    // ── Definição das relíquias por nível ──────────────────
     window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
     var BRASOES = {
       faisca: [
@@ -13353,7 +13353,7 @@ window.abrirPerfil = function(jogadorNome){
     // Versão global simples
     window.abrirTelaBrasoes = function(nivel){ window._abrirBrasoesComDados(nivel, window._BRASOES_GLOBAL, window._NIVEL_INFO_GLOBAL); };
 
-    // ── Montar seção de brasões - linha compacta com 3 filtros ─────────────
+    // ── Montar seção de relíquias - linha compacta com 3 filtros ─────────────
     var section = document.createElement('div');
     section.style.cssText = 'padding:8px 16px 4px;';
 
@@ -13363,7 +13363,7 @@ window.abrirPerfil = function(jogadorNome){
 
     var tituloB = document.createElement('div');
     tituloB.style.cssText = 'font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;';
-    tituloB.textContent = 'Brasões';
+    tituloB.textContent = 'Relíquias';
     filtroRow.appendChild(tituloB);
 
 
@@ -13423,7 +13423,7 @@ window.abrirPerfil = function(jogadorNome){
       telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:52px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;';
       telaHeader.innerHTML = '<div>'
         +'<div style="font-size:18px;font-weight:900;color:'+info.cor+';">'+info.label+'</div>'
-        +'<div style="font-size:11px;color:#6b82a0;margin-top:2px;">Toque num brasão para ver detalhes</div>'
+        +'<div style="font-size:11px;color:#6b82a0;margin-top:2px;">Toque numa relíquia para ver detalhes</div>'
         +'</div>';
 
       var btnFecharTela = document.createElement('button');
@@ -13437,7 +13437,7 @@ window.abrirPerfil = function(jogadorNome){
       var grid = document.createElement('div');
       grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:14px;padding:8px 10px 32px;box-sizing:border-box;overflow:visible;';
 
-      // Attach SVG art to each brasao
+      // Attach SVG art to each relíquia
       var svgKeys = {
         faisca:  ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
         chama:   ['Certeiro','Capitao','Podio Constante','Colecionador C','Exterminador','Gelo Vivo C','Fenix','Cofre C','Fortaleza C','Ceifador Imp'],
@@ -13486,7 +13486,7 @@ window.abrirPerfil = function(jogadorNome){
           .replace('Dragao','Dragao')
           .replace('Tubarao Branco','Tubarao Branco')
           .trim();
-        // Para brasões com nome duplicado entre níveis, adiciona sufixo do nível
+        // Para relíquias com nome duplicado entre níveis, adiciona sufixo do nível
         var _svgKeyNivel = _svgKey + (nivel==='chama' ? ' C' : nivel==='inferno' ? ' I' : '');
         var _svgArt = window.BRASAO_SVGS[b.nome]
           || window.BRASAO_SVGS[_svgKeyNivel]
@@ -16140,7 +16140,7 @@ var TOUR_STEPS = [
     target: '#card-perfis',
     titleSel: '#tour-hdr-perfis',
     title: '👥 Perfis dos Jogadores',
-    desc: 'Fotos de todos os jogadores. Toque em qualquer um para abrir o perfil completo com estatísticas detalhadas, gráfico de evolução e histórico semana a semana. Dentro do perfil você também encontra os 🏅 Brasões — conquistas desbloqueáveis em 3 níveis: Faísca, Chama e Inferno.',
+    desc: 'Fotos de todos os jogadores. Toque em qualquer um para abrir o perfil completo com estatísticas detalhadas, gráfico de evolução e histórico semana a semana. Dentro do perfil você também encontra os 🏅 Relíquias — conquistas desbloqueáveis em 3 níveis: Faísca, Chama e Inferno.',
     pos: 'center',
     smallTarget: true
   },
