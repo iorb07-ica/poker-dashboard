@@ -2046,6 +2046,46 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 .rn-faltou-row td:first-child{opacity:1;}
 .rn-pos-badge{display:inline-block;background:#0f1c30;border:1px solid #1e3a5a;border-radius:8px;padding:6px 12px;font-size:15px;font-weight:700;color:#66d9ef;min-width:48px;text-align:center;}
 
+
+/* ── Animações Brasões ── */
+@keyframes brasao-faisca {
+  0%   { box-shadow: 0 0 14px #ffd700, 0 0 30px #ffd70066; transform: scale(1); }
+  50%  { box-shadow: 0 0 28px #ffe44d, 0 0 56px #ffe44d99; transform: scale(1.04); }
+  100% { box-shadow: 0 0 14px #ffd700, 0 0 30px #ffd70066; transform: scale(1); }
+}
+@keyframes brasao-chama {
+  0%   { box-shadow: 0 0 14px #f97316, 0 0 30px #f9731666; transform: scale(1) rotate(0deg); }
+  25%  { transform: scale(1.03) rotate(-1deg); }
+  50%  { box-shadow: 0 0 28px #ff7a2a, 0 0 56px #ff7a2a99; transform: scale(1.05) rotate(1deg); }
+  75%  { transform: scale(1.03) rotate(-1deg); }
+  100% { box-shadow: 0 0 14px #f97316, 0 0 30px #f9731666; transform: scale(1) rotate(0deg); }
+}
+@keyframes brasao-inferno {
+  0%   { box-shadow: 0 0 14px #ef4444, 0 0 30px #ef444466; filter: brightness(1); }
+  33%  { box-shadow: 0 0 28px #ff2222, 0 0 56px #ff222299; filter: brightness(1.15); }
+  66%  { box-shadow: 0 0 14px #dc2626, 0 0 30px #dc262666; filter: brightness(0.95); }
+  100% { box-shadow: 0 0 14px #ef4444, 0 0 30px #ef444466; filter: brightness(1); }
+}
+.brasao-anim-faisca  { animation: brasao-faisca  2.4s ease-in-out infinite; }
+.brasao-anim-chama   { animation: brasao-chama   1.8s ease-in-out infinite; }
+.brasao-anim-inferno { animation: brasao-inferno 2.0s ease-in-out infinite; }
+
+/* ── Animações ícones botões brasões ── */
+@keyframes btn-faisca-icon {
+  0%,100% { transform: scale(1); }
+  50%      { transform: scale(1.3) rotate(-8deg); }
+}
+@keyframes btn-chama-icon {
+  0%,100% { transform: scale(1) translateY(0); }
+  50%      { transform: scale(1.25) translateY(-2px); }
+}
+@keyframes btn-inferno-icon {
+  0%,100% { transform: scale(1) rotate(0deg); filter: brightness(1); }
+  50%      { transform: scale(1.2) rotate(15deg); filter: brightness(1.4); }
+}
+.brasao-btn-faisca  { animation: btn-faisca-icon  1.8s ease-in-out infinite; }
+.brasao-btn-chama   { animation: btn-chama-icon   2.0s ease-in-out infinite; }
+.brasao-btn-inferno { animation: btn-inferno-icon 2.2s ease-in-out infinite; }
 </style>
 
 
@@ -2341,7 +2381,7 @@ function setLoadingProgress(pct, msg){
 
 <!-- ====== CARD: Perfil dos Jogadores ====== -->
 <div class="card" id="card-perfis" style="margin-top:10px;padding:0;background:linear-gradient(145deg,rgba(59,130,246,0.08),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.2);">
-  <div onclick="window.toggleCard('perfis-body','perfis-arrow')"
+  <div id="tour-hdr-perfis" onclick="window.toggleCard('perfis-body','perfis-arrow')"
        style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;user-select:none;background:linear-gradient(135deg,rgba(99,102,241,0.08) 0%,transparent 100%);border-radius:12px 12px 0 0;">
     <div style="display:flex;align-items:center;gap:12px;">
       <div id="perfis-card-icon" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.12);box-shadow:0 4px 16px rgba(0,0,0,0.5);position:relative;overflow:visible;flex-shrink:0;">
@@ -2409,7 +2449,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-medalhas-periodo" style="margin-top:4px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('medalhas-periodo-body','medalhas-periodo-arrow')">
+         id="tour-hdr-medalhas" onclick="window.toggleCard('medalhas-periodo-body','medalhas-periodo-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#3a2a0d,rgba(201,162,39,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏅</div>
         <div>
@@ -2509,7 +2549,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-ranking-anual" style="margin-top:0;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('ranking-anual-body','ranking-anual-arrow')">
+         id="tour-hdr-ranking-anual" onclick="window.toggleCard('ranking-anual-body','ranking-anual-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(59,130,246,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🥇</div>
         <div>
@@ -2530,7 +2570,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-ranking-kos" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('ranking-kos-body','ranking-kos-arrow')">
+         id="tour-hdr-ranking-kos" onclick="window.toggleCard('ranking-kos-body','ranking-kos-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2a0d0d,rgba(239,68,68,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💀</div>
         <div>
@@ -2561,7 +2601,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-pontuacao-anual" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('pontuacao-anual-body','pontuacao-anual-arrow')">
+         id="tour-hdr-pontuacao" onclick="window.toggleCard('pontuacao-anual-body','pontuacao-anual-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📈</div>
         <div>
@@ -2582,7 +2622,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-calculadora" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('calc-body','calc-arrow')">
+         id="tour-hdr-calc" onclick="window.toggleCard('calc-body','calc-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(99,102,241,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(99,102,241,0.3);">🧮</div>
         <div>
@@ -2649,7 +2689,7 @@ function setLoadingProgress(pct, msg){
 
     <!-- Cabeçalho colapsável -->
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('prem-tip-body','prem-tip-arrow')">
+         id="tour-hdr-premiacoes" onclick="window.toggleCard('prem-tip-body','prem-tip-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#3a2a0d,rgba(251,191,36,0.2));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(251,191,36,0.3);">🏆</div>
         <div>
@@ -2685,7 +2725,7 @@ function setLoadingProgress(pct, msg){
 
     <!-- Cabeçalho colapsável -->
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('heatmap-novo-body','heatmap-novo-arrow')">
+         id="tour-hdr-heatmap" onclick="window.toggleCard('heatmap-novo-body','heatmap-novo-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d2a3a,rgba(6,182,212,0.2));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(6,182,212,0.3);">🗺️</div>
         <div>
@@ -2719,7 +2759,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-previsao" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px 12px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('previsao-body','previsao-arrow')">
+         id="tour-hdr-previsao" onclick="window.toggleCard('previsao-body','previsao-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0a2a1a,rgba(34,197,94,0.2));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(34,197,94,0.35);">🔮</div>
         <div>
@@ -2768,7 +2808,7 @@ function setLoadingProgress(pct, msg){
 <div id="card-equity-calc" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
-         onclick="window.toggleCard('equity-calc-body','equity-calc-arrow')">
+         id="tour-hdr-equity" onclick="window.toggleCard('equity-calc-body','equity-calc-arrow')">
       <div style="display:flex;align-items:center;gap:12px;">
         <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(239,68,68,0.3));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🃏</div>
         <div>
@@ -2847,7 +2887,7 @@ function setLoadingProgress(pct, msg){
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
-    <div onclick="window.toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
+    <div id="tour-hdr-torneios" onclick="window.toggleCard('torneios-body','torneios-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;">
       <span style="font-size:42px;line-height:1;filter:drop-shadow(0 4px 16px rgba(255,80,0,.7));">🥩</span>
       <div style="flex:1;">
         <div style="font-size:19px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Torneios Especiais</div>
@@ -2979,7 +3019,7 @@ function setLoadingProgress(pct, msg){
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
-    <div onclick="window.toggleCard('hof-body','hof-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;background:linear-gradient(135deg,rgba(255,215,0,0.08) 0%,transparent 100%);border-radius:16px 16px 0 0;">
+    <div id="tour-hdr-hof" onclick="window.toggleCard('hof-body','hof-arrow')" style="display:flex;align-items:center;gap:14px;padding:20px 18px;cursor:pointer;user-select:none;background:linear-gradient(135deg,rgba(255,215,0,0.08) 0%,transparent 100%);border-radius:16px 16px 0 0;">
       <span style="font-size:44px;line-height:1;filter:drop-shadow(0 4px 20px rgba(255,215,0,.9));animation:trophyPulse 2.4s ease-in-out infinite;">🏆</span>
       <div style="flex:1;">
         <div class="hof-title" style="font-size:20px;font-weight:900;letter-spacing:.3px;display:flex;align-items:center;gap:6px;">
@@ -8594,6 +8634,10 @@ document.addEventListener('DOMContentLoaded', function(){
     return H.map(function(v){return(v>>>0).toString(16).padStart(8,'0');}).join('');
   }
 
+  // Expor sha256 globalmente para uso no admin
+  window._sha256 = sha256;
+  window._sha256sync = sha256sync;
+
   window.abrirRegistroNoite = function(){
     // Verificar se já autenticou nessa sessão
     if(RN_AUTENTICADO){
@@ -8809,7 +8853,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var toast=document.getElementById('rn-toast');
     toast.textContent='📂 WK'+String(wk).padStart(2,'0')+' carregada!';
     toast.style.background='linear-gradient(135deg,#1a3a6e,#3b82f6)';
-    toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');toast.style.background='';},3500);
+    toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');toast.style.background='';},5000);
   };
 
   // ── Preencher formulário ──────────────────────────────────
@@ -9268,7 +9312,7 @@ document.addEventListener('DOMContentLoaded', function(){
     } else {
       /* Fallback: toast simples */
       var toast=document.getElementById('rn-toast');
-      if(toast){ toast.textContent='✅ '+wkStr+' registrada!'; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},4000); }
+      if(toast){ toast.textContent='✅ '+wkStr+' registrada!'; toast.classList.add('show'); setTimeout(function(){toast.classList.remove('show');},5000); }
     }
 
     // Popup WhatsApp após salvar
@@ -9303,7 +9347,7 @@ window.salvarHTML = function(){
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
     var t = document.getElementById('rn-toast');
-    if(t){ t.textContent='💾 Dashboard salvo com '+raw.length+' registros!'; t.style.background='linear-gradient(135deg,#1a3a6e,#3b82f6)'; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');t.style.background='';},3500); }
+    if(t){ t.textContent='💾 Dashboard salvo com '+raw.length+' registros!'; t.style.background='linear-gradient(135deg,#1a3a6e,#3b82f6)'; t.classList.add('show'); setTimeout(function(){t.classList.remove('show');t.style.background='';},5000); }
   } catch(e) { alert('Erro ao salvar: ' + e.message); }
 };
 
@@ -9587,7 +9631,7 @@ window.ghSalvarDados = function(){
       toast.textContent = '✅ Dashboard salvo no GitHub com '+raw.length+' registros!';
       toast.style.background = 'linear-gradient(135deg,#1a3a6e,#3b82f6)';
       toast.classList.add('show');
-      setTimeout(function(){ toast.classList.remove('show'); toast.style.background=''; }, 4000);
+      setTimeout(function(){ toast.classList.remove('show'); toast.style.background=''; }, 5000);
     }
   })
   .catch(function(e){
@@ -11414,88 +11458,487 @@ window.abrirPerfil = function(jogadorNome){
   header.appendChild(avatarWrap);
   header.appendChild(btnClose);
 
-  /* ── Badges / Conquistas ── */
+  /* ══════════════════════════════════════════════════════
+     SISTEMA DE BRASÕES - 3 níveis: Faísca / Chama / Inferno
+     ══════════════════════════════════════════════════════ */
   (function(){
     var ledger = getLedger();
-    var playerRows = ledger.filter(function(r){ return r.jogador===jogadorNome; });
+    var playerRows = ledger.filter(function(r){ return r.jogador===jogadorNome && !+r.faltou; });
+    var allRows = ledger.filter(function(r){ return r.jogador===jogadorNome; });
     var wksSorted = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
-    var badges = [];
 
-    // 🦈 Tubarão — mais KOs numa semana (comparado a todos)
-    var maxKOsGlobal = 0;
-    wksSorted.forEach(function(wk){
-      var allRows = ledger.filter(function(r){ return +r.wk===wk; });
-      allRows.forEach(function(r){ if((+r.kos||0) > maxKOsGlobal) maxKOsGlobal = +r.kos||0; });
-    });
-    var playerMaxKOs = 0;
-    playerRows.forEach(function(r){ if((+r.kos||0)>playerMaxKOs) playerMaxKOs=+r.kos||0; });
-    if(playerMaxKOs > 0 && playerMaxKOs >= maxKOsGlobal)
-      badges.push({emoji:'🦈', nome:'Tubarão', desc:'Recorde de KOs em uma semana ('+playerMaxKOs+')'});
+    // ── Helpers ──────────────────────────────────────────
+    function maxConsec(arr, fn){
+      var max=0, cur=0;
+      arr.forEach(function(x){ if(fn(x)){cur++;if(cur>max)max=cur;}else cur=0; });
+      return max;
+    }
 
-    // 🎯 Sniper — pelo menos 1 vitória sem nenhum rebuy
-    var sniper = playerRows.some(function(r){ return +r.posicao===1 && (+r.rebuys||0)===0 && !+r.faltou; });
-    if(sniper) badges.push({emoji:'🎯', nome:'Sniper', desc:'Ganhou sem nenhum rebuy'});
+    // ── Calcular conquistas ───────────────────────────────
 
-    // 💪 Resiliência — rebuyou 3x e terminou top-3
-    var resiliente = playerRows.some(function(r){ return (+r.rebuys||0)>=3 && +r.posicao<=3 && !+r.faltou; });
-    if(resiliente) badges.push({emoji:'💪', nome:'Resiliência', desc:'Rebuyou 3x e terminou top-3'});
+    // FAÍSCA
+    // 1. Explosivo - 2+ KOs em 4 noites diferentes
+    var expNights = playerRows.filter(function(r){ return (+r.kos||0)>=2; }).length;
+    var explosivo = expNights >= 4;
 
-    // 👑 Dominador — liderou ranking por 4 semanas seguidas
-    // Build cumulative points per week and check if player led for 4 consecutive
-    var cumByPlayer = {};
-    var dominated = 0, maxDom = 0;
-    wksSorted.forEach(function(wk){
-      var wkRows = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
-      wkRows.forEach(function(r){
-        if(!cumByPlayer[r.jogador]) cumByPlayer[r.jogador]=0;
-        cumByPlayer[r.jogador]+=(+r.pontos_calc||0);
+    // 2. Colecionador Faísca - 5 medalhas (top-3) no ano
+    var totalMedalhas = playerRows.filter(function(r){ return +r.posicao<=3; }).length;
+    var colecionadorF = totalMedalhas >= 5;
+
+    // 3. Soldado - 3 meses sem faltar nenhuma semana
+    var mesesSemFalta = 0;
+    var mesesJogados = Array.from(new Set(ledger.map(function(r){ return +r.mes; }))).filter(Boolean);
+    mesesJogados.forEach(function(m){
+      var wksMes = Array.from(new Set(ledger.filter(function(r){ return +r.mes===m; }).map(function(r){ return +r.wk; })));
+      var falteiNesse = wksMes.some(function(wk){
+        var r = allRows.find(function(x){ return +x.wk===wk; });
+        return !r || +r.faltou===1;
       });
-      // Find leader this week
-      var leader = null, top=0;
-      Object.keys(cumByPlayer).forEach(function(j){ if(cumByPlayer[j]>top){top=cumByPlayer[j];leader=j;} });
-      if(leader===jogadorNome){ dominated++; if(dominated>maxDom) maxDom=dominated; }
-      else dominated=0;
+      if(!falteiNesse) mesesSemFalta++;
     });
-    if(maxDom>=4) badges.push({emoji:'👑', nome:'Dominador', desc:'Liderou o ranking por '+maxDom+' semanas seguidas'});
+    var soldado = mesesSemFalta >= 3;
 
-    // 🔥 Hat-trick — 3 vitórias consecutivas
-    var wins=0, maxWins=0;
-    wksSorted.forEach(function(wk){
+    // 4. Coleção Completa - ouro, prata e bronze conquistados
+    var temOuro   = playerRows.some(function(r){ return +r.posicao===1; });
+    var temPrata  = playerRows.some(function(r){ return +r.posicao===2; });
+    var temBronze = playerRows.some(function(r){ return +r.posicao===3; });
+    var colecaoCompleta = temOuro && temPrata && temBronze;
+
+    // 5. Cofre Faísca - terminou com mais de 20.000 fichas numa noite
+    var cofreF = playerRows.some(function(r){ return (+r.fichas_restantes||0) > 20000; });
+
+    // 6. Caçador - 3+ KOs numa única noite
+    var cacador = playerRows.some(function(r){ return (+r.kos||0) >= 3; });
+
+    // 7. Primeiro Ouro - venceu uma noite
+    var primeiroOuro = playerRows.some(function(r){ return +r.posicao===1; });
+
+    // 8. Fortaleza Faísca - nunca terminou em último num mês
+    var fortF = true;
+    mesesJogados.forEach(function(m){
+      var wksMes = ledger.filter(function(r){ return +r.mes===m && !+r.faltou; });
+      var nJogs = Array.from(new Set(wksMes.map(function(r){ return r.jogador; }))).length;
+      var minhas = playerRows.filter(function(r){ return +r.mes===m; });
+      if(minhas.some(function(r){ return +r.posicao===nJogs; })) fortF = false;
+    });
+    var fortalezaF = fortF;
+
+    // 9. Gelo Vivo Faísca - terminou top-3 sem rebuyar
+    var geloVivoF = playerRows.some(function(r){ return +r.posicao<=3 && (+r.rebuys||0)===0; });
+
+    // 10. Ceifador - foi campeão de KOs num mês
+    var ceifador = false;
+    mesesJogados.forEach(function(m){
+      var kosPorJog = {};
+      ledger.filter(function(r){ return +r.mes===m && !+r.faltou; }).forEach(function(r){
+        kosPorJog[r.jogador] = (kosPorJog[r.jogador]||0) + (+r.kos||0);
+      });
+      var maxKO = Math.max.apply(null, Object.values(kosPorJog));
+      if(maxKO > 0 && (kosPorJog[jogadorNome]||0) === maxKO) ceifador = true;
+    });
+
+    // CHAMA
+    // 1. Certeiro - venceu sem rebuyar
+    var certeiro = playerRows.some(function(r){ return +r.posicao===1 && (+r.rebuys||0)===0; });
+
+    // 2. Capitão - 6 meses sem faltar
+    var capitao = mesesSemFalta >= 6;
+
+    // 3. Pódio Constante - top-3 em 3 noites consecutivas
+    var podioCons = maxConsec(wksSorted, function(wk){
       var r = playerRows.find(function(x){ return +x.wk===wk; });
-      if(r && +r.posicao===1 && !+r.faltou){ wins++; if(wins>maxWins) maxWins=wins; }
-      else wins=0;
+      return r && +r.posicao<=3;
+    }) >= 3;
+
+    // 4. Colecionador Chama - 10 medalhas no ano
+    var colecionadorC = totalMedalhas >= 10;
+
+    // 5. Exterminador - 50 KOs acumulados no ano
+    var totalKOs = playerRows.reduce(function(s,r){ return s+(+r.kos||0); }, 0);
+    var exterminador = totalKOs >= 50;
+
+    // 6. Gelo Vivo Chama - jogou um mês inteiro sem rebuyar
+    var geloVivoC = false;
+    mesesJogados.forEach(function(m){
+      var minhas = playerRows.filter(function(r){ return +r.mes===m; });
+      if(minhas.length > 0 && minhas.every(function(r){ return (+r.rebuys||0)===0; })) geloVivoC = true;
     });
-    if(maxWins>=3) badges.push({emoji:'🔥', nome:'Hat-trick', desc:maxWins+' vitórias consecutivas'});
 
-    if(!badges.length) return;
+    // 7. Fênix - rebuyou 3x+ e venceu
+    var fenix = playerRows.some(function(r){ return +r.posicao===1 && (+r.rebuys||0)>=3; });
 
-    var badgeWrap = document.createElement('div');
-    badgeWrap.style.cssText = 'padding:6px 16px 2px;display:flex;flex-wrap:wrap;gap:8px;justify-content:center;';
-    badges.forEach(function(b){
-      var el = document.createElement('div');
-      el.style.cssText = 'font-size:26px;cursor:pointer;position:relative;filter:drop-shadow(0 2px 6px rgba(0,0,0,0.4));';
-      el.textContent = b.emoji;
-      // Tap to show tooltip
-      var tooltip = null;
-      el.addEventListener('click', function(e){
-        e.stopPropagation();
-        // Remove other tooltips
-        document.querySelectorAll('.badge-tooltip').forEach(function(t){ t.remove(); });
-        if(tooltip && document.body.contains(tooltip)){ tooltip=null; return; }
-        tooltip = document.createElement('div');
-        tooltip.className = 'badge-tooltip';
-        tooltip.style.cssText = 'position:fixed;background:rgba(10,16,32,0.97);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:8px 12px;font-size:12px;color:#e6edf3;z-index:999999;max-width:200px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.5);';
-        tooltip.innerHTML = '<b style="color:#ffd700;">'+escHTML(b.nome)+'</b><br><span style="color:#9fb3d4;font-size:11px;">'+escHTML(b.desc)+'</span>';
-        document.body.appendChild(tooltip);
-        var rect = el.getBoundingClientRect();
-        tooltip.style.top = (rect.bottom + 6) + 'px';
-        tooltip.style.left = Math.max(8, rect.left - tooltip.offsetWidth/2 + 13) + 'px';
-        setTimeout(function(){ if(tooltip) tooltip.remove(); tooltip=null; }, 3000);
+    // 8. Cofre Chama - terminou com mais de 50.000 fichas
+    var cofreC = playerRows.some(function(r){ return (+r.fichas_restantes||0) > 50000; });
+
+    // 9. Fortaleza Chama - nunca terminou em último num trimestre
+    var fortC = true;
+    var trimestres = Array.from(new Set(ledger.map(function(r){ return +r.trimestre; }))).filter(Boolean);
+    trimestres.forEach(function(t){
+      var wksTri = ledger.filter(function(r){ return +r.trimestre===t && !+r.faltou; });
+      var nJogs = Array.from(new Set(wksTri.map(function(r){ return r.jogador; }))).length;
+      var minhas = playerRows.filter(function(r){ return +r.trimestre===t; });
+      if(minhas.some(function(r){ return +r.posicao===nJogs; })) fortC = false;
+    });
+    var fortalezaC = fortC;
+
+    // 10. Ceifador Implacável - campeão de KOs em 3 meses
+    var mesesCampeaoKO = 0;
+    mesesJogados.forEach(function(m){
+      var kosPorJog = {};
+      ledger.filter(function(r){ return +r.mes===m && !+r.faltou; }).forEach(function(r){
+        kosPorJog[r.jogador] = (kosPorJog[r.jogador]||0) + (+r.kos||0);
       });
-      badgeWrap.appendChild(el);
+      var maxKO = Math.max.apply(null, Object.values(kosPorJog));
+      if(maxKO > 0 && (kosPorJog[jogadorNome]||0) === maxKO) mesesCampeaoKO++;
     });
-    box._badgeWrap = badgeWrap;
-    box._badgeWrapData = badgeWrap; // will be inserted before kpisGrid after it's created
+    var ceifadorImp = mesesCampeaoKO >= 3;
+
+    // INFERNO
+    // 1. Vulcão - 5 pódios consecutivos
+    var vulcao = maxConsec(wksSorted, function(wk){
+      var r = playerRows.find(function(x){ return +x.wk===wk; });
+      return r && +r.posicao<=3;
+    }) >= 5;
+
+    // 2. Fortaleza Inferno - nunca terminou em último no ano
+    var fortI = true;
+    var nJogsTotal = Array.from(new Set(ledger.filter(function(r){ return !+r.faltou; }).map(function(r){ return r.jogador; }))).length;
+    playerRows.forEach(function(r){ if(+r.posicao===nJogsTotal) fortI = false; });
+    var fortalezaI = fortI;
+
+    // 3. Colecionador Inferno - 20 medalhas no ano
+    var colecionadorI = totalMedalhas >= 20;
+
+    // 4. Dinastia - campeão mensal por 3 meses consecutivos
+    var campMesSorted = mesesJogados.sort(function(a,b){return a-b;}).map(function(m){
+      var pts = {};
+      ledger.filter(function(r){ return +r.mes===m && !+r.faltou; }).forEach(function(r){
+        pts[r.jogador] = (pts[r.jogador]||0) + (+r.pontos_calc||0);
+      });
+      var top = Object.entries(pts).sort(function(a,b){return b[1]-a[1];})[0];
+      return top && top[0]===jogadorNome;
+    });
+    var dinastia = maxConsec(campMesSorted, function(x){ return x; }) >= 3;
+
+    // 5. Tubarão Branco - 10+ KOs numa única noite
+    var tubarao = playerRows.some(function(r){ return (+r.kos||0) >= 10; });
+
+    // 6. Hat-trick - 3 vitórias consecutivas
+    var hatTrick = maxConsec(wksSorted, function(wk){
+      var r = playerRows.find(function(x){ return +x.wk===wk; });
+      return r && +r.posicao===1;
+    }) >= 3;
+
+    // 7. Dragao - eliminou TODOS os outros jogadores presentes numa noite
+    // Regra: seus KOs nessa noite = total de outros jogadores presentes (nPresentes - 1)
+    // E voce terminou em 1o lugar (unico com fichas)
+    var dragao = false;
+    wksSorted.forEach(function(wk){
+      var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
+      var nPresentes = wkAll.length;
+      if(nPresentes < 3) return; // precisa de pelo menos 3 jogadores
+      var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
+      if(!meuRow) return;
+      var meusKOs = +meuRow.kos || 0;
+      var minhaPosicao = +meuRow.posicao;
+      // Tem que ter vencido a noite E feito KOs em todos os outros
+      if(minhaPosicao === 1 && meusKOs === nPresentes - 1) dragao = true;
+    });
+
+    // 8. Grand Slam - vencer noite + mês + trimestre no mesmo ciclo FECHADO
+    var grandSlam = false;
+    var _eng2 = PREMIO_ENGINE ? PREMIO_ENGINE.get(getLedger()) : null;
+    if(_eng2){
+      trimestres.forEach(function(t){
+        var triData = _eng2.tri[t];
+        // So conta trimestre fechado
+        if(!triData || !triData.fechado) return;
+        // 1° no trimestre
+        var ptsTri = {};
+        ledger.filter(function(r){ return +r.trimestre===t && !+r.faltou; }).forEach(function(r){ ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+(+r.pontos_calc||0); });
+        var topTri = Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0];
+        if(!topTri || topTri[0]!==jogadorNome) return;
+
+        // Verificar cada mes do trimestre
+        var mesTri = Array.from(new Set(ledger.filter(function(r){ return +r.trimestre===t; }).map(function(r){ return +r.mes; })));
+        mesTri.forEach(function(m){
+          var mesData = _eng2.mes[m];
+          if(!mesData || !mesData.fechado) return;
+          // 1° no mes fechado
+          var ptsMes = {};
+          ledger.filter(function(r){ return +r.mes===m && !+r.faltou; }).forEach(function(r){ ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+(+r.pontos_calc||0); });
+          var topMes = Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0];
+          if(!topMes || topMes[0]!==jogadorNome) return;
+          // 1° em pelo menos uma noite desse mes
+          var venceuNoite = playerRows.some(function(r){ return +r.mes===m && +r.posicao===1; });
+          if(venceuNoite) grandSlam = true;
+        });
+      });
+    }
+
+    // 9. Olimpo - campeão anual
+    var ptsAnual = {};
+    ledger.filter(function(r){ return !+r.faltou; }).forEach(function(r){ ptsAnual[r.jogador]=(ptsAnual[r.jogador]||0)+(+r.pontos_calc||0); });
+    var topAnual = Object.entries(ptsAnual).sort(function(a,b){return b[1]-a[1];})[0];
+    var olimpo = topAnual && topAnual[0]===jogadorNome;
+
+    // 10. Eterno - não implementável ainda (requer dados de anos anteriores)
+    var eterno = false;
+
+    // ── Definição dos brasões por nível ──────────────────
+    var BRASOES = {
+      faisca: [
+        {emoji:'💥', nome:'Explosivo',       desc:'Fez 2+ KOs em 4 noites diferentes.',                                    conquistado: explosivo},
+        {emoji:'🏅', nome:'Colecionador',    desc:'5 medalhas conquistadas no ano. O pódio virou costume.',                conquistado: colecionadorF},
+        {emoji:'🪖', nome:'Soldado',         desc:'3 meses sem faltar. Disciplina de guerreiro.',                          conquistado: soldado},
+        {emoji:'🎨', nome:'Coleção Completa',desc:'Conquistou ouro, prata e bronze. O pódio inteiro passou pelas suas mãos.', conquistado: colecaoCompleta},
+        {emoji:'🏦', nome:'Cofre',           desc:'Terminou com mais de 20.000 fichas. Guardou bem.',                     conquistado: cofreF},
+        {emoji:'💀', nome:'Caçador',         desc:'3 ou mais KOs numa noite. A mesa sentiu.',                             conquistado: cacador},
+        {emoji:'🥇', nome:'Primeiro Ouro',   desc:'A primeira vitória. O começo de tudo.',                                conquistado: primeiroOuro},
+        {emoji:'🏰', nome:'Fortaleza',       desc:'Nunca terminou em último num mês.',                                    conquistado: fortalezaF},
+        {emoji:'🧊', nome:'Gelo Vivo',       desc:'Terminou top-3 sem rebuyar. Frio e eficiente.',                        conquistado: geloVivoF},
+        {emoji:'💀', nome:'Ceifador',        desc:'Maior caçador de KOs do mês. A mesa tremeu.',                         conquistado: ceifador},
+      ],
+      chama: [
+        {emoji:'🏹', nome:'Certeiro',           desc:'Venceu sem rebuyar. Eficiência pura.',                                  conquistado: certeiro},
+        {emoji:'🛡️', nome:'Capitão',            desc:'6 meses sem faltar. Lidera pelo exemplo.',                              conquistado: capitao},
+        {emoji:'🃏', nome:'Pódio Constante',    desc:'Top-3 em 3 noites consecutivas. A mesa te respeita.',                  conquistado: podioCons},
+        {emoji:'🏅', nome:'Colecionador',       desc:'10 medalhas no ano. Você e o pódio são inseparáveis.',                 conquistado: colecionadorC},
+        {emoji:'☠️', nome:'Exterminador',       desc:'50 KOs acumulados no ano. Metade da mesa passou pelas suas mãos.',     conquistado: exterminador},
+        {emoji:'🧊', nome:'Gelo Vivo',          desc:'Jogou um mês inteiro sem rebuyar. Sangue frio do começo ao fim.',      conquistado: geloVivoC},
+        {emoji:'🐦‍🔥', nome:'Fênix',            desc:'Rebuyou 3 vezes ou mais e ainda venceu a noite. Das cinzas para o topo.', conquistado: fenix},
+        {emoji:'🏦', nome:'Cofre',              desc:'Terminou com mais de 50.000 fichas. Intocável.',                       conquistado: cofreC},
+        {emoji:'🏰', nome:'Fortaleza',          desc:'Nunca terminou em último em um trimestre inteiro.',                    conquistado: fortalezaC},
+        {emoji:'💀', nome:'Ceifador Implacável',desc:'Liderou os KOs em 3 meses. A mesa te teme.',                          conquistado: ceifadorImp},
+      ],
+      inferno: [
+        {emoji:'🌋', nome:'Vulcão',          desc:'5 semanas. 5 pódios. Sem interrupção. Vulcão ativo.',                   conquistado: vulcao},
+        {emoji:'🏰', nome:'Fortaleza',       desc:'Nunca terminou em último no ano inteiro.',                              conquistado: fortalezaI},
+        {emoji:'🏅', nome:'Colecionador',    desc:'20 medalhas no ano. Uma temporada histórica.',                          conquistado: colecionadorI},
+        {emoji:'👑', nome:'Dinastia',        desc:'Campeão do ranking mensal por 3 meses consecutivos. O trono é seu.',    conquistado: dinastia},
+        {emoji:'🦈', nome:'Tubarão Branco',  desc:'10 ou mais KOs em uma única noite. A mesa virou território seu.',       conquistado: tubarao},
+        {emoji:'⚡', nome:'Hat-trick',       desc:'Hat-trick puro. Três noites, três vitórias, zero dúvidas.',             conquistado: hatTrick},
+        {emoji:'🐉', nome:'Dragão',          desc:'Eliminou todos os jogadores presentes em uma única noite. Ninguém sobreviveu.', conquistado: dragao},
+        {emoji:'🎖️', nome:'Grand Slam',      desc:'Conquistou a noite, o mês e o trimestre num mesmo ciclo. O pódio completo de uma vez.', conquistado: grandSlam},
+        {emoji:'🏆', nome:'Olimpo',          desc:'Escalou mais alto que todos. Campeão Anual do Poker do Plaza. Poucos chegam, ninguém esquece.', conquistado: olimpo},
+        {emoji:'🌌', nome:'Eterno',          desc:'Três anos. Três coroas. Imortal no Plaza.',                             conquistado: eterno},
+      ]
+    };
+
+    var NIVEL_INFO = {
+      faisca:  {label:'🔥 Faísca',  cor:'#f97316', bg:'rgba(249,115,22,0.12)',  brd:'rgba(249,115,22,0.35)'},
+      chama:   {label:'🌋 Chama',   cor:'#ef4444', bg:'rgba(239,68,68,0.12)',   brd:'rgba(239,68,68,0.35)'},
+      inferno: {label:'☀️ Inferno', cor:'#fbbf24', bg:'rgba(251,191,36,0.12)', brd:'rgba(251,191,36,0.35)'},
+    };
+
+    // ── Montar seção de brasões - linha compacta com 3 filtros ─────────────
+    var section = document.createElement('div');
+    section.style.cssText = 'padding:8px 16px 4px;';
+
+    // Linha com título + 3 botões filtro — centralizados
+    var filtroRow = document.createElement('div');
+    filtroRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0;';
+
+    var tituloB = document.createElement('div');
+    tituloB.style.cssText = 'font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;';
+    tituloB.textContent = 'Brasões';
+    filtroRow.appendChild(tituloB);
+
+    var btnsDiv = document.createElement('div');
+    btnsDiv.style.cssText = 'display:flex;gap:8px;align-items:center;';
+
+var BRASAO_SVGS = {
+  'Explosivo': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_exp" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7c1d0a"/><stop offset="100%" stop-color="#1a0500"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_exp)" stroke="#ff4400" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ff6622" stroke-width="1" opacity=".5"/><g transform="translate(50,50)"><polygon points="0,-28 5,-8 20,-12 8,2 18,16 3,8 0,26 -3,8 -18,16 -8,2 -20,-12 -5,-8" fill="#ff6600" opacity=".9"/><polygon points="0,-18 3,-5 12,-8 5,1 11,10 2,5 0,16 -2,5 -11,10 -5,1 -12,-8 -3,-5" fill="#ffcc00"/><circle cx="0" cy="0" r="4" fill="#fff" opacity=".9"/></g><g opacity=".7"><line x1="50" y1="8" x2="50" y2="2" stroke="#ff6600" stroke-width="2" stroke-linecap="round"/><line x1="74" y1="15" x2="78" y2="11" stroke="#ff6600" stroke-width="2" stroke-linecap="round"/><line x1="85" y1="38" x2="91" y2="36" stroke="#ff6600" stroke-width="2" stroke-linecap="round"/><line x1="26" y1="15" x2="22" y2="11" stroke="#ff6600" stroke-width="2" stroke-linecap="round"/><line x1="15" y1="38" x2="9" y2="36" stroke="#ff6600" stroke-width="2" stroke-linecap="round"/></g></svg>`,
+  'Colecionador': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_col" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#7a5500"/><stop offset="100%" stop-color="#1a0f00"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_col)" stroke="#ffd700" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ffaa00" stroke-width="1" opacity=".4"/><circle cx="50" cy="38" r="14" fill="#ffd700" stroke="#fff8" stroke-width="1"/><rect x="43" y="52" width="14" height="18" rx="2" fill="#ffd700"/><polygon points="50,26 52,32 58,32 53,36 55,42 50,38 45,42 47,36 42,32 48,32" fill="#fff" opacity=".9"/><g fill="#ffd700" opacity=".8"><circle cx="20" cy="30" r="7" stroke="#ffaa00" stroke-width="1.5"/><polygon points="20,23 21.5,27 26,27 22.5,29.5 23.5,34 20,31.5 16.5,34 17.5,29.5 14,27 18.5,27" fill="#fff9" font-size="6"/><circle cx="80" cy="30" r="7" stroke="#ffaa00" stroke-width="1.5"/><polygon points="80,23 81.5,27 86,27 82.5,29.5 83.5,34 80,31.5 76.5,34 77.5,29.5 74,27 78.5,27" fill="#fff9"/><circle cx="50" cy="78" r="7" stroke="#ffaa00" stroke-width="1.5"/><polygon points="50,71 51.5,75 56,75 52.5,77.5 53.5,82 50,79.5 46.5,82 47.5,77.5 44,75 48.5,75" fill="#fff9"/></g></svg>`,
+  'Soldado': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_sol" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a2e0a"/><stop offset="100%" stop-color="#050e02"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_sol)" stroke="#4a8a1a" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#6aaa2a" stroke-width="1" opacity=".4"/><ellipse cx="50" cy="42" rx="24" ry="10" fill="#3a6e10" stroke="#5a9a20" stroke-width="1.5"/><path d="M26,42 Q26,62 50,65 Q74,62 74,42" fill="#4a8a18" stroke="#5a9a20" stroke-width="1.5"/><path d="M26,42 Q24,38 30,35 Q40,28 50,28 Q60,28 70,35 Q76,38 74,42" fill="#3a6e10" stroke="#5a9a20" stroke-width="1.5"/><rect x="46" y="26" width="8" height="6" rx="1" fill="#2a5008" stroke="#4a8a18" stroke-width="1"/><path d="M44,42 Q44,56 50,58 Q56,56 56,42" fill="#2a5008" stroke="#4a8a18" stroke-width="1" opacity=".6"/><rect x="46" y="62" width="8" height="4" rx="1" fill="#ffd700" opacity=".8"/></svg>`,
+  'Colecao Completa': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0a2e"/><stop offset="100%" stop-color="#05020e"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cc)" stroke="#cc88ff" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#aa66dd" stroke-width="1" opacity=".4"/><circle cx="50" cy="36" r="12" fill="#ffd700" stroke="#fff8" stroke-width="1.5"/><text x="50" y="41" text-anchor="middle" font-size="14" fill="#fff">1</text><circle cx="30" cy="62" r="10" fill="#aaaaaa" stroke="#fff8" stroke-width="1.5"/><text x="30" y="66" text-anchor="middle" font-size="12" fill="#fff">2</text><circle cx="70" cy="62" r="10" fill="#cd7f32" stroke="#fff8" stroke-width="1.5"/><text x="70" y="66" text-anchor="middle" font-size="12" fill="#fff">3</text><line x1="40" y1="44" x2="32" y2="52" stroke="#fff" stroke-width="1.5" opacity=".5"/><line x1="60" y1="44" x2="68" y2="52" stroke="#fff" stroke-width="1.5" opacity=".5"/></svg>`,
+  'Cofre F': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cof" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a1a2e"/><stop offset="100%" stop-color="#020508"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cof)" stroke="#3b82f6" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#2255cc" stroke-width="1" opacity=".4"/><rect x="25" y="32" width="50" height="40" rx="5" fill="#1a3a6e" stroke="#3b82f6" stroke-width="2"/><circle cx="50" cy="52" r="10" fill="#0a1a3e" stroke="#3b82f6" stroke-width="2"/><circle cx="50" cy="52" r="6" fill="#3b82f6" opacity=".7"/><circle cx="50" cy="52" r="3" fill="#fff" opacity=".9"/><line x1="50" y1="52" x2="56" y2="46" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/><rect x="45" y="68" width="10" height="5" rx="1" fill="#3b82f6"/><rect x="70" y="44" width="6" height="16" rx="3" fill="#1a3a6e" stroke="#3b82f6" stroke-width="1.5"/><rect x="24" y="36" width="4" height="8" rx="1" fill="#ffd700" opacity=".6"/></svg>`,
+  'Cacador': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cac" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0a0a"/><stop offset="100%" stop-color="#050202"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cac)" stroke="#ef4444" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#cc2222" stroke-width="1" opacity=".4"/><ellipse cx="50" cy="40" rx="14" ry="16" fill="#1a1a2e" stroke="#cc2222" stroke-width="1.5"/><ellipse cx="44" cy="35" rx="5" ry="7" fill="#111" stroke="#333" stroke-width="1"/><ellipse cx="56" cy="35" rx="5" ry="7" fill="#111" stroke="#333" stroke-width="1"/><ellipse cx="44" cy="35" rx="3" ry="4" fill="#ef4444" opacity=".8"/><ellipse cx="56" cy="35" rx="3" ry="4" fill="#ef4444" opacity=".8"/><path d="M36,54 Q36,70 50,72 Q64,70 64,54" fill="#1a1a2e" stroke="#cc2222" stroke-width="1.5"/><path d="M42,58 Q44,64 50,65 Q56,64 58,58" fill="#cc2222" opacity=".6"/><rect x="36" y="52" width="5" height="8" rx="2" fill="#cc2222" opacity=".7"/><rect x="59" y="52" width="5" height="8" rx="2" fill="#cc2222" opacity=".7"/></svg>`,
+  'Primeiro Ouro': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_po" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#3a2800"/><stop offset="100%" stop-color="#0e0800"/></radialGradient><radialGradient id="trophy_po" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#fff7a0"/><stop offset="100%" stop-color="#b8860b"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_po)" stroke="#ffd700" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ffaa00" stroke-width="1" opacity=".5"/><path d="M35,28 L35,55 Q35,65 50,65 Q65,65 65,55 L65,28 Z" fill="url(#trophy_po)" stroke="#b8860b" stroke-width="1.5"/><path d="M35,35 Q25,35 25,45 Q25,55 35,53" fill="url(#trophy_po)" stroke="#b8860b" stroke-width="1.5"/><path d="M65,35 Q75,35 75,45 Q75,55 65,53" fill="url(#trophy_po)" stroke="#b8860b" stroke-width="1.5"/><rect x="44" y="65" width="12" height="6" fill="url(#trophy_po)" stroke="#b8860b" stroke-width="1"/><rect x="38" y="71" width="24" height="4" rx="2" fill="url(#trophy_po)" stroke="#b8860b" stroke-width="1"/><polygon points="50,35 52,41 58,41 53,45 55,51 50,47 45,51 47,45 42,41 48,41" fill="#fff" opacity=".9"/></svg>`,
+  'Fortaleza F': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_fort" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a1222"/><stop offset="100%" stop-color="#060410"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_fort)" stroke="#8b5cf6" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#6d3fc8" stroke-width="1" opacity=".4"/><rect x="28" y="45" width="44" height="28" fill="#2d1f4e" stroke="#8b5cf6" stroke-width="1.5"/><rect x="28" y="38" width="10" height="12" fill="#2d1f4e" stroke="#8b5cf6" stroke-width="1.5"/><rect x="45" y="38" width="10" height="12" fill="#2d1f4e" stroke="#8b5cf6" stroke-width="1.5"/><rect x="62" y="38" width="10" height="12" fill="#2d1f4e" stroke="#8b5cf6" stroke-width="1.5"/><rect x="30" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="35" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="47" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="52" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="64" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="69" y="36" width="3" height="4" fill="#8b5cf6"/><rect x="45" y="57" width="10" height="16" fill="#1a0f30" stroke="#8b5cf6" stroke-width="1"/><circle cx="50" cy="30" r="6" fill="#ffd700" stroke="#aa8800" stroke-width="1"/><line x1="50" y1="24" x2="50" y2="18" stroke="#ffd700" stroke-width="2"/><polygon points="50,16 52,20 56,20 53,22 54,26 50,24 46,26 47,22 44,20 48,20" fill="#ffd700" opacity=".8" transform="scale(.6) translate(33,13)"/></svg>`,
+  'Gelo Vivo F': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_gel" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#062030"/><stop offset="100%" stop-color="#010810"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_gel)" stroke="#67e8f9" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#22d3ee" stroke-width="1" opacity=".4"/><line x1="50" y1="20" x2="50" y2="80" stroke="#67e8f9" stroke-width="2.5" stroke-linecap="round"/><line x1="20" y1="50" x2="80" y2="50" stroke="#67e8f9" stroke-width="2.5" stroke-linecap="round"/><line x1="29" y1="29" x2="71" y2="71" stroke="#67e8f9" stroke-width="2.5" stroke-linecap="round"/><line x1="71" y1="29" x2="29" y2="71" stroke="#67e8f9" stroke-width="2.5" stroke-linecap="round"/><line x1="50" y1="20" x2="44" y2="30" stroke="#67e8f9" stroke-width="1.5"/><line x1="50" y1="20" x2="56" y2="30" stroke="#67e8f9" stroke-width="1.5"/><line x1="50" y1="80" x2="44" y2="70" stroke="#67e8f9" stroke-width="1.5"/><line x1="50" y1="80" x2="56" y2="70" stroke="#67e8f9" stroke-width="1.5"/><line x1="20" y1="50" x2="30" y2="44" stroke="#67e8f9" stroke-width="1.5"/><line x1="20" y1="50" x2="30" y2="56" stroke="#67e8f9" stroke-width="1.5"/><line x1="80" y1="50" x2="70" y2="44" stroke="#67e8f9" stroke-width="1.5"/><line x1="80" y1="50" x2="70" y2="56" stroke="#67e8f9" stroke-width="1.5"/><circle cx="50" cy="50" r="8" fill="#0e4060" stroke="#67e8f9" stroke-width="2"/><circle cx="50" cy="50" r="4" fill="#67e8f9" opacity=".8"/></svg>`,
+  'Ceifador': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cei" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0f0f0f"/><stop offset="100%" stop-color="#020202"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cei)" stroke="#9ca3af" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#6b7280" stroke-width="1" opacity=".4"/><path d="M50,22 Q38,28 35,40 Q32,52 38,58 Q44,64 50,62 Q56,64 62,58 Q68,52 65,40 Q62,28 50,22Z" fill="#1f1f1f" stroke="#9ca3af" stroke-width="1.5"/><ellipse cx="43" cy="42" rx="5" ry="6" fill="#111" stroke="#555" stroke-width="1"/><ellipse cx="57" cy="42" rx="5" ry="6" fill="#111" stroke="#555" stroke-width="1"/><ellipse cx="43" cy="42" rx="3" ry="4" fill="#9ca3af" opacity=".6"/><ellipse cx="57" cy="42" rx="3" ry="4" fill="#9ca3af" opacity=".6"/><path d="M42,54 Q46,58 50,58 Q54,58 58,54" fill="none" stroke="#9ca3af" stroke-width="2" stroke-linecap="round"/><line x1="36" y1="62" x2="64" y2="75" stroke="#9ca3af" stroke-width="3" stroke-linecap="round"/><path d="M60,60 Q72,52 78,40 Q80,34 74,34 Q68,34 62,44" fill="#1f1f1f" stroke="#9ca3af" stroke-width="1.5"/><path d="M62,44 Q58,50 60,60" fill="none" stroke="#9ca3af" stroke-width="1.5"/></svg>`,
+  'Certeiro': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cer" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0a00"/><stop offset="100%" stop-color="#060200"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cer)" stroke="#f97316" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ea6a00" stroke-width="1" opacity=".4"/><circle cx="50" cy="50" r="30" fill="none" stroke="#f97316" stroke-width="1.5" opacity=".3"/><circle cx="50" cy="50" r="20" fill="none" stroke="#f97316" stroke-width="1.5" opacity=".5"/><circle cx="50" cy="50" r="10" fill="none" stroke="#f97316" stroke-width="2" opacity=".8"/><circle cx="50" cy="50" r="4" fill="#f97316"/><line x1="8" y1="50" x2="42" y2="50" stroke="#f97316" stroke-width="1.5" opacity=".6"/><line x1="58" y1="50" x2="92" y2="50" stroke="#f97316" stroke-width="1.5" opacity=".6"/><line x1="50" y1="8" x2="50" y2="42" stroke="#f97316" stroke-width="1.5" opacity=".6"/><line x1="50" y1="58" x2="50" y2="92" stroke="#f97316" stroke-width="1.5" opacity=".6"/><path d="M30,20 L48,46" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".9"/><path d="M26,18 L30,20 L28,24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/></svg>`,
+  'Capitao': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cap" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a1430"/><stop offset="100%" stop-color="#020510"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cap)" stroke="#60a5fa" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#3b82f6" stroke-width="1" opacity=".4"/><path d="M20,52 L50,30 L80,52 L72,52 L72,72 L28,72 L28,52 Z" fill="#1e3a6e" stroke="#60a5fa" stroke-width="2"/><rect x="42" y="52" width="16" height="20" fill="#0f1f40" stroke="#60a5fa" stroke-width="1"/><rect x="28" y="55" width="14" height="10" fill="#1e3a6e" stroke="#60a5fa" stroke-width="1"/><rect x="58" y="55" width="14" height="10" fill="#1e3a6e" stroke="#60a5fa" stroke-width="1"/><polygon points="50,22 53,30 62,30 55,35 58,44 50,39 42,44 45,35 38,30 47,30" fill="#ffd700" stroke="#aa8800" stroke-width="1"/><line x1="28" y1="52" x2="72" y2="52" stroke="#60a5fa" stroke-width="2"/></svg>`,
+  'Podio Constante': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_pc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a1400"/><stop offset="100%" stop-color="#060500"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_pc)" stroke="#fbbf24" stroke-width="2.5"/><rect x="38" y="50" width="24" height="24" rx="2" fill="#ffd700" stroke="#aa8800" stroke-width="1.5"/><rect x="22" y="58" width="18" height="16" rx="2" fill="#aaaaaa" stroke="#888" stroke-width="1.5"/><rect x="60" y="62" width="18" height="12" rx="2" fill="#cd7f32" stroke="#8b5a1a" stroke-width="1.5"/><text x="50" y="44" text-anchor="middle" font-size="14" fill="#ffd700" font-weight="bold">1</text><text x="31" y="52" text-anchor="middle" font-size="12" fill="#aaa" font-weight="bold">2</text><text x="69" y="56" text-anchor="middle" font-size="12" fill="#cd7f32" font-weight="bold">3</text><circle cx="50" cy="30" r="10" fill="#ffd700" stroke="#fff8" stroke-width="1.5"/><polygon points="50,23 51.5,27 56,27 52.5,29.5 53.5,34 50,31.5 46.5,34 47.5,29.5 44,27 48.5,27" fill="#fff" opacity=".9"/></svg>`,
+  'Colecionador C': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_colc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0a00"/><stop offset="100%" stop-color="#060200"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_colc)" stroke="#fb923c" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ea7a00" stroke-width="1" opacity=".4"/><circle cx="50" cy="38" r="14" fill="#ff6600" stroke="#ff9944" stroke-width="1.5"/><rect x="43" y="52" width="14" height="16" rx="2" fill="#ff6600"/><polygon points="50,28 52,34 58,34 53,38 55,44 50,40 45,44 47,38 42,34 48,34" fill="#fff" opacity=".9"/><g fill="#fb923c" stroke="#ea7a00" stroke-width="1"><circle cx="20" cy="28" r="6"/><circle cx="80" cy="28" r="6"/><circle cx="20" cy="70" r="6"/><circle cx="80" cy="70" r="6"/><circle cx="50" cy="80" r="6"/></g><text x="50" y="84" text-anchor="middle" font-size="7" fill="#fff" font-weight="bold">x10</text></svg>`,
+  'Exterminador': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_ext" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0000"/><stop offset="100%" stop-color="#050000"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_ext)" stroke="#dc2626" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#991111" stroke-width="1" opacity=".4"/><g opacity=".9"><ellipse cx="30" cy="35" rx="9" ry="10" fill="#1a0000" stroke="#dc2626" stroke-width="1.5"/><ellipse cx="26" cy="31" rx="3" ry="4" fill="#dc2626" opacity=".8"/><ellipse cx="34" cy="31" rx="3" ry="4" fill="#dc2626" opacity=".8"/></g><g opacity=".9"><ellipse cx="70" cy="35" rx="9" ry="10" fill="#1a0000" stroke="#dc2626" stroke-width="1.5"/><ellipse cx="66" cy="31" rx="3" ry="4" fill="#dc2626" opacity=".8"/><ellipse cx="74" cy="31" rx="3" ry="4" fill="#dc2626" opacity=".8"/></g><g opacity=".9"><ellipse cx="50" cy="60" rx="9" ry="10" fill="#1a0000" stroke="#dc2626" stroke-width="1.5"/><ellipse cx="46" cy="56" rx="3" ry="4" fill="#dc2626" opacity=".8"/><ellipse cx="54" cy="56" rx="3" ry="4" fill="#dc2626" opacity=".8"/></g><text x="50" y="84" text-anchor="middle" font-size="8" fill="#dc2626" font-weight="bold">50 KOs</text></svg>`,
+  'Gelo Vivo C': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_gelc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#020e1a"/><stop offset="100%" stop-color="#000508"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_gelc)" stroke="#a5f3fc" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#67e8f9" stroke-width="1" opacity=".5"/><polygon points="50,20 58,35 75,35 62,47 67,64 50,54 33,64 38,47 25,35 42,35" fill="#0e3a50" stroke="#a5f3fc" stroke-width="2"/><polygon points="50,28 56,38 68,38 58,46 62,58 50,51 38,58 42,46 32,38 44,38" fill="#a5f3fc" opacity=".3"/><circle cx="50" cy="44" r="8" fill="#0e3a50" stroke="#a5f3fc" stroke-width="2"/><circle cx="50" cy="44" r="4" fill="#a5f3fc" opacity=".8"/></svg>`,
+  'Fenix': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_fen" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0800"/><stop offset="100%" stop-color="#060200"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_fen)" stroke="#f97316" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#dc4400" stroke-width="1" opacity=".4"/><path d="M50,65 Q30,55 25,38 Q32,45 40,42 Q30,32 35,20 Q42,32 50,30 Q58,32 65,20 Q70,32 60,42 Q68,45 75,38 Q70,55 50,65Z" fill="#ff4400" stroke="#ff8800" stroke-width="1.5"/><path d="M50,65 Q38,58 35,47 Q40,52 46,50 Q42,43 45,35 Q48,44 50,42 Q52,44 55,35 Q58,43 54,50 Q60,52 65,47 Q62,58 50,65Z" fill="#ffaa00" opacity=".9"/><path d="M50,65 Q44,60 42,52 Q46,56 50,54 Q54,56 58,52 Q56,60 50,65Z" fill="#ffee00" opacity=".9"/><ellipse cx="50" cy="68" rx="8" ry="4" fill="#ff4400" opacity=".6"/><line x1="50" y1="72" x2="46" y2="80" stroke="#ff8800" stroke-width="2" stroke-linecap="round"/><line x1="50" y1="72" x2="54" y2="80" stroke="#ff8800" stroke-width="2" stroke-linecap="round"/></svg>`,
+  'Cofre C': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_cofc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a0a1a"/><stop offset="100%" stop-color="#020205"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_cofc)" stroke="#818cf8" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#6366f1" stroke-width="1" opacity=".4"/><rect x="22" y="30" width="56" height="44" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/><circle cx="50" cy="52" r="12" fill="#0f0e2e" stroke="#818cf8" stroke-width="2"/><circle cx="50" cy="52" r="7" fill="#818cf8" opacity=".5"/><circle cx="50" cy="52" r="3.5" fill="#fff" opacity=".9"/><line x1="50" y1="52" x2="57" y2="45" stroke="#fff" stroke-width="2" stroke-linecap="round"/><rect x="44" y="70" width="12" height="6" rx="2" fill="#818cf8"/><rect x="73" y="42" width="7" height="20" rx="3" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/><text x="50" y="25" text-anchor="middle" font-size="8" fill="#818cf8" font-weight="bold">50.000</text></svg>`,
+  'Fortaleza C': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_fortc" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#120a20"/><stop offset="100%" stop-color="#040208"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_fortc)" stroke="#a78bfa" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#7c3aed" stroke-width="1" opacity=".4"/><rect x="24" y="44" width="52" height="30" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><rect x="24" y="36" width="12" height="14" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><rect x="44" y="36" width="12" height="14" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><rect x="64" y="36" width="12" height="14" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><rect x="26" y="34" width="3" height="5" fill="#a78bfa"/><rect x="31" y="34" width="3" height="5" fill="#a78bfa"/><rect x="46" y="34" width="3" height="5" fill="#a78bfa"/><rect x="51" y="34" width="3" height="5" fill="#a78bfa"/><rect x="66" y="34" width="3" height="5" fill="#a78bfa"/><rect x="71" y="34" width="3" height="5" fill="#a78bfa"/><rect x="44" y="58" width="12" height="16" fill="#1a0f38" stroke="#a78bfa" stroke-width="1"/><circle cx="50" cy="28" r="8" fill="#ffd700" stroke="#aa8800" stroke-width="1.5"/><polygon points="50,21 51.5,25.5 56.5,25.5 52.5,28.5 54,33 50,30.5 46,33 47.5,28.5 43.5,25.5 48.5,25.5" fill="#fff" opacity=".9"/></svg>`,
+  'Ceifador Imp': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_ceimp" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a0010"/><stop offset="100%" stop-color="#020005"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_ceimp)" stroke="#c084fc" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#9333ea" stroke-width="1" opacity=".4"/><path d="M50,22 Q36,28 33,42 Q30,56 38,62 Q44,68 50,66 Q56,68 62,62 Q70,56 67,42 Q64,28 50,22Z" fill="#1a0030" stroke="#c084fc" stroke-width="1.5"/><ellipse cx="42" cy="44" rx="5" ry="6" fill="#0a0015" stroke="#666" stroke-width="1"/><ellipse cx="58" cy="44" rx="5" ry="6" fill="#0a0015" stroke="#666" stroke-width="1"/><ellipse cx="42" cy="44" rx="3" ry="4" fill="#c084fc" opacity=".8"/><ellipse cx="58" cy="44" rx="3" ry="4" fill="#c084fc" opacity=".8"/><path d="M42,56 Q46,60 50,60 Q54,60 58,56" fill="none" stroke="#c084fc" stroke-width="2" stroke-linecap="round"/><line x1="34" y1="64" x2="66" y2="78" stroke="#c084fc" stroke-width="3" stroke-linecap="round"/><path d="M62,62 Q76,52 80,38 Q82,30 76,30 Q70,30 62,42" fill="#1a0030" stroke="#c084fc" stroke-width="1.5"/><text x="50" y="90" text-anchor="middle" font-size="7" fill="#c084fc" font-weight="bold">3 meses</text></svg>`,
+  'Vulcao': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_vul" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2a0800"/><stop offset="100%" stop-color="#080200"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_vul)" stroke="#f97316" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#dc4400" stroke-width="1.5" opacity=".5"/><path d="M20,75 L35,45 L50,55 L65,45 L80,75 Z" fill="#4a1800" stroke="#f97316" stroke-width="2"/><path d="M35,45 L42,32 L50,40 L58,32 L65,45 L50,55 Z" fill="#7a2200" stroke="#f97316" stroke-width="1.5"/><path d="M42,32 L46,22 L50,28 L54,22 L58,32 L50,40 Z" fill="#cc3300" stroke="#ff6600" stroke-width="1.5"/><path d="M46,22 L50,14 L54,22 Z" fill="#ff6600"/><path d="M48,16 Q50,8 52,16 Q56,22 50,26 Q44,22 48,16Z" fill="#ffcc00" opacity=".9"/><path d="M30,58 Q40,52 50,55 Q60,52 70,58" fill="none" stroke="#ff4400" stroke-width="2" opacity=".6"/><path d="M25,65 Q38,60 50,63 Q62,60 75,65" fill="none" stroke="#ff4400" stroke-width="1.5" opacity=".5"/></svg>`,
+  'Fortaleza I': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_forti" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a0a0a"/><stop offset="100%" stop-color="#020202"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_forti)" stroke="#e5e7eb" stroke-width="2.5"/><rect x="20" y="42" width="60" height="32" fill="#1f2937" stroke="#e5e7eb" stroke-width="1.5"/><rect x="20" y="32" width="14" height="16" fill="#1f2937" stroke="#e5e7eb" stroke-width="1.5"/><rect x="43" y="32" width="14" height="16" fill="#1f2937" stroke="#e5e7eb" stroke-width="1.5"/><rect x="66" y="32" width="14" height="16" fill="#1f2937" stroke="#e5e7eb" stroke-width="1.5"/><rect x="22" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="27" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="45" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="50" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="68" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="73" y="30" width="3" height="5" fill="#e5e7eb"/><rect x="43" y="56" width="14" height="18" fill="#111827" stroke="#e5e7eb" stroke-width="1"/><circle cx="50" cy="24" r="8" fill="#ffd700" stroke="#aa8800" stroke-width="2"/><text x="50" y="28" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">1</text><path d="M20,42 L80,42" stroke="#e5e7eb" stroke-width="2"/></svg>`,
+  'Colecionador I': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_coli" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a1000"/><stop offset="100%" stop-color="#060400"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_coli)" stroke="#fcd34d" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#f59e0b" stroke-width="1" opacity=".5"/><g><circle cx="50" cy="32" r="10" fill="#ffd700" stroke="#fff8" stroke-width="1.5"/><text x="50" y="36" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">1</text></g><g><circle cx="28" cy="52" r="8" fill="#aaaaaa" stroke="#fff8" stroke-width="1.5"/><text x="28" y="56" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">2</text></g><g><circle cx="72" cy="52" r="8" fill="#cd7f32" stroke="#fff8" stroke-width="1.5"/><text x="72" y="56" text-anchor="middle" font-size="10" fill="#fff" font-weight="bold">3</text></g><g><circle cx="38" cy="72" r="7" fill="#ffd700" stroke="#fff8" stroke-width="1"/><circle cx="62" cy="72" r="7" fill="#aaaaaa" stroke="#fff8" stroke-width="1"/></g><text x="50" y="90" text-anchor="middle" font-size="8" fill="#fcd34d" font-weight="bold">20 medalhas</text></svg>`,
+  'Dinastia': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_din" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a1000"/><stop offset="100%" stop-color="#060400"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_din)" stroke="#fbbf24" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#d97706" stroke-width="1.5" opacity=".5"/><path d="M20,32 L28,22 L36,32 L32,32 L32,42 L28,42 L28,32 Z M38,68 L28,42 L44,42 Z" fill="#1a0f00" stroke="#fbbf24" stroke-width="1"/><path d="M50,24 Q38,32 38,42 Q38,58 50,62 Q62,58 62,42 Q62,32 50,24Z" fill="#2a1800" stroke="#fbbf24" stroke-width="2"/><path d="M42,30 L38,26 L50,22 L62,26 L58,30" fill="#ffd700" stroke="#aa8800" stroke-width="1.5"/><path d="M38,26 L50,22 L62,26 L60,32 L50,28 L40,32 Z" fill="#ffd700" stroke="#aa8800" stroke-width="1"/><polygon points="50,33 52,39 58,39 53,43 55,49 50,45 45,49 47,43 42,39 48,39" fill="#fff" opacity=".9"/><path d="M62,42 L80,32 L80,42 L68,42 L62,68 L38,68 L32,42 L20,42 L20,32 L38,42Z" fill="#1a0f00" stroke="#fbbf24" stroke-width="1"/></svg>`,
+  'Tubarao Branco': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_tub" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#001a2e"/><stop offset="100%" stop-color="#000508"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_tub)" stroke="#0ea5e9" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#0284c7" stroke-width="1" opacity=".4"/><path d="M15,55 Q30,30 50,35 Q70,30 85,55 Q70,60 65,68 Q58,75 50,73 Q42,75 35,68 Q30,60 15,55Z" fill="#0369a1" stroke="#0ea5e9" stroke-width="1.5"/><path d="M50,35 L50,20 L60,35" fill="#0369a1" stroke="#0ea5e9" stroke-width="1.5"/><path d="M30,58 Q50,50 70,58" fill="none" stroke="#fff" stroke-width="1.5" opacity=".5"/><ellipse cx="42" cy="50" rx="5" ry="4" fill="#001a30" stroke="#0ea5e9" stroke-width="1"/><ellipse cx="42" cy="50" rx="3" ry="2.5" fill="#0ea5e9" opacity=".6"/><path d="M38,60 Q44,66 50,65 Q56,66 62,60" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/><path d="M44,63 L43,68 M47,64 L47,70 M53,64 L53,70 M56,63 L57,68" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity=".7"/><text x="50" y="88" text-anchor="middle" font-size="8" fill="#0ea5e9" font-weight="bold">10+ KOs</text></svg>`,
+  'Hat-trick': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_hat" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0a2e"/><stop offset="100%" stop-color="#050210"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_hat)" stroke="#a78bfa" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#7c3aed" stroke-width="1" opacity=".4"/><circle cx="26" cy="50" r="12" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><polygon points="26,41 28,47 34,47 29.5,51 31,57 26,53.5 21,57 22.5,51 18,47 24,47" fill="#ffd700" stroke="#aa8800" stroke-width=".8"/><circle cx="50" cy="50" r="12" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><polygon points="50,41 52,47 58,47 53.5,51 55,57 50,53.5 45,57 46.5,51 42,47 48,47" fill="#ffd700" stroke="#aa8800" stroke-width=".8"/><circle cx="74" cy="50" r="12" fill="#2d1f50" stroke="#a78bfa" stroke-width="1.5"/><polygon points="74,41 76,47 82,47 77.5,51 79,57 74,53.5 69,57 70.5,51 66,47 72,47" fill="#ffd700" stroke="#aa8800" stroke-width=".8"/><path d="M38,50 L38,50" stroke="#a78bfa" stroke-width="2"/><text x="50" y="80" text-anchor="middle" font-size="9" fill="#a78bfa" font-weight="bold">3 seguidas</text></svg>`,
+  'Dragao': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_dra" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#0a1a00"/><stop offset="100%" stop-color="#020500"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_dra)" stroke="#22c55e" stroke-width="2.5"/><circle cx="50" cy="50" r="42" fill="none" stroke="#16a34a" stroke-width="1" opacity=".4"/><path d="M50,20 Q30,25 25,40 Q20,55 30,62 Q38,68 50,65 Q62,68 70,62 Q80,55 75,40 Q70,25 50,20Z" fill="#0f3020" stroke="#22c55e" stroke-width="2"/><path d="M50,20 L44,14 L50,18 L56,14 Z" fill="#22c55e"/><path d="M30,28 L22,22 L28,30" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/><path d="M70,28 L78,22 L72,30" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/><ellipse cx="40" cy="38" rx="6" ry="7" fill="#0a2010" stroke="#22c55e" stroke-width="1"/><ellipse cx="60" cy="38" rx="6" ry="7" fill="#0a2010" stroke="#22c55e" stroke-width="1"/><ellipse cx="40" cy="38" rx="3" ry="5" fill="#22c55e" opacity=".8"/><ellipse cx="60" cy="38" rx="3" ry="5" fill="#22c55e" opacity=".8"/><path d="M38,52 Q44,58 50,57 Q56,58 62,52" fill="none" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/><path d="M34,56 L28,64 M38,60 L34,70 M50,62 L50,72 M62,60 L66,70 M66,56 L72,64" stroke="#22c55e" stroke-width="2" stroke-linecap="round" opacity=".8"/></svg>`,
+  'Grand Slam': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_gs" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a0f00"/><stop offset="100%" stop-color="#060400"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_gs)" stroke="#f59e0b" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#d97706" stroke-width="1.5" opacity=".5"/><path d="M32,28 L32,58 Q32,68 50,68 Q68,68 68,58 L68,28 Z" fill="#2a1800" stroke="#f59e0b" stroke-width="2"/><path d="M32,36 Q20,36 20,48 Q20,60 32,56" fill="#2a1800" stroke="#f59e0b" stroke-width="2"/><path d="M68,36 Q80,36 80,48 Q80,60 68,56" fill="#2a1800" stroke="#f59e0b" stroke-width="2"/><rect x="42" y="68" width="16" height="8" fill="#2a1800" stroke="#f59e0b" stroke-width="1.5"/><rect x="34" y="76" width="32" height="5" rx="2" fill="#2a1800" stroke="#f59e0b" stroke-width="1.5"/><polygon points="50,36 53,44 62,44 55,50 58,58 50,53 42,58 45,50 38,44 47,44" fill="#ffd700" stroke="#aa8800" stroke-width="1"/><text x="50" y="90" text-anchor="middle" font-size="7" fill="#f59e0b" font-weight="bold">Noite+Mes+Tri</text></svg>`,
+  'Olimpo': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_oli" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#1a1400"/><stop offset="100%" stop-color="#060500"/></radialGradient><radialGradient id="trophy_oli" cx="40%" cy="30%" r="60%"><stop offset="0%" stop-color="#fffde0"/><stop offset="100%" stop-color="#b8860b"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_oli)" stroke="#ffd700" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#ffaa00" stroke-width="2" opacity=".6"/><circle cx="50" cy="50" r="36" fill="none" stroke="#ffd700" stroke-width="1" opacity=".3"/><path d="M32,26 L32,60 Q32,72 50,72 Q68,72 68,60 L68,26 Z" fill="url(#trophy_oli)" stroke="#b8860b" stroke-width="1.5"/><path d="M32,34 Q18,34 18,48 Q18,62 32,58" fill="url(#trophy_oli)" stroke="#b8860b" stroke-width="1.5"/><path d="M68,34 Q82,34 82,48 Q82,62 68,58" fill="url(#trophy_oli)" stroke="#b8860b" stroke-width="1.5"/><rect x="42" y="72" width="16" height="7" fill="url(#trophy_oli)" stroke="#b8860b" stroke-width="1"/><rect x="34" y="79" width="32" height="5" rx="2" fill="url(#trophy_oli)" stroke="#b8860b" stroke-width="1"/><polygon points="50,32 53,41 63,41 55,47 58,57 50,51 42,57 45,47 37,41 47,41" fill="#fff" opacity=".95"/></svg>`,
+  'Eterno': `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="bg_ete" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#000818"/><stop offset="100%" stop-color="#000204"/></radialGradient></defs><circle cx="50" cy="50" r="48" fill="url(#bg_ete)" stroke="#818cf8" stroke-width="3"/><circle cx="50" cy="50" r="42" fill="none" stroke="#4f46e5" stroke-width="1.5" opacity=".6"/><g opacity=".9"><circle cx="20" cy="25" r="2" fill="#fff"/><circle cx="35" cy="15" r="1.5" fill="#fff"/><circle cx="65" cy="18" r="2" fill="#fff"/><circle cx="80" cy="28" r="1.5" fill="#fff"/><circle cx="15" cy="55" r="1.5" fill="#fff"/><circle cx="85" cy="65" r="2" fill="#fff"/><circle cx="25" cy="75" r="1.5" fill="#fff"/><circle cx="72" cy="80" r="2" fill="#fff"/><circle cx="88" cy="45" r="1" fill="#fff"/><circle cx="10" cy="40" r="1" fill="#fff"/></g><path d="M50,18 Q62,28 62,42 Q62,56 50,62 Q38,56 38,42 Q38,28 50,18Z" fill="#1e1b4b" stroke="#818cf8" stroke-width="2"/><path d="M50,18 Q56,28 56,42 Q56,56 50,62 Q44,56 44,42 Q44,28 50,18Z" fill="#312e81" opacity=".8"/><polygon points="50,26 52.5,33 60,33 54,37.5 56.5,45 50,40.5 43.5,45 46,37.5 40,33 47.5,33" fill="#818cf8" opacity=".9"/><text x="50" y="78" text-anchor="middle" font-size="8" fill="#818cf8" font-weight="bold">3 anos</text><g fill="#ffd700"><circle cx="36" cy="84" r="3"/><circle cx="50" cy="87" r="3"/><circle cx="64" cy="84" r="3"/></g></svg>`
+};
+    function abrirTelaBrasoes(nivel){
+      document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
+      var info = NIVEL_INFO[nivel];
+
+      // Tela fullscreen
+      var tela = document.createElement('div');
+      tela.className = 'brasao-tela';
+      tela.style.cssText = 'position:fixed;inset:0;z-index:999999;background:linear-gradient(145deg,#060d1a,#0d1629);display:flex;flex-direction:column;overflow:hidden;padding:0;';
+
+      // Header da tela
+      var telaHeader = document.createElement('div');
+      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;';
+      telaHeader.innerHTML = '<div>'
+        +'<div style="font-size:18px;font-weight:900;color:'+info.cor+';">'+info.label+'</div>'
+        +'<div style="font-size:11px;color:#6b82a0;margin-top:2px;">Toque num brasão para ver detalhes</div>'
+        +'</div>';
+
+      var btnFecharTela = document.createElement('button');
+      btnFecharTela.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:10px;width:36px;height:36px;color:#fca5a5;font-size:16px;font-weight:800;cursor:pointer;';
+      btnFecharTela.textContent = '✕';
+      btnFecharTela.addEventListener('click', function(){ tela.remove(); });
+      telaHeader.appendChild(btnFecharTela);
+      tela.appendChild(telaHeader);
+
+      // Grid 5x2 - tamanho fixo para caber tudo na tela
+      var grid = document.createElement('div');
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:10px;padding:10px 14px 14px;box-sizing:border-box;flex:1;min-height:0;';
+
+      // Attach SVG art to each brasao
+      var svgKeys = {
+        faisca:  ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
+        chama:   ['Certeiro','Capitao','Podio Constante','Colecionador C','Exterminador','Gelo Vivo C','Fenix','Cofre C','Fortaleza C','Ceifador Imp'],
+        inferno: ['Vulcao','Fortaleza I','Colecionador I','Dinastia','Tubarao Branco','Hat-trick','Dragao','Grand Slam','Olimpo','Eterno']
+      };
+      BRASOES[nivel].forEach(function(b, idx){
+        b.svgArt = (BRASAO_SVGS && svgKeys[nivel] && BRASAO_SVGS[svgKeys[nivel][idx]]) || null;
+      });
+
+      BRASOES[nivel].forEach(function(b){
+        var item = document.createElement('div');
+        // Cor de borda por nivel
+        var borderColor = b.conquistado
+          ? (nivel==='faisca' ? '#ffd700' : nivel==='chama' ? '#f97316' : '#ef4444')
+          : 'rgba(255,255,255,0.08)';
+
+        item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;'
+          +'background:'+(b.conquistado?info.bg:'rgba(255,255,255,0.03)')+';'
+          +'border:2px solid '+borderColor+';'
+          +'border-radius:20px;cursor:pointer;position:relative;overflow:hidden;'
+          +'padding:12px 8px 10px;transition:transform .15s;text-align:center;';
+
+        // SVG ocupa ~75% do card — tamanho percentual via padding-trick
+        // Animacao por nivel
+        var animClass = b.conquistado ? ('brasao-anim-'+nivel) : '';
+
+        var svgWrap = document.createElement('div');
+        svgWrap.className = 'brasao-svg-wrap' + (animClass ? ' '+animClass : '');
+        svgWrap.style.cssText = 'width:115px;height:115px;border-radius:50%;overflow:hidden;flex-shrink:0;'
+          +(b.conquistado?'box-shadow:0 0 20px '+info.brd+';':'filter:grayscale(1) brightness(0.22);');
+        svgWrap.innerHTML = b.svgArt || ('<div style="width:115px;height:115px;display:flex;align-items:center;justify-content:center;font-size:52px;">'+b.emoji+'</div>');
+
+        // Nome maior
+        var nomeEl = document.createElement('div');
+        nomeEl.style.cssText = 'font-size:16px;font-weight:900;text-align:center;line-height:1.2;letter-spacing:.3px;'
+          +'color:'+(b.conquistado?info.cor:'#3a4a60')+';width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        nomeEl.textContent = b.nome;
+
+        // Cadeado grande centralizado para bloqueados
+        if(!b.conquistado){
+          var lock = document.createElement('div');
+          lock.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:36px;opacity:0.6;pointer-events:none;z-index:3;';
+          lock.textContent = '🔒';
+          item.appendChild(lock);
+        }
+
+        item.appendChild(svgWrap);
+        item.appendChild(nomeEl);
+
+        item.addEventListener('mouseenter', function(){ this.style.transform='scale(1.04)'; });
+        item.addEventListener('mouseleave', function(){ this.style.transform='scale(1)'; });
+
+        // Tap — abre modal de detalhe
+        item.addEventListener('click', function(){
+          // Remove qualquer modal aberto
+          document.querySelectorAll('.brasao-modal').forEach(function(m){ m.remove(); });
+
+          // Overlay clicável para fechar
+          var overlay = document.createElement('div');
+          overlay.className = 'brasao-modal';
+          overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
+          overlay.addEventListener('click', function(){ overlay.remove(); });
+
+          var card = document.createElement('div');
+          card.style.cssText = 'background:linear-gradient(145deg,#0d1629,#111827);border:1px solid '+info.brd+';border-radius:20px;padding:26px 22px;max-width:290px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,0.7);cursor:default;';
+          card.addEventListener('click', function(e){ e.stopPropagation(); });
+
+          var svgOrEmoji = b.svgArt
+            ? '<div style="width:90px;height:90px;border-radius:50%;overflow:hidden;margin:0 auto 14px;'+(b.conquistado?'':'filter:grayscale(1) brightness(0.35);')+'">'+b.svgArt+'</div>'
+            : '<div style="font-size:64px;line-height:1;margin-bottom:14px;'+(b.conquistado?'':'filter:grayscale(1) opacity(0.4);')+'">'+b.emoji+'</div>';
+          card.innerHTML = svgOrEmoji
+            +'<div style="display:inline-block;background:'+info.bg+';border:1px solid '+info.brd+';border-radius:6px;padding:2px 10px;font-size:10px;font-weight:700;color:'+info.cor+';margin-bottom:12px;">'+info.label+'</div>'
+            +'<div style="font-size:20px;font-weight:900;color:'+(b.conquistado?'#e6edf3':'#6b82a0')+';margin-bottom:8px;">'+escHTML(b.nome)+'</div>'
+            +'<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:18px;">'+escHTML(b.desc)+'</div>'
+            +'<div style="font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;display:inline-block;margin-bottom:14px;'
+              +(b.conquistado
+                ? 'background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);'
+                : 'background:rgba(255,255,255,0.05);color:#4a6080;border:1px solid rgba(255,255,255,0.1);')
+              +'">'+(b.conquistado?'✅ Conquistado!':'🔒 Bloqueado')+'</div>'
+            +'<button id="brasao-fechar-btn" style="display:block;width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#9fb3d4;padding:9px;cursor:pointer;font-size:13px;font-weight:600;">Fechar</button>';
+
+          var fecharBtn = card.querySelector('#brasao-fechar-btn');
+          if(fecharBtn) fecharBtn.addEventListener('click', function(e){ e.stopPropagation(); overlay.remove(); });
+
+          overlay.appendChild(card);
+          document.body.appendChild(overlay);
+        });
+
+        grid.appendChild(item);
+      });
+
+      tela.appendChild(grid);
+      document.body.appendChild(tela);
+    }
+
+    // Animacoes dos icones dos botoes
+    var iconAnims = {
+      faisca:  'brasao-btn-faisca',
+      chama:   'brasao-btn-chama',
+      inferno: 'brasao-btn-inferno'
+    };
+    var iconLabels = { faisca: '🔥', chama: '🌋', inferno: '☀️' };
+    var nomeLabels  = { faisca: 'Faísca', chama: 'Chama', inferno: 'Inferno' };
+
+    ['faisca','chama','inferno'].forEach(function(nivel){
+      var info = NIVEL_INFO[nivel];
+      var btn = document.createElement('button');
+      btn.style.cssText = 'border:1px solid '+info.brd+';background:'+info.bg+';color:'+info.cor+';'
+        +'border-radius:20px;padding:5px 12px 5px 8px;font-size:14px;font-weight:800;cursor:pointer;'
+        +'display:inline-flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;'
+        +'box-shadow:0 2px 8px rgba(0,0,0,0.3);';
+
+      var iconSpan = document.createElement('span');
+      iconSpan.className = iconAnims[nivel];
+      iconSpan.style.cssText = 'font-size:16px;display:inline-block;line-height:1;';
+      iconSpan.textContent = iconLabels[nivel];
+
+      var labelSpan = document.createElement('span');
+      labelSpan.style.cssText = 'font-size:14px;font-weight:800;letter-spacing:.2px;';
+      labelSpan.textContent = nomeLabels[nivel];
+
+      btn.appendChild(iconSpan);
+      btn.appendChild(labelSpan);
+      btn.addEventListener('click', function(){ abrirTelaBrasoes(nivel); });
+      btnsDiv.appendChild(btn);
+    });
+
+    filtroRow.appendChild(btnsDiv);
+    section.appendChild(filtroRow);
+    box._badgeWrap = section;
+    box._badgeWrapData = section;
   })();
 
   /* ── Banner Saldo Mês Atual ── */
@@ -11653,11 +12096,32 @@ window.abrirPerfil = function(jogadorNome){
   })();
 
   // Descobre qual WK é o último de cada mês (para marcar linha de fim de mês)
+  // Regra: só marca FIM MÊS em meses já FECHADOS (todos os jogos do mês concluídos)
+  // Para o mês corrente em aberto, não marca nada
   var wkUltimoDoMes = {};
-  all.forEach(function(r){
-    var m = +r.mes; var w = +r.wk;
-    if(!wkUltimoDoMes[m] || w > wkUltimoDoMes[m]) wkUltimoDoMes[m] = w;
-  });
+  (function(){
+    var mesAtualCalc = new Date().getMonth() + 1; // mês atual real
+
+    // Agrupar todas as WKs do ledger por mês
+    var wksPorMes = {};
+    getLedger().forEach(function(r){
+      var m = +r.mes; var w = +r.wk;
+      if(!m || !w) return;
+      if(!wksPorMes[m]) wksPorMes[m] = [];
+      if(wksPorMes[m].indexOf(w) < 0) wksPorMes[m].push(w);
+    });
+
+    Object.keys(wksPorMes).forEach(function(m){
+      m = +m;
+      // Não marcar FIM MÊS para o mês atual (ainda em aberto)
+      if(m >= mesAtualCalc) return;
+
+      // Para meses passados: usar a última WK registrada do ledger global
+      var wksDoMes = wksPorMes[m];
+      var ultimaWK = Math.max.apply(null, wksDoMes);
+      wkUltimoDoMes[m] = ultimaWK;
+    });
+  })();
 
   // helper: formata R$ com sinal
   function mR(v, force){
@@ -12097,13 +12561,15 @@ function buildPrevisao(){
     animation:true,backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'#0d1629',borderColor:'rgba(255,255,255,0.12)',textStyle:{color:'#e6edf3',fontSize:12},
       formatter:function(params){ var d=res[params[0].dataIndex]; return '<b>'+d.jog+'</b><br/>Acumulado: <b>'+fmt(d.acum)+' pts</b><br/>Projeção: <b>'+fmt(d.proj)+' pts</b><br/>Média recente: '+fmt(d.med)+' pts/WK'; }},
-    grid:{left:90,right:20,top:16,bottom:40},
+    grid:{left:72,right:70,top:10,bottom:40},
     xAxis:{type:'value',axisLabel:{show:false},axisTick:{show:false},axisLine:{show:false},splitLine:{lineStyle:{color:'rgba(255,255,255,0.06)'}}},
     yAxis:{type:'category',data:res.map(function(r){ return r.jog; }),axisLabel:{color:'#e6edf3',fontWeight:700,fontSize:12},axisTick:{show:false},axisLine:{show:false}},
     series:[
-      {name:'Acumulado real',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.9}}; }),barWidth:26,label:{show:false}},
-      {name:'Projeção',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.proj-r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.3}}; }),barWidth:26,
-        label:{show:true,position:'right',color:'#e6edf3',fontSize:11,fontWeight:700,formatter:function(p){ return fmt(res[p.dataIndex].proj); }}}
+      {name:'Acumulado real',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.9}}; }),barWidth:24,
+        label:{show:false}},
+      {name:'Projeção',type:'bar',stack:'t',data:res.map(function(r,i){ return {value:r.proj-r.acum,itemStyle:{color:CORES[i]||'#3b82f6',opacity:0.3}}; }),barWidth:24,
+        label:{show:true,position:'insideRight',distance:-65,color:'#e6edf3',fontSize:11,fontWeight:700,
+          formatter:function(p){ return fmt(res[p.dataIndex].proj); }}}
     ],
     legend:{bottom:0,data:['Acumulado real','Projeção'],textStyle:{color:'#9fb3d4',fontSize:11}}
   },true);
@@ -13394,12 +13860,12 @@ function criarToast(msg, emoji, cor, delay){
       });
     });
 
-    // Animate out after 4s
+    // Animate out after 5s
     setTimeout(function(){
       t.style.opacity = '0';
       t.style.transform = 'translateX(-50%) translateY(-20px)';
       setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 500);
-    }, 4000);
+    }, 5000);
   }, delay || 0);
 }
 
@@ -13509,10 +13975,10 @@ function addSeasonBtn(){
 
   var btn = document.createElement('button');
   btn.id = 'season-btn';
-  btn.title = 'Histórico de Temporadas';
-  btn.style.cssText = 'background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
-  btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 8v4l3 3" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.05 11a9 9 0 1 1 .5 4" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 16H7V12" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-  btn.onclick = abrirHistoricoTemporadas;
+  btn.title = 'Tutorial — como usar o dashboard';
+  btn.style.cssText = 'background:rgba(99,102,241,0.18);border:1px solid rgba(99,102,241,0.4);border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#a5b4fc;font-size:17px;font-weight:900;';
+  btn.textContent = '?';
+  btn.onclick = function(){ if(window.iniciarTour) window.iniciarTour(); };
   rightBtns.insertBefore(btn, rightBtns.firstChild);
 }
 
@@ -13674,8 +14140,38 @@ function pedirSenha(cb){
       if(h===ADMIN_HASH || (window._RN_CUSTOM_HASH && h===window._RN_CUSTOM_HASH)){ _adminAuthed=true; modal.remove(); cb(); }
       else { err.style.display='block'; inp.value=''; inp.focus(); }
     };
-    if(window.crypto && crypto.subtle){ sha256(val).then(check).catch(function(){ check(sha256sync(val)); }); }
-    else { check(sha256sync(val)); }
+    // Usar sha256sync global se disponível, senão fallback interno
+    var syncFn = window._sha256sync || sha256sync_admin;
+    var asyncFn = window._sha256 || null;
+    if(asyncFn && window.crypto && window.crypto.subtle){
+      asyncFn(val).then(check).catch(function(){ check(syncFn(val)); });
+    } else {
+      check(syncFn(val));
+    }
+  }
+  // Fallback SHA-256 local para o admin (caso sha256sync nao esteja no escopo)
+  function sha256sync_admin(str){
+    function rr(n,x){return(x>>>n)|(x<<(32-n));}
+    function ch(x,y,z){return(x&y)^(~x&z);}
+    function maj(x,y,z){return(x&y)^(x&z)^(y&z);}
+    function sig0(x){return rr(2,x)^rr(13,x)^rr(22,x);}
+    function sig1(x){return rr(6,x)^rr(11,x)^rr(25,x);}
+    function gam0(x){return rr(7,x)^rr(18,x)^(x>>>3);}
+    function gam1(x){return rr(17,x)^rr(19,x)^(x>>>10);}
+    var K=[0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    var bytes=[];
+    for(var i=0;i<str.length;i++){var c=str.charCodeAt(i);if(c<128)bytes.push(c);else if(c<2048){bytes.push(192|(c>>6));bytes.push(128|(c&63));}else{bytes.push(224|(c>>12));bytes.push(128|((c>>6)&63));bytes.push(128|(c&63));}}
+    var l=bytes.length*8;bytes.push(0x80);while(bytes.length%64!==56)bytes.push(0);
+    for(var i=7;i>=0;i--)bytes.push((l>>>(i*8))&0xff);
+    var H=[0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    for(var off=0;off<bytes.length;off+=64){
+      var W=[];for(var t=0;t<16;t++)W[t]=(bytes[off+t*4]<<24)|(bytes[off+t*4+1]<<16)|(bytes[off+t*4+2]<<8)|bytes[off+t*4+3];
+      for(var t=16;t<64;t++)W[t]=(gam1(W[t-2])+W[t-7]+gam0(W[t-15])+W[t-16])|0;
+      var a=H[0],b=H[1],c=H[2],d=H[3],e=H[4],f=H[5],g=H[6],h=H[7];
+      for(var t=0;t<64;t++){var T1=(h+sig1(e)+ch(e,f,g)+K[t]+W[t])|0;var T2=(sig0(a)+maj(a,b,c))|0;h=g;g=f;f=e;e=(d+T1)|0;d=c;c=b;b=a;a=(T1+T2)|0;}
+      H[0]=(H[0]+a)|0;H[1]=(H[1]+b)|0;H[2]=(H[2]+c)|0;H[3]=(H[3]+d)|0;H[4]=(H[4]+e)|0;H[5]=(H[5]+f)|0;H[6]=(H[6]+g)|0;H[7]=(H[7]+h)|0;
+    }
+    return H.map(function(v){return(v>>>0).toString(16).padStart(8,'0');}).join('');
   }
   box.querySelector('#apwo').onclick=tryAuth;
   box.querySelector('#apwc').onclick=function(){modal.remove();};
@@ -13954,6 +14450,254 @@ window.abrirEdicaoAdmin=function(tipo){
     if(tipo==='hof') abrirEditorHOF();
     else abrirEditorTorneios();
   });
+};
+
+})();
+</script>
+
+
+<script id="tour-script">
+(function(){
+
+var TOUR_STEPS = [
+  {
+    target: 'header',
+    title: '🃏 Poker do Plaza Dashboard',
+    desc: 'Bem-vindo ao dashboard do grupo! Aqui você acompanha tudo sobre o torneio semanal — rankings, estatísticas, histórico e muito mais. Vamos fazer um tour rápido pelos 13 cards do dashboard!',
+    pos: 'bottom'
+  },
+  {
+    target: '#card-perfis',
+    titleSel: '#tour-hdr-perfis',
+    title: '👥 Perfis dos Jogadores',
+    desc: 'Fotos de todos os jogadores. Toque em qualquer um para abrir o perfil completo com estatísticas detalhadas, gráfico de evolução e histórico semana a semana. Dentro do perfil você também encontra os 🏅 Brasões — conquistas desbloqueáveis em 3 níveis: Faísca, Chama e Inferno.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-medalhas-periodo',
+    titleSel: '#tour-hdr-medalhas',
+    title: '🥇 Quadro de Medalhas',
+    desc: 'Resumo visual das medalhas conquistadas no período — ouro (1º lugar), prata (2º) e bronze (3º). Filtre por semana, mês ou trimestre para ver quem mais subiu ao pódio em cada período.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-ranking-anual',
+    titleSel: '#tour-hdr-ranking-anual',
+    title: '🏆 Ranking Anual',
+    desc: 'Pontuação acumulada no ano inteiro. Vitórias valem mais pontos que pódios, e a soma de todas as semanas define quem lidera o campeonato anual do Plaza. A posição no ranking determina os prêmios do trimestre.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-ranking-kos',
+    titleSel: '#tour-hdr-ranking-kos',
+    title: '💀 Ranking de KOs',
+    desc: 'Quem mais eliminou jogadores no ano. KOs valem pontos extras e geram bônus no prêmio mensal — o maior KO do mês leva uma fatia adicional do pot. Vale a pena ser agressivo!',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-pontuacao-anual',
+    titleSel: '#tour-hdr-pontuacao',
+    title: '📈 Gráfico de Pontuação Anual',
+    desc: 'Evolução semana a semana de cada jogador. A linha tracejada branca é a média do grupo — fique acima dela! Toque em qualquer linha para destacar um jogador. Mostra claramente quem está em alta e quem está caindo.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-calculadora',
+    titleSel: '#tour-hdr-calc',
+    title: '🧮 Calculadora de Pontuação',
+    desc: 'Mostra quanto cada jogador precisa para subir uma posição no ranking e quanto falta para virar o líder. Traz também a média de pontos por noite jogada e o ranking dos jogadores por média — ideal para entender quem está mais eficiente na temporada.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-premiacoes-tipologia',
+    titleSel: '#tour-hdr-premiacoes',
+    title: '💸 Premiações',
+    desc: 'Detalhamento de como os prêmios são distribuídos — por semana, por mês e por trimestre. Mostra o pot total arrecadado, quanto vai para cada posição e os bônus de KO. Tudo transparente e auditável.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-heatmap-novo',
+    titleSel: '#tour-hdr-heatmap',
+    title: '🗓️ Heatmap de Performance',
+    desc: 'Mapa de calor com a performance semana a semana. Use os 3 filtros no topo para alternar entre pontuação, posição e KOs. Atenção às cores: vermelho indica pior desempenho em posição e rebuys, enquanto azul mais intenso indica mais KOs. Cada filtro tem sua escala própria de cores.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-previsao',
+    titleSel: '#tour-hdr-previsao',
+    title: '🔮 Projeções',
+    desc: 'Com base na média das últimas 3 semanas, o dashboard projeta onde cada jogador vai terminar o mês, trimestre ou ano. Barra colorida = acumulado real. Barra transparente = projeção futura.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-equity-calc',
+    titleSel: '#tour-hdr-equity',
+    title: '🃏 Calculadora de Equity',
+    desc: 'Ferramenta para analisar uma mão específica. Informe até 4 mãos e as cartas do board (flop, turn, river) para ver a probabilidade de vitória de cada mão com simulação exata. Ideal para estudar situações.',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-torneios',
+    titleSel: '#tour-hdr-torneios',
+    title: '🎯 Torneios Especiais',
+    desc: 'Torneios extras, fora do calendário regular, normalmente feita no nosso QG do Marcolino, regado a churrasco feito pelo Rafa, piscina, sinuca e muito chopp! Os campeões ficam eternizados na história do grupo!',
+    pos: 'center',
+    smallTarget: true
+  },
+  {
+    target: '#card-hall-da-fama',
+    titleSel: '#tour-hdr-hof',
+    title: '👑 Hall da Fama',
+    desc: 'O Hall da Fama representa os campeões históricos do Poker do Plaza, os vice-campeões e os 3º lugares. Cada troféu representa um título anual conquistado. O Hall da Fama é organizado pelo número de troféus, vice-campeonatos e terceiros lugares. Quem estiver aqui, entrou para a história!',
+    pos: 'center',
+    smallTarget: true
+  },
+];
+
+var _tourActive = false;
+var _tourIdx = 0;
+var _tourOverlay = null;
+var _tourBox = null;
+var _tourHighlight = null;
+
+function getTourTarget(step){
+  if(!step.target) return null;
+  var el = document.querySelector(step.target);
+  return el;
+}
+
+function removerTour(){
+  if(_tourOverlay) { _tourOverlay.remove(); _tourOverlay = null; }
+  if(_tourHighlight) { _tourHighlight.remove(); _tourHighlight = null; }
+  document.querySelectorAll('.tour-box').forEach(function(e){ e.remove(); });
+  _tourActive = false;
+}
+
+function renderStep(idx){
+  removerTour();
+  if(idx >= TOUR_STEPS.length){ mostrarFimTour(); return; }
+  _tourActive = true;
+  _tourIdx = idx;
+  var step = TOUR_STEPS[idx];
+
+  // Encontrar elemento — preferir titleSel, fallback para target
+  var scrollEl = null;
+  if(step.target === 'header'){
+    scrollEl = document.querySelector('header');
+  } else if(step.titleSel){
+    scrollEl = document.querySelector(step.titleSel);
+    // Se nao achou com seletor filho, tentar o proprio card
+    if(!scrollEl) scrollEl = document.querySelector(step.target);
+  } else {
+    scrollEl = document.querySelector(step.target);
+  }
+
+  // Scroll suave ao elemento
+  if(scrollEl){
+    scrollEl.scrollIntoView({ behavior:'smooth', block:'center' });
+  }
+
+  setTimeout(function(){
+    // Overlay escuro
+    _tourOverlay = document.createElement('div');
+    _tourOverlay.style.cssText = 'position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,0.75);pointer-events:none;';
+    document.body.appendChild(_tourOverlay);
+
+    // Highlight preciso do elemento após scroll
+    if(scrollEl){
+      var rect = scrollEl.getBoundingClientRect();
+      var pad = 6;
+      _tourHighlight = document.createElement('div');
+      _tourHighlight.style.cssText = [
+        'position:fixed',
+        'z-index:99991',
+        'pointer-events:none',
+        'border-radius:12px',
+        'box-shadow:0 0 0 3px #6366f1, 0 0 0 9999px rgba(0,0,0,0.75)',
+        'top:'+(rect.top - pad)+'px',
+        'left:'+(rect.left - pad)+'px',
+        'width:'+(rect.width + pad*2)+'px',
+        'height:'+(rect.height + pad*2)+'px',
+      ].join(';');
+      document.body.appendChild(_tourHighlight);
+    }
+
+    // Caixa sempre centralizada na tela
+    var box = document.createElement('div');
+    box.className = 'tour-box';
+    box.style.cssText = [
+      'position:fixed',
+      'z-index:99992',
+      'background:linear-gradient(145deg,#0d1629,#111827)',
+      'border:2px solid #6366f1',
+      'border-radius:18px',
+      'padding:20px 18px 16px',
+      'max-width:310px',
+      'width:calc(100vw - 32px)',
+      'box-shadow:0 8px 40px rgba(99,102,241,0.35)',
+      'left:50%',
+      'top:50%',
+      'transform:translateX(-50%) translateY(-50%)',
+      'pointer-events:all',
+    ].join(';');
+
+    box.innerHTML = ''
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;">'
+      +   '<div style="font-size:16px;font-weight:900;color:#e6edf3;line-height:1.3;">'+step.title+'</div>'
+      +   '<button id="tour-close-btn" style="background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;width:26px;height:26px;color:#fca5a5;font-size:12px;font-weight:800;cursor:pointer;flex-shrink:0;margin-left:8px;">✕</button>'
+      + '</div>'
+      + '<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:16px;">'+step.desc+'</div>'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">'
+      +   '<div style="font-size:11px;color:#4a6080;font-weight:700;">'+(idx+1)+' / '+TOUR_STEPS.length+'</div>'
+      +   '<div style="display:flex;gap:6px;">'
+      +     (idx > 0 ? '<button id="tour-prev-btn" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:7px 14px;color:#9fb3d4;font-size:12px;font-weight:700;cursor:pointer;">← Anterior</button>' : '')
+      +     '<button id="tour-next-btn" style="background:linear-gradient(135deg,#4338ca,#6366f1);border:none;border-radius:10px;padding:7px 16px;color:#fff;font-size:12px;font-weight:800;cursor:pointer;">'+(idx === TOUR_STEPS.length-1 ? 'Concluir ✓' : 'Próximo →')+'</button>'
+      +   '</div>'
+      + '</div>'
+      // Indicadores de progresso
+      + '<div style="display:flex;gap:4px;justify-content:center;margin-top:12px;">'
+      + TOUR_STEPS.map(function(_,i){ return '<div style="width:'+(i===idx?'20':'6')+'px;height:6px;border-radius:3px;background:'+(i===idx?'#6366f1':'rgba(99,102,241,0.25)')+';transition:all .3s;"></div>'; }).join('')
+      + '</div>';
+
+    document.body.appendChild(box);
+
+    box.querySelector('#tour-next-btn').addEventListener('click', function(){
+      renderStep(idx + 1);
+    });
+    var prevBtn = box.querySelector('#tour-prev-btn');
+    if(prevBtn) prevBtn.addEventListener('click', function(){ renderStep(idx - 1); });
+    box.querySelector('#tour-close-btn').addEventListener('click', removerTour);
+
+  }, scrollEl ? 350 : 0);
+}
+
+function mostrarFimTour(){
+  removerTour();
+  var fim = document.createElement('div');
+  fim.style.cssText = 'position:fixed;inset:0;z-index:99992;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:20px;';
+  fim.innerHTML = '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:2px solid #6366f1;border-radius:20px;padding:32px 24px;max-width:300px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(99,102,241,0.4);">'
+    + '<div style="font-size:48px;margin-bottom:12px;">🎉</div>'
+    + '<div style="font-size:20px;font-weight:900;color:#e6edf3;margin-bottom:8px;">Tour Concluído!</div>'
+    + '<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:20px;">Agora você conhece o dashboard do Plaza. Boa sorte na mesa! 🃏</div>'
+    + '<button id="tour-fim-btn" style="width:100%;background:linear-gradient(135deg,#4338ca,#6366f1);border:none;border-radius:12px;padding:12px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;">Fechar</button>'
+    + '</div>';
+  document.body.appendChild(fim);
+  fim.querySelector('#tour-fim-btn').addEventListener('click', function(){ fim.remove(); });
+  fim.addEventListener('click', function(e){ if(e.target===fim) fim.remove(); });
+}
+
+window.iniciarTour = function(){
+  renderStep(0);
 };
 
 })();
