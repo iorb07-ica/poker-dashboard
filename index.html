@@ -11790,7 +11790,7 @@ var BRASAO_SVGS = {
 
       // Header da tela
       var telaHeader = document.createElement('div');
-      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;';
+      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:52px 16px 12px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;';
       telaHeader.innerHTML = '<div>'
         +'<div style="font-size:18px;font-weight:900;color:'+info.cor+';">'+info.label+'</div>'
         +'<div style="font-size:11px;color:#6b82a0;margin-top:2px;">Toque num brasão para ver detalhes</div>'
@@ -11805,7 +11805,7 @@ var BRASAO_SVGS = {
 
       // Grid 5x2 - tamanho fixo para caber tudo na tela
       var grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:repeat(5,1fr);gap:10px;padding:10px 14px 14px;box-sizing:border-box;flex:1;min-height:0;';
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:10px 12px 12px;box-sizing:border-box;overflow-y:auto;-webkit-overflow-scrolling:touch;';
 
       // Attach SVG art to each brasao
       var svgKeys = {
@@ -11827,8 +11827,8 @@ var BRASAO_SVGS = {
         item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;'
           +'background:'+(b.conquistado?info.bg:'rgba(255,255,255,0.03)')+';'
           +'border:2px solid '+borderColor+';'
-          +'border-radius:20px;cursor:pointer;position:relative;overflow:hidden;'
-          +'padding:12px 8px 10px;transition:transform .15s;text-align:center;';
+          +'border-radius:16px;cursor:pointer;position:relative;overflow:hidden;'
+          +'padding:10px 4px 10px;transition:transform .15s;text-align:center;';
 
         // SVG ocupa ~75% do card — tamanho percentual via padding-trick
         // Animacao por nivel
@@ -11836,20 +11836,20 @@ var BRASAO_SVGS = {
 
         var svgWrap = document.createElement('div');
         svgWrap.className = 'brasao-svg-wrap' + (animClass ? ' '+animClass : '');
-        svgWrap.style.cssText = 'width:115px;height:115px;border-radius:50%;overflow:hidden;flex-shrink:0;'
+        svgWrap.style.cssText = 'width:110px;height:110px;border-radius:50%;overflow:hidden;flex-shrink:0;'
           +(b.conquistado?'box-shadow:0 0 20px '+info.brd+';':'filter:grayscale(1) brightness(0.22);');
-        svgWrap.innerHTML = b.svgArt || ('<div style="width:115px;height:115px;display:flex;align-items:center;justify-content:center;font-size:52px;">'+b.emoji+'</div>');
+        svgWrap.innerHTML = b.svgArt || ('<div style="width:110px;height:110px;display:flex;align-items:center;justify-content:center;font-size:50px;">'+b.emoji+'</div>');
 
         // Nome maior
         var nomeEl = document.createElement('div');
-        nomeEl.style.cssText = 'font-size:16px;font-weight:900;text-align:center;line-height:1.2;letter-spacing:.3px;'
-          +'color:'+(b.conquistado?info.cor:'#3a4a60')+';width:95%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;';
+        nomeEl.style.cssText = 'font-size:13px;font-weight:800;text-align:center;line-height:1.3;letter-spacing:.2px;'
+          +'color:'+(b.conquistado?info.cor:'#3a4a60')+';width:95%;word-break:break-word;';
         nomeEl.textContent = b.nome;
 
         // Cadeado grande centralizado para bloqueados
         if(!b.conquistado){
           var lock = document.createElement('div');
-          lock.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:36px;opacity:0.6;pointer-events:none;z-index:3;';
+          lock.style.cssText = 'position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);font-size:30px;opacity:0.6;pointer-events:none;z-index:3;';
           lock.textContent = '🔒';
           item.appendChild(lock);
         }
