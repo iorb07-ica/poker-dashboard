@@ -11629,20 +11629,24 @@ window.abrirPerfil = function(jogadorNome){
       return r && +r.posicao===1;
     }) >= 3;
 
-    // 7. Dragao - eliminou TODOS os outros jogadores presentes numa noite
-    // Regra: seus KOs nessa noite = total de outros jogadores presentes (nPresentes - 1)
-    // E voce terminou em 1o lugar (unico com fichas)
+    // 7. Dragao - UNICO jogador a terminar com fichas numa noite
+    // Criterio definitivo: terminou em 1o lugar E todos os outros presentes
+    // terminaram com fichas_restantes = 0 (foram eliminados sem fichas)
     var dragao = false;
     wksSorted.forEach(function(wk){
       var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
       var nPresentes = wkAll.length;
-      if(nPresentes < 3) return; // precisa de pelo menos 3 jogadores
+      if(nPresentes < 3) return;
       var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
       if(!meuRow) return;
-      var meusKOs = +meuRow.kos || 0;
-      var minhaPosicao = +meuRow.posicao;
-      // Tem que ter vencido a noite E feito KOs em todos os outros
-      if(minhaPosicao === 1 && meusKOs === nPresentes - 1) dragao = true;
+      if(+meuRow.posicao !== 1) return; // precisa ter vencido
+      // Verificar se TODOS os outros terminaram com 0 fichas
+      var todosEliminados = wkAll.every(function(r){
+        if(r.jogador === jogadorNome) return true; // skip proprio jogador
+        var fichas = +r.fichas_restantes || 0;
+        return fichas === 0;
+      });
+      if(todosEliminados) dragao = true;
     });
 
     // 8. Grand Slam - vencer noite + mês + trimestre no mesmo ciclo FECHADO
