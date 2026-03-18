@@ -8839,7 +8839,7 @@ document.addEventListener('DOMContentLoaded', function(){
   window.rnKOTotalInput = function(idx,inp){
     var v=Math.max(0,parseInt(inp.value)||0); inp.value=v;
     inp.style.color=v>0?'#22c55e':'#e6edf3';
-    rnAtualizarContadores(); rnRecalcular();
+    rnAtualizarContadores(); rnSyncPosicoes(); rnRecalcular();
   };
 
   // ── Contadores ────────────────────────────────────────────
@@ -8924,6 +8924,18 @@ document.addEventListener('DOMContentLoaded', function(){
     var rows=document.getElementById('rn-tbody').rows, n=rows.length, usadas={};
     for(var i=0;i<n;i++){ if(rows[i].querySelector('.rn-faltou').checked)continue; var v=rows[i].querySelector('.rn-pos').value; if(v)usadas[v]=true; }
     for(var i=0;i<n;i++){ var sel=rows[i].querySelector('.rn-pos'), mv=sel.value; Array.from(sel.options).forEach(function(o){ if(!o.value)return; o.disabled=usadas[o.value]&&o.value!==mv; o.style.color=o.disabled?'#4a5568':''; }); }
+
+    /* Sincronizar também os selects dos cards mobile */
+    document.querySelectorAll('.rn-mc-pos-sel').forEach(function(posSel){
+      var mv = posSel.value;
+      Array.from(posSel.options).forEach(function(o){
+        if(!o.value) return;
+        var bloqueada = usadas[o.value] && o.value !== mv;
+        o.disabled = bloqueada;
+        o.style.color = bloqueada ? '#4a5568' : '';
+        o.textContent = bloqueada ? o.value+'º ✓' : o.value+'º';
+      });
+    });
   };
 
   // ── Ordenar linhas ────────────────────────────────────────
@@ -9132,7 +9144,14 @@ document.addEventListener('DOMContentLoaded', function(){
               +'</div></div>';
           }).join('');
       alertEl.classList.add('show');
-      alertEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+      /* Rolar o overlay até o alerta ficar visível */
+      var overlay = document.getElementById('rn-overlay');
+      if(overlay){
+        var alertTop = alertEl.getBoundingClientRect().top - overlay.getBoundingClientRect().top + overlay.scrollTop;
+        overlay.scrollTo({top: Math.max(0, alertTop - 20), behavior:'smooth'});
+      } else {
+        alertEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+      }
       return;
     }
     var novos=dados.map(function(d){
@@ -9229,10 +9248,11 @@ window.salvarHTML = function(){
     if(!backup) return;
     var raw = JSON.parse(backup);
     if(!Array.isArray(raw) || raw.length === 0) return;
-    // Só restaura se o RAW atual estiver vazio ou for menor
+    // Carregar na memória IMEDIATAMENTE — antes do ghCarregarDados sobrescrever
     var currentRaw = window.RAW || (window.DATA && window.DATA.ledger) || [];
-    if(currentRaw.length >= raw.length) return; // dados do HTML já são mais completos
+    if(currentRaw.length >= raw.length) return;
     window.RAW = raw;
+    window._localStorageRaw = raw; // guardar referência para merge posterior
     if(!window.DATA) window.DATA = {ledger:[], podios:[]};
     window.DATA.ledger = raw;
     var wks = Array.from(new Set(raw.map(function(r){return r.wk;}))).filter(Boolean).length;
@@ -9301,20 +9321,22 @@ window.ghCarregarDados = function(){
       /* ── Mesclar com localStorage se tiver dados mais recentes ── */
       var ledgerFinal = dados.ledger || [];
       try {
-        var backup = localStorage.getItem('plaza_raw_backup');
-        if(backup){
-          var backupRaw = JSON.parse(backup);
-          if(Array.isArray(backupRaw) && backupRaw.length > ledgerFinal.length){
-            // localStorage tem mais registros — usa ele e limpa o backup
-            console.log('[Merge] localStorage ('+backupRaw.length+') > GitHub ('+ledgerFinal.length+') — usando localStorage');
-            ledgerFinal = backupRaw;
-            localStorage.removeItem('plaza_raw_backup');
-            localStorage.removeItem('plaza_raw_backup_ts');
-          } else {
-            // GitHub está atualizado — limpa o backup
-            localStorage.removeItem('plaza_raw_backup');
-            localStorage.removeItem('plaza_raw_backup_ts');
-          }
+        // Usar referência já carregada na memória (window._localStorageRaw)
+        // ou ler do localStorage diretamente
+        var backupRaw = window._localStorageRaw || null;
+        if(!backupRaw){
+          var backup = localStorage.getItem('plaza_raw_backup');
+          if(backup) backupRaw = JSON.parse(backup);
+        }
+        if(backupRaw && Array.isArray(backupRaw) && backupRaw.length > ledgerFinal.length){
+          console.log('[Merge] localStorage ('+backupRaw.length+') > GitHub ('+ledgerFinal.length+') — usando localStorage');
+          ledgerFinal = backupRaw;
+          // NÃO limpar backup ainda — só limpar após publicar com sucesso
+        } else {
+          // GitHub está atualizado — limpar backup
+          localStorage.removeItem('plaza_raw_backup');
+          localStorage.removeItem('plaza_raw_backup_ts');
+          window._localStorageRaw = null;
         }
       } catch(e){ console.warn('[Merge] erro:', e); }
 
@@ -9380,6 +9402,21 @@ window.ghSalvarDados = function(){
   if(!GH_TOKEN){ alert('Configure o token GitHub primeiro (botão ⚙️)'); abrirConfigGH(); return; }
   
   var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+
+  /* ── Mesclar com localStorage antes de publicar ── */
+  try {
+    var backup = localStorage.getItem('plaza_raw_backup');
+    if(backup){
+      var backupRaw = JSON.parse(backup);
+      if(Array.isArray(backupRaw) && backupRaw.length > raw.length){
+        console.log('[Publish] Mesclando localStorage ('+backupRaw.length+') com memória ('+raw.length+')');
+        raw = backupRaw;
+        window.RAW = raw;
+        if(window.DATA) window.DATA.ledger = raw;
+      }
+    }
+  } catch(e){ console.warn('[Publish] erro ao mesclar localStorage:', e); }
+
   if(!raw.length){ alert('Nenhum dado para salvar.'); return; }
   
   var allData = window.DATA || {};
@@ -12318,7 +12355,11 @@ window._buildRankingAnual = function(rows){
           if(window.rnSyncPosicoes) rnSyncPosicoes();
         }
         if(window.rnRecalcular) rnRecalcular();
-        setTimeout(window.rnSyncMobileAll, 60);
+        /* Atualizar selects de todos os cards após mudança de posição */
+        setTimeout(function(){
+          if(window.rnSyncPosicoes) rnSyncPosicoes();
+          if(window.rnSyncMobileAll) rnSyncMobileAll();
+        }, 30);
       });
       posField.appendChild(posSel);
 
