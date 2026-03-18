@@ -9287,8 +9287,30 @@ window.ghCarregarDados = function(){
     })
     .then(function(dados){
       if(!dados || !dados.ledger) throw new Error('Formato inválido');
+
+      /* ── Mesclar com localStorage se tiver dados mais recentes ── */
+      var ledgerFinal = dados.ledger || [];
+      try {
+        var backup = localStorage.getItem('plaza_raw_backup');
+        if(backup){
+          var backupRaw = JSON.parse(backup);
+          if(Array.isArray(backupRaw) && backupRaw.length > ledgerFinal.length){
+            // localStorage tem mais registros — usa ele e limpa o backup
+            console.log('[Merge] localStorage ('+backupRaw.length+') > GitHub ('+ledgerFinal.length+') — usando localStorage');
+            ledgerFinal = backupRaw;
+            localStorage.removeItem('plaza_raw_backup');
+            localStorage.removeItem('plaza_raw_backup_ts');
+          } else {
+            // GitHub está atualizado — limpa o backup
+            localStorage.removeItem('plaza_raw_backup');
+            localStorage.removeItem('plaza_raw_backup_ts');
+          }
+        }
+      } catch(e){ console.warn('[Merge] erro:', e); }
+
       window.DATA = dados;
-      window.RAW  = dados.ledger || [];
+      window.DATA.ledger = ledgerFinal;
+      window.RAW  = ledgerFinal;
       try{ MENSAL    = dados.mensal    || []; }catch(e){}
       try{ TRIMESTRE = dados.trimestre || []; }catch(e){}
       try{ ANUAL     = dados.anual     || []; }catch(e){}
