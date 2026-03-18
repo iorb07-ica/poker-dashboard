@@ -8956,7 +8956,20 @@ document.addEventListener('DOMContentLoaded', function(){
     rows.forEach(function(r){tbody.appendChild(r);});
     // Recalcular badges — reler rows do DOM para garantir ordem correcta
     var orderedRows = Array.from(tbody.rows);
-    var pos=1;
+
+    // Coletar posições já ocupadas por eliminados (sem fichas, com posição manual)
+    var posOcupadas = {};
+    orderedRows.forEach(function(r){
+      if(r.querySelector('.rn-faltou').checked) return;
+      var fichas = parseFloat(r.querySelector('.rn-fichas').value)||0;
+      if(fichas > 0) return; // sobrevivente — posição será auto
+      var sel = r.querySelector('.rn-pos');
+      var pManual = sel ? parseInt(sel.value) : null;
+      if(pManual) posOcupadas[pManual] = true;
+    });
+
+    // Atribuir posições aos sobreviventes pulando as já ocupadas
+    var pos = 1;
     orderedRows.forEach(function(r){
       var faltou=r.querySelector('.rn-faltou').checked;
       var fichasInp=r.querySelector('.rn-fichas');
@@ -8968,12 +8981,21 @@ document.addEventListener('DOMContentLoaded', function(){
         return;
       }
       if(fichas>0){
+        // Pular posições ocupadas por eliminados com posição manual
+        while(posOcupadas[pos]) pos++;
         if(badge){badge.style.display='inline-block';badge.textContent=pos+'º';}
         if(sel){sel.value=String(pos);sel.style.display='none';}
         pos++;
       } else {
-        if(badge){badge.style.display='none';badge.textContent='—';}
-        if(sel){sel.style.display='';sel.value='';}
+        // Eliminado — mantém posição manual se já tiver, senão mostra select
+        var pManual = sel ? parseInt(sel.value) : null;
+        if(pManual){
+          if(badge){badge.style.display='inline-block';badge.textContent=pManual+'º';}
+          if(sel){sel.style.display='none';}
+        } else {
+          if(badge){badge.style.display='none';badge.textContent='—';}
+          if(sel){sel.style.display='';sel.value='';}
+        }
       }
     });
     // Também actualizar os idx nos oninput/onblur após reordenação
@@ -8984,6 +9006,20 @@ document.addEventListener('DOMContentLoaded', function(){
       var fEl=r.querySelector('.rn-faltou');
       if(fEl) fEl.setAttribute('onchange','rnToggleFaltou('+newIdx+')');
     });
+
+    // Sincronizar posições nos cards mobile após reordenação
+    try {
+      orderedRows.forEach(function(r){
+        var nome = r.dataset.jogador; if(!nome) return;
+        var badge = r.querySelector('.rn-pos-badge');
+        var sel   = r.querySelector('.rn-pos');
+        var posVal = (badge && badge.style.display !== 'none') ? badge.textContent : (sel && sel.value ? sel.value+'º' : '');
+        var lbl = document.getElementById('rn-mc-pos-lbl-'+nome);
+        if(lbl){ lbl.textContent = posVal||'insira as fichas para calcular'; lbl.style.color = posVal?'#22c55e':'#4a6080'; }
+        var mcSel = document.querySelector('.rn-mc-pos-sel[data-nome="'+nome+'"]');
+        if(mcSel && posVal){ var n=parseInt(posVal); if(!isNaN(n)) mcSel.value=String(n); }
+      });
+    } catch(e){}
   };
 
   // ── Recalcular ────────────────────────────────────────────
