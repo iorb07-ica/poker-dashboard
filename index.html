@@ -84,6 +84,251 @@ function escHTML(str){
       --bg:#0f1115; --panel:#121723; --muted:#8a94a6; --text:#e6edf3; --accent:#66d9ef;
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
     }
+
+/* ═══════════════════════════════════════════════════════
+   TEMA CLARO / ESCURO — variáveis e overrides
+   ═══════════════════════════════════════════════════════ */
+
+/* --- Tema escuro (padrão) --- */
+:root {
+  --t-bg:          #060d1a;
+  --t-bg2:         #0d1629;
+  --t-surface:     rgba(255,255,255,0.04);
+  --t-card:        linear-gradient(145deg,#0d1629,#111827);
+  --t-card-border: rgba(255,255,255,0.09);
+  --t-card-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  --t-text:        #e6edf3;
+  --t-text2:       #9fb3d4;
+  --t-text3:       #6b82a0;
+  --t-topbar:      linear-gradient(135deg,#060d1a 0%,#0d1629 100%);
+  --t-topbar-brd:  rgba(59,130,246,0.20);
+  --t-input:       rgba(255,255,255,0.07);
+  --t-input-brd:   rgba(255,255,255,0.12);
+  --t-select-bg:   #0d1629;
+  --t-header-bg:   linear-gradient(180deg,#0d1220,#0a0e19);
+  --t-header-brd:  #1c2330;
+  --t-transition:  background 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* --- Tema claro --- */
+body.theme-light {
+  --t-bg:          #f0f4f8;
+  --t-bg2:         #e2e8f0;
+  --t-surface:     rgba(0,0,0,0.03);
+  --t-card:        linear-gradient(145deg,#ffffff,#f8fafc);
+  --t-card-border: rgba(0,0,0,0.10);
+  --t-card-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  --t-text:        #1a2233;
+  --t-text2:       #3a506b;
+  --t-text3:       #6b82a0;
+  --t-topbar:      linear-gradient(135deg,#1e3a5f 0%,#2563eb 100%);
+  --t-topbar-brd:  rgba(37,99,235,0.3);
+  --t-input:       rgba(0,0,0,0.05);
+  --t-input-brd:   rgba(0,0,0,0.15);
+  --t-select-bg:   #ffffff;
+  --t-header-bg:   linear-gradient(180deg,#1e3a5f,#1a3159);
+  --t-header-brd:  rgba(37,99,235,0.2);
+}
+
+/* Aplicar variáveis nos elementos principais */
+body {
+  transition: var(--t-transition);
+  color: var(--t-text);
+}
+
+body.theme-light {
+  background: radial-gradient(1200px 600px at 20% -10%, #dbeafe 0%, #e0e7ef 40%, #f0f4f8 100%) !important;
+}
+
+body.theme-light header {
+  background: var(--t-header-bg) !important;
+  border-bottom-color: var(--t-header-brd) !important;
+}
+
+body.theme-light #mobile-topbar {
+  background: var(--t-topbar) !important;
+  border-bottom-color: var(--t-topbar-brd) !important;
+}
+
+body.theme-light .card {
+  background: var(--t-card) !important;
+  border-color: var(--t-card-border) !important;
+  box-shadow: var(--t-card-shadow) !important;
+  color: var(--t-text) !important;
+}
+
+body.theme-light .card-title,
+body.theme-light .card-title * {
+  color: var(--t-text) !important;
+}
+
+body.theme-light select,
+body.theme-light input[type="text"],
+body.theme-light input[type="number"],
+body.theme-light input[type="date"] {
+  background: var(--t-select-bg) !important;
+  border-color: var(--t-input-brd) !important;
+  color: var(--t-text) !important;
+}
+
+body.theme-light .mini-item .name { color: var(--t-text) !important; }
+body.theme-light .mini-item .pts  { color: var(--t-text2) !important; }
+
+body.theme-light .ptbl th { color: var(--t-text2) !important; background: rgba(0,0,0,0.05) !important; }
+body.theme-light .ptbl td { color: var(--t-text) !important; }
+body.theme-light .ptbl tr.tr-even { background: rgba(0,0,0,0.02) !important; }
+body.theme-light .ptbl tr.tr-odd  { background: transparent !important; }
+body.theme-light .ptbl tr.tr-total { background: rgba(37,99,235,0.08) !important; }
+
+/* Perfil modal no tema claro */
+body.theme-light #perfil-modal > div {
+  background: linear-gradient(145deg,#ffffff,#f0f6ff) !important;
+  color: var(--t-text) !important;
+}
+
+
+/* Seta de collapse com transição suave */
+[id$="-arrow"] {
+  transition: transform 0.25s cubic-bezier(0.34,1.3,0.64,1) !important;
+}
+/* Cards colapsáveis: cursor pointer feedback */
+[onclick*="toggleCard"] {
+  user-select: none;
+}
+[onclick*="toggleCard"]:active {
+  opacity: 0.85;
+}
+
+/* Botão do tema — posicionamento */
+#btn-theme-toggle {
+  background: transparent;
+  border: 1px solid var(--t-input-brd, rgba(255,255,255,0.15));
+  border-radius: 20px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--t-text, #e6edf3);
+  transition: all 0.2s;
+  line-height: 1;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+#btn-theme-toggle:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.05);
+}
+body.theme-light #btn-theme-toggle {
+  border-color: rgba(255,255,255,0.3);
+  color: #fff;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ANIMAÇÕES APRIMORADAS — spring, stagger, hover
+   ═══════════════════════════════════════════════════════ */
+
+@keyframes cardSpringUp {
+  0%   { opacity: 0; transform: translateY(28px) scale(0.97); }
+  55%  { opacity: 1; transform: translateY(-4px) scale(1.005); }
+  75%  { transform: translateY(2px) scale(0.999); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes cardSlideLeft {
+  0%   { opacity: 0; transform: translateX(-18px); }
+  60%  { opacity: 1; transform: translateX(3px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes statCountUp {
+  0%   { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmerGlow {
+  0%, 100% { box-shadow: 0 4px 20px rgba(59,130,246,0.08); }
+  50%       { box-shadow: 0 4px 28px rgba(59,130,246,0.20); }
+}
+
+/* Hover lift nos cards */
+.card {
+  transition: transform 0.22s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.22s ease;
+  will-change: transform;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45), 0 2px 8px rgba(59,130,246,0.12);
+}
+
+/* Mini-items: hover suave */
+.mini-item {
+  transition: background 0.18s ease, transform 0.18s ease;
+  border-radius: 8px;
+}
+.mini-item:hover {
+  background: rgba(59,130,246,0.07) !important;
+  transform: translateX(3px);
+}
+
+/* Substituir cardFadeUp por cardSpringUp nas animações principais */
+.fade-ready .grid-charts .chart,
+.fade-ready .mini-card,
+.fade-ready #card-ranking-anual,
+.fade-ready #card-perfis,
+.fade-ready #card-saldo-financeiro,
+.fade-ready #card-premiacoes-tipologia,
+.fade-ready #card-heatmap-novo,
+.fade-ready #card-momento,
+.fade-ready #card-previsao,
+.fade-ready #card-recordes,
+.fade-ready #card-hall-da-fama,
+.fade-ready #card-torneios,
+.fade-ready .row.mini-ranks > .card,
+.fade-ready #medal-standalone-row .card {
+  animation-name: cardSpringUp !important;
+  animation-duration: 0.55s !important;
+  animation-timing-function: cubic-bezier(0.34,1.4,0.64,1) !important;
+  animation-fill-mode: both !important;
+}
+
+/* Stagger mais pronunciado e suave */
+.fade-ready #card-ranking-anual            { animation-delay: 0.04s !important; }
+.fade-ready #card-perfis                   { animation-delay: 0.09s !important; }
+.fade-ready .row.mini-ranks > .card:nth-child(1) { animation-delay: 0.12s !important; }
+.fade-ready .row.mini-ranks > .card:nth-child(2) { animation-delay: 0.17s !important; }
+.fade-ready .row.mini-ranks > .card:nth-child(3) { animation-delay: 0.22s !important; }
+.fade-ready #card-saldo-financeiro         { animation-delay: 0.27s !important; }
+.fade-ready #card-premiacoes-tipologia     { animation-delay: 0.32s !important; }
+.fade-ready #card-heatmap-novo             { animation-delay: 0.37s !important; }
+.fade-ready #card-momento                  { animation-delay: 0.42s !important; }
+.fade-ready #card-previsao                 { animation-delay: 0.47s !important; }
+.fade-ready #card-recordes                 { animation-delay: 0.52s !important; }
+.fade-ready #card-hall-da-fama             { animation-delay: 0.57s !important; }
+.fade-ready #card-torneios                 { animation-delay: 0.62s !important; }
+
+/* Botões de perfil: hover com glow */
+.perfil-btn, [onclick*="abrirPerfil"] {
+  transition: transform 0.18s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.18s ease !important;
+}
+.perfil-btn:hover, [onclick*="abrirPerfil"]:hover {
+  transform: scale(1.04) !important;
+  box-shadow: 0 4px 18px rgba(59,130,246,0.35) !important;
+}
+
+/* Mini barras: animação de preenchimento */
+@keyframes barFill {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+.fade-ready .mini-item .bar-fill {
+  animation: barFill 0.6s cubic-bezier(0.34,1.2,0.64,1) both;
+  transform-origin: left;
+}
+
     *{box-sizing:border-box}
     html { overflow-y: scroll; overflow-x: hidden; }
     body{
@@ -93,7 +338,7 @@ function escHTML(str){
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
       background-size: cover, 240px 240px;
     }
-    header{padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5}
+    header{padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;transition:background 0.35s ease,border-color 0.35s ease;}
     h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
     #libwarn{display:none;margin-top:8px;padding:8px 10px;border:1px dashed #f59e0b;border-radius:10px;background:rgba(245,158,11,.08);color:#fbbf24;font-size:13px}
     .container{padding:16px;max-width:2400px;margin:0 auto}
@@ -115,6 +360,7 @@ function escHTML(str){
       background: linear-gradient(180deg, rgba(24,29,45,.95) 0%, rgba(17,21,34,.95) 100%);
       border:1px solid #1f2a3a;border-radius:16px;padding:8px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 12px 24px rgba(0,0,0,.35), 0 4px 10px rgba(10,12,20,.45);
+      transition: background 0.35s ease, border-color 0.35s ease, transform 0.22s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.22s ease;
     }
     .card-title{font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.6px;margin:0 0 4px 2px;opacity:.9}
     select, button{
@@ -1912,8 +2158,15 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 .rn-btn{padding:10px 24px;border-radius:12px;border:none;cursor:pointer;font-size:15px;font-weight:700;}
 .rn-btn-cancel{background:#1e2e46;color:#8a9ab8;}
 .rn-btn-confirm{background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;box-shadow:0 4px 14px rgba(34,197,94,.3);}
-.rn-alert{display:none;background:rgba(248,113,113,.12);border:1px solid #f87171;border-radius:10px;padding:10px 14px;color:#f87171;font-size:12px;margin-bottom:14px;}
-.rn-alert.show{display:block;}
+.rn-alert{display:none;background:rgba(248,113,113,.10);border:1px solid rgba(248,113,113,.5);border-radius:12px;padding:0;color:#f87171;font-size:13px;margin-bottom:14px;overflow:hidden;}
+.rn-alert.show{display:block;animation:cardSpringUp 0.35s cubic-bezier(0.34,1.3,0.64,1) both;}
+.rn-alert-titulo{background:rgba(248,113,113,.18);padding:9px 14px;font-weight:800;font-size:12px;letter-spacing:.4px;text-transform:uppercase;display:flex;align-items:center;gap:7px;border-bottom:1px solid rgba(248,113,113,.2);}
+.rn-alert-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(248,113,113,.1);}
+.rn-alert-item:last-child{border-bottom:none;}
+.rn-alert-item .rn-alert-icon{font-size:17px;flex-shrink:0;margin-top:1px;}
+.rn-alert-item .rn-alert-body{}
+.rn-alert-item .rn-alert-msg{font-weight:700;color:#fca5a5;font-size:13px;line-height:1.3;}
+.rn-alert-item .rn-alert-dica{font-size:11px;color:rgba(252,165,165,.7);margin-top:2px;line-height:1.4;}
 .rn-success-toast{position:fixed;bottom:30px;right:30px;z-index:10000;background:linear-gradient(135deg,#166534,#22c55e);color:#fff;border-radius:14px;padding:14px 22px;font-size:14px;font-weight:700;box-shadow:0 8px 28px rgba(34,197,94,.4);transform:translateY(80px);opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);}
 .rn-success-toast.show{transform:translateY(0);opacity:1;}
 .rn-faltou-row td{opacity:.4;}
@@ -2005,6 +2258,37 @@ function setLoadingProgress(pct, msg){
 
 
 
+<script>
+/* ═══ TEMA CLARO / ESCURO ═══ */
+(function(){
+  var DARK = 'theme-dark', LIGHT = 'theme-light';
+  var stored = localStorage.getItem('plaza_theme') || DARK;
+  
+  function applyTheme(t) {
+    document.body.classList.remove(DARK, LIGHT);
+    document.body.classList.add(t);
+    var icon = document.getElementById('theme-icon');
+    if(icon) icon.textContent = t === LIGHT ? '🌙' : '☀️';
+    // Atualiza meta theme-color
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if(meta) meta.content = t === LIGHT ? '#1e3a5f' : '#060d1a';
+    localStorage.setItem('plaza_theme', t);
+  }
+
+  window.toggleTheme = function() {
+    var isLight = document.body.classList.contains(LIGHT);
+    applyTheme(isLight ? DARK : LIGHT);
+  };
+
+  // Aplica tema salvo imediatamente
+  applyTheme(stored);
+
+  // Re-aplica ícone quando topbar aparecer (mobile)
+  window.addEventListener('load', function(){
+    applyTheme(localStorage.getItem('plaza_theme') || DARK);
+  });
+})();
+</script>
 </head>
 <body>
 
@@ -2030,8 +2314,27 @@ function setLoadingProgress(pct, msg){
     /* Usar data-open para rastrear estado — evita conflito com style vazio vs 'none' */
     var isOpen = body.getAttribute('data-open') !== 'false';
     body.setAttribute('data-open', isOpen ? 'false' : 'true');
-    body.style.display = isOpen ? 'none' : 'block';
-    if(arrow) arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    if(isOpen){
+      // Fechar com fade-out rápido
+      body.style.opacity = '0';
+      body.style.transform = 'translateY(-6px)';
+      body.style.transition = 'opacity 0.18s ease, transform 0.18s ease';
+      setTimeout(function(){ body.style.display = 'none'; body.style.opacity=''; body.style.transform=''; body.style.transition=''; }, 180);
+    } else {
+      body.style.display = 'block';
+      body.style.opacity = '0';
+      body.style.transform = 'translateY(10px)';
+      body.style.transition = 'opacity 0.3s ease, transform 0.3s cubic-bezier(0.34,1.3,0.64,1)';
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        body.style.opacity = '1';
+        body.style.transform = 'translateY(0)';
+        setTimeout(function(){ body.style.transition=''; }, 320);
+      }); });
+    }
+    if(arrow){
+      arrow.style.transition = 'transform 0.25s cubic-bezier(0.34,1.3,0.64,1)';
+      arrow.style.transform = isOpen ? '' : 'rotate(180deg)';
+    }
     if(!isOpen){
       var _elMap={'ranking-anual-body':'chartRanking','ranking-kos-body':'chartKOs','pontuacao-anual-body':'chartEvolucao'};
       var _elId=_elMap[bodyId];
@@ -2125,6 +2428,9 @@ function setLoadingProgress(pct, msg){
       <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-mobile">📱</button>
       <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-desktop">🖥️</button>
     </div>
+    <button id="btn-theme-toggle" onclick="window.toggleTheme()" title="Alternar tema claro/escuro">
+      <span id="theme-icon">☀️</span>
+    </button>
     <div style="display:flex;align-items:center;gap:6px;">
       <button onclick="abrirRegistroNoite()" title="Registrar noite" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,0.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><line x1="11" y1="3" x2="11" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="3" y1="11" x2="19" y2="11" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg></button>
       <button onclick="avisarWhatsApp()" title="Avisar grupo" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:22px;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;">
@@ -3761,7 +4067,8 @@ function renderMini(per, val){
 
 function miniRow(pos, name, pontos){
   const badge = pos===1? '🥇' : pos===2? '🥈' : pos===3? '🥉' : pos+'.';
-  return `<div class="mini-item"><div class="pos">${badge}</div><div class="name">${name}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+  const delay = ((pos-1) * 0.07).toFixed(2);
+  return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name">${name}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
 }
 
 // ===== Campeões do Período (Top 5 + prêmios) =====
@@ -8855,7 +9162,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
     var presentes=dados.filter(function(d){return !d.faltou;}), totalBuyins=presentes.length;
     var rebTEl=document.getElementById('rn-rebuys-total'), rebTG=rebTEl?(parseInt(rebTEl.value)||0):0;
-    var totalRebuys=Math.max(rebTG,presentes.reduce(function(s,d){return s+d.rebuys;},0));
+    var totalRebuys=rebTG; // campo global é a fonte de verdade
     var totalEntradas=totalBuyins+totalRebuys;
     try{rnAtualizarContadores();}catch(e){}
     var poteNoite=totalEntradas*R_NOITE, poteMes=totalEntradas*R_MES, poteTri=totalEntradas*R_TRI, poteAno=totalEntradas*R_ANO;
@@ -8918,19 +9225,77 @@ document.addEventListener('DOMContentLoaded', function(){
     var data=document.getElementById('rn-data').value, wk=parseInt(document.getElementById('rn-wk').value)||1;
     var mes=parseInt(document.getElementById('rn-mes').value)||1, tri=parseInt(document.getElementById('rn-tri').value)||1, ano=parseInt(document.getElementById('rn-ano').value)||2026;
     var erros=[], presentes=dados.filter(function(d){return !d.faltou;});
-    if(presentes.length<2) erros.push('É necessário pelo menos 2 jogadores presentes.');
-    if(!document.getElementById('rn-dealer').value) erros.push('Selecione o Dealer da semana.');
-    if(!data) erros.push('Informe a data do jogo.');
-    else{ var dO=new Date(data+'T12:00:00'); if(dO.getDay()!==3) erros.push('A data não é uma quarta-feira.'); var wkC=window.rnDataParaWK(data); if(wkC!==null&&wkC!==wk) erros.push('WK'+wk+' não corresponde à data. Correto: WK'+wkC+'.'); }
-    if(presentes.length>=2){
-      var rebT=Math.max(parseInt(document.getElementById('rn-rebuys-total').value)||0, presentes.reduce(function(s,d){return s+d.rebuys;},0));
-      var ficE=(presentes.length+rebT)*FICHAS_INI, ficI=presentes.reduce(function(s,d){return s+(d.fichas||0);},0);
-      if(ficI!==ficE) erros.push('🎲 Fichas incorretas! Esperado: '+ficE.toLocaleString('pt-BR')+'. Informado: '+ficI.toLocaleString('pt-BR')+'.');
-      var nSob=presentes.filter(function(d){return (d.fichas||0)>0;}).length, kosN=Math.max(0,presentes.length+rebT-nSob);
-      var kosM2=0; document.querySelectorAll('#rn-tbody .rn-kos-total').forEach(function(inp){kosM2+=parseInt(inp.value)||0;});
-      if(kosM2!==kosN) erros.push('💀 KOs incorretos! Necessários: '+kosN+'. Marcados: '+kosM2+'.');
+
+    // — Validação: mínimo de jogadores
+    if(presentes.length<2) erros.push({
+      icon:'👥', msg:'Mínimo de 2 jogadores presentes.',
+      dica:'Marque pelo menos 2 jogadores como presentes na noite.'
+    });
+
+    // — Validação: dealer
+    if(!document.getElementById('rn-dealer').value) erros.push({
+      icon:'🎯', msg:'Dealer não selecionado.',
+      dica:'Escolha quem foi o dealer/organizador desta noite.'
+    });
+
+    // — Validação: data e WK
+    if(!data){ erros.push({icon:'📅', msg:'Data do jogo não informada.', dica:'Preencha a data da partida.'}); }
+    else{
+      var dO=new Date(data+'T12:00:00');
+      if(dO.getDay()!==3) erros.push({icon:'📅', msg:'A data selecionada não é uma quarta-feira.', dica:'O jogo acontece sempre às quartas. Verifique a data informada.'});
+      var wkC=window.rnDataParaWK(data);
+      if(wkC!==null&&wkC!==wk) erros.push({icon:'🔢', msg:'WK'+wk+' não corresponde à data informada.', dica:'Para esta data o correto seria WK'+wkC+'. Ajuste o campo Semana (WK).'});
     }
-    if(erros.length>0){ alertEl.innerHTML=erros.map(function(e){return '<div>⚠️ '+e+'</div>';}).join(''); alertEl.classList.add('show'); alertEl.scrollIntoView({behavior:'smooth',block:'nearest'}); return; }
+
+    if(presentes.length>=2){
+      // rebT = campo global de rebuys (fonte de verdade)
+      var rebT=parseInt(document.getElementById('rn-rebuys-total').value)||0;
+
+      // — Validação: fichas
+      var ficE=(presentes.length+rebT)*FICHAS_INI;
+      var ficI=presentes.reduce(function(s,d){return s+(d.fichas||0);},0);
+      if(ficI!==ficE){
+        var ficDiff=ficI-ficE;
+        var ficDiffAbs=Math.abs(ficDiff).toLocaleString('pt-BR');
+        erros.push({
+          icon:'🎲',
+          msg:'Total de fichas não confere. Esperado: '+ficE.toLocaleString('pt-BR')+' — Informado: '+ficI.toLocaleString('pt-BR')+' ('+( ficDiff>0?'+':'')+ficDiff.toLocaleString('pt-BR')+').',
+          dica: ficDiff>0
+            ? 'Há '+ficDiffAbs+' fichas a mais que o esperado. Verifique os stacks informados ou se o número de rebuys ('+rebT+') está correto.'
+            : 'Faltam '+ficDiffAbs+' fichas. Confira os stacks dos sobreviventes ou se todos os rebuys ('+rebT+') foram contabilizados.'
+        });
+      }
+
+      // — Validação: KOs
+      var nSob=presentes.filter(function(d){return (d.fichas||0)>0;}).length;
+      var kosN=Math.max(0,presentes.length+rebT-nSob);
+      var kosM2=0; document.querySelectorAll('#rn-tbody .rn-kos-total').forEach(function(inp){kosM2+=parseInt(inp.value)||0;});
+      if(kosM2!==kosN){
+        var kosDiff=kosM2-kosN;
+        erros.push({
+          icon:'💀',
+          msg:'KOs não conferem. Necessários: '+kosN+' — Marcados: '+kosM2+' ('+( kosDiff>0?'+':'')+kosDiff+').',
+          dica: kosDiff>0
+            ? 'Há '+(kosDiff)+' KO(s) a mais que o esperado. Lembre: KOs = eliminações = (jogadores + rebuys) − sobreviventes.'
+            : 'Faltam '+Math.abs(kosDiff)+' KO(s). Verifique os KOs de cada jogador na tabela ou revise o número de sobreviventes.'
+        });
+      }
+    }
+
+    if(erros.length>0){
+      alertEl.innerHTML = '<div class="rn-alert-titulo">🚨 Corrija os erros abaixo antes de salvar</div>'
+        + erros.map(function(e){
+            return '<div class="rn-alert-item">'
+              +'<div class="rn-alert-icon">'+e.icon+'</div>'
+              +'<div class="rn-alert-body">'
+              +'<div class="rn-alert-msg">'+e.msg+'</div>'
+              +(e.dica?'<div class="rn-alert-dica">💡 '+e.dica+'</div>':'')
+              +'</div></div>';
+          }).join('');
+      alertEl.classList.add('show');
+      alertEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+      return;
+    }
     var novos=dados.map(function(d){
       if(d.faltou) return {ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.nome,buyin:0,posicao:null,rebuys:0,kos:0,fichas_restantes:0,valor_fichas:0,pontos_classificacao:0,penalidade_rebuy:0,pontos_fichas:0,pontos_calc:0,custo_buyin:0,custo_rebuys:0,premio_noite:0,dealer:+(meta.dealerShare||0).toFixed(2),antecipacao_dealer:0,saldo_semana_final:-(meta.dealerShare||0),faltou:1};
       var _despAj = d.despAjuste||0;
@@ -8946,6 +9311,12 @@ document.addEventListener('DOMContentLoaded', function(){
     window.RAW.push.apply(window.RAW, novos);
     if(!window.DATA) window.DATA={ledger:[],podios:[]};
     window.DATA.ledger=window.RAW;
+    /* ── Auto-save no localStorage ── */
+    try{
+      localStorage.setItem('plaza_raw_backup', JSON.stringify(window.RAW));
+      localStorage.setItem('plaza_raw_backup_ts', new Date().toISOString());
+      console.log('[AutoSave] RAW salvo no localStorage:', window.RAW.length, 'registros');
+    }catch(e){ console.warn('[AutoSave] Falha ao salvar localStorage:', e); }
     try{window.afterDataLoaded&&window.afterDataLoaded();}catch(e){}
     try{window.refreshAll&&window.refreshAll();}catch(e){}
     try{window.refresh&&window.refresh();}catch(e){}
@@ -9011,6 +9382,43 @@ window.salvarHTML = function(){
 
 <script>
 /* ═══════════ GITHUB INTEGRATION ═══════════ */
+/* ── Restaurar backup do localStorage ao carregar ── */
+(function(){
+  try {
+    var backup = localStorage.getItem('plaza_raw_backup');
+    var ts     = localStorage.getItem('plaza_raw_backup_ts');
+    if(!backup) return;
+    var raw = JSON.parse(backup);
+    if(!Array.isArray(raw) || raw.length === 0) return;
+    // Só restaura se o RAW atual estiver vazio ou for menor
+    var currentRaw = window.RAW || (window.DATA && window.DATA.ledger) || [];
+    if(currentRaw.length >= raw.length) return; // dados do HTML já são mais completos
+    window.RAW = raw;
+    if(!window.DATA) window.DATA = {ledger:[], podios:[]};
+    window.DATA.ledger = raw;
+    var wks = Array.from(new Set(raw.map(function(r){return r.wk;}))).filter(Boolean).length;
+    var tsFormatado = ts ? new Date(ts).toLocaleString('pt-BR') : '';
+    // Mostrar banner de restauração
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        try{window.afterDataLoaded&&window.afterDataLoaded();}catch(e){}
+        try{window.refresh&&window.refresh();}catch(e){}
+        // Banner informativo
+        var banner = document.createElement('div');
+        banner.id = 'plaza-restore-banner';
+        banner.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:99999;background:linear-gradient(135deg,#1a3a6e,#2563eb);border:1px solid rgba(99,162,246,0.4);border-radius:14px;padding:12px 18px;color:#e6edf3;font-size:13px;font-weight:700;box-shadow:0 4px 24px rgba(0,0,0,0.5);display:flex;align-items:center;gap:10px;max-width:320px;white-space:nowrap;';
+        banner.innerHTML = '<span style="font-size:20px;">💾</span>'
+          + '<div><div>Dados restaurados automaticamente</div>'
+          + '<div style="font-size:11px;font-weight:500;opacity:.75;margin-top:2px;">'
+          + raw.length+' registros · '+wks+' WKs'+(tsFormatado?' · '+tsFormatado:'')+'</div></div>'
+          + '<button onclick="this.parentNode.remove()" style="background:rgba(255,255,255,0.15);border:none;border-radius:8px;color:#fff;padding:4px 8px;cursor:pointer;font-size:12px;flex-shrink:0;">OK</button>';
+        document.body.appendChild(banner);
+        setTimeout(function(){ if(banner.parentNode) banner.remove(); }, 6000);
+      }, 1500);
+    });
+  } catch(e){ console.warn('[Restore] Falha ao restaurar localStorage:', e); }
+})();
+
 var GH_USER  = "iorb07-ica";
 var GH_REPO  = "poker-dashboard";
 var GH_FILE  = "dados.json";
@@ -9160,6 +9568,12 @@ window.ghSalvarDados = function(){
   .then(function(){
     var wks = Array.from(new Set((raw||[]).map(function(r){return r.wk;}))).length;
     ghMostrarStatus('✅ Salvo! '+raw.length+' registros ('+wks+' WKs)', '#22c55e');
+    /* Limpar backup local — já está no GitHub */
+    try{
+      localStorage.removeItem('plaza_raw_backup');
+      localStorage.removeItem('plaza_raw_backup_ts');
+      console.log('[AutoSave] Backup local limpo após publicar no GitHub.');
+    }catch(e){}
     var toast = document.getElementById('rn-toast');
     if(toast){
       toast.textContent = '✅ Dashboard salvo no GitHub com '+raw.length+' registros!';
@@ -9540,12 +9954,17 @@ window.addEventListener('load', function(){
     }
   }
 
-  // Restore preference only if appropriate for screen size
+  // Restaurar preferência — tela pequena sempre mobile, independente do salvo
   var saved = localStorage.getItem('viewMode');
   var isSmallScreen = window.innerWidth < 768;
-  if(saved === 'mobile' && isSmallScreen) enableMobileMode(true);
-  else if(saved === 'desktop') enableMobileMode(false);
-  else if(isSmallScreen) enableMobileMode(true);
+  if(isSmallScreen){
+    // Celular: sempre mobile, sem exceção
+    enableMobileMode(true);
+  } else {
+    // Desktop: respeitar preferência salva
+    if(saved === 'mobile') enableMobileMode(true);
+    else enableMobileMode(false);
+  }
 
   window.toggleViewMode = function(){
     var on = !document.body.classList.contains('mobile-mode');
