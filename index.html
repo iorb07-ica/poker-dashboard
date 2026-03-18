@@ -9399,30 +9399,60 @@ window.salvarHTML = function(){
         var okBtn  = document.getElementById('plaza-restore-ok-btn');
         if(pubBtn) pubBtn.addEventListener('click', function(){
           var self = this;
-          // Garantir que o token está carregado antes de publicar
+          // Garantir token
           var tok = sessionStorage.getItem('gh_token') || localStorage.getItem('gh_token') || window.GH_TOKEN || '';
           if(!tok){
             alert('Token GitHub não configurado. Use o botão ⚙️ para configurar.');
             return;
           }
-          // Forçar token na variável global
           window.GH_TOKEN = tok;
-          self.textContent = 'Publicando...';
+          self.textContent = '⏳ Publicando...';
           self.disabled = true;
-          if(window.ghSalvarDados){
-            window.ghSalvarDados();
-            // Verificar se publicou após 10s
-            setTimeout(function(){
-              if(self.textContent === 'Publicando...'){
-                self.textContent = '☁️ Publicar agora';
-                self.disabled = false;
+
+          // Publicar diretamente — forçando RAW do backup
+          var backupStr = localStorage.getItem('plaza_raw_backup');
+          if(backupStr){
+            try{
+              var backupData = JSON.parse(backupStr);
+              if(Array.isArray(backupData) && backupData.length > 0){
+                window.RAW = backupData;
+                if(window.DATA) window.DATA.ledger = backupData;
               }
-            }, 10000);
-          } else {
-            alert('Função de publicar não disponível. Aguarde o dashboard carregar.');
+            }catch(e){}
+          }
+
+          if(!window.ghSalvarDados){
+            alert('Aguarde o dashboard carregar completamente.');
             self.textContent = '☁️ Publicar agora';
             self.disabled = false;
+            return;
           }
+
+          // Hook temporário para detectar sucesso/erro
+          var origStatus = window.ghMostrarStatus;
+          window.ghMostrarStatus = function(msg, cor){
+            if(origStatus) origStatus(msg, cor);
+            if(msg.indexOf('✅') >= 0){
+              self.textContent = '✅ Publicado!';
+              setTimeout(function(){ if(banner && banner.parentNode) banner.remove(); }, 2000);
+              window.ghMostrarStatus = origStatus;
+            } else if(msg.indexOf('❌') >= 0){
+              self.textContent = '❌ Erro — tente de novo';
+              self.disabled = false;
+              window.ghMostrarStatus = origStatus;
+            }
+          };
+
+          window.ghSalvarDados();
+
+          // Timeout de segurança
+          setTimeout(function(){
+            window.ghMostrarStatus = origStatus;
+            if(self.disabled && self.textContent.indexOf('Publicando') >= 0){
+              self.textContent = '☁️ Publicar agora';
+              self.disabled = false;
+            }
+          }, 15000);
         });
         if(okBtn) okBtn.addEventListener('click', function(){
           banner.remove();
@@ -9482,15 +9512,21 @@ window.ghCarregarDados = function(){
           var backup = localStorage.getItem('plaza_raw_backup');
           if(backup) backupRaw = JSON.parse(backup);
         }
-        if(backupRaw && Array.isArray(backupRaw) && backupRaw.length > ledgerFinal.length){
-          console.log('[Merge] localStorage ('+backupRaw.length+') > GitHub ('+ledgerFinal.length+') — usando localStorage');
-          ledgerFinal = backupRaw;
-          // NÃO limpar backup ainda — só limpar após publicar com sucesso
-        } else {
-          // GitHub está atualizado — limpar backup
-          localStorage.removeItem('plaza_raw_backup');
-          localStorage.removeItem('plaza_raw_backup_ts');
-          window._localStorageRaw = null;
+        if(backupRaw && Array.isArray(backupRaw) && backupRaw.length > 0){
+          var maxWkGH     = Math.max.apply(null, ledgerFinal.map(function(r){ return +r.wk||0; }));
+          var maxWkLocal  = Math.max.apply(null, backupRaw.map(function(r){ return +r.wk||0; }));
+          console.log('[Merge] GitHub WK'+maxWkGH+' | localStorage WK'+maxWkLocal);
+          if(maxWkLocal > maxWkGH || (maxWkLocal === maxWkGH && backupRaw.length > ledgerFinal.length)){
+            console.log('[Merge] Usando localStorage — dados mais recentes (WK'+maxWkLocal+')');
+            ledgerFinal = backupRaw;
+            // NÃO limpar backup — só limpar após publicar com sucesso
+          } else {
+            // GitHub está atualizado — limpar backup
+            console.log('[Merge] GitHub está atualizado — limpando backup local');
+            localStorage.removeItem('plaza_raw_backup');
+            localStorage.removeItem('plaza_raw_backup_ts');
+            window._localStorageRaw = null;
+          }
         }
       } catch(e){ console.warn('[Merge] erro:', e); }
 
@@ -9562,16 +9598,32 @@ window.ghSalvarDados = function(){
     var backup = localStorage.getItem('plaza_raw_backup');
     if(backup){
       var backupRaw = JSON.parse(backup);
-      if(Array.isArray(backupRaw) && backupRaw.length > raw.length){
-        console.log('[Publish] Mesclando localStorage ('+backupRaw.length+') com memória ('+raw.length+')');
-        raw = backupRaw;
-        window.RAW = raw;
-        if(window.DATA) window.DATA.ledger = raw;
+      if(Array.isArray(backupRaw) && backupRaw.length > 0){
+        // Comparar pela WK máxima, não pelo tamanho
+        var maxWkRaw    = Math.max.apply(null, raw.map(function(r){ return +r.wk||0; }));
+        var maxWkBackup = Math.max.apply(null, backupRaw.map(function(r){ return +r.wk||0; }));
+        console.log('[Publish] WK max memória: WK'+maxWkRaw+' | WK max backup: WK'+maxWkBackup);
+        if(maxWkBackup > maxWkRaw){
+          console.log('[Publish] Usando backup do localStorage (WK'+maxWkBackup+' > WK'+maxWkRaw+')');
+          raw = backupRaw;
+          window.RAW = raw;
+          if(window.DATA) window.DATA.ledger = raw;
+        } else if(maxWkBackup === maxWkRaw && backupRaw.length >= raw.length){
+          // Mesma WK mas backup pode ter mais registros (mais jogadores)
+          console.log('[Publish] Mesclando — mesma WK, backup tem '+backupRaw.length+' vs memória '+raw.length);
+          raw = backupRaw;
+          window.RAW = raw;
+          if(window.DATA) window.DATA.ledger = raw;
+        }
       }
     }
   } catch(e){ console.warn('[Publish] erro ao mesclar localStorage:', e); }
 
   if(!raw.length){ alert('Nenhum dado para salvar.'); return; }
+  
+  // Log final do que vai ser publicado
+  var maxWkFinal = Math.max.apply(null, raw.map(function(r){ return +r.wk||0; }));
+  console.log('[Publish] Publicando '+raw.length+' registros, WK máxima: WK'+maxWkFinal);
   
   var allData = window.DATA || {};
   var payload = {
