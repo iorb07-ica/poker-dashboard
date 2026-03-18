@@ -9530,6 +9530,22 @@ window.ghCarregarDados = function(){
         }
       } catch(e){ console.warn('[Merge] erro:', e); }
 
+      // Verificacao final: nao sobrescrever se localStorage tem WK mais alta
+      try {
+        var _backupFinal = localStorage.getItem('plaza_raw_backup');
+        if(_backupFinal){
+          var _backupData = JSON.parse(_backupFinal);
+          if(Array.isArray(_backupData) && _backupData.length > 0){
+            var _maxWkGH    = Math.max.apply(null, ledgerFinal.map(function(r){ return +r.wk||0; }));
+            var _maxWkLocal = Math.max.apply(null, _backupData.map(function(r){ return +r.wk||0; }));
+            if(_maxWkLocal > _maxWkGH){
+              console.log('[Load] Backup local tem WK'+_maxWkLocal+' > GitHub WK'+_maxWkGH+' — preservando backup');
+              ledgerFinal = _backupData;
+            }
+          }
+        }
+      } catch(e){}
+
       window.DATA = dados;
       window.DATA.ledger = ledgerFinal;
       window.RAW  = ledgerFinal;
@@ -10736,17 +10752,55 @@ window.addEventListener('load', function(){
   function desenharCards(){
     var su = document.getElementById('sf-summary');
     if(!su) return;
-    var men = getMensal(); var picks = getPicks();
-    if(!men.length){ su.innerHTML=''; return; }
+    var picks = getPicks();
+    var ledger = getLedger();
+    if(!ledger.length){ su.innerHTML=''; return; }
+
+    // Usar PREMIO_ENGINE para calcular saldo dinamicamente a partir do ledger atual
+    // Isso garante que WK recém-registradas apareçam sem precisar recarregar
     var D = {};
-    men.forEach(function(r){
-      if(!r.jogador) return;
-      if(picks.length && picks.indexOf(r.jogador)<0) return;
-      if(r.saldo_mes_total == null) return;
-      if(sfMesFiltro !== 'todos' && +r.mes !== sfMesFiltro) return;
-      if(!D[r.jogador]) D[r.jogador] = 0;
-      D[r.jogador] += r2(r.saldo_mes_total);
-    });
+    try {
+      if(window.PREMIO_ENGINE){
+        window.PREMIO_ENGINE.reset();
+        var premio = window.PREMIO_ENGINE.get(ledger);
+        // Calcular saldo por jogador: saldo_semanas + premios_mes + premios_ko
+        var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).filter(Boolean);
+        jogs.forEach(function(j){
+          if(picks.length && picks.indexOf(j)<0) return;
+          // Saldo das semanas filtradas por mês se necessário
+          var rows = ledger.filter(function(r){
+            if(r.jogador !== j) return false;
+            if(sfMesFiltro !== 'todos' && +r.mes !== sfMesFiltro) return false;
+            return true;
+          });
+          var saldoSemanas = rows.reduce(function(s,r){ return s + (+r.saldo_semana_final||0); }, 0);
+          // Premios mensais e KO dos meses filtrados
+          var meses = Array.from(new Set(rows.map(function(r){ return +r.mes; }))).filter(Boolean);
+          var premMes = 0, premKO = 0;
+          meses.forEach(function(m){
+            var pm = premio.mes[m];
+            if(pm && pm.fechado){
+              premMes += pm.premMes[j] || 0;
+              premKO  += pm.premKO[j]  || 0;
+            }
+          });
+          D[j] = r2(saldoSemanas + premMes + premKO);
+        });
+      } else {
+        // Fallback para MENSAL se engine nao disponivel
+        var men = getMensal();
+        men.forEach(function(r){
+          if(!r.jogador) return;
+          if(picks.length && picks.indexOf(r.jogador)<0) return;
+          if(r.saldo_mes_total == null) return;
+          if(sfMesFiltro !== 'todos' && +r.mes !== sfMesFiltro) return;
+          if(!D[r.jogador]) D[r.jogador] = 0;
+          D[r.jogador] += r2(r.saldo_mes_total);
+        });
+      }
+    } catch(e) {
+      console.warn('[SaldoFin] Erro ao calcular cards:', e);
+    }
     var jogs = Object.keys(D).sort(function(a,b){return a.localeCompare(b,'pt-BR');});
     if(!jogs.length){ su.innerHTML=''; return; }
     var tots = jogs.map(function(n){
