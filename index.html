@@ -3669,6 +3669,19 @@ var PIX_ISRAEL = {
   desc:  'Fechamento Poker Plaza'
 };
 
+/* Chaves Pix de cada jogador — usadas quando Israel deve pagar */
+var PIX_JOGADORES = {
+  'Israel':   PIX_ISRAEL,
+  'Rafa':     { chave:'48984189081',                             nome:'Rafa',      cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Cristiano':{ chave:'tiano_nascimento@yahoo.com.br',           nome:'Cristiano', cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Heron':    { chave:'33f76318-1985-440c-adfb-1a946a5d9362',    nome:'Heron',     cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Magu':     { chave:'03802206959',                             nome:'Magu',      cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Marcus':   { chave:'48988110192',                             nome:'Marcus',    cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Charles':  { chave:'48999917794',                             nome:'Charles',   cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Pedro':    { chave:'01165152959',                             nome:'Pedro',     cidade:'Florianopolis', desc:'Poker Plaza' },
+  'Oscar':    { chave:'09127055825',                             nome:'Oscar',     cidade:'Florianopolis', desc:'Poker Plaza' }
+};
+
 function pixCRC16(str){
   var crc = 0xFFFF;
   for(var i=0;i<str.length;i++){
@@ -3824,25 +3837,31 @@ function pixAtualizarSaldoJog(){
 function pixCopiarJogSel(btn){
   var sel = document.getElementById('pix-jog-sel');
   if(!sel||!sel.value) return;
-  var saldo = pixGetSaldoJogador(sel.value);
+  var nome  = sel.value;
+  var saldo = pixGetSaldoJogador(nome);
   if(saldo===null) return;
 
   /* Verifica se o mes selecionado e o mes corrente */
   var sfSel = document.getElementById('sf-mes-select');
   var mesSel = sfSel ? parseInt(sfSel.value) : null;
-  var mesAtual = new Date().getMonth() + 1; /* 1-12 */
+  var mesAtual = new Date().getMonth() + 1;
   var aviso = document.getElementById('pix-mes-aviso');
   if(mesSel && mesSel !== mesAtual){
     var nomesMes = ['','Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
     if(aviso){
       aviso.style.display = '';
-      aviso.innerHTML = '⚠️ <strong>Atenção:</strong> você copiou o Pix com o valor de <strong>'+(nomesMes[mesSel]||'mês '+mesSel)+'</strong>, não do mês atual. Confira se é isso mesmo!';
+      aviso.innerHTML = '&#9888;&#65039; <strong>Atencao:</strong> voce copiou o Pix com o valor de <strong>'+(nomesMes[mesSel]||'mes '+mesSel)+'</strong>, nao do mes atual. Confira se e isso mesmo!';
     }
   } else {
     if(aviso) aviso.style.display = 'none';
   }
 
-  pixCopiarSaldoJogador(Math.abs(saldo), btn);
+  /* Saldo negativo = jogador deve pagar Israel -> chave de Israel
+     Saldo positivo = Israel deve pagar jogador -> chave do jogador */
+  var deve = saldo < 0;
+  var valor = Math.abs(saldo).toFixed(2);
+  var cfg = deve ? PIX_ISRAEL : (PIX_JOGADORES[nome] || PIX_ISRAEL);
+  pixCopiarPayload(cfg, valor, btn);
 }
 (function(){
   function tryInit(){
