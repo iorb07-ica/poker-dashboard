@@ -5,7 +5,13 @@
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; font-src 'self';"/>
 <meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
 <title>Poker do Plaza - Dashboard 2026</title>
+<link rel="preconnect" href="https://raw.githubusercontent.com"/>
+<link rel="dns-prefetch" href="https://raw.githubusercontent.com"/>
+<link rel="preconnect" href="https://api.github.com"/>
 
 <!-- ═══ PWA / Ícone para tela inicial (iOS & Android) ═══ -->
 <meta name="apple-mobile-web-app-capable" content="yes"/>
@@ -194,6 +200,7 @@ function escHTML(str){
     html { overflow-y: scroll; overflow-x: hidden; }
     body{
       margin:0;color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
+      -webkit-tap-highlight-color:transparent;touch-action:pan-y;
       background:
         radial-gradient(1200px 600px at 20% -10%, #11182a 0%, #0b0f1a 40%, #0a0d16 100%),
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
@@ -2436,7 +2443,7 @@ document.addEventListener('DOMContentLoaded', function(){
 <div class="card mini-card">
 <div class="mini-header">
 <span class="card-title" style="margin:0">Ranking da Semana</span>
-<select id="mini-wk"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52">WK52</option></select>
+<select id="mini-wk"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11" selected="selected">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52">WK52</option></select>
 </div>
 <div class="mini-list" id="mini-wk-list"></div>
 <div class="mini-prizes" id="mini-wk-prizes"></div><div class="mini-rule" id="mini-wk-rule"></div></div>
@@ -6892,7 +6899,16 @@ document.addEventListener('DOMContentLoaded', function(){
   };
 
   /* ── 2. Estado local dos mini-cards (sobrevive ao refresh global) ── */
-  var state = { wk: null, mes: null, tri: null };
+  var state = { 
+    wk: (function(){ 
+      try{ 
+        var raw = window.RAW || (window.DATA && window.DATA.ledger) || [];
+        if(!raw.length) return null;
+        return Math.max.apply(null, raw.map(function(r){ return +r.wk||0; }).filter(Boolean)) || null;
+      }catch(e){ return null; }
+    })(), 
+    mes: null, tri: null 
+  };
 
   /* ── 3. Helpers internos ── */
   function byId(id){ return document.getElementById(id); }
@@ -12882,7 +12898,7 @@ window.addEventListener('load', function(){
       // Confirmado — recarregar
       if(icon){ icon.textContent='↺'; icon.style.background='rgba(34,197,94,0.95)'; icon.style.animation='ptr-spin 0.5s linear infinite'; }
       ind.style.height = THRESHOLD + 'px';
-      setTimeout(function(){ window.location.reload(); }, 600);
+      setTimeout(function(){ window.location.replace(window.location.href.split('?')[0]+'?v='+Date.now()); }, 600);
     } else {
       // Cancelado — recolher
       ind.style.transition = 'height .3s ease';
