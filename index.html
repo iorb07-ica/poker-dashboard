@@ -3018,6 +3018,47 @@ document.addEventListener('DOMContentLoaded', function(){
     <div id="saldo-fin-body" data-open="true" style="padding:0 16px 16px;">
       <div id="sf-summary" style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;"></div>
       <div style="margin-top:8px;font-size:11px;color:#4a6080;letter-spacing:.2px;">* Saldo Financeiro = semanas + KO + prêmios (valor a acertar). Saldo Efetivo = descontadas antecipações já pagas ao dealer.</div>
+
+      <!-- PIX BUTTONS -->
+      <div style="margin-top:14px;display:flex;gap:8px;">
+
+        <!-- PIX 1: Dealer -->
+        <div style="flex:1;background:rgba(52,211,153,.1);border:1.5px solid rgba(52,211,153,.35);border-radius:12px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;">
+          <div>
+            <div style="font-size:11px;color:#34d399;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#128176; Dealer · toda quarta</div>
+            <div style="font-size:17px;font-weight:900;color:#f0fdf4;margin-bottom:4px;">Ed · R$ 200,00</div>
+            <div style="font-size:11px;color:#86efac;margin-bottom:0;">edenilson&#46;nunes&#64;gmail&#46;com</div>
+          </div>
+          <button onclick="pixCopiar('edenilson.nunes@gmail.com','200.00','Dealer Ed',this)"
+            style="width:100%;margin-top:12px;background:rgba(52,211,153,.22);border:1.5px solid rgba(52,211,153,.5);border-radius:8px;color:#34d399;font-size:12px;font-weight:800;padding:10px 8px;cursor:pointer;letter-spacing:.2px;line-height:1.4;">
+            &#128594; Copiar<br>Chave Pix
+          </button>
+        </div>
+
+        <!-- PIX 2: Fechamento Israel com seletor de jogador -->
+        <div style="flex:1;background:rgba(99,102,241,.1);border:1.5px solid rgba(99,102,241,.35);border-radius:12px;padding:12px;display:flex;flex-direction:column;">
+          <div style="font-size:11px;color:#a5b4fc;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#128197; Fechamento · saldo</div>
+          <div style="font-size:14px;font-weight:800;color:#eef2ff;margin-bottom:2px;">Israel</div>
+          <div style="font-size:11px;color:#c7d2fe;margin-bottom:10px;">iorb&#64;hotmail&#46;com</div>
+
+          <select id="pix-jog-sel" onchange="pixAtualizarSaldoJog()"
+            style="width:100%;background:#0d1629;border:1.5px solid rgba(99,102,241,.4);border-radius:8px;color:#e0e7ff;padding:7px 8px;font-size:12px;font-weight:700;margin-bottom:7px;cursor:pointer;outline:none;">
+            <option value="">Selecionar jogador...</option>
+          </select>
+
+          <div id="pix-jog-saldo" style="display:none;font-size:13px;font-weight:800;text-align:center;padding:5px 0 8px;"></div>
+
+          <button id="pix-jog-btn" onclick="pixCopiarJogSel(this)" disabled
+            style="width:100%;background:rgba(99,102,241,.12);border:1.5px solid rgba(99,102,241,.25);border-radius:8px;color:#6b7db3;font-size:12px;font-weight:800;padding:9px;cursor:not-allowed;letter-spacing:.2px;transition:all .2s;">
+            &#128594; Copiar Chave Pix
+          </button>
+
+          <div id="pix-mes-aviso" style="display:none;margin-top:8px;padding:7px 10px;border-radius:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);font-size:11px;color:#fbbf24;font-weight:600;line-height:1.4;"></div>
+        </div>
+
+      </div>
+      <!-- FIM PIX BUTTONS -->
+
       <div style="margin-top:18px;border-top:1px solid rgba(255,255,255,0.07);padding-top:14px;">
         <button onclick="window.sfToggleTabela()" id="sf-tabela-btn"
           style="background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(99,102,241,0.1));border:1px solid rgba(99,102,241,0.4);border-radius:12px;padding:12px 20px;color:#e6edf3;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .2s;width:100%;box-shadow:0 2px 12px rgba(99,102,241,0.15);">
@@ -3344,7 +3385,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // Carrega fotos nos cards de Torneios Especiais
 (function() {
   function loadTorneiosPhotos() {
@@ -3477,9 +3518,1500 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
-<div class="footer" style="margin-top:32px;padding-bottom:16px;">Feito com ♥ — arquivo único v4.7</div>
+<div class="footer" style="margin-top:32px;padding-bottom:16px;">Feito com &#9829; &#8212; arquivo único v4.7</div>
+
+<!-- FEEDBACK BUTTON -->
+<style>
+#feedback-fab {
+  position:fixed;
+  bottom:24px;
+  right:18px;
+  z-index:9990;
+  width:48px;height:48px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#4338ca,#6366f1);
+  border:none;
+  box-shadow:0 4px 20px rgba(99,102,241,.5);
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  transition:transform .2s, box-shadow .2s;
+  -webkit-tap-highlight-color:transparent;
+}
+#feedback-fab:active { transform:scale(.92); }
+#feedback-modal {
+  display:none;
+  position:fixed;inset:0;z-index:9991;
+  background:rgba(0,0,0,.7);
+  align-items:flex-end;justify-content:center;
+  padding:0 0 0 0;
+}
+#feedback-modal.open { display:flex; }
+#feedback-box {
+  background:#0d1629;
+  border:1px solid rgba(99,102,241,.3);
+  border-radius:20px 20px 0 0;
+  padding:20px 18px 32px;
+  width:100%;max-width:480px;
+  box-shadow:0 -8px 40px rgba(0,0,0,.6);
+  animation:feedbackSlideUp .25s ease;
+}
+@keyframes feedbackSlideUp {
+  from { transform:translateY(100%); }
+  to   { transform:translateY(0); }
+}
+#feedback-box h3 {
+  font-size:16px;font-weight:900;color:#e6edf3;
+  margin:0 0 4px;display:flex;align-items:center;gap:8px;
+}
+#feedback-box p {
+  font-size:12px;color:#6b82a0;margin:0 0 14px;
+}
+#feedback-tipo {
+  display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;
+}
+.feedback-chip {
+  padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;
+  border:1.5px solid rgba(99,102,241,.3);background:transparent;
+  color:#818cf8;cursor:pointer;transition:all .15s;
+}
+.feedback-chip.sel {
+  background:rgba(99,102,241,.25);border-color:#6366f1;color:#a5b4fc;
+}
+#feedback-texto {
+  width:100%;box-sizing:border-box;
+  background:#060d1a;border:1px solid rgba(99,102,241,.25);
+  border-radius:12px;color:#e6edf3;
+  padding:12px 14px;font-size:14px;line-height:1.55;
+  resize:none;height:110px;font-family:inherit;
+  outline:none;
+}
+#feedback-texto:focus { border-color:#6366f1; }
+#feedback-nome {
+  width:100%;box-sizing:border-box;margin-top:8px;
+  background:#060d1a;border:1px solid rgba(99,102,241,.2);
+  border-radius:10px;color:#e6edf3;
+  padding:9px 12px;font-size:13px;font-family:inherit;outline:none;
+}
+#feedback-nome:focus { border-color:#6366f1; }
+#feedback-actions {
+  display:flex;flex-direction:column;gap:10px;margin-top:16px;
+}
+#feedback-send {
+  width:100%;padding:16px;border-radius:14px;
+  background:linear-gradient(135deg,#4338ca,#6366f1);
+  border:none;color:#fff;font-size:16px;font-weight:900;
+  cursor:pointer;letter-spacing:.3px;
+  box-shadow:0 4px 20px rgba(99,102,241,.45);
+  transition:transform .15s, box-shadow .15s;
+}
+#feedback-send:active { transform:scale(.97); box-shadow:0 2px 10px rgba(99,102,241,.3); }
+#feedback-cancel {
+  width:100%;padding:11px;border-radius:10px;
+  background:transparent;
+  border:1px solid rgba(255,255,255,.1);
+  color:#4a6080;font-size:13px;cursor:pointer;
+  transition:color .15s;
+}
+#feedback-cancel:active { color:#6b82a0; }
+#feedback-ok {
+  display:none;text-align:center;padding:20px 0 8px;
+}
+#feedback-ok .ok-icon { font-size:40px;display:block;margin-bottom:8px; }
+#feedback-ok p { color:#34d399;font-size:14px;font-weight:700;margin:0; }
+#feedback-ok small { color:#6b82a0;font-size:12px; }
+</style>
+
+<button id="feedback-fab" onclick="feedbackOpen()" title="Enviar feedback / relatar bug">&#128172;</button>
+
+<div id="feedback-modal" onclick="if(event.target===this)feedbackClose()">
+  <div id="feedback-box">
+    <h3>&#128172; Feedback &amp; Bugs</h3>
+    <p>Encontrou um bug ou tem uma sugestão? Conta pra gente!</p>
+
+    <div id="feedback-tipo">
+      <button class="feedback-chip sel" onclick="feedbackTipo(this,'Bug')">&#128027; Bug</button>
+      <button class="feedback-chip" onclick="feedbackTipo(this,'Sugestao')">&#128161; Sugestão</button>
+      <button class="feedback-chip" onclick="feedbackTipo(this,'Melhoria')">&#9889; Melhoria</button>
+      <button class="feedback-chip" onclick="feedbackTipo(this,'Outro')">&#128172; Outro</button>
+    </div>
+
+    <textarea id="feedback-texto" placeholder="Descreva o que aconteceu ou o que você gostaria de ver no dashboard..."></textarea>
+    <input id="feedback-nome" placeholder="Seu nome (opcional)" />
+
+    <div id="feedback-actions">
+      <button id="feedback-send" onclick="feedbackEnviar()">&#128231; Enviar Feedback por Email</button>
+      <button id="feedback-cancel" onclick="feedbackClose()">Cancelar</button>
+    </div>
+
+    <div id="feedback-ok">
+      <span class="ok-icon">&#10003;</span>
+      <p>Obrigado pelo feedback!</p>
+      <small>O app de email abriu — é só enviar!</small>
+    </div>
+  </div>
+</div>
+
+<script>
+/* PIX — copiar chave e tentar abrir app */
+/* ── PIX COPIA E COLA — Payload oficial Bacen com CRC16 ── */
+var PIX_ED = {
+  chave: 'edenilson.nunes@gmail.com',
+  nome:  'Edenilson Nunes Machado',
+  cidade:'Florianopolis',
+  valor: '200.00',
+  desc:  'Dealer Poker Plaza'
+};
+var PIX_ISRAEL = {
+  chave: 'iorb@hotmail.com',
+  nome:  'Israel Oreano Rollin Borges',
+  cidade:'Florianopolis',
+  desc:  'Fechamento Poker Plaza'
+};
+
+function pixCRC16(str){
+  var crc = 0xFFFF;
+  for(var i=0;i<str.length;i++){
+    crc ^= str.charCodeAt(i) << 8;
+    for(var j=0;j<8;j++){
+      if(crc & 0x8000) crc = (crc<<1)^0x1021;
+      else crc <<= 1;
+      crc &= 0xFFFF;
+    }
+  }
+  return crc.toString(16).toUpperCase().padStart(4,'0');
+}
+
+function pixField(id, val){
+  var s = id + val.length.toString().padStart(2,'0') + val;
+  return s;
+}
+
+function pixPayload(chave, nome, cidade, valor, desc){
+  /* Limpa e trunca conforme spec Bacen */
+  nome   = nome.substring(0,25).replace(/[^a-zA-Z0-9 ]/g,'').trim();
+  cidade = cidade.substring(0,15).replace(/[^a-zA-Z0-9 ]/g,'').trim();
+  desc   = (desc||'').substring(0,50).replace(/[^a-zA-Z0-9 ]/g,'').trim();
+
+  /* MAI — Merchant Account Information */
+  var gui  = pixField('00','BR.GOV.BCB.PIX');
+  var key  = pixField('01', chave);
+  var inf  = desc ? pixField('02', desc) : '';
+  var mai  = pixField('26', gui + key + inf);
+
+  /* MCC, moeda, valor */
+  var mcc  = pixField('52','0000');
+  var cur  = pixField('53','986');
+  var val_ = valor && parseFloat(valor) > 0 ? pixField('54', parseFloat(valor).toFixed(2)) : '';
+
+  /* Country, nome, cidade */
+  var ctry = pixField('58','BR');
+  var nm   = pixField('59', nome);
+  var cit  = pixField('60', cidade);
+
+  /* Additional data */
+  var txid = pixField('05','***');
+  var add  = pixField('62', txid);
+
+  var body = pixField('00','01') + mcc + cur + val_ + ctry + nm + cit + add + mai;
+  var withCrc = body + '6304';
+  return withCrc + pixCRC16(withCrc);
+}
+
+function pixCopiarPayload(cfg, valorOverride, btn){
+  var valor = valorOverride || cfg.valor || '';
+  var payload = pixPayload(cfg.chave, cfg.nome, cfg.cidade, valor, cfg.desc);
+  var label = '&#10003; Pix copiado! Cole no banco';
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(payload)
+      .then(function(){ pixFeedback(btn, label); })
+      .catch(function(){ pixFallback(payload, btn, label); });
+  } else { pixFallback(payload, btn, label); }
+}
+
+function pixCopiar(chave, valor, desc, btn){
+  /* Compatibilidade com chamadas antigas */
+  var cfg = { chave:chave, nome: chave===PIX_ED.chave?PIX_ED.nome:PIX_ISRAEL.nome,
+              cidade:'Florianopolis', desc:desc };
+  pixCopiarPayload(cfg, valor, btn);
+}
+
+function pixCopiarComInput(chave, inputId, desc, btn){
+  var inp = document.getElementById(inputId);
+  var valor = inp ? (parseFloat(inp.value)||0).toFixed(2) : '0.00';
+  if(!parseFloat(valor)){
+    inp.focus(); inp.style.borderColor='#f87171';
+    setTimeout(function(){ inp.style.borderColor=''; },1500);
+    return;
+  }
+  var cfg = { chave:chave, nome:PIX_ISRAEL.nome, cidade:PIX_ISRAEL.cidade, desc:desc };
+  pixCopiarPayload(cfg, valor, btn);
+}
+
+/* Chamado do perfil do jogador com saldo automático */
+/* Seletor de jogador no card Pix Israel */
+function pixIniciarSeletor(){
+  var sel = document.getElementById('pix-jog-sel');
+  if(!sel) return;
+  while(sel.options.length > 1) sel.remove(1);
+  var jogadores = typeof nfPlayers === 'function' ? nfPlayers()
+    : (window.players && players.length ? players
+      : ['Charles','Cristiano','Heron','Israel','Rafa','Magu','Marcus','Oscar','Pedro']);
+  jogadores.forEach(function(j){
+    var saldo = pixGetSaldoJogador(j);
+    var opt   = document.createElement('option');
+    opt.value = j;
+    if(saldo !== null){
+      var abs  = Math.abs(saldo).toFixed(2).replace('.',',');
+      var sinal = saldo < 0 ? '-R$ '+abs+' (deve)' : '+R$ '+abs+' (recebe)';
+      opt.textContent = j + '  ' + sinal;
+    } else {
+      opt.textContent = j;
+    }
+    sel.appendChild(opt);
+  });
+}
+function pixGetSaldoJogador(nome){
+  /* Usa o mesmo engine dos cards de Saldo Financeiro */
+  var sfSel = document.getElementById('sf-mes-select');
+  var mesSel = sfSel ? parseInt(sfSel.value) : null;
+  if(!mesSel){
+    /* Fallback: mes mais recente com dados */
+    if(window.DATA && window.DATA.mensal){
+      var meses = window.DATA.mensal
+        .filter(function(r){ return r.saldo_mes_total !== null; })
+        .map(function(r){ return +r.mes; });
+      mesSel = meses.length ? Math.max.apply(null, meses) : null;
+    }
+  }
+  if(!mesSel) return null;
+  if(window.sfGetSaldoPorJogador){
+    return window.sfGetSaldoPorJogador(nome, mesSel);
+  }
+  /* Fallback para DATA.mensal se engine ainda nao carregou */
+  if(!window.DATA || !window.DATA.mensal) return null;
+  var rec = window.DATA.mensal.find(function(r){
+    return r.jogador === nome && +r.mes === mesSel;
+  });
+  return rec && rec.saldo_mes_total !== null ? Math.round(+rec.saldo_mes_total * 100) / 100 : null;
+}
+function pixAtualizarSaldoJog(){
+  var sel  = document.getElementById('pix-jog-sel');
+  var info = document.getElementById('pix-jog-saldo');
+  var btn  = document.getElementById('pix-jog-btn');
+  if(!sel||!info||!btn) return;
+  var nome = sel.value;
+  if(!nome){
+    info.style.display='none';
+    btn.disabled=true; btn.style.background='rgba(99,102,241,.12)'; btn.style.borderColor='rgba(99,102,241,.25)'; btn.style.color='#6b7db3'; btn.style.cursor='not-allowed';
+    return;
+  }
+  var saldo = pixGetSaldoJogador(nome);
+  if(saldo===null){ info.style.display='none'; return; }
+  var deve = saldo < 0;
+  var abs  = Math.abs(saldo).toFixed(2).replace('.',',');
+  info.style.display='';
+  if(deve){
+    info.innerHTML = '<div style="font-size:16px;font-weight:900;color:#f87171;margin-bottom:1px;">-R$ '+abs+'</div>'
+      +'<div style="font-size:11px;color:#9fb3d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+nome+' deve pagar Israel</div>';
+  } else {
+    info.innerHTML = '<div style="font-size:16px;font-weight:900;color:#34d399;margin-bottom:1px;">+R$ '+abs+'</div>'
+      +'<div style="font-size:11px;color:#9fb3d4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Israel deve pagar '+nome+'</div>';
+  }
+  /* Habilita botão em ambos os casos */
+  btn.disabled=false; btn.style.background='rgba(99,102,241,.22)'; btn.style.borderColor='rgba(99,102,241,.5)'; btn.style.color='#a5b4fc'; btn.style.cursor='pointer';
+}
+function pixCopiarJogSel(btn){
+  var sel = document.getElementById('pix-jog-sel');
+  if(!sel||!sel.value) return;
+  var saldo = pixGetSaldoJogador(sel.value);
+  if(saldo===null) return;
+
+  /* Verifica se o mes selecionado e o mes corrente */
+  var sfSel = document.getElementById('sf-mes-select');
+  var mesSel = sfSel ? parseInt(sfSel.value) : null;
+  var mesAtual = new Date().getMonth() + 1; /* 1-12 */
+  var aviso = document.getElementById('pix-mes-aviso');
+  if(mesSel && mesSel !== mesAtual){
+    var nomesMes = ['','Janeiro','Fevereiro','Marco','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+    if(aviso){
+      aviso.style.display = '';
+      aviso.innerHTML = '⚠️ <strong>Atenção:</strong> você copiou o Pix com o valor de <strong>'+(nomesMes[mesSel]||'mês '+mesSel)+'</strong>, não do mês atual. Confira se é isso mesmo!';
+    }
+  } else {
+    if(aviso) aviso.style.display = 'none';
+  }
+
+  pixCopiarSaldoJogador(Math.abs(saldo), btn);
+}
+(function(){
+  function tryInit(){
+    var s = document.getElementById('pix-jog-sel');
+    if(s){ pixIniciarSeletor(); }
+    else { setTimeout(tryInit, 800); }
+    /* Quando o mes mudar, recarrega o seletor */
+    var sfSel = document.getElementById('sf-mes-select');
+    if(sfSel && !sfSel._pixHooked){
+      sfSel._pixHooked = true;
+      sfSel.addEventListener('change', function(){
+        pixIniciarSeletor();
+        pixAtualizarSaldoJog();
+      });
+    }
+  }
+  if(document.readyState==='loading')
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(tryInit, 1500); });
+  else setTimeout(tryInit, 1500);
+})();
+
+function pixCopiarSaldoJogador(saldo, btn){
+  if(!saldo || saldo <= 0){
+    pixFeedback(btn, 'Sem saldo a pagar'); return;
+  }
+  pixCopiarPayload(PIX_ISRAEL, saldo.toFixed(2), btn);
+}
+
+function pixFallback(txt, btn, label){
+  var ta = document.createElement('textarea');
+  ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); pixFeedback(btn, label||'&#10003; Copiado!'); }
+  catch(e){ alert('Copie manualmente:\n'+txt); }
+  document.body.removeChild(ta);
+}
+
+function pixFeedback(btn, msg){
+  var orig = btn.innerHTML;
+  var origBg = btn.style.background;
+  btn.innerHTML = msg;
+  btn.style.background = 'rgba(52,211,153,.25)';
+  btn.style.color = '#34d399';
+  btn.disabled = true;
+  setTimeout(function(){ btn.innerHTML=orig; btn.style.background=origBg; btn.disabled=false; }, 2800);
+}
+
+
+var _feedbackTipoSel = 'Bug';
+function feedbackOpen(){
+  document.getElementById('feedback-modal').classList.add('open');
+  document.getElementById('feedback-texto').value='';
+  document.getElementById('feedback-nome').value='';
+  document.getElementById('feedback-ok').style.display='none';
+  document.getElementById('feedback-actions').style.display='flex';
+  document.getElementById('feedback-texto').style.display='';
+  document.getElementById('feedback-nome').style.display='';
+  setTimeout(function(){ document.getElementById('feedback-texto').focus(); },300);
+}
+function feedbackClose(){
+  document.getElementById('feedback-modal').classList.remove('open');
+}
+function feedbackTipo(btn, tipo){
+  _feedbackTipoSel = tipo;
+  document.querySelectorAll('.feedback-chip').forEach(function(c){ c.classList.remove('sel'); });
+  btn.classList.add('sel');
+}
+function feedbackEnviar(){
+  var texto = (document.getElementById('feedback-texto').value||'').trim();
+  if(!texto){ document.getElementById('feedback-texto').focus(); return; }
+  var nome  = (document.getElementById('feedback-nome').value||'').trim() || 'Jogador';
+  var tipo  = _feedbackTipoSel;
+  var assunto = 'Melhoria Dashboard Poker Plaza - '+tipo+' - '+nome;
+  var corpo = 'Tipo: '+tipo+'\nDe: '+nome+'\n\n'+texto+'\n\n---\nEnviado pelo Dashboard Poker do Plaza 2026';
+  var mailto = 'mailto:iorb07@gmail.com'
+    +'?subject='+encodeURIComponent(assunto)
+    +'&body='+encodeURIComponent(corpo);
+  window.location.href = mailto;
+  document.getElementById('feedback-actions').style.display='none';
+  document.getElementById('feedback-texto').style.display='none';
+  document.getElementById('feedback-nome').style.display='none';
+  document.getElementById('feedback-ok').style.display='block';
+  setTimeout(feedbackClose, 3500);
+}
+</script>
 </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     FEATURES NOVAS: Atas · Mídia · Bruxarias · Churrasco
+     ══════════════════════════════════════════════════════════ -->
+
+<style>
+/* ── Shared new-features styles ── */
+.nf-card {
+  margin-top:16px;width:100%;box-sizing:border-box;
+}
+.nf-hdr {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 18px;cursor:pointer;user-select:none;
+  border-radius:12px 12px 0 0;
+}
+.nf-hdr-left { display:flex;align-items:center;gap:12px; }
+.nf-icon {
+  width:40px;height:40px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:20px;flex-shrink:0;
+}
+.nf-title  { font-size:15px;font-weight:900;color:#e6edf3;letter-spacing:.2px; }
+.nf-sub    { font-size:11px;color:#6b82a0;margin-top:2px; }
+.nf-arrow  { font-size:18px;transition:transform .25s; }
+.nf-body   { padding:14px 16px 18px; }
+
+/* Atas */
+#card-atas .nf-hdr   { background:linear-gradient(135deg,rgba(99,102,241,.10) 0%,transparent 100%); }
+#card-atas .nf-icon  { background:linear-gradient(145deg,#1e2a4a,#2a3a6a);border:1px solid rgba(99,102,241,.3); }
+
+/* Mídia */
+#card-midia .nf-hdr  { background:linear-gradient(135deg,rgba(236,72,153,.10) 0%,transparent 100%); }
+#card-midia .nf-icon { background:linear-gradient(145deg,#2a1a2e,#3a1a40);border:1px solid rgba(236,72,153,.3); }
+
+/* Bruxarias */
+#card-bruxarias .nf-hdr  { background:linear-gradient(135deg,rgba(139,92,246,.10) 0%,transparent 100%); }
+#card-bruxarias .nf-icon { background:linear-gradient(145deg,#1e1430,#2a1a40);border:1px solid rgba(139,92,246,.3); }
+
+/* Churrasco */
+#card-churrasco .nf-hdr  { background:linear-gradient(135deg,rgba(245,158,11,.10) 0%,transparent 100%); }
+#card-churrasco .nf-icon { background:linear-gradient(145deg,#2a1e0a,#3a2a0a);border:1px solid rgba(245,158,11,.3); }
+
+/* Atas — crônica */
+.ata-select-wrap { display:flex;align-items:center;gap:8px;margin-bottom:14px; }
+.ata-select-wrap select { flex:1;background:#0d1629;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:13px; }
+.ata-texto {
+  background:rgba(255,255,255,.03);border:1px solid rgba(99,102,241,.2);
+  border-radius:12px;padding:14px 16px;min-height:90px;
+  font-size:13px;line-height:1.7;color:#c8d8f0;white-space:pre-wrap;
+  font-family:inherit;
+}
+.ata-texto.vazio { color:#4a6080;font-style:italic; }
+.ata-frase {
+  margin-top:12px;padding:10px 14px;
+  background:linear-gradient(135deg,rgba(99,102,241,.12),rgba(99,102,241,.04));
+  border-left:3px solid #6366f1;border-radius:0 10px 10px 0;
+  font-size:13px;font-style:italic;color:#818cf8;
+}
+.ata-admin-wrap { margin-top:12px; }
+.ata-admin-wrap textarea {
+  width:100%;box-sizing:border-box;background:#060d1a;
+  border:1px solid rgba(99,102,241,.3);border-radius:10px;
+  color:#e6edf3;padding:10px 12px;font-size:13px;line-height:1.6;
+  resize:vertical;min-height:100px;font-family:inherit;
+}
+.ata-frase-input {
+  width:100%;box-sizing:border-box;background:#060d1a;
+  border:1px solid rgba(99,102,241,.2);border-radius:8px;
+  color:#e6edf3;padding:8px 12px;font-size:13px;margin-top:6px;font-family:inherit;
+}
+
+/* Mídia — galeria */
+.midia-wk-wrap { display:flex;align-items:center;gap:8px;margin-bottom:14px; }
+.midia-wk-wrap select { flex:1;background:#0d1629;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:13px; }
+.midia-grid {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+}
+.midia-thumb {
+  aspect-ratio:1;border-radius:10px;overflow:hidden;
+  background:#0d1629;border:1px solid rgba(236,72,153,.15);
+  cursor:pointer;position:relative;
+}
+.midia-thumb img { width:100%;height:100%;object-fit:cover;display:block; }
+.midia-thumb .midia-label {
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(transparent,rgba(0,0,0,.75));
+  padding:4px 6px 5px;font-size:9px;color:#e6edf3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.midia-empty { grid-column:1/-1;text-align:center;padding:24px;color:#4a6080;font-size:13px; }
+.midia-url-list { display:flex;flex-direction:column;gap:6px; }
+.midia-url-item {
+  display:flex;gap:8px;align-items:center;
+}
+.midia-url-item input {
+  flex:1;background:#060d1a;border:1px solid rgba(236,72,153,.25);
+  border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:12px;
+}
+
+/* Bruxarias */
+.brux-grid { display:flex;flex-direction:column;gap:10px; }
+.brux-item {
+  display:flex;align-items:center;gap:12px;
+  padding:12px 14px;border-radius:12px;
+  background:rgba(139,92,246,.08);border:1px solid rgba(139,92,246,.2);
+}
+.brux-icon-big { font-size:28px;flex-shrink:0;line-height:1; }
+.brux-info { flex:1;min-width:0; }
+.brux-nome { font-size:13px;font-weight:800;color:#c4b5fd; }
+.brux-desc { font-size:11px;color:#6b82a0;margin-top:2px; }
+.brux-count {
+  font-size:22px;font-weight:900;color:#a78bfa;
+  min-width:32px;text-align:right;flex-shrink:0;
+}
+.brux-date { font-size:10px;color:#4a6080;margin-top:1px; }
+.brux-add-form {
+  margin-top:14px;padding:14px;border-radius:12px;
+  background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.18);
+  display:flex;flex-direction:column;gap:8px;
+}
+.brux-add-form input, .brux-add-form select, .brux-add-form textarea {
+  background:#060d1a;border:1px solid rgba(139,92,246,.25);
+  border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:13px;
+  font-family:inherit;width:100%;box-sizing:border-box;
+}
+.brux-add-form textarea { resize:vertical;min-height:60px; }
+
+/* Churrasco */
+.chur-evento { font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:14px; }
+.chur-rows { display:flex;flex-direction:column;gap:6px;margin-bottom:14px; }
+.chur-row {
+  display:flex;align-items:center;gap:10px;
+  padding:8px 12px;background:rgba(245,158,11,.06);
+  border:1px solid rgba(245,158,11,.15);border-radius:10px;
+}
+.chur-nome { flex:1;font-size:13px;color:#e6edf3;font-weight:600; }
+.chur-val {
+  width:90px;background:#060d1a;border:1px solid rgba(245,158,11,.25);
+  border-radius:8px;color:#fbbf24;padding:6px 8px;font-size:13px;
+  text-align:right;
+}
+.chur-resultado {
+  padding:14px;border-radius:12px;
+  background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(245,158,11,.04));
+  border:1px solid rgba(245,158,11,.25);
+}
+.chur-res-linha {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;
+}
+.chur-res-linha:last-child { border-bottom:none; }
+.chur-res-nome { color:#c8d8f0; }
+.chur-res-val { font-weight:800; }
+.chur-res-val.deve { color:#f87171; }
+.chur-res-val.recebe { color:#34d399; }
+.chur-res-val.ok { color:#6b82a0; }
+.chur-transferencias {
+  margin-top:12px;padding:12px;border-radius:10px;
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+}
+.chur-trans-titulo { font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px; }
+.chur-trans-item { font-size:12px;color:#c8d8f0;padding:3px 0; }
+.chur-trans-item strong { color:#fbbf24; }
+.chur-btn-calcular {
+  width:100%;padding:11px;border-radius:10px;
+  background:linear-gradient(135deg,#92400e,#f59e0b);
+  border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer;
+  margin-bottom:14px;
+}
+.chur-btn-calcular:active { opacity:.85; }
+.chur-campo-evento {
+  width:100%;box-sizing:border-box;background:#060d1a;
+  border:1px solid rgba(245,158,11,.25);border-radius:8px;
+  color:#e6edf3;padding:8px 12px;font-size:13px;margin-bottom:10px;
+}
+.nf-btn-save {
+  padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;
+  border:none;cursor:pointer;
+}
+.nf-btn-save.indigo { background:linear-gradient(135deg,#4338ca,#6366f1);color:#fff; }
+.nf-btn-save.pink   { background:linear-gradient(135deg,#9d174d,#ec4899);color:#fff; }
+.nf-btn-save.purple { background:linear-gradient(135deg,#5b21b6,#8b5cf6);color:#fff; }
+.nf-btn-save.amber  { background:linear-gradient(135deg,#92400e,#f59e0b);color:#fff; }
+.nf-btn-save:active { opacity:.85; }
+.nf-admin-only { display:none; }
+body.admin-mode .nf-admin-only { display:block; }
+body.admin-mode .nf-admin-only.flex { display:flex; }
+</style>
+
+<!-- ══════ CARD 1: ATAS SEMANAIS ══════ -->
+<div class="nf-card card" id="card-atas" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('atas-body','atas-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">📝</div>
+      <div>
+        <div class="nf-title">Atas das Noites</div>
+        <div class="nf-sub">Crônicas, mãos épicas e destaques de cada rodada</div>
+      </div>
+    </div>
+    <span id="atas-arrow" class="nf-arrow" style="color:#6366f1;">▼</span>
+  </div>
+  <div id="atas-body" data-open="false" style="display:none;" class="nf-body">
+
+    <div class="ata-select-wrap">
+      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
+      <select id="ata-wk-sel" onchange="ataCarregar()"></select>
+    </div>
+
+    <!-- Leitura pública -->
+    <div id="ata-leitura">
+      <div id="ata-texto-view" class="ata-texto vazio">Nenhuma ata registrada para esta semana.</div>
+      <div id="ata-frase-view" class="ata-frase" style="display:none;"></div>
+    </div>
+
+    <!-- Edição (só admin) -->
+    <div class="nf-admin-only ata-admin-wrap" id="ata-admin-wrap">
+      <div style="font-size:11px;color:#6b82a0;margin-bottom:6px;font-weight:700;">✏️ NARRATIVA DA NOITE</div>
+      <textarea id="ata-texto-input" class="ata-admin-wrap" placeholder="Conte o que aconteceu… mãos épicas, blefes, momentos, quem brilhou…"></textarea>
+      <input id="ata-frase-input" class="ata-frase-input" placeholder="Frase da noite (opcional)" />
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="nf-btn-save indigo" onclick="ataSalvar()">💾 Salvar Ata</button>
+        <button class="nf-btn-save" style="background:rgba(255,255,255,.07);color:#c8d8f0;" onclick="ataLimpar()">🗑 Limpar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ CARD 2: REPOSITÓRIO DE MÍDIA ══════ -->
+<div class="nf-card card" id="card-midia" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('midia-body','midia-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">📸</div>
+      <div>
+        <div class="nf-title">Memórias da Mesa</div>
+        <div class="nf-sub">Fotos e vídeos das mãos épicas e momentos do grupo</div>
+      </div>
+    </div>
+    <span id="midia-arrow" class="nf-arrow" style="color:#ec4899;">▼</span>
+  </div>
+  <div id="midia-body" data-open="false" style="display:none;" class="nf-body">
+
+    <div class="midia-wk-wrap">
+      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
+      <select id="midia-wk-sel" onchange="midiaCarregar()"></select>
+    </div>
+
+    <!-- Galeria pública -->
+    <div id="midia-galeria" class="midia-grid">
+      <div class="midia-empty">Nenhuma mídia registrada para esta semana.</div>
+    </div>
+
+    <!-- Lightbox simples -->
+    <div id="midia-lightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;">
+      <img id="midia-lb-img" src="" style="max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;" />
+    </div>
+
+    <!-- Administração -->
+    <div class="nf-admin-only" id="midia-admin-wrap" style="margin-top:14px;">
+      <div style="font-size:11px;color:#6b82a0;margin-bottom:8px;font-weight:700;">📎 ADICIONAR LINKS DE MÍDIA</div>
+      <div style="font-size:11px;color:#4a6080;margin-bottom:8px;">Cole URLs de imagens (GitHub raw, Imgur, etc). Uma por linha.</div>
+      <div id="midia-url-list" class="midia-url-list"></div>
+      <button onclick="midiaAddLinha()" style="margin-top:8px;background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.25);border-radius:8px;color:#f472b6;padding:6px 14px;font-size:12px;cursor:pointer;">+ Adicionar URL</button>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="nf-btn-save pink" onclick="midiaSalvar()">💾 Salvar Mídia</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ CARD 3: BRUXARIAS DO ED ══════ -->
+<div class="nf-card card" id="card-bruxarias" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('bruxarias-body','bruxarias-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">⚡</div>
+      <div>
+        <div class="nf-title" style="background:linear-gradient(90deg,#c4b5fd,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Bruxarias do Plaza</div>
+        <div class="nf-sub">Feitos históricos e momentos lendários</div>
+      </div>
+    </div>
+    <span id="bruxarias-arrow" class="nf-arrow" style="color:#8b5cf6;">▼</span>
+  </div>
+  <div id="bruxarias-body" data-open="false" style="display:none;" class="nf-body">
+
+    <div id="bruxarias-lista" class="brux-grid">
+      <!-- preenchido por JS -->
+    </div>
+
+    <!-- Form de adição (só admin) -->
+    <div class="nf-admin-only brux-add-form" id="brux-add-form">
+      <div style="font-size:11px;color:#6b82a0;font-weight:700;margin-bottom:2px;">✨ REGISTRAR NOVO FEITO</div>
+      <input id="brux-input-nome" placeholder="Nome do feito (ex: Royal Straight Flush)" />
+      <textarea id="brux-input-desc" placeholder="Descrição (quem, quando, o que aconteceu…)"></textarea>
+      <div style="display:flex;gap:8px;">
+        <input id="brux-input-emoji" placeholder="Emoji" style="width:70px;" />
+        <input id="brux-input-data" placeholder="Data (ex: WK11 · Mar 2026)" style="flex:1;" />
+      </div>
+      <input id="brux-input-jogador" placeholder="Jogador (opcional)" />
+      <div style="display:flex;gap:8px;margin-top:4px;">
+        <button class="nf-btn-save purple" onclick="bruxSalvar()">⚡ Registrar Bruxaria</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════ CARD 4: RATEIO DO CHURRASCO ══════ -->
+<div class="nf-card card" id="card-churrasco" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('churrasco-body','churrasco-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">&#127830;</div>
+      <div>
+        <div class="nf-title">Rateio do Torneio</div>
+        <div class="nf-sub">Controle em tempo real + divisao de despesas</div>
+      </div>
+    </div>
+    <span id="churrasco-arrow" class="nf-arrow" style="color:#f59e0b;">&#9660;</span>
+  </div>
+  <div id="churrasco-body" data-open="false" style="display:none;" class="nf-body">
+
+    <!-- Nome evento -->
+    <input id="chur-evento-nome" class="chur-campo-evento" placeholder="Nome do evento (ex: Torneio Especial Marco 2026)" />
+
+    <!-- Valores buyin/rebuy -->
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <div style="flex:1;">
+        <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">BUYIN (R$)</div>
+        <input id="chur-vlr-buyin" type="number" min="0" step="0.01" value="25" oninput="churRecalcGastos()"
+          style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.3);border-radius:8px;color:#fbbf24;padding:10px 12px;font-size:15px;font-weight:700;" />
+      </div>
+      <div style="flex:1;">
+        <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">REBUY (R$)</div>
+        <input id="chur-vlr-rebuy" type="number" min="0" step="0.01" value="25" oninput="churRecalcGastos()"
+          style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;padding:10px 12px;font-size:15px;font-weight:700;" />
+      </div>
+    </div>
+
+    <!-- Header controle -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+      <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;">&#127919; Controle do Torneio</div>
+      <button onclick="churAddConvidado()" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#a78bfa;font-size:12px;font-weight:700;padding:7px 14px;cursor:pointer;white-space:nowrap;">+ Convidado</button>
+    </div>
+
+    <!-- Tabela jogadores -->
+    <div id="chur-rows" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
+
+    <!-- Pote -->
+    <div style="padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
+      <span style="font-size:13px;color:#c8d8f0;">&#127974; Pote acumulado</span>
+      <span id="chur-pote-calc" style="font-size:18px;font-weight:900;color:#fbbf24;">R$ 0,00</span>
+    </div>
+
+    <!-- Despesas com rateio seletivo -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div style="font-size:11px;font-weight:700;color:#6b82a0;text-transform:uppercase;letter-spacing:.5px;">&#128184; Despesas extras</div>
+      <button onclick="churAddDespesa()" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);border-radius:7px;color:#34d399;font-size:12px;font-weight:700;padding:5px 12px;cursor:pointer;">+ Despesa</button>
+    </div>
+    <div style="font-size:11px;color:#4a6080;margin-bottom:10px;">Cada despesa pode ser rateada so entre quem consumiu.</div>
+    <div id="chur-despesas-lista" style="display:flex;flex-direction:column;gap:10px;margin-bottom:6px;"></div>
+    <div id="chur-desp-preview" style="display:none;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);font-size:12px;color:#6b82a0;margin-bottom:14px;"></div>
+
+    <!-- Distribuicao do pote -->
+    <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.20);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+      <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#127942; Distribuicao do Pote (%)</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;width:22px;text-align:center;">&#129351;</span>
+          <span style="font-size:12px;color:#fde68a;width:60px;">1&#186; lugar</span>
+          <input id="chur-pct-1" type="number" min="0" max="100" step="1" value="50" oninput="churAtualizarPremios()"
+            style="width:60px;background:#060d1a;border:1px solid rgba(253,230,138,.3);border-radius:8px;color:#fde68a;padding:8px;font-size:14px;text-align:center;" />
+          <span style="font-size:12px;color:#6b82a0;">%</span>
+          <span id="chur-val-premio-1" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#fde68a;">R$ 0,00</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;width:22px;text-align:center;">&#129352;</span>
+          <span style="font-size:12px;color:#c8d8f0;width:60px;">2&#186; lugar</span>
+          <input id="chur-pct-2" type="number" min="0" max="100" step="1" value="30" oninput="churAtualizarPremios()"
+            style="width:60px;background:#060d1a;border:1px solid rgba(200,216,240,.2);border-radius:8px;color:#c8d8f0;padding:8px;font-size:14px;text-align:center;" />
+          <span style="font-size:12px;color:#6b82a0;">%</span>
+          <span id="chur-val-premio-2" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#c8d8f0;">R$ 0,00</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;width:22px;text-align:center;">&#129353;</span>
+          <span style="font-size:12px;color:#fdba74;width:60px;">3&#186; lugar</span>
+          <input id="chur-pct-3" type="number" min="0" max="100" step="1" value="20" oninput="churAtualizarPremios()"
+            style="width:60px;background:#060d1a;border:1px solid rgba(253,186,116,.2);border-radius:8px;color:#fdba74;padding:8px;font-size:14px;text-align:center;" />
+          <span style="font-size:12px;color:#6b82a0;">%</span>
+          <span id="chur-val-premio-3" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#fdba74;">R$ 0,00</span>
+        </div>
+        <div id="chur-pct-aviso" style="display:none;font-size:11px;color:#f87171;padding-top:2px;">
+          &#9888; Percentuais somam <span id="chur-pct-soma">0</span>% — ajuste para 100%
+        </div>
+      </div>
+    </div>
+
+    <button class="chur-btn-calcular" onclick="churCalcular()">&#127830; Calcular Rateio Completo</button>
+
+    <div id="chur-resultado" style="display:none;">
+      <div id="chur-res-pote" style="display:none;margin-bottom:10px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);">
+        <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">&#127942; Premios do Torneio</div>
+        <div id="chur-res-pote-linhas"></div>
+      </div>
+      <div class="chur-resultado">
+        <div style="font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Saldo Final por Pessoa</div>
+        <div style="font-size:10px;color:#4a6080;margin-bottom:10px;">buy+reb + despesas pagas - cota das despesas - cota do pote + premio</div>
+        <div id="chur-res-linhas"></div>
+      </div>
+      <div class="chur-transferencias">
+        <div class="chur-trans-titulo">Transferencias minimas</div>
+        <div id="chur-trans-lista"></div>
+      </div>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button onclick="churCompartilhar()" style="flex:1;padding:11px;border-radius:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fbbf24;font-size:13px;font-weight:700;cursor:pointer;">&#128231; Compartilhar</button>
+        <button onclick="churLimpar()" style="padding:11px 14px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#6b82a0;font-size:13px;cursor:pointer;">&#128260; Reiniciar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<script>
+/* FEATURES DATA */
+var NF_DATA = (function(){
+  try { return JSON.parse(localStorage.getItem('nf_data_plaza') || 'null') || {}; } catch(e){ return {}; }
+})();
+if(!NF_DATA.atas)      NF_DATA.atas = {};
+if(!NF_DATA.midia)     NF_DATA.midia = {};
+if(!NF_DATA.bruxarias) NF_DATA.bruxarias = [];
+
+function nfSave(){ try{ localStorage.setItem('nf_data_plaza', JSON.stringify(NF_DATA)); }catch(e){} }
+function nfIsAdmin(){ return window._adminAuthed === true; }
+function nfRequireAdmin(cb){
+  if(nfIsAdmin()){ cb(); return; }
+  if(window.abrirEdicaoAdmin){ window.abrirEdicaoAdmin('hof'); }
+  var t=setInterval(function(){ if(nfIsAdmin()){ clearInterval(t); cb(); } }, 300);
+  setTimeout(function(){ clearInterval(t); }, 30000);
+}
+function nfRefreshAdminUI(){
+  if(nfIsAdmin()) document.body.classList.add('admin-mode');
+}
+setInterval(nfRefreshAdminUI, 1000);
+
+function nfWKs(){
+  var wks = [];
+  if(window.RAW && RAW.length){
+    var set = {};
+    RAW.forEach(function(r){ if(r.wk) set['WK'+String(r.wk).padStart(2,'0')]=r.wk; });
+    Object.keys(set).sort().forEach(function(k){ wks.push(k); });
+  }
+  if(!wks.length){ for(var i=1;i<=11;i++) wks.push('WK'+String(i).padStart(2,'0')); }
+  return wks;
+}
+function nfPlayers(){
+  if(window.players && players.length) return players;
+  if(window.RAW && RAW.length) return Array.from(new Set(RAW.map(function(r){return r.jogador;}).filter(Boolean)));
+  return ['Charles','Cristiano','Heron','Israel','Rafa','Magu','Marcus','Oscar','Pedro'];
+}
+function nfFmt(v){ return 'R$ '+Math.abs(+v||0).toFixed(2).replace('.',','); }
+
+/* ATAS */
+function ataInit(){
+  var sel = document.getElementById('ata-wk-sel');
+  if(!sel) return;
+  var wks = nfWKs();
+  sel.innerHTML = wks.map(function(w){ return '<option>'+w+'</option>'; }).join('');
+  sel.value = wks[wks.length-1];
+  ataCarregar();
+}
+function ataCarregar(){
+  var wk = document.getElementById('ata-wk-sel').value;
+  var d  = NF_DATA.atas[wk] || {};
+  var tv = document.getElementById('ata-texto-view');
+  var fv = document.getElementById('ata-frase-view');
+  var ti = document.getElementById('ata-texto-input');
+  var fi = document.getElementById('ata-frase-input');
+  if(d.texto){ tv.textContent=d.texto; tv.classList.remove('vazio'); }
+  else { tv.textContent='Nenhuma ata registrada para esta semana.'; tv.classList.add('vazio'); }
+  if(d.frase){ fv.textContent='"'+d.frase+'"'; fv.style.display=''; }
+  else { fv.style.display='none'; }
+  if(ti) ti.value=d.texto||'';
+  if(fi) fi.value=d.frase||'';
+}
+function ataSalvar(){
+  nfRequireAdmin(function(){
+    var wk=(document.getElementById('ata-wk-sel').value);
+    var t=(document.getElementById('ata-texto-input').value||'').trim();
+    var f=(document.getElementById('ata-frase-input').value||'').trim();
+    NF_DATA.atas[wk]={texto:t,frase:f};
+    nfSave(); ataCarregar();
+    alert('Ata da '+wk+' salva!');
+  });
+}
+function ataLimpar(){
+  nfRequireAdmin(function(){
+    var wk=document.getElementById('ata-wk-sel').value;
+    if(!confirm('Apagar ata da '+wk+'?')) return;
+    delete NF_DATA.atas[wk];
+    nfSave(); ataCarregar();
+  });
+}
+
+/* MIDIA */
+function midiaInit(){
+  var sel = document.getElementById('midia-wk-sel');
+  if(!sel) return;
+  var wks = nfWKs();
+  sel.innerHTML = wks.map(function(w){ return '<option>'+w+'</option>'; }).join('');
+  sel.value = wks[wks.length-1];
+  midiaCarregar();
+}
+function midiaCarregar(){
+  var wk   = document.getElementById('midia-wk-sel').value;
+  var urls = (NF_DATA.midia[wk] || []);
+  var grid = document.getElementById('midia-galeria');
+  if(!urls.length){
+    grid.innerHTML = '<div class="midia-empty">Nenhuma midia para esta semana.</div>';
+  } else {
+    grid.innerHTML = urls.map(function(url,i){
+      var label = url.split('/').pop().slice(0,20)||('midia '+(i+1));
+      return '<div class="midia-thumb" onclick="midiaAbrirLB(\''+url+'\')"><img src="'+url+'" onerror="this.parentNode.style.display=\'none\'"><div class="midia-label">'+label+'</div></div>';
+    }).join('');
+  }
+  var wrap = document.getElementById('midia-url-list');
+  if(wrap){
+    wrap.innerHTML='';
+    if(!urls.length) midiaAddLinha();
+    else urls.forEach(function(u){ midiaAddLinha(u); });
+  }
+}
+function midiaAddLinha(val){
+  var wrap = document.getElementById('midia-url-list');
+  if(!wrap) return;
+  var div = document.createElement('div');
+  div.className='midia-url-item';
+  div.innerHTML='<input type="url" placeholder="https://..." value="'+(val||'')+'"><button onclick="this.parentNode.remove()" style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#6b82a0;width:28px;height:28px;cursor:pointer;flex-shrink:0;">x</button>';
+  wrap.appendChild(div);
+}
+function midiaSalvar(){
+  nfRequireAdmin(function(){
+    var wk=document.getElementById('midia-wk-sel').value;
+    var inputs=document.querySelectorAll('#midia-url-list input[type="url"]');
+    var urls=[];
+    inputs.forEach(function(inp){ var v=(inp.value||'').trim(); if(v) urls.push(v); });
+    NF_DATA.midia[wk]=urls;
+    nfSave(); midiaCarregar();
+    alert(urls.length+' midia(s) salva(s) para '+wk);
+  });
+}
+function midiaAbrirLB(url){
+  var lb=document.getElementById('midia-lightbox');
+  document.getElementById('midia-lb-img').src=url;
+  lb.style.display='flex';
+}
+
+/* BRUXARIAS */
+var BRUX_DEFAULT = [
+  { emoji:'&#127183;', nome:'Royal Straight Flush', desc:'A mao mais rara do poker.', count:0, datas:[] }
+];
+function bruxInit(){
+  if(!NF_DATA.bruxarias.length){
+    NF_DATA.bruxarias=[{emoji:'RSF',nome:'Royal Straight Flush',desc:'A mao mais rara do poker.',count:0,datas:[]}];
+    nfSave();
+  }
+  bruxRender();
+}
+function bruxRender(){
+  var lista=document.getElementById('bruxarias-lista');
+  if(!lista) return;
+  if(!NF_DATA.bruxarias.length){
+    lista.innerHTML='<div style="color:#4a6080;font-size:13px;padding:16px;text-align:center;">Nenhuma bruxaria registrada ainda.</div>';
+    return;
+  }
+  lista.innerHTML=NF_DATA.bruxarias.map(function(b,i){
+    var adminBtns='';
+    if(nfIsAdmin()){
+      adminBtns='<div style="display:flex;gap:6px;margin-top:6px;">'
+        +'<button onclick="bruxIncrement('+i+')" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);border-radius:6px;color:#a78bfa;padding:3px 10px;font-size:11px;cursor:pointer;">+1</button>'
+        +'<button onclick="bruxRemover('+i+')" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);border-radius:6px;color:#f87171;padding:3px 8px;font-size:11px;cursor:pointer;">x</button>'
+        +'</div>';
+    }
+    var ultData=b.datas&&b.datas.length?b.datas[b.datas.length-1]:'';
+    return '<div class="brux-item">'
+      +'<div class="brux-icon-big">'+b.emoji+'</div>'
+      +'<div class="brux-info">'
+        +'<div class="brux-nome">'+b.nome+'</div>'
+        +(b.desc?'<div class="brux-desc">'+b.desc+'</div>':'')
+        +(ultData?'<div class="brux-date">Ultimo: '+ultData+'</div>':'')
+        +(b.jogador?'<div class="brux-date" style="color:#a78bfa;">'+b.jogador+'</div>':'')
+        +adminBtns
+      +'</div>'
+      +'<div><div class="brux-count">'+b.count+'</div><div style="font-size:9px;color:#4a6080;text-align:right;">vez'+(b.count!==1?'es':'')+'</div></div>'
+    +'</div>';
+  }).join('');
+}
+function bruxIncrement(i){
+  var d=prompt('Data/contexto (ex: WK11 - Mar 2026)','');
+  if(d===null) return;
+  NF_DATA.bruxarias[i].count++;
+  if(d.trim()) NF_DATA.bruxarias[i].datas.push(d.trim());
+  nfSave(); bruxRender();
+}
+function bruxRemover(i){
+  if(!confirm('Remover esta bruxaria?')) return;
+  NF_DATA.bruxarias.splice(i,1);
+  nfSave(); bruxRender();
+}
+function bruxSalvar(){
+  nfRequireAdmin(function(){
+    var nome=(document.getElementById('brux-input-nome').value||'').trim();
+    if(!nome){ alert('Informe o nome do feito.'); return; }
+    var b={
+      emoji:(document.getElementById('brux-input-emoji').value||'').trim()||'!',
+      nome:nome,
+      desc:(document.getElementById('brux-input-desc').value||'').trim(),
+      jogador:(document.getElementById('brux-input-jogador').value||'').trim(),
+      count:1,
+      datas:[(document.getElementById('brux-input-data').value||'').trim()].filter(Boolean)
+    };
+    NF_DATA.bruxarias.push(b);
+    nfSave(); bruxRender();
+    ['brux-input-nome','brux-input-desc','brux-input-emoji','brux-input-data','brux-input-jogador']
+      .forEach(function(id){ document.getElementById(id).value=''; });
+    alert('Bruxaria registrada!');
+  });
+}
+
+/* CHURRASCO */
+var _churPlayers = [];
+var _churDespesas = [];  /* [{id, desc, valor, quem:[nomes]}] */
+var _churDespId = 0;
+
+function churInit(){
+  _churPlayers = nfPlayers().map(function(p){
+    return { nome:p, presente:true, buyin:1, rebuys:0, kos:0, pos:0, convidado:false };
+  });
+  _churDespesas = [];
+  churRenderRows();
+  churAtualizarPremios();
+}
+
+function churAddConvidado(){
+  var nome = prompt('Nome do convidado:','');
+  if(!nome || !nome.trim()) return;
+  _churPlayers.push({ nome:nome.trim(), presente:true, buyin:1, rebuys:0, kos:0, pos:0, convidado:true });
+  churRenderRows();
+  churRenderDespesas();
+}
+
+function churToggle(nome){
+  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
+  if(!pl) return;
+  pl.presente = !pl.presente;
+  if(!pl.presente){ pl.buyin=0; pl.rebuys=0; pl.kos=0; pl.pos=0; }
+  else { pl.buyin=1; }
+  /* atualiza participacao nas despesas */
+  _churDespesas.forEach(function(d){
+    if(!pl.presente){
+      d.quem = d.quem.filter(function(n){ return n!==nome; });
+    } else {
+      if(d.quem.indexOf(nome) < 0) d.quem.push(nome);
+    }
+  });
+  churRenderRows();
+  churRenderDespesas();
+}
+
+function churRenderRows(){
+  var rows = document.getElementById('chur-rows');
+  if(!rows) return;
+  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
+  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
+
+  var sorted = _churPlayers.slice().sort(function(a,b){
+    if(a.presente !== b.presente) return a.presente ? -1 : 1;
+    if(a.pos===0 && b.pos===0) return 0;
+    if(a.pos===0) return -1;
+    if(b.pos===0) return 1;
+    return b.pos - a.pos;
+  });
+
+  var html = '';
+  sorted.forEach(function(pl){
+    var eli = pl.presente && pl.pos > 0;
+    var aus = !pl.presente;
+    var tot = pl.presente ? (pl.buyin*vlrB + pl.rebuys*vlrR) : 0;
+
+    var bg  = aus ? 'rgba(107,130,160,.05)' : eli ? 'rgba(248,113,113,.07)' : 'rgba(52,211,153,.06)';
+    var brd = aus ? 'rgba(107,130,160,.15)' : eli ? 'rgba(248,113,113,.18)' : 'rgba(52,211,153,.15)';
+    var opa = aus ? '.5' : '1';
+
+    var chkBrd = pl.presente ? '#34d399' : 'rgba(107,130,160,.4)';
+    var chkBg  = pl.presente ? 'rgba(52,211,153,.2)' : 'transparent';
+    var chkMrk = pl.presente ? '<span style="color:#34d399;font-size:14px;font-weight:900;line-height:1;">&#10003;</span>' : '';
+    var nc = aus ? '#4a6080' : eli ? '#6b82a0' : '#e6edf3';
+    var nex = pl.convidado ? ' <span style="font-size:10px;color:#a78bfa;">[conv]</span>' : '';
+    var dis = aus ? 'opacity:.3;pointer-events:none;' : '';
+
+    function stp(f,v,r,g,b){
+      return '<div style="display:flex;align-items:center;justify-content:center;gap:4px;width:68px;">'
+        +'<button data-n="'+pl.nome+'" data-f="'+f+'" data-d="-1" onclick="churBtn(this)" style="width:28px;height:32px;background:rgba('+r+','+g+','+b+',.2);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:900;line-height:1;cursor:pointer;flex-shrink:0;'+dis+'">-</button>'
+        +'<span style="font-size:14px;font-weight:800;color:rgb('+r+','+g+','+b+');min-width:16px;text-align:center;flex-shrink:0;">'+v+'</span>'
+        +'<button data-n="'+pl.nome+'" data-f="'+f+'" data-d="1" onclick="churBtn(this)" style="width:28px;height:32px;background:rgba('+r+','+g+','+b+',.2);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:900;line-height:1;cursor:pointer;flex-shrink:0;'+dis+'">+</button>'
+        +'</div>';
+    }
+
+    var posLbl = aus
+      ? '<span style="font-size:11px;color:#4a6080;width:44px;text-align:center;">-</span>'
+      : eli
+        ? '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:44px;">'
+            +'<span style="font-size:13px;font-weight:800;color:#f87171;">'+pl.pos+'&#186;</span>'
+            +'<button data-n="'+pl.nome+'" onclick="churBtnReativar(this)" style="font-size:9px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2);border-radius:4px;color:#34d399;padding:2px 5px;cursor:pointer;white-space:nowrap;">&#8617;</button>'
+          +'</div>'
+        : '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:44px;">'
+            +'<span style="font-size:10px;color:#34d399;">ativo</span>'
+            +'<button data-n="'+pl.nome+'" onclick="churBtnEliminar(this)" style="font-size:9px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2);border-radius:4px;color:#f87171;padding:2px 6px;cursor:pointer;">out</button>'
+          +'</div>';
+
+    var remBtn = pl.convidado
+      ? '<button data-n="'+pl.nome+'" onclick="churBtnRemover(this)" style="margin-left:4px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2);border-radius:5px;color:#f87171;font-size:11px;cursor:pointer;padding:3px 7px;line-height:1;flex-shrink:0;">&#10005;</button>'
+      : '';
+
+    html += '<div style="display:flex;align-items:center;gap:8px;padding:10px 10px;border-radius:11px;background:'+bg+';border:1px solid '+brd+';opacity:'+opa+';">'
+      +'<div data-n="'+pl.nome+'" onclick="churToggle(this.getAttribute(\'data-n\'))" style="cursor:pointer;width:26px;height:26px;border-radius:6px;border:2px solid '+chkBrd+';background:'+chkBg+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+chkMrk+'</div>'
+      +'<span data-n="'+pl.nome+'" onclick="churToggle(this.getAttribute(\'data-n\'))" style="font-size:14px;font-weight:700;color:'+nc+';cursor:pointer;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none;">'+pl.nome+nex+'</span>'
+      +stp('buyin',pl.buyin,245,158,11)
+      +stp('rebuys',pl.rebuys,99,102,241)
+      +stp('kos',pl.kos,248,113,113)
+      +'<span style="font-size:12px;font-weight:700;color:#34d399;width:68px;text-align:right;flex-shrink:0;">'+(aus?'-':('R$'+tot.toFixed(2).replace('.',',')))+'</span>'
+      +posLbl
+      +remBtn
+    +'</div>';
+  });
+  rows.innerHTML = html;
+  churRecalcGastos();
+}
+
+/* ── Despesas com rateio seletivo ── */
+function churAddDespesa(){
+  var presentes = _churPlayers.filter(function(p){ return p.presente; });
+  _churDespesas.push({
+    id: ++_churDespId,
+    desc: '',
+    valor: 0,
+    quem: presentes.map(function(p){ return p.nome; })  /* default: todos presentes */
+  });
+  churRenderDespesas();
+}
+
+function churRemoveDespesa(id){
+  _churDespesas = _churDespesas.filter(function(d){ return d.id!==id; });
+  churRenderDespesas();
+}
+
+function churRenderDespesas(){
+  var wrap = document.getElementById('chur-despesas-lista');
+  if(!wrap) return;
+  if(!_churDespesas.length){
+    wrap.innerHTML = '<div style="font-size:12px;color:#4a6080;padding:6px 0;">Nenhuma despesa cadastrada. Clique em "+ Despesa" para adicionar.</div>';
+    churAtualizarDespPreview();
+    return;
+  }
+  var presentes = _churPlayers.filter(function(p){ return p.presente; });
+  var html = '';
+  _churDespesas.forEach(function(d){
+    /* chips dos participantes */
+    var chipsHtml = presentes.map(function(pl){
+      var sel = d.quem.indexOf(pl.nome) >= 0;
+      return '<button data-id="'+d.id+'" data-nome="'+pl.nome+'" onclick="churToggleDesp(this)"'
+        +' style="padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;'
+        +'border:1.5px solid '+(sel?'rgba(52,211,153,.6)':'rgba(255,255,255,.12)')+';'
+        +'background:'+(sel?'rgba(52,211,153,.18)':'transparent')+';'
+        +'color:'+(sel?'#34d399':'#4a6080')+';'
+        +'transition:all .15s;">'+pl.nome+'</button>';
+    }).join('');
+
+    var cota = d.quem.length > 0 && d.valor > 0 ? '  cota: R$'+(d.valor/d.quem.length).toFixed(2).replace('.',',') : '';
+
+    html += '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 12px 10px;">'
+      /* linha 1: descricao + valor + remover */
+      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">'
+        +'<input data-id="'+d.id+'" onchange="churDespDescChange(this)" placeholder="Descricao (ex: carne, chopp, limpeza)" value="'+(d.desc||'')+'"'
+        +' style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:13px;min-width:0;" />'
+        +'<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">'
+          +'<span style="font-size:12px;color:#34d399;font-weight:700;">R$</span>'
+          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="churDespValChange(this)" placeholder="0,00" value="'+(d.valor||'')+'"'
+          +' style="width:80px;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;color:#34d399;padding:8px;font-size:13px;font-weight:700;text-align:right;" />'
+        +'</div>'
+        +'<button data-id="'+d.id+'" onclick="churRemoveDespesa(this.getAttribute(\'data-id\')*1)" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:12px;padding:6px 10px;cursor:pointer;flex-shrink:0;">&#10005;</button>'
+      +'</div>'
+      /* linha 2: quem paga */
+      +'<div style="font-size:10px;color:#6b82a0;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Quem divide esta despesa'+cota+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
+        +'<button data-id="'+d.id+'" onclick="churDespTodos(this.getAttribute(\'data-id\')*1)" style="padding:4px 10px;border-radius:999px;font-size:11px;cursor:pointer;border:1px solid rgba(99,102,241,.3);background:rgba(99,102,241,.1);color:#818cf8;">Todos</button>'
+        +chipsHtml
+      +'</div>'
+    +'</div>';
+  });
+  wrap.innerHTML = html;
+  churAtualizarDespPreview();
+}
+
+function churToggleDesp(btn){
+  var id   = parseInt(btn.getAttribute('data-id'));
+  var nome = btn.getAttribute('data-nome');
+  var d = _churDespesas.find(function(x){ return x.id===id; });
+  if(!d) return;
+  var idx = d.quem.indexOf(nome);
+  if(idx >= 0) d.quem.splice(idx,1);
+  else         d.quem.push(nome);
+  churRenderDespesas();
+}
+
+function churDespTodos(id){
+  var d = _churDespesas.find(function(x){ return x.id===id; });
+  if(!d) return;
+  d.quem = _churPlayers.filter(function(p){ return p.presente; }).map(function(p){ return p.nome; });
+  churRenderDespesas();
+}
+
+function churDespDescChange(inp){
+  var id = parseInt(inp.getAttribute('data-id'));
+  var d = _churDespesas.find(function(x){ return x.id===id; });
+  if(d) d.desc = inp.value;
+}
+
+function churDespValChange(inp){
+  var id = parseInt(inp.getAttribute('data-id'));
+  var d = _churDespesas.find(function(x){ return x.id===id; });
+  if(d){ d.valor = parseFloat(inp.value)||0; churRenderDespesas(); }
+}
+
+function churAtualizarDespPreview(){
+  var total = _churDespesas.reduce(function(s,d){ return s+(d.valor||0); }, 0);
+  var prev = document.getElementById('chur-desp-preview');
+  if(!prev) return;
+  if(total > 0){
+    prev.style.display = '';
+    var partes = _churDespesas.filter(function(d){ return d.valor>0; }).map(function(d){
+      return (d.desc||'Despesa')+' R$'+d.valor.toFixed(2).replace('.',',')+'/'+(d.quem.length||1)+'px';
+    });
+    prev.textContent = 'Total: R$'+total.toFixed(2).replace('.',',') + '   |   ' + partes.join('  +  ');
+  } else { prev.style.display = 'none'; }
+}
+
+/* ── Botoes ── */
+function churBtn(btn){
+  var nome  = btn.getAttribute('data-n');
+  var field = btn.getAttribute('data-f');
+  var delta = parseInt(btn.getAttribute('data-d'));
+  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
+  if(!pl || !pl.presente) return;
+  var min = field==='buyin' ? 1 : 0;
+  pl[field] = Math.max(min, (pl[field]||0) + delta);
+  churRenderRows();
+}
+function churBtnEliminar(btn){
+  var nome = btn.getAttribute('data-n');
+  var ativos = _churPlayers.filter(function(p){ return p.presente && p.pos===0; }).length;
+  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
+  if(!pl || !pl.presente || pl.pos!==0) return;
+  pl.pos = ativos;
+  churRenderRows();
+}
+function churBtnReativar(btn){
+  var nome = btn.getAttribute('data-n');
+  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
+  if(!pl) return;
+  var posLib = pl.pos;
+  _churPlayers.forEach(function(p){ if(p.pos>posLib) p.pos--; });
+  pl.pos = 0;
+  churRenderRows();
+}
+function churBtnRemover(btn){
+  var nome = btn.getAttribute('data-n');
+  _churPlayers = _churPlayers.filter(function(p){ return p.nome!==nome; });
+  _churDespesas.forEach(function(d){ d.quem = d.quem.filter(function(n){ return n!==nome; }); });
+  churRenderRows();
+  churRenderDespesas();
+}
+
+function churRecalcGastos(){
+  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
+  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
+  var pote = 0;
+  _churPlayers.forEach(function(pl){ if(pl.presente) pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
+  var el = document.getElementById('chur-pote-calc');
+  if(el) el.textContent = 'R$ '+pote.toFixed(2).replace('.',',');
+  churAtualizarPremios();
+}
+
+function churAtualizarPremios(){
+  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
+  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
+  var pote = 0;
+  _churPlayers.forEach(function(pl){ if(pl.presente) pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
+  var p1=parseFloat(document.getElementById('chur-pct-1').value)||0;
+  var p2=parseFloat(document.getElementById('chur-pct-2').value)||0;
+  var p3=parseFloat(document.getElementById('chur-pct-3').value)||0;
+  var soma = p1+p2+p3;
+  var aviso = document.getElementById('chur-pct-aviso');
+  var somaEl = document.getElementById('chur-pct-soma');
+  if(aviso&&somaEl){ somaEl.textContent=soma; aviso.style.display=(soma!==100&&soma>0)?'':'none'; }
+  function sv(id,v){ var el=document.getElementById(id); if(el) el.textContent='R$ '+v.toFixed(2).replace('.',','); }
+  sv('chur-val-premio-1',pote*p1/100);
+  sv('chur-val-premio-2',pote*p2/100);
+  sv('chur-val-premio-3',pote*p3/100);
+}
+
+function churCalcular(){
+  var presentes = _churPlayers.filter(function(p){ return p.presente; });
+  if(!presentes.length){ alert('Nenhum jogador presente.'); return; }
+  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
+  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
+  var pct1 = (parseFloat(document.getElementById('chur-pct-1').value)||0)/100;
+  var pct2 = (parseFloat(document.getElementById('chur-pct-2').value)||0)/100;
+  var pct3 = (parseFloat(document.getElementById('chur-pct-3').value)||0)/100;
+  var n = presentes.length;
+
+  var pote = 0;
+  presentes.forEach(function(pl){ pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
+  var cotaPote = pote / n;
+
+  /* Despesas: cada uma rateada so entre quem participa */
+  var cotaDesp = {};
+  presentes.forEach(function(pl){ cotaDesp[pl.nome] = 0; });
+  _churDespesas.forEach(function(d){
+    if(!d.valor || !d.quem.length) return;
+    var cota = d.valor / d.quem.length;
+    d.quem.forEach(function(nome){ if(cotaDesp[nome]!==undefined) cotaDesp[nome] += cota; });
+  });
+
+  /* Vencedores */
+  var ativos = presentes.filter(function(p){ return p.pos===0; });
+  var campeao = ativos.length===1 ? ativos[0].nome : '';
+  function lugar(pl){
+    if(pl.nome===campeao) return 1;
+    if(pl.pos===0) return 999;
+    return pl.pos+1;
+  }
+  var premios = {};
+  presentes.forEach(function(pl){ premios[pl.nome]=0; });
+  presentes.forEach(function(pl){
+    var l=lugar(pl);
+    if(l===1) premios[pl.nome]+=pote*pct1;
+    if(l===2) premios[pl.nome]+=pote*pct2;
+    if(l===3) premios[pl.nome]+=pote*pct3;
+  });
+
+  /* Saldo: gastou_buyin_reb - cota_pote - cota_despesas + premio */
+  /* Quem pagou uma despesa recebe de volta o valor que nao e dele */
+  var pagouDesp = {};
+  presentes.forEach(function(pl){ pagouDesp[pl.nome] = 0; });
+  _churDespesas.forEach(function(d){
+    /* quem pagou fisicamente? usamos o campo desc para identificar — nao temos campo "quem pagou"
+       então usamos uma abordagem diferente: a despesa foi bancada por alguem, mas aqui
+       consideramos que o valor JA foi adiantado — entao quem esta na lista "quem" paga a cota
+       e o restante vira credito para quem pagou. Como nao temos "pagador", ignoramos aqui
+       e apenas calculamos a cota devida por cada um. */
+  });
+
+  var saldos = {};
+  presentes.forEach(function(pl){
+    var gastoBuyin = pl.buyin*vlrB + pl.rebuys*vlrR;
+    saldos[pl.nome] = gastoBuyin - cotaPote - cotaDesp[pl.nome] + premios[pl.nome];
+  });
+
+  /* Bloco premios */
+  var resPote = document.getElementById('chur-res-pote');
+  var rPL = document.getElementById('chur-res-pote-linhas');
+  var temP = presentes.some(function(pl){ return premios[pl.nome]>0; });
+  if(pote>0 && temP){
+    resPote.style.display='';
+    rPL.innerHTML=[{pos:'1o',pct:pct1,l:1},{pos:'2o',pct:pct2,l:2},{pos:'3o',pct:pct3,l:3}].map(function(lp){
+      var v=presentes.find(function(pl){ return lugar(pl)===lp.l; });
+      if(!v || pote*lp.pct<0.005) return '';
+      return '<div class="chur-res-linha"><span class="chur-res-nome">'+lp.pos+' '+v.nome+'</span><span class="chur-res-val recebe">+'+nfFmt(pote*lp.pct)+'</span></div>';
+    }).filter(Boolean).join('');
+  } else { resPote.style.display='none'; }
+
+  /* Saldo final */
+  var sorted2 = presentes.slice().sort(function(a,b){ return lugar(a)-lugar(b); });
+  document.getElementById('chur-res-linhas').innerHTML = sorted2.map(function(pl){
+    var s = saldos[pl.nome];
+    var cls = s>0.005?'recebe':s<-0.005?'deve':'ok';
+    var txt = s>0.005?'+'+nfFmt(s)+' a receber':s<-0.005?'-'+nfFmt(Math.abs(s))+' a pagar':'em dia';
+    var l = lugar(pl);
+    var lt = l===1?'1o':l===2?'2o':l===3?'3o':l<999?(l+'o'):'ativo';
+    var det = '('+lt+' | buy:'+pl.buyin+' reb:'+pl.rebuys+' ko:'+pl.kos
+      +(cotaDesp[pl.nome]>0?' | desp:-'+nfFmt(cotaDesp[pl.nome]):'')
+      +(premios[pl.nome]>0?' | premio:+'+nfFmt(premios[pl.nome]):'')
+      +')';
+    return '<div class="chur-res-linha">'
+      +'<span class="chur-res-nome">'+pl.nome+' <span style="font-size:10px;color:#4a6080;">'+det+'</span></span>'
+      +'<span class="chur-res-val '+cls+'">'+txt+'</span>'
+      +'</div>';
+  }).join('');
+
+  /* Transferencias */
+  var creds=[],devs=[];
+  presentes.forEach(function(pl){
+    var s=Math.round(saldos[pl.nome]*100)/100;
+    if(s>0.005) creds.push({nome:pl.nome,val:s});
+    else if(s<-0.005) devs.push({nome:pl.nome,val:-s});
+  });
+  creds.sort(function(a,b){return b.val-a.val;});
+  devs.sort(function(a,b){return b.val-a.val;});
+  var trans=[],ci=0,di=0;
+  var cc=creds.map(function(x){return{nome:x.nome,val:x.val};});
+  var dd=devs.map(function(x){return{nome:x.nome,val:x.val};});
+  while(ci<cc.length && di<dd.length){
+    var tv=Math.min(cc[ci].val,dd[di].val);
+    trans.push({de:dd[di].nome,para:cc[ci].nome,val:tv});
+    cc[ci].val-=tv; dd[di].val-=tv;
+    if(cc[ci].val<0.005) ci++;
+    if(dd[di].val<0.005) di++;
+  }
+  var tL=document.getElementById('chur-trans-lista');
+  tL.innerHTML = !trans.length
+    ? '<div class="chur-trans-item" style="color:#34d399;">Todos estao quites!</div>'
+    : trans.map(function(tr){
+        return '<div class="chur-trans-item"><strong>'+tr.de+'</strong> paga <strong>'+nfFmt(tr.val)+'</strong> para <strong>'+tr.para+'</strong></div>';
+      }).join('');
+  document.getElementById('chur-resultado').style.display='';
+}
+
+function churLimpar(){
+  _churPlayers = _churPlayers.filter(function(p){ return !p.convidado; });
+  _churPlayers.forEach(function(pl){ pl.presente=true; pl.buyin=1; pl.rebuys=0; pl.kos=0; pl.pos=0; });
+  _churDespesas = [];
+  var el=document.getElementById('chur-evento-nome'); if(el) el.value='';
+  document.getElementById('chur-pct-1').value='50';
+  document.getElementById('chur-pct-2').value='30';
+  document.getElementById('chur-pct-3').value='20';
+  var dp=document.getElementById('chur-desp-preview'); if(dp) dp.style.display='none';
+  document.getElementById('chur-resultado').style.display='none';
+  churRenderRows();
+  churRenderDespesas();
+}
+
+function churCompartilhar(){
+  var evento = document.getElementById('chur-evento-nome').value || 'Rateio';
+  var presentes = _churPlayers.filter(function(p){ return p.presente; });
+  var txt = '[Rateio] '+evento+'\n';
+  txt += 'Presentes: '+presentes.map(function(p){return p.nome;}).join(', ')+'\n\n';
+  var poteEl = document.getElementById('chur-pote-calc');
+  if(poteEl) txt += 'Pote: '+poteEl.textContent+'\n';
+  if(_churDespesas.length){
+    txt += '\nDespesas:\n';
+    _churDespesas.forEach(function(d){
+      if(d.valor>0) txt += '- '+(d.desc||'Despesa')+': R$'+d.valor.toFixed(2).replace('.',',')
+        +' ('+d.quem.join(', ')+')\n';
+    });
+  }
+  txt += '\n';
+  var pL = document.querySelectorAll('#chur-res-pote-linhas .chur-res-linha');
+  if(pL.length){ txt+='Premios:\n'; pL.forEach(function(l){ txt+=l.querySelector('.chur-res-nome').textContent+': '+l.querySelector('.chur-res-val').textContent+'\n'; }); txt+='\n'; }
+  txt += 'Saldo final:\n';
+  document.querySelectorAll('#chur-res-linhas .chur-res-linha').forEach(function(l){
+    var nome = l.querySelector('.chur-res-nome').childNodes[0].textContent.trim();
+    txt += nome+': '+l.querySelector('.chur-res-val').textContent+'\n';
+  });
+  var trans = document.querySelectorAll('#chur-trans-lista .chur-trans-item');
+  if(trans.length){ txt+='\nTransferencias:\n'; trans.forEach(function(t){ txt+=t.textContent+'\n'; }); }
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+
+/* BOOT */
+(function nfBoot(){
+  function init(){
+    ataInit();
+    midiaInit();
+    bruxInit();
+    churInit();
+    nfRefreshAdminUI();
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init,1200); });
+  } else { setTimeout(init,1200); }
+})();
+</script>
 
 <!-- ═══ TORNEIOS ESPECIAIS ═══ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -12208,11 +13740,13 @@ window.addEventListener('load', function(){
       venc.forEach(function(j){ premKO[j] = r2(potKO / venc.length); });
       perd.forEach(function(j){ premKO[j] = -TAXA_KO; });
 
-      // Mês fechado? Só se todas as WKs do mês forem semanas passadas
-      // (tem dados no ledger para pelo menos 4 semanas no mês, ou seja, o mês virou)
-      var wksMes  = Array.from(new Set(rows.map(function(r){ return +r.wk; }))).sort(function(a,b){return a-b;});
-      var mesAtual = new Date().getMonth()+1;
-      var fechado  = mes < mesAtual;
+      // Mês fechado? A última WK do mês já foi lançada no ledger
+      // fimMeses = [0,4,8,12,17,21,25,30,34,38,43,47,52] — wk que fecha cada mes (mes 1=wk4, mes 2=wk8, mes 3=wk12...)
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var wkFechaMes = FIM_MESES[mes] || 0;
+      var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
+      var maxWKLancada = wksNoLedger.length ? Math.max.apply(null, wksNoLedger) : 0;
+      var fechado = wkFechaMes > 0 && maxWKLancada >= wkFechaMes;
 
       return { pot:pot, premMes:premMes, premKO:premKO, rank:rank, kos:kos, vencKO:venc, fechado:fechado, entradas:entradas };
     }
@@ -12236,8 +13770,13 @@ window.addEventListener('load', function(){
       var premTri = {};
       rank.slice(0,5).forEach(function(e,i){ premTri[e[0]] = r2(pot * PERC[i]); });
 
-      var mesAtual = new Date().getMonth()+1;
-      var fechado  = Math.max.apply(null, meses) < mesAtual;
+      // Trimestre fechado? A última WK do trimestre (= última WK do último mês) já foi lançada
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var ultimoMesTri = Math.max.apply(null, meses);
+      var wkFechaTri = FIM_MESES[ultimoMesTri] || 0;
+      var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
+      var maxWKLancada = wksNoLedger.length ? Math.max.apply(null, wksNoLedger) : 0;
+      var fechado = wkFechaTri > 0 && maxWKLancada >= wkFechaTri;
 
       return { pot:pot, premTri:premTri, rank:rank, fechado:fechado, entradas:entradas };
     }
@@ -12364,7 +13903,7 @@ window.addEventListener('load', function(){
 
     /* Meses com prêmio real (premio_mensal > 0 para pelo menos 1 jogador)
        → indica que a sessão de premiação mensal já aconteceu */
-    /* Mês/tri fechado = mês já passou (mes < mesAtual) */
+    /* Mes/tri fechado = ultima WK do periodo ja foi lancada no ledger */
     var mesAtualCalc = new Date().getMonth()+1;
     var mesesFechados = {}; // mes → true se fechado
     var trisFechados  = {}; // tri → true se fechado
@@ -12674,7 +14213,39 @@ window.addEventListener('load', function(){
     }).join('');
   }
 
-  var _t1=setInterval(function(){
+  /* Expoe funcao para o seletor Pix usar o mesmo calculo dos cards */
+  window.sfGetSaldoPorJogador = function(nome, mesFiltro){
+    var ledger = getLedger();
+    if(!ledger.length) return null;
+    var rows = ledger.filter(function(r){
+      if(r.jogador !== nome) return false;
+      if(mesFiltro && mesFiltro !== 'todos' && +r.mes !== mesFiltro) return false;
+      return true;
+    });
+    if(!rows.length) return null;
+    var saldoSemanas = rows.reduce(function(s,r){ return s+(+r.saldo_semana_final||0); }, 0);
+    var premMes = 0, premKO = 0;
+    if(window.PREMIO_ENGINE){
+      window.PREMIO_ENGINE.reset();
+      var premio = window.PREMIO_ENGINE.get(ledger);
+      var meses = Array.from(new Set(rows.map(function(r){ return +r.mes; }))).filter(Boolean);
+      meses.forEach(function(m){
+        var pm = premio.mes[m];
+        if(pm && pm.fechado){
+          premMes += pm.premMes[nome] || 0;
+          premKO  += pm.premKO[nome]  || 0;
+        }
+      });
+      if(mesFiltro && mesFiltro !== 'todos' && mesFiltro % 3 === 0){
+        var tri = Math.ceil(mesFiltro / 3);
+        var pt = premio.tri[tri];
+        if(pt && pt.fechado) premMes += pt.premTri[nome] || 0;
+      }
+    }
+    return r2(saldoSemanas + premMes + premKO);
+  };
+
+  var _t1 = setInterval(function(){
     if(typeof window.afterDataLoaded==='function'){ clearInterval(_t1);
       var _o=window.afterDataLoaded;
       window.afterDataLoaded=function(){_o.apply(this,arguments);setTimeout(window.renderSaldoFin,400);};}
@@ -14097,6 +15668,37 @@ window.abrirPerfil = function(jogadorNome){
 
   /* ── Gráfico evolução ── */
   var chartLabel = document.createElement('div');
+
+  /* ── Saldo + Botão Pix ── */
+  var pixBlock = document.createElement('div');
+  var _saldoDevedor = -saldo_efetivo; /* positivo = deve para Israel */
+  var _saldoColor = saldo_efetivo >= 0 ? '#22c55e' : '#f87171';
+  var _saldoTxt   = saldo_efetivo >= 0
+    ? '+R$ '+Math.abs(saldo_efetivo).toFixed(2).replace('.',',') + ' a receber'
+    : '-R$ '+Math.abs(saldo_efetivo).toFixed(2).replace('.',',') + ' a pagar';
+  pixBlock.style.cssText = 'margin:4px 16px 10px;padding:12px 14px;border-radius:12px;'
+    +'background:'+(saldo_efetivo<0?'rgba(248,113,113,.07)':'rgba(34,197,94,.07)')+';'
+    +'border:1px solid '+(saldo_efetivo<0?'rgba(248,113,113,.2)':'rgba(34,197,94,.2)')+';'
+    +'display:flex;align-items:center;justify-content:space-between;gap:10px;';
+  var _pixBtnHtml = saldo_efetivo < 0
+    ? '<button id="pix-perfil-btn-'+jogadorNome.replace(/\s/g,'')+'" '
+      +'style="background:rgba(99,102,241,.2);border:1px solid rgba(99,102,241,.4);border-radius:8px;'
+      +'color:#818cf8;font-size:12px;font-weight:800;padding:8px 12px;cursor:pointer;white-space:nowrap;flex-shrink:0;">'
+      +'&#128594; Copiar Pix</button>'
+    : '';
+  pixBlock.innerHTML = '<div>'
+    +'<div style="font-size:10px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.4px;margin-bottom:3px;">Saldo Efetivo</div>'
+    +'<div style="font-size:18px;font-weight:900;color:'+_saldoColor+';">'+_saldoTxt+'</div>'
+    +'</div>'
+    +_pixBtnHtml;
+  if(saldo_efetivo < 0){
+    var _pixVal = Math.abs(saldo_efetivo);
+    setTimeout(function(){
+      var _btn = document.getElementById('pix-perfil-btn-'+jogadorNome.replace(/\s/g,''));
+      if(_btn) _btn.onclick = function(){ pixCopiarSaldoJogador(_pixVal, _btn); };
+    }, 100);
+  }
+
   chartLabel.style.cssText = 'padding:0 20px 8px;text-align:center;';
   chartLabel.innerHTML = '<div style="font-size:12px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;text-align:center;">Evolução de Pontos — vs Média do Grupo</div>'
     +'<div id="perfil-chart-evo" style="height:180px;width:100%;"></div>';
@@ -14328,6 +15930,7 @@ window.abrirPerfil = function(jogadorNome){
   if(box._bannerMes) box.appendChild(box._bannerMes);
   if(box._badgeWrapData) box.appendChild(box._badgeWrapData);
   box.appendChild(kpisGrid);
+  box.appendChild(pixBlock);
   box.appendChild(chartLabel);
   box.appendChild(tabelaWrap);
   modal.appendChild(box);
@@ -16833,22 +18436,4 @@ function mostrarFimTour(){
   fim.style.cssText = 'position:fixed;inset:0;z-index:99992;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:20px;';
   fim.innerHTML = '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:2px solid #6366f1;border-radius:20px;padding:32px 24px;max-width:300px;width:100%;text-align:center;box-shadow:0 8px 40px rgba(99,102,241,0.4);">'
     + '<div style="font-size:48px;margin-bottom:12px;">🎉</div>'
-    + '<div style="font-size:20px;font-weight:900;color:#e6edf3;margin-bottom:8px;">Tour Concluído!</div>'
-    + '<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:20px;">Agora você conhece o dashboard do Plaza. Boa sorte na mesa! 🃏</div>'
-    + '<button id="tour-fim-btn" style="width:100%;background:linear-gradient(135deg,#4338ca,#6366f1);border:none;border-radius:12px;padding:12px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;">Fechar</button>'
-    + '</div>';
-  document.body.appendChild(fim);
-  fim.querySelector('#tour-fim-btn').addEventListener('click', function(){ fim.remove(); });
-  fim.addEventListener('click', function(e){ if(e.target===fim) fim.remove(); });
-}
-
-window.iniciarTour = function(){
-  renderStep(0);
-};
-
-})();
-</script>
-
-</body>
-</html>
-
+    + '<div style="font-size:20px;font-weight:900;color:#e6edf3;margin-bottom:8px;">Tour Concl
