@@ -22,9 +22,7 @@ button, [onclick], .chip, .mini-item, .card {
 }
 /* Reduz repaint em elementos animados */
 .brasao-anim-faisca, .brasao-anim-chama, .brasao-anim-inferno {
-  will-change: filter, transform;
-  transform: translateZ(0);
-  backface-visibility: hidden;
+  /* Android-safe: removed will-change */
 }
 /* Evita que filtros CSS travem o scroll */
 .brasao-svg-wrap, .brasao-fire-wrap {
@@ -1310,6 +1308,43 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 /* Avoid any global overflow creating horizontal scrollbar */
 body { overflow-x: hidden; overflow-y: auto; scroll-padding-bottom: 70px; }
 
+/* ═══ ANDROID PERFORMANCE FIXES ═══ */
+/* Detect Android and disable heavy effects */
+@media screen {
+  /* Fallback for browsers without backdrop-filter support (Android 12 WebView) */
+  @supports not (backdrop-filter: blur(1px)) {
+    #plaza-tabbar,
+    #ata-editor-modal,
+    #tor-wizard-modal,
+    #feedback-modal,
+    #rn-overlay,
+    #mobile-topbar,
+    .perfil-modal {
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+    }
+    /* Make backgrounds more opaque to compensate */
+    #plaza-tabbar {
+      background: rgba(6,11,26,0.97) !important;
+    }
+  }
+}
+
+/* Disable ALL animations on low-end devices */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Android WebView safe: remove will-change from non-critical elements */
+.card, .mini-card, .chip {
+  will-change: auto !important;
+}
+
+
 /* Android / Samsung fix — prevent touch freeze */
 * {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
@@ -2248,6 +2283,47 @@ function setLoadingProgress(pct, msg){
 
 
 
+<script>
+
+/* ═══ ANDROID RUNTIME DETECTION ═══ */
+(function(){
+  var ua = navigator.userAgent || '';
+  var isAndroid = /Android/i.test(ua);
+  var isIOS = /iPad|iPhone|iPod/.test(ua);
+
+  if(isAndroid){
+    /* Add class for Android-specific CSS */
+    document.documentElement.classList.add('is-android');
+
+    /* Disable backdrop-filter via JS for Android < 13 */
+    var androidVer = parseInt((ua.match(/Android (\d+)/) || [])[1] || '0');
+    if(androidVer < 13){
+      document.documentElement.classList.add('no-blur');
+    }
+  }
+
+  /* Patch all dynamic modal creation to remove backdrop-filter on Android */
+  if(isAndroid){
+    var _origSetAttr = Element.prototype.setAttribute;
+    /* Override inline style setting to strip backdrop-filter on Android */
+    var _origStyleSet = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'style');
+    /* Simple approach: patch after DOM ready */
+    document.addEventListener('DOMContentLoaded', function(){
+      /* Remove backdrop-filter from all fixed elements */
+      document.querySelectorAll('[style*="backdrop-filter"]').forEach(function(el){
+        el.style.backdropFilter = 'none';
+        el.style.webkitBackdropFilter = 'none';
+        /* Make bg more opaque */
+        var bg = el.style.background || '';
+        if(bg.includes('rgba') && bg.includes('.7')){
+          el.style.background = bg.replace(/rgba\(([^)]+),\s*[\d.]+\)/, 'rgba($1, 0.96)');
+        }
+      });
+    });
+  }
+})();
+
+</script>
 </head>
 <body>
 <script>
@@ -3903,9 +3979,7 @@ document.addEventListener('DOMContentLoaded', function(){
   position:fixed;
   bottom:0;left:0;right:0;
   z-index:9980;
-  background:linear-gradient(180deg,rgba(6,11,26,.0) 0%,rgba(6,11,26,.97) 12px);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  background:rgba(6,11,26,0.97);
   border-top:1px solid rgba(255,255,255,.08);
   display:flex;
   align-items:stretch;
@@ -4689,6 +4763,31 @@ body.admin-mode .nf-admin-only.flex { display:flex; }
 .ata-pub-jog-nome { font-size:12px;font-weight:800;color:#a5b4fc;margin-bottom:4px; }
 .ata-pub-jog-texto { font-size:13px;color:#c8d8f0;line-height:1.6;white-space:pre-wrap; }
 .ata-vazio { font-size:13px;color:#4a6080;font-style:italic;padding:10px 0; }
+
+
+
+/* Android no-blur mode */
+.no-blur [style*="backdrop-filter"],
+.no-blur #plaza-tabbar,
+.no-blur #ata-editor-modal,
+.no-blur #tor-wizard-modal,
+.no-blur #feedback-modal {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+.is-android #plaza-tabbar {
+  background: #060d1a !important;
+  border-top: 1px solid rgba(255,255,255,0.12) !important;
+}
+.is-android .tab-item.active::after {
+  box-shadow: none !important;
+}
+.is-android .tab-icon {
+  filter: grayscale(1) opacity(0.5) !important;
+}
+.is-android .tab-item.active .tab-icon {
+  filter: grayscale(0) opacity(1) !important;
+}
 
 </style>
 
