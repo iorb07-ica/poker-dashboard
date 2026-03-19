@@ -3971,7 +3971,7 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
-<div class="footer" style="margin-top:32px;padding-bottom:120px;">Feito com &#9829; &#8212; arquivo único v4.7</div>
+<div class="footer" style="margin-top:32px;padding-bottom:80px;padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px));">Feito com &#9829; &#8212; arquivo único v4.7</div>
 
 <!-- ═══ TAB BAR ═══ -->
 <style>
@@ -3983,8 +3983,21 @@ document.addEventListener('DOMContentLoaded', function(){
   border-top:1px solid rgba(255,255,255,.08);
   display:flex;
   align-items:stretch;
-  padding-bottom:env(safe-area-inset-bottom);
+  /* Android 12 fix: env(safe-area-inset-bottom) pode retornar valor errado */
+  padding-bottom:0;
+  padding-bottom:env(safe-area-inset-bottom, 0px);
   box-shadow:0 -4px 32px rgba(0,0,0,.5);
+  /* Altura máxima explícita para evitar expansão indevida no Android */
+  max-height:72px;
+  height:auto;
+  /* Garante que fique abaixo de tudo, sem sobrepor a página */
+  pointer-events:auto;
+}
+/* Android: tab bar com altura fixa sem safe area */
+.is-android #plaza-tabbar {
+  padding-bottom:0 !important;
+  max-height:60px !important;
+  height:60px !important;
 }
 .tab-item {
   flex:1;
@@ -4000,6 +4013,9 @@ document.addEventListener('DOMContentLoaded', function(){
   -webkit-tap-highlight-color:transparent;
   position:relative;
   transition:all .18s;
+  /* Altura explícita para evitar expansão */
+  max-height:60px;
+  overflow:hidden;
 }
 .tab-item:active { transform:scale(.93); }
 .tab-icon {
