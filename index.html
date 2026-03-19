@@ -2468,42 +2468,339 @@ document.addEventListener('DOMContentLoaded', function(){
 
 </div>
 
-<!-- ====== CARD: Perfil dos Jogadores ====== -->
-<div class="card" id="card-perfis" style="margin-top:10px;padding:0;background:linear-gradient(145deg,rgba(59,130,246,0.08),rgba(99,102,241,0.04));border:1px solid rgba(99,102,241,0.2);">
+<!-- ====== CARD: Perfis dos Jogadores ====== -->
+<style>
+@keyframes perfis-gold-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+@keyframes perfis-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0), 0 2px 20px rgba(0,0,0,0.35); }
+  50%       { box-shadow: 0 0 18px 3px rgba(212,175,55,0.18), 0 4px 24px rgba(0,0,0,0.4); }
+}
+#card-perfis {
+  animation: perfis-pulse-glow 4s ease-in-out infinite;
+}
+#tour-hdr-perfis {
+  background: linear-gradient(135deg,
+    rgba(212,175,55,0.10) 0%,
+    rgba(99,102,241,0.07) 40%,
+    rgba(212,175,55,0.06) 70%,
+    transparent 100%) !important;
+  border-radius: 12px 12px 0 0;
+}
+#perfis-gold-bar {
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(212,175,55,0.15) 15%,
+    rgba(212,175,55,0.65) 35%,
+    #ffd700 50%,
+    rgba(212,175,55,0.65) 65%,
+    rgba(212,175,55,0.15) 85%,
+    transparent 100%);
+  background-size: 200% auto;
+  animation: perfis-gold-shimmer 3s linear infinite;
+  border-radius: 12px 12px 0 0;
+}
+#perfis-lava-wrap {
+  position:relative;
+  width:44px; height:44px;
+  flex-shrink:0;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid rgba(212,175,55,0.30);
+  box-shadow:0 4px 16px rgba(0,0,0,0.55), 0 0 10px rgba(212,175,55,0.15);
+  background:#060d1a;
+}
+#perfis-lava-canvas {
+  display:block;
+  width:44px; height:44px;
+}
+</style>
+
+<div class="card" id="card-perfis" style="margin-top:10px;padding:0;background:linear-gradient(145deg,rgba(212,175,55,0.06),rgba(99,102,241,0.04),rgba(212,175,55,0.03));border:1px solid rgba(212,175,55,0.22);">
+  <div id="perfis-gold-bar"></div>
   <div id="tour-hdr-perfis" onclick="window.toggleCard('perfis-body','perfis-arrow')"
-       style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;user-select:none;background:linear-gradient(135deg,rgba(99,102,241,0.08) 0%,transparent 100%);border-radius:12px 12px 0 0;">
+       style="display:flex;align-items:center;justify-content:space-between;padding:16px 18px;cursor:pointer;user-select:none;">
     <div style="display:flex;align-items:center;gap:12px;">
-      <div id="perfis-card-icon" style="width:44px;height:44px;border-radius:12px;background:linear-gradient(145deg,#0f172a,#1e293b);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.12);box-shadow:0 4px 16px rgba(0,0,0,0.5);position:relative;overflow:visible;flex-shrink:0;">
-        
-        <svg width="36" height="36" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="overflow:visible;">
-          <g id="pc1">
-            <rect x="7" y="4" width="16" height="22" rx="2.5" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1"/>
-            <text x="9" y="10" font-size="5" font-weight="800" fill="#60a5fa" font-family="serif">K</text>
-            <text x="13" y="19" font-size="9" fill="#60a5fa" font-family="serif" text-anchor="middle">♠</text>
-          </g>
-          <g id="pc2">
-            <rect x="7" y="4" width="16" height="22" rx="2.5" fill="#1e2d4a" stroke="#818cf8" stroke-width="1"/>
-            <text x="9" y="10" font-size="5" font-weight="800" fill="#818cf8" font-family="serif">Q</text>
-            <text x="13" y="19" font-size="9" fill="#c084fc" font-family="serif" text-anchor="middle">♦</text>
-          </g>
-          <g id="pc3">
-            <rect x="7" y="4" width="16" height="22" rx="2.5" fill="#f8fafc" stroke="#e2e8f0" stroke-width="0.5"/>
-            <text x="9" y="10" font-size="5" font-weight="800" fill="#ef4444" font-family="serif">A</text>
-            <text x="13" y="19" font-size="9" fill="#ef4444" font-family="serif" text-anchor="middle">♥</text>
-          </g>
-        </svg>
+
+      <!-- Ícone: lava-lamp de avatares no canvas -->
+      <div id="perfis-lava-wrap">
+        <canvas id="perfis-lava-canvas" width="88" height="88"></canvas>
       </div>
+
       <div>
-        <div style="font-size:15px;font-weight:900;color:#e6edf3;letter-spacing:.2px;">Perfil dos Jogadores</div>
-        <div style="font-size:11px;color:#6b82a0;margin-top:1px;">Toque num jogador para ver suas estatísticas</div>
+        <div style="font-size:15px;font-weight:900;letter-spacing:.2px;background:linear-gradient(90deg,#e6edf3 0%,#fde68a 55%,#e6edf3 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:perfis-gold-shimmer 4s linear infinite;">Perfis dos Jogadores</div>
+        <div style="font-size:11px;color:#8a7040;margin-top:1px;">✨ Toque num jogador para ver suas estatísticas</div>
       </div>
     </div>
-    <span id="perfis-arrow" style="color:#818cf8;font-size:18px;transition:transform .25s;">▼</span>
+    <span id="perfis-arrow" style="color:#d4af37;font-size:18px;transition:transform .25s;">▼</span>
   </div>
   <div id="perfis-body" data-open="false" style="display:none;padding:12px 16px 16px;">
     <div id="perfis-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;"></div>
   </div>
 </div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   PERFIS ICON — Supernova de Avatares
+   Os jogadores são estrelas num sistema solar minúsculo.
+   Um pulsar central explode em ondas de energia douradas.
+   Cada avatar orbita em anel próprio, deixa trilha cometária
+   e pulsa ao ser atingido pela onda de choque.
+   Canvas 88×88 retina → exibido 44×44 via CSS.
+   ═══════════════════════════════════════════════════════════════ */
+(function initPerfisSuperNova(){
+  var CORES=['#3b82f6','#8b5cf6','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316','#06b6d4'];
+  var W=88,H=88,CX=44,CY=44;
+  var imgCache={}, names=[], stars=[], waves=[], trails=[];
+  var raf=null, canvas, ctx;
+  var t=0;
+
+  /* ── Imagens ── */
+  function loadImg(n){
+    if(imgCache[n]!==undefined)return;
+    imgCache[n]=null;
+    var f=window.photoFor?window.photoFor(n):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[n]);
+    if(!f){imgCache[n]='err';return;}
+    var img=new Image();
+    img.onload=function(){imgCache[n]=img;};
+    img.onerror=function(){imgCache[n]='err';};
+    img.src=f;
+  }
+
+  /* ── Monta estrelas (planetas) ── */
+  function makeStars(ns){
+    stars=ns.map(function(name,i){
+      var N=ns.length;
+      /* Distribui em 3 anéis concêntricos */
+      var ring= i<3 ? 0 : i<6 ? 1 : 2;
+      var rBase=[14,21,28][ring];
+      var offset=(i - (ring===0?0:ring===1?3:6));
+      var perRing=[3,3,3][ring]||3;
+      var baseAngle=(Math.PI*2/perRing)*offset + ring*0.52;
+      var spd=[0.022,0.015,0.010][ring] * (i%2===0?1:-1);
+      return {
+        name:name, cor:CORES[i%CORES.length],
+        ring:ring, r:rBase,
+        angle:baseAngle, spd:spd,
+        radius: 7 - ring*1.2,   /* menor conforme afasta */
+        pulse:0,                /* quanto está pulsando */
+        trailBuf:[]             /* últimas posições */
+      };
+    });
+  }
+
+  /* ── Dispara onda de choque ── */
+  function fireWave(){
+    waves.push({ r:4, maxR:46, alpha:0.9, gold: Math.random()>0.4 });
+  }
+
+  /* ── Desenha pulsar central ── */
+  function drawPulsar(){
+    /* Núcleo */
+    var pulse = 0.55 + 0.45*Math.sin(t*0.055);
+    var gcore = ctx.createRadialGradient(CX,CY,0,CX,CY,7*pulse);
+    gcore.addColorStop(0,'rgba(255,255,220,1)');
+    gcore.addColorStop(0.3,'rgba(255,215,0,0.9)');
+    gcore.addColorStop(0.7,'rgba(180,100,0,0.5)');
+    gcore.addColorStop(1,'rgba(180,80,0,0)');
+    ctx.beginPath(); ctx.arc(CX,CY,7*pulse,0,Math.PI*2);
+    ctx.fillStyle=gcore; ctx.fill();
+
+    /* Raios de luz saindo do núcleo */
+    var nRays=8;
+    for(var r=0;r<nRays;r++){
+      var ra= t*0.04 + (Math.PI*2/nRays)*r;
+      var len= 9 + 5*Math.sin(t*0.07+r*1.3);
+      var alpha= 0.15 + 0.12*Math.sin(t*0.05+r);
+      ctx.save();
+      ctx.strokeStyle='rgba(255,215,0,'+alpha+')';
+      ctx.lineWidth=0.8;
+      ctx.shadowColor='rgba(255,215,0,0.5)'; ctx.shadowBlur=3;
+      ctx.beginPath();
+      ctx.moveTo(CX+Math.cos(ra)*5, CY+Math.sin(ra)*5);
+      ctx.lineTo(CX+Math.cos(ra)*(5+len), CY+Math.sin(ra)*(5+len));
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  /* ── Desenha ondas de choque ── */
+  function drawWaves(){
+    waves=waves.filter(function(w){return w.alpha>0.01;});
+    waves.forEach(function(w){
+      w.r += 0.9;
+      w.alpha *= 0.955;
+      /* Verifica se atingiu alguma estrela */
+      stars.forEach(function(s){
+        var sx=CX+Math.cos(s.angle)*s.r;
+        var sy=CY+Math.sin(s.angle)*s.r;
+        var d=Math.sqrt((sx-CX)**2+(sy-CY)**2);
+        if(Math.abs(d-w.r)<2.5 && s.pulse<0.3) s.pulse=1.0;
+      });
+      ctx.save();
+      ctx.globalAlpha=w.alpha;
+      ctx.strokeStyle=w.gold?'rgba(255,215,0,1)':'rgba(120,180,255,1)';
+      ctx.lineWidth=w.gold?1.2:0.8;
+      ctx.shadowColor=w.gold?'rgba(255,215,0,0.7)':'rgba(100,160,255,0.5)';
+      ctx.shadowBlur=5;
+      ctx.beginPath(); ctx.arc(CX,CY,w.r,0,Math.PI*2);
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  /* ── Desenha anéis de órbita ── */
+  function drawOrbits(){
+    [14,21,28].forEach(function(r,i){
+      ctx.save();
+      ctx.strokeStyle='rgba(255,255,255,0.04)';
+      ctx.lineWidth=0.6;
+      ctx.setLineDash([2,4]);
+      ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.restore();
+    });
+  }
+
+  /* ── Desenha trilha cometária de uma estrela ── */
+  function drawTrail(s){
+    var buf=s.trailBuf;
+    if(buf.length<2)return;
+    for(var i=1;i<buf.length;i++){
+      var prog=i/(buf.length-1);
+      var alpha=prog*0.35;
+      ctx.save();
+      ctx.globalAlpha=alpha;
+      ctx.strokeStyle=s.cor;
+      ctx.lineWidth=s.radius*0.55*prog;
+      ctx.shadowColor=s.cor; ctx.shadowBlur=3*prog;
+      ctx.beginPath();
+      ctx.moveTo(buf[i-1].x,buf[i-1].y);
+      ctx.lineTo(buf[i].x,buf[i].y);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  /* ── Desenha avatar de uma estrela ── */
+  function drawStar(s){
+    var sx=CX+Math.cos(s.angle)*s.r;
+    var sy=CY+Math.sin(s.angle)*s.r;
+    var r=s.radius * (1 + s.pulse*0.45);
+    var glow= s.pulse>0.05;
+
+    ctx.save();
+    if(glow){
+      ctx.shadowColor=s.cor;
+      ctx.shadowBlur=6+s.pulse*8;
+    }
+    /* Clip circular */
+    ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.clip();
+    /* Fundo */
+    ctx.fillStyle=s.cor; ctx.fillRect(sx-r,sy-r,r*2,r*2);
+    /* Foto */
+    var img=imgCache[s.name];
+    if(img&&img!=='err'){
+      try{ctx.drawImage(img,sx-r,sy-r,r*2,r*2);}catch(e){}
+    } else {
+      var gr=ctx.createRadialGradient(sx-r*0.3,sy-r*0.3,r*0.1,sx,sy,r);
+      gr.addColorStop(0,'rgba(255,255,255,0.2)');
+      gr.addColorStop(1,'rgba(0,0,0,0.2)');
+      ctx.fillStyle=gr; ctx.fillRect(sx-r,sy-r,r*2,r*2);
+      ctx.fillStyle='#fff';
+      ctx.font='bold '+(r*1.05)+'px system-ui';
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.shadowColor='rgba(0,0,0,0.7)'; ctx.shadowBlur=2;
+      ctx.fillText(s.name?s.name[0].toUpperCase():'?',sx,sy+0.5);
+    }
+    /* Reflexo */
+    var sh=ctx.createRadialGradient(sx-r*0.3,sy-r*0.45,r*0.05,sx-r*0.1,sy-r*0.2,r*0.65);
+    sh.addColorStop(0,'rgba(255,255,255,0.35)');
+    sh.addColorStop(0.5,'rgba(255,255,255,0.06)');
+    sh.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.fillStyle=sh; ctx.fillRect(sx-r,sy-r,r*2,r*2);
+    ctx.restore();
+
+    /* Anel */
+    ctx.save();
+    ctx.strokeStyle=glow
+      ?'rgba(255,255,255,'+(0.5+s.pulse*0.4)+')'
+      :'rgba(255,255,255,0.15)';
+    ctx.lineWidth=glow?1.1:0.6;
+    if(glow){ctx.shadowColor=s.cor;ctx.shadowBlur=5+s.pulse*5;}
+    ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.stroke();
+    ctx.restore();
+
+    /* Atualiza trilha */
+    s.trailBuf.push({x:sx,y:sy});
+    if(s.trailBuf.length>18) s.trailBuf.shift();
+  }
+
+  /* ── Loop ── */
+  function loop(){
+    t++;
+    ctx.clearRect(0,0,W,H);
+
+    /* Fundo estelar */
+    var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,W*0.65);
+    bg.addColorStop(0,'#0a1628'); bg.addColorStop(0.5,'#060d1a'); bg.addColorStop(1,'#020710');
+    ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+
+    /* Estrelas de fundo minúsculas */
+    ctx.fillStyle='rgba(255,255,255,0.55)';
+    [[8,12],[73,7],[18,78],[82,65],[40,4],[5,50],[88,30],[55,82],[30,38]].forEach(function(p,i){
+      var a=0.25+0.22*Math.sin(t*0.02+i*1.7);
+      ctx.globalAlpha=a;
+      ctx.beginPath(); ctx.arc(p[0]*W/100,p[1]*H/100,0.7,0,Math.PI*2); ctx.fill();
+    });
+    ctx.globalAlpha=1;
+
+    /* Onda periódica */
+    if(t%90===0) fireWave();
+    /* Onda dourada mais rara */
+    if(t%210===105) { waves.push({r:4,maxR:46,alpha:0.75,gold:true}); }
+
+    drawOrbits();
+    drawWaves();
+    drawPulsar();
+
+    /* Atualiza e desenha estrelas (trilha antes do avatar) */
+    stars.forEach(function(s){
+      s.angle += s.spd;
+      s.pulse *= 0.92;
+      drawTrail(s);
+    });
+    stars.forEach(function(s){ drawStar(s); });
+
+    raf=requestAnimationFrame(loop);
+  }
+
+  /* ── Inicia ── */
+  function tryStart(){
+    canvas=document.getElementById('perfis-lava-canvas');
+    if(!canvas){setTimeout(tryStart,300);return;}
+    ctx=canvas.getContext('2d');
+    var players=window.players||(window.RAW&&Array.from(new Set(
+      window.RAW.map(function(r){return r.jogador;}).filter(Boolean))));
+    if(!players||!players.length){setTimeout(tryStart,500);return;}
+    names=players.slice(0,9);
+    names.forEach(loadImg);
+    makeStars(names);
+    /* Dispara primeira onda imediatamente */
+    fireWave();
+    if(raf)cancelAnimationFrame(raf);
+    requestAnimationFrame(loop);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){setTimeout(tryStart,900);});
+  } else { setTimeout(tryStart,900); }
+})();
+</script>
 
 <!-- ADV ANALYTICS: Consistência × Potência & Top KO vs Pontos -->
 <!-- MINI RANKS: Semana / Mês / Trimestre -->
