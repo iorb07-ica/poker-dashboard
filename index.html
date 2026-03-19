@@ -3321,30 +3321,122 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
   <div id="atas-body" data-open="false" style="display:none;" class="nf-body">
 
-    <div class="ata-select-wrap">
+    <!-- Seletor de semana + botão editar -->
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
       <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
-      <select id="ata-wk-sel" onchange="ataCarregar()"></select>
+      <select id="ata-wk-sel" onchange="ataCarregar()" style="flex:1;background:#0d1629;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:13px;"></select>
+      <button class="nf-admin-only" onclick="ataAbrirEditor()" style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;font-size:12px;font-weight:700;padding:7px 12px;cursor:pointer;white-space:nowrap;">✏️ Editar</button>
     </div>
 
-    <!-- Leitura pública -->
-    <div id="ata-leitura">
-      <div id="ata-texto-view" class="ata-texto vazio">Nenhuma ata registrada para esta semana.</div>
-      <div id="ata-frase-view" class="ata-frase" style="display:none;"></div>
-    </div>
-
-    <!-- Edição (só admin) -->
-    <div class="nf-admin-only ata-admin-wrap" id="ata-admin-wrap">
-      <div style="font-size:11px;color:#6b82a0;margin-bottom:6px;font-weight:700;">✏️ NARRATIVA DA NOITE</div>
-      <textarea id="ata-texto-input" class="ata-admin-wrap" placeholder="Conte o que aconteceu… mãos épicas, blefes, momentos, quem brilhou…"></textarea>
-      <input id="ata-frase-input" class="ata-frase-input" placeholder="Frase da noite (opcional)" />
-      <div style="margin-top:10px;display:flex;gap:8px;">
-        <button class="nf-btn-save indigo" onclick="ataSalvar()">💾 Salvar Ata</button>
-        <button class="nf-btn-save" style="background:rgba(255,255,255,.07);color:#c8d8f0;" onclick="ataLimpar()">🗑 Limpar</button>
-      </div>
-    </div>
+    <!-- LEITURA PÚBLICA -->
+    <div id="ata-leitura"></div>
 
   </div>
 </div>
+
+<!-- ══ EDITOR DE ATA — MODAL ══ -->
+<div id="ata-editor-modal" style="display:none;position:fixed;inset:0;z-index:9996;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;">
+  <div id="ata-editor-box" style="background:linear-gradient(145deg,#0a1020,#0d1629);border:1px solid rgba(99,102,241,.2);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:94vh;overflow-y:auto;overscroll-behavior:contain;padding-bottom:env(safe-area-inset-bottom);">
+
+    <!-- Header fixo -->
+    <div style="position:sticky;top:0;background:#0a1020;border-bottom:1px solid rgba(255,255,255,.07);padding:14px 16px 10px;z-index:2;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-size:15px;font-weight:900;color:#e6edf3;">✍️ Editando Ata</div>
+        <div id="ata-ed-wk-label" style="font-size:11px;color:#6b82a0;margin-top:1px;"></div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="ataRascunho()" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:7px;color:#fbbf24;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;">💾 Rascunho</button>
+        <button onclick="ataFecharEditor()" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:#fca5a5;width:32px;height:32px;font-size:16px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+      </div>
+    </div>
+
+    <div style="padding:16px;">
+
+      <!-- 🎬 TÍTULO DO EPISÓDIO -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">🎬 Título do Episódio</div>
+        <input id="ata-ep-titulo" placeholder="Ex: A Noite em que o Pedro Sangrou" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#e6edf3;padding:9px 12px;font-size:14px;font-weight:700;margin-bottom:6px;" />
+        <input id="ata-ep-sub" placeholder="Subtítulo dramático (opcional)" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(255,255,255,.08);border-radius:8px;color:#9fb3d4;padding:8px 12px;font-size:12px;" />
+      </div>
+
+      <!-- 🌡️ TERMÔMETRO DO CLIMA -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">🌡️ Clima da Mesa</div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+          <span style="font-size:20px;">🧊</span>
+          <input id="ata-clima-slider" type="range" min="0" max="10" value="5" oninput="ataClimaUpdate()" style="flex:1;height:6px;accent-color:#f59e0b;cursor:pointer;" />
+          <span style="font-size:20px;">🌋</span>
+        </div>
+        <div id="ata-clima-display" style="text-align:center;font-size:13px;font-weight:700;color:#f59e0b;min-height:20px;"></div>
+      </div>
+
+      <!-- 📝 INTRODUÇÃO GERAL -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">📝 Narrativa da Noite</div>
+        <!-- Emoji bar -->
+        <div id="ata-emoji-bar" style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px;padding:8px;background:rgba(255,255,255,.03);border-radius:8px;border:1px solid rgba(255,255,255,.06);"></div>
+        <textarea id="ata-intro" rows="5" placeholder="Conte o que aconteceu… clima, tensão, viradas, momentos épicos…" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.2);border-radius:8px;color:#e6edf3;padding:10px 12px;font-size:13px;resize:vertical;line-height:1.6;" oninput="ataEmojiTarget('ata-intro')"></textarea>
+      </div>
+
+      <!-- 🃏 MÃO DA NOITE -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">🃏 Mão da Noite</div>
+        <input id="ata-mao-titulo" placeholder="Título da mão (ex: O Blefe do Século)" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.25);border-radius:8px;color:#fbbf24;padding:8px 12px;font-size:13px;font-weight:700;margin-bottom:6px;" />
+        <textarea id="ata-mao-desc" rows="3" placeholder="Descreva a mão épica em detalhes…" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(255,255,255,.08);border-radius:8px;color:#e6edf3;padding:9px 12px;font-size:13px;resize:vertical;" oninput="ataEmojiTarget('ata-mao-desc')"></textarea>
+      </div>
+
+      <!-- 🎭 PERSONAGEM DA NOITE -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">🎭 Personagem da Noite</div>
+        <div style="display:flex;gap:8px;margin-bottom:8px;">
+          <select id="ata-pers-jogador" style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:8px;font-size:13px;">
+            <option value="">— Jogador —</option>
+          </select>
+          <select id="ata-pers-arq" onchange="ataArqUpdate()" style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:8px;font-size:13px;">
+            <option value="">— Arquétipo —</option>
+            <option value="👑 O Dominante">👑 O Dominante</option>
+            <option value="🃏 O Blefador">🃏 O Blefador</option>
+            <option value="🧊 O Glacial">🧊 O Glacial</option>
+            <option value="🌋 O Tilted">🌋 O Tilted</option>
+            <option value="🤡 O Palhaço">🤡 O Palhaço</option>
+            <option value="😱 O Azarado">😱 O Azarado</option>
+            <option value="🦁 O Leão">🦁 O Leão</option>
+            <option value="🦊 O Raposo">🦊 O Raposo</option>
+            <option value="💀 O Fantasma">💀 O Fantasma</option>
+            <option value="🚀 O Explosivo">🚀 O Explosivo</option>
+            <option value="🎯 O Certeiro">🎯 O Certeiro</option>
+            <option value="🫠 O Derretido">🫠 O Derretido</option>
+          </select>
+        </div>
+        <div id="ata-pers-preview" style="display:none;padding:10px 14px;border-radius:10px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);font-size:13px;color:#c8d8f0;"></div>
+      </div>
+
+      <!-- 💬 FALAS ICÔNICAS -->
+      <div class="ata-secao">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div class="ata-secao-titulo" style="margin:0;">💬 Falas Icônicas</div>
+          <button onclick="ataAddFala()" style="background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);border-radius:7px;color:#a5b4fc;font-size:12px;font-weight:700;padding:5px 10px;cursor:pointer;">+ Fala</button>
+        </div>
+        <div id="ata-falas-lista" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <!-- 👤 BLOCOS POR JOGADOR -->
+      <div class="ata-secao">
+        <div class="ata-secao-titulo">👤 Destaques por Jogador</div>
+        <div style="font-size:11px;color:#4a6080;margin-bottom:10px;">Toque num jogador para escrever sobre ele</div>
+        <div id="ata-jogadores-chips" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;"></div>
+        <div id="ata-jogadores-blocos" style="display:flex;flex-direction:column;gap:8px;"></div>
+      </div>
+
+      <!-- Salvar -->
+      <button onclick="ataSalvarRich()" style="width:100%;background:linear-gradient(135deg,#312e81,#6366f1);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;padding:13px;cursor:pointer;margin-top:4px;">💾 Salvar Ata</button>
+
+    </div>
+  </div>
+</div>
+
+
+
 
 
 <!-- ══════ CARD 2: REPOSITÓRIO DE MÍDIA ══════ -->
@@ -3645,10 +3737,6 @@ document.addEventListener('DOMContentLoaded', function(){
             <div id="tor-step-4" style="display:none;">
               <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">&#127942; Resultado Final</div>
               <div id="tor-resultado-content" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
-              <div style="margin-bottom:14px;">
-                <div style="font-size:11px;font-weight:700;color:#6b82a0;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Transferências mínimas</div>
-                <div id="tor-trans-lista" style="display:flex;flex-direction:column;gap:4px;"></div>
-              </div>
               <div id="tor-admin-salvar" style="display:none;padding:12px;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);margin-bottom:12px;">
                 <div style="font-size:12px;color:#fbbf24;font-weight:700;margin-bottom:4px;">&#128274; Admin — Salvar no histórico</div>
                 <div style="font-size:11px;color:#6b82a0;margin-bottom:8px;">Salva definitivamente para todos os jogadores verem.</div>
@@ -4535,6 +4623,73 @@ function feedbackEnviar(){
 .nf-admin-only { display:none; }
 body.admin-mode .nf-admin-only { display:block; }
 body.admin-mode .nf-admin-only.flex { display:flex; }
+
+/* ── ATAS RICH EDITOR ── */
+.ata-secao {
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+}
+.ata-secao-titulo {
+  font-size:12px;font-weight:800;color:#a5b4fc;
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;
+}
+.ata-emoji-btn {
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:4px 7px;font-size:16px;cursor:pointer;
+  transition:background .12s;
+}
+.ata-emoji-btn:active { background:rgba(255,255,255,.15); }
+/* Leitura pública */
+.ata-pub-card {
+  background:linear-gradient(145deg,rgba(99,102,241,.07),rgba(6,11,26,.5));
+  border:1px solid rgba(99,102,241,.2);border-radius:14px;padding:18px;
+  margin-bottom:10px;
+}
+.ata-pub-titulo {
+  font-size:20px;font-weight:900;color:#e6edf3;margin-bottom:4px;line-height:1.2;
+}
+.ata-pub-sub {
+  font-size:12px;color:#6366f1;font-style:italic;margin-bottom:14px;
+}
+.ata-pub-clima {
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25);
+  border-radius:999px;padding:4px 12px;font-size:12px;font-weight:700;
+  color:#fbbf24;margin-bottom:14px;
+}
+.ata-pub-intro {
+  font-size:13px;color:#c8d8f0;line-height:1.7;white-space:pre-wrap;margin-bottom:14px;
+}
+.ata-pub-mao {
+  background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(245,158,11,.04));
+  border:1px solid rgba(245,158,11,.25);border-radius:10px;padding:12px 14px;
+  margin-bottom:14px;
+}
+.ata-pub-mao-titulo { font-size:14px;font-weight:800;color:#fbbf24;margin-bottom:6px; }
+.ata-pub-mao-desc { font-size:13px;color:#c8d8f0;line-height:1.6; }
+.ata-pub-pers {
+  display:flex;align-items:center;gap:10px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);
+  border-radius:10px;padding:10px 14px;margin-bottom:14px;
+}
+.ata-pub-falas { margin-bottom:14px; }
+.ata-pub-fala {
+  padding:8px 12px;border-left:3px solid #6366f1;
+  margin-bottom:6px;font-size:13px;color:#e6edf3;
+  background:rgba(99,102,241,.05);border-radius:0 8px 8px 0;
+}
+.ata-pub-fala-autor { font-size:11px;color:#6b82a0;margin-top:2px; }
+.ata-pub-jog {
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:10px;padding:10px 12px;margin-bottom:6px;
+}
+.ata-pub-jog-nome { font-size:12px;font-weight:800;color:#a5b4fc;margin-bottom:4px; }
+.ata-pub-jog-texto { font-size:13px;color:#c8d8f0;line-height:1.6;white-space:pre-wrap; }
+.ata-vazio { font-size:13px;color:#4a6080;font-style:italic;padding:10px 0; }
+
 </style>
 
 
@@ -4831,21 +4986,32 @@ function torRenderStep3(){
   wrap.innerHTML=_torState.despesas.map(function(d){
     var chips=presentes.map(function(pl){
       var sel=d.quem.indexOf(pl.nome)>=0;
-      return '<button data-id="'+d.id+'" data-nome="'+pl.nome+'" onclick="torToggleDesp(this)" style="padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid '+(sel?'rgba(52,211,153,.6)':'rgba(255,255,255,.12)')+';background:'+(sel?'rgba(52,211,153,.18)':'transparent')+';color:'+(sel?'#34d399':'#4a6080')+';">'+pl.nome+'</button>';
+      return '<button data-id="'+d.id+'" data-nome="'+pl.nome+'" onclick="torToggleDesp(this)"'
+        +' style="display:inline-flex;align-items:center;width:auto;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0;'
+        +(sel
+          ? 'border:1.5px solid rgba(52,211,153,.7);background:rgba(52,211,153,.32);color:#d1fae5;'
+          : 'border:1.5px solid rgba(99,130,160,.35);background:transparent;color:#6b82a0;')
+        +'transition:all .15s;">'+pl.nome+'</button>';
     }).join('');
-    var cota=d.quem.length>0&&d.valor>0?'  cota: R$'+(d.valor/d.quem.length).toFixed(2).replace('.',','):'';
-    return '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">'
-      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">'
-        +'<input data-id="'+d.id+'" onchange="torDespDesc(this)" placeholder="Descricao (ex: carne, chopp)" value="'+(d.desc||'')+'" style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:12px;min-width:0;" />'
-        +'<div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">'
+    var cota=d.quem.length>0&&d.valor>0?' · R$'+(d.valor/d.quem.length).toFixed(2).replace('.',',')+'∕p':'';
+    return '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:11px 12px;">'
+      /* Row 1: descrição + R$ valor + ✕ */
+      +'<div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;">'
+        +'<input data-id="'+d.id+'" onchange="torDespDesc(this)" placeholder="Descrição (ex: carne, chopp, limpeza)" value="'+(d.desc||'')+'"'
+        +' style="flex:1;min-width:0;background:#060d1a;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:13px;" />'
+        +'<div style="display:flex;align-items:center;gap:3px;flex-shrink:0;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:0 8px;">'
           +'<span style="font-size:11px;color:#34d399;font-weight:700;">R$</span>'
-          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="torDespVal(this)" placeholder="0,00" value="'+(d.valor||'')+'" style="width:72px;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;color:#34d399;padding:7px;font-size:12px;font-weight:700;text-align:right;" />'
+          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="torDespVal(this)" placeholder="0,00" value="'+(d.valor||'')+'"'
+          +' style="width:66px;background:transparent;border:none;color:#34d399;padding:8px 4px;font-size:13px;font-weight:700;text-align:right;outline:none;" />'
         +'</div>'
-        +'<button data-id="'+d.id+'" onclick="torRemDespesa(parseInt(this.getAttribute(\'data-id\')))" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:12px;padding:5px 9px;cursor:pointer;flex-shrink:0;">&#10005;</button>'
+        +'<button data-id="'+d.id+'" onclick="torRemDespesa(parseInt(this.getAttribute(\'data-id\')))"'
+        +' style="width:30px;height:34px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;">&#10005;</button>'
       +'</div>'
-      +'<div style="font-size:10px;color:#6b82a0;margin-bottom:6px;font-weight:700;text-transform:uppercase;">Quem divide'+cota+'</div>'
-      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
-        +'<button data-id="'+d.id+'" onclick="torDespTodos(parseInt(this.getAttribute(\'data-id\')))" style="padding:4px 10px;border-radius:999px;font-size:11px;cursor:pointer;border:1px solid rgba(99,102,241,.3);background:rgba(99,102,241,.1);color:#818cf8;">Todos</button>'
+      /* Row 2: quem divide — compact chips */
+      +'<div style="font-size:10px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.3px;margin-bottom:6px;">Quem divide'+cota+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center;">'
+        +'<button data-id="'+d.id+'" onclick="torDespTodos(parseInt(this.getAttribute(\'data-id\')))"'
+        +' style="display:inline-flex;align-items:center;width:auto;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;border:1px solid rgba(99,102,241,.4);background:rgba(99,102,241,.12);color:#818cf8;">Todos</button>'
         +chips
       +'</div>'
     +'</div>';
@@ -5000,17 +5166,73 @@ function torSalvarDefinitivo(){
 
 /* Compartilhar */
 function torCompartilharWA(){
-  var txt='[Torneio] '+_torState.nome+' - '+_torState.data+'\n\n';
-  txt+='Pote: R$ '+(_torState._pote||0).toFixed(2).replace('.',',')+'\n\n';
-  txt+='Resultado:\n';
-  if(_torState._saldosCalc){
-    _torState.jogadores.filter(function(p){return p.presente;}).forEach(function(pl){
-      var s=_torState._saldosCalc[pl.nome]||0;
-      var txt2=s>0.005?'+R$'+s.toFixed(2).replace('.',','):s<-0.005?'-R$'+Math.abs(s).toFixed(2).replace('.',','):'em dia';
-      txt+=pl.nome+': '+txt2+'\n';
+  if(!_torState._saldosCalc){ alert('Calcule o resultado primeiro.'); return; }
+
+  var nome    = _torState.nome || 'Torneio';
+  var data    = _torState.data || '';
+  var pote    = (_torState._pote||0);
+  var vlrB    = _torState._vlrB||25;
+  var vlrR    = _torState._vlrR||25;
+  var vlrA    = _torState._vlrA||50;
+  var presentes = _torState.jogadores.filter(function(p){ return p.presente; });
+
+  var linhas = [];
+
+  /* Cabeçalho */
+  linhas.push('🃏 *POKER DO PLAZA — ' + nome.toUpperCase() + '*');
+  if(data) linhas.push('📅 ' + data);
+  linhas.push('💰 Pote total: *R$ ' + pote.toFixed(2).replace('.',',') + '*');
+  linhas.push('');
+
+  /* Despesas */
+  var totalDesp = _torState.despesas.reduce(function(s,d){return s+(d.valor||0);},0);
+  if(_torState.despesas.length && totalDesp > 0){
+    linhas.push('🍖 *DESPESAS DO EVENTO*');
+    _torState.despesas.forEach(function(d){
+      if(!d.valor) return;
+      var desc = d.desc || 'Despesa';
+      var cota = d.quem.length ? (d.valor/d.quem.length).toFixed(2).replace('.',',') : '0,00';
+      linhas.push('  • ' + desc + ': R$' + d.valor.toFixed(2).replace('.',',')
+        + ' ÷ ' + d.quem.length + 'px = R$' + cota + '/pessoa');
     });
+    linhas.push('');
   }
-  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+
+  /* Resultado por jogador */
+  linhas.push('📊 *RESULTADO FINAL*');
+  var pagam = [], recebem = [], quites = [];
+  presentes.forEach(function(pl){
+    var s = _torState._saldosCalc[pl.nome] || 0;
+    var f = _torState.fin[pl.nome] || {buyin:1,rebuys:0,addon:false};
+    var det = [];
+    det.push('buyin R$' + (f.buyin*vlrB).toFixed(0));
+    if(f.rebuys > 0) det.push(f.rebuys + 'x rebuy R$' + (f.rebuys*vlrR).toFixed(0));
+    if(f.addon) det.push('addon R$' + vlrA.toFixed(0));
+    var detStr = '(' + det.join(' + ') + ')';
+    if(s < -0.5){
+      pagam.push('  💸 *' + pl.nome + '*: paga R$' + Math.abs(s).toFixed(2).replace('.',',') + ' ' + detStr);
+    } else if(s > 0.5){
+      recebem.push('  🏆 *' + pl.nome + '*: recebe R$' + s.toFixed(2).replace('.',',') + ' ' + detStr);
+    } else {
+      quites.push('  ✅ *' + pl.nome + '*: quite ' + detStr);
+    }
+  });
+  recebem.forEach(function(l){ linhas.push(l); });
+  quites.forEach(function(l){ linhas.push(l); });
+  pagam.forEach(function(l){ linhas.push(l); });
+  linhas.push('');
+
+  /* Pix para pagar */
+  if(pagam.length){
+    linhas.push('💳 *PIX PARA ACERTO*');
+    linhas.push('Chave: *iorb@hotmail.com* (Israel)');
+    linhas.push('👉 Use "Pix Copia e Cola" no app do banco');
+    linhas.push('');
+  }
+
+  linhas.push('🎰 _Gerado pelo Dashboard Poker do Plaza 2026_');
+
+  window.open('https://wa.me/?text=' + encodeURIComponent(linhas.join('\n')), '_blank');
 }
 
 /* Historico */
@@ -5164,47 +5386,410 @@ function nfPlayers(){
 }
 function nfFmt(v){ return 'R$ '+Math.abs(+v||0).toFixed(2).replace('.',','); }
 
-/* ATAS */
+/* ═══════════════════════════════════
+   ATAS DAS NOITES — RICH EDITOR
+   ═══════════════════════════════════ */
+
+var _ataTarget = 'ata-intro'; /* active textarea for emoji insertion */
+var _ataRascunhoKey = 'ata_rascunho_plaza';
+
+var ATA_EMOJIS = [
+  {g:'🃏 Jogo',    e:['🃏','♠️','♥️','♦️','♣️','🎰','🎲','🃏']},
+  {g:'💥 Drama',  e:['💥','🤯','😱','🔥','❄️','🎭','⚡','🌪️']},
+  {g:'😤 Reações',e:['😤','🤡','😂','🫠','💀','🤌','🙄','😈']},
+  {g:'🏆 Pódio',  e:['🥇','🥈','🥉','👑','💰','💸','🤑','🎯']},
+  {g:'🃏 Mãos',   e:['🗡️','🤚','👊','🙌','🤲','✊','🫳','🫴']}
+];
+
+var ATA_CLIMA_LABELS = [
+  '🧊 Glacial — Ninguém falava, só cartas',
+  '❄️ Fria — Mesa reservada, jogo técnico',
+  '😐 Neutra — Noite tranquila, sem grandes emoções',
+  '😏 Aquecida — Alguns momentos de tensão',
+  '🌤️ Animada — Boa energia, risadas',
+  '😤 Tensa — Discussões, blefes expostos',
+  '🔥 Quente — Drama na mesa, jogadas loucas',
+  '🌶️ Picante — Provocações e emoções à flor da pele',
+  '🌋 Vulcânica — Caos total, todo mundo tiltado',
+  '💥 Explosiva — Noite histórica, todo mundo falando',
+  '🌋🔥 APOCALIPSE — A noite mais louca da história do Plaza'
+];
+
 function ataInit(){
   var sel = document.getElementById('ata-wk-sel');
   if(!sel) return;
   var wks = nfWKs();
-  sel.innerHTML = wks.map(function(w){ return '<option>'+w+'</option>'; }).join('');
-  sel.value = wks[wks.length-1];
+  sel.innerHTML = wks.map(function(w){ return '<option value="'+w+'">'+w+'</option>'; }).join('');
+  /* Sempre seleciona a semana mais recente (última da lista ordenada) */
+  var ultima = wks[wks.length-1] || '';
+  sel.value = ultima;
+  /* Garante que o valor foi aplicado */
+  if(sel.value !== ultima && wks.length){
+    sel.selectedIndex = wks.length - 1;
+  }
   ataCarregar();
 }
+
 function ataCarregar(){
-  var wk = document.getElementById('ata-wk-sel').value;
-  var d  = NF_DATA.atas[wk] || {};
-  var tv = document.getElementById('ata-texto-view');
-  var fv = document.getElementById('ata-frase-view');
-  var ti = document.getElementById('ata-texto-input');
-  var fi = document.getElementById('ata-frase-input');
-  if(d.texto){ tv.textContent=d.texto; tv.classList.remove('vazio'); }
-  else { tv.textContent='Nenhuma ata registrada para esta semana.'; tv.classList.add('vazio'); }
-  if(d.frase){ fv.textContent='"'+d.frase+'"'; fv.style.display=''; }
-  else { fv.style.display='none'; }
-  if(ti) ti.value=d.texto||'';
-  if(fi) fi.value=d.frase||'';
+  var wk  = document.getElementById('ata-wk-sel').value;
+  var d   = (NF_DATA.atas && NF_DATA.atas[wk]) || {};
+  var wrap = document.getElementById('ata-leitura');
+  if(!wrap) return;
+
+  if(!d || (!d.intro && !d.titulo)){
+    wrap.innerHTML = '<div class="ata-vazio">Nenhuma ata registrada para ' + wk + '.</div>';
+    return;
+  }
+  wrap.innerHTML = ataRenderLeitura(d, wk);
 }
-function ataSalvar(){
-  nfRequireAdmin(function(){
-    var wk=(document.getElementById('ata-wk-sel').value);
-    var t=(document.getElementById('ata-texto-input').value||'').trim();
-    var f=(document.getElementById('ata-frase-input').value||'').trim();
-    NF_DATA.atas[wk]={texto:t,frase:f};
-    nfSave(); ataCarregar();
-    alert('Ata da '+wk+' salva!');
+
+function ataRenderLeitura(d, wk){
+  var h = '<div class="ata-pub-card">';
+
+  /* Título */
+  if(d.titulo){
+    h += '<div class="ata-pub-titulo">' + esc(d.titulo) + '</div>';
+    if(d.subtitulo) h += '<div class="ata-pub-sub">' + esc(d.subtitulo) + '</div>';
+  } else {
+    h += '<div class="ata-pub-titulo">' + (wk||'') + '</div>';
+  }
+
+  /* Clima */
+  if(d.clima !== undefined){
+    var climaLabel = ATA_CLIMA_LABELS[Math.min(Math.round(d.clima), ATA_CLIMA_LABELS.length-1)] || '';
+    h += '<div class="ata-pub-clima">' + climaLabel + '</div>';
+  }
+
+  /* Intro */
+  if(d.intro){
+    h += '<div class="ata-pub-intro">' + esc(d.intro) + '</div>';
+  }
+
+  /* Stats automáticas */
+  var stats = ataGerarStats(wk);
+  if(stats.length){
+    h += '<div style="background:rgba(52,211,153,.06);border:1px solid rgba(52,211,153,.15);border-radius:10px;padding:10px 14px;margin-bottom:14px;">';
+    h += '<div style="font-size:10px;font-weight:800;color:#34d399;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">📊 Dados da Noite</div>';
+    stats.forEach(function(s){ h += '<div style="font-size:12px;color:#a7f3d0;margin-bottom:3px;">• ' + s + '</div>'; });
+    h += '</div>';
+  }
+
+  /* Mão da noite */
+  if(d.maoTitulo || d.maoDesc){
+    h += '<div class="ata-pub-mao">';
+    h += '<div style="font-size:10px;font-weight:800;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">🃏 Mão da Noite</div>';
+    if(d.maoTitulo) h += '<div class="ata-pub-mao-titulo">' + esc(d.maoTitulo) + '</div>';
+    if(d.maoDesc)   h += '<div class="ata-pub-mao-desc">'   + esc(d.maoDesc)   + '</div>';
+    h += '</div>';
+  }
+
+  /* Personagem */
+  if(d.persJogador && d.persArq){
+    h += '<div class="ata-pub-pers">';
+    h += '<div style="font-size:28px;">' + (d.persArq.split(' ')[0]||'🎭') + '</div>';
+    h += '<div><div style="font-size:13px;font-weight:800;color:#e6edf3;">' + esc(d.persJogador) + '</div>';
+    h += '<div style="font-size:12px;color:#a5b4fc;">' + esc(d.persArq) + '</div></div>';
+    h += '</div>';
+  }
+
+  /* Falas */
+  if(d.falas && d.falas.length){
+    h += '<div class="ata-pub-falas">';
+    h += '<div style="font-size:10px;font-weight:800;color:#c8d8f0;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">💬 Frases da Noite</div>';
+    d.falas.forEach(function(f){
+      h += '<div class="ata-pub-fala">"' + esc(f.fala) + '"';
+      if(f.autor) h += '<div class="ata-pub-fala-autor">— ' + esc(f.autor) + '</div>';
+      h += '</div>';
+    });
+    h += '</div>';
+  }
+
+  /* Blocos por jogador */
+  if(d.jogadores && Object.keys(d.jogadores).length){
+    h += '<div style="margin-bottom:4px;">';
+    h += '<div style="font-size:10px;font-weight:800;color:#c8d8f0;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">👤 Destaques</div>';
+    Object.keys(d.jogadores).forEach(function(nome){
+      var txt = d.jogadores[nome];
+      if(!txt) return;
+      h += '<div class="ata-pub-jog"><div class="ata-pub-jog-nome">' + esc(nome) + '</div>';
+      h += '<div class="ata-pub-jog-texto">' + esc(txt) + '</div></div>';
+    });
+    h += '</div>';
+  }
+
+  h += '</div>';
+  return h;
+}
+
+function ataGerarStats(wk){
+  var stats = [];
+  try {
+    var ledger = typeof getLedger==='function' ? getLedger() : [];
+    var wkRows = ledger.filter(function(r){ return r.wk === wk; });
+    if(!wkRows.length) return stats;
+    var presentes = wkRows.filter(function(r){ return !r.faltou || r.faltou=='0'; });
+    if(presentes.length) stats.push(presentes.length + ' jogadores na mesa');
+    var vencedor = wkRows.find(function(r){ return r.posicao=='1' || r.pos=='1'; });
+    if(vencedor) stats.push('🥇 ' + vencedor.jogador + ' venceu a noite');
+    var maxKO = wkRows.reduce(function(m,r){ return (parseInt(r.kos)||0) > (parseInt(m.kos)||0) ? r : m; }, wkRows[0]);
+    if(maxKO && parseInt(maxKO.kos)>0) stats.push('💀 ' + maxKO.jogador + ' com ' + maxKO.kos + ' KO(s)');
+    var totalRebuys = wkRows.reduce(function(s,r){ return s+(parseInt(r.rebuys)||0); },0);
+    if(totalRebuys>0) stats.push('🔄 ' + totalRebuys + ' rebuy(s) na noite');
+  } catch(e){}
+  return stats;
+}
+
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+/* ── EDITOR ── */
+function ataAbrirEditor(){
+  var wk  = document.getElementById('ata-wk-sel').value;
+  var d   = (NF_DATA.atas && NF_DATA.atas[wk]) || {};
+
+  /* Check rascunho */
+  var rasc = null;
+  try { rasc = JSON.parse(localStorage.getItem(_ataRascunhoKey+wk)||'null'); } catch(e){}
+  if(rasc && confirm('Existe um rascunho de ' + wk + '. Continuar?')){ d = rasc; }
+
+  /* Open modal */
+  var modal = document.getElementById('ata-editor-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  if(isIOS){ document.body.style.position='fixed'; document.body.style.width='100%'; }
+
+  document.getElementById('ata-ed-wk-label').textContent = wk;
+
+  /* Fill fields */
+  _set('ata-ep-titulo',  d.titulo||'');
+  _set('ata-ep-sub',     d.subtitulo||'');
+  _set('ata-intro',      d.intro||'');
+  _set('ata-mao-titulo', d.maoTitulo||'');
+  _set('ata-mao-desc',   d.maoDesc||'');
+
+  /* Clima */
+  var sl = document.getElementById('ata-clima-slider');
+  if(sl){ sl.value = d.clima !== undefined ? d.clima : 5; ataClimaUpdate(); }
+
+  /* Personagem */
+  var pj = document.getElementById('ata-pers-jogador');
+  var pa = document.getElementById('ata-pers-arq');
+  if(pj){
+    var players = nfPlayers();
+    pj.innerHTML = '<option value="">— Jogador —</option>' + players.map(function(n){ return '<option'+(n===d.persJogador?' selected':'')+'>'+n+'</option>'; }).join('');
+  }
+  if(pa && d.persArq){
+    pa.value = d.persArq;
+    ataArqUpdate();
+  }
+
+  /* Falas */
+  var fl = document.getElementById('ata-falas-lista');
+  if(fl){
+    fl.innerHTML = '';
+    if(d.falas && d.falas.length){
+      d.falas.forEach(function(f){ ataAddFala(f.fala, f.autor); });
+    }
+  }
+
+  /* Jogadores chips + blocos */
+  ataRenderJogadoresEditor(d.jogadores || {});
+
+  /* Build emoji bar */
+  ataRenderEmojiBar();
+}
+
+function ataFecharEditor(){
+  document.getElementById('ata-editor-modal').style.display='none';
+  document.body.style.overflow='';
+  document.body.style.position='';
+  document.body.style.width='';
+}
+
+function _set(id, val){
+  var el = document.getElementById(id);
+  if(el) el.value = val;
+}
+
+function ataClimaUpdate(){
+  var v = parseInt(document.getElementById('ata-clima-slider').value)||5;
+  var label = ATA_CLIMA_LABELS[Math.min(v, ATA_CLIMA_LABELS.length-1)];
+  var d = document.getElementById('ata-clima-display');
+  if(d) d.textContent = label;
+  /* color the slider track */
+  var pct = v / 10 * 100;
+  var col = v<=2?'#60a5fa': v<=4?'#34d399': v<=6?'#fbbf24': v<=8?'#f97316':'#ef4444';
+  if(d) d.style.color = col;
+}
+
+function ataArqUpdate(){
+  var arq = document.getElementById('ata-pers-arq').value;
+  var jog = document.getElementById('ata-pers-jogador').value;
+  var prev = document.getElementById('ata-pers-preview');
+  if(!prev) return;
+  if(arq && jog){
+    prev.style.display='';
+    prev.innerHTML = '<strong style="color:#e6edf3;">'+esc(jog)+'</strong> foi <strong style="color:#a5b4fc;">'+esc(arq)+'</strong> esta noite.';
+  } else {
+    prev.style.display='none';
+  }
+}
+
+function ataAddFala(falaVal, autorVal){
+  var wrap = document.getElementById('ata-falas-lista');
+  if(!wrap) return;
+  var id = Date.now() + Math.random();
+  var div = document.createElement('div');
+  div.style.cssText = 'background:rgba(99,102,241,.07);border:1px solid rgba(99,102,241,.15);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;';
+  div.innerHTML =
+    '<div style="display:flex;gap:6px;align-items:center;">'
+      +'<span style="font-size:16px;">💬</span>'
+      +'<input placeholder="A frase icônica…" value="'+(falaVal?esc(falaVal):'')+'" style="flex:1;background:#060d1a;border:1px solid rgba(99,102,241,.25);border-radius:7px;color:#e6edf3;padding:7px 10px;font-size:13px;min-width:0;" oninput="ataEmojiTarget(this.id)" />'
+      +'<button onclick="this.closest(\'div[style]\').remove()" style="width:28px;height:28px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;cursor:pointer;flex-shrink:0;font-size:13px;">✕</button>'
+    +'</div>'
+    +'<input placeholder="— Quem disse?" value="'+(autorVal?esc(autorVal):'')+'" style="background:#060d1a;border:1px solid rgba(255,255,255,.08);border-radius:7px;color:#9fb3d4;padding:6px 10px;font-size:12px;" />';
+  wrap.appendChild(div);
+}
+
+function ataRenderJogadoresEditor(jogData){
+  var chips = document.getElementById('ata-jogadores-chips');
+  var blocos = document.getElementById('ata-jogadores-blocos');
+  if(!chips || !blocos) return;
+  var players = nfPlayers();
+  chips.innerHTML = players.map(function(n){
+    var ativo = jogData[n] ? true : false;
+    return '<button data-jog="'+n+'" onclick="ataToggleJogBloco(this)" style="display:inline-flex;align-items:center;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;'
+      +(ativo?'background:rgba(99,102,241,.25);border:1.5px solid rgba(99,102,241,.6);color:#c7d2fe;':'background:transparent;border:1.5px solid rgba(99,130,160,.3);color:#6b82a0;')
+      +'">'+n+'</button>';
+  }).join('');
+
+  blocos.innerHTML = '';
+  players.forEach(function(n){
+    if(jogData[n]) ataAddJogBloco(n, jogData[n]);
   });
 }
+
+function ataToggleJogBloco(btn){
+  var nome = btn.getAttribute('data-jog');
+  var blocos = document.getElementById('ata-jogadores-blocos');
+  var existing = blocos.querySelector('[data-jog-bloco="'+nome+'"]');
+  if(existing){
+    existing.remove();
+    btn.style.background='transparent';
+    btn.style.border='1.5px solid rgba(99,130,160,.3)';
+    btn.style.color='#6b82a0';
+  } else {
+    ataAddJogBloco(nome, '');
+    btn.style.background='rgba(99,102,241,.25)';
+    btn.style.border='1.5px solid rgba(99,102,241,.6)';
+    btn.style.color='#c7d2fe';
+  }
+}
+
+function ataAddJogBloco(nome, val){
+  var blocos = document.getElementById('ata-jogadores-blocos');
+  if(!blocos) return;
+  var div = document.createElement('div');
+  div.setAttribute('data-jog-bloco', nome);
+  div.style.cssText = 'background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 12px;';
+  div.innerHTML =
+    '<div style="font-size:11px;font-weight:800;color:#a5b4fc;margin-bottom:6px;">👤 '+esc(nome)+'</div>'
+   +'<textarea placeholder="Escreva sobre '+esc(nome)+' nessa noite…" rows="2" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.15);border-radius:7px;color:#e6edf3;padding:8px 10px;font-size:12px;resize:vertical;line-height:1.6;" oninput="ataEmojiTarget(this)">'+esc(val)+'</textarea>';
+  blocos.appendChild(div);
+}
+
+/* Emoji bar */
+function ataRenderEmojiBar(){
+  var bar = document.getElementById('ata-emoji-bar');
+  if(!bar) return;
+  var h = '';
+  ATA_EMOJIS.forEach(function(grp){
+    h += '<span style="font-size:10px;color:#4a6080;font-weight:700;align-self:center;margin-right:2px;">'+grp.g.split(' ')[0]+'</span>';
+    grp.e.forEach(function(e){
+      h += '<button class="ata-emoji-btn" onclick="ataInsertEmoji(\''+e+'\')">'+e+'</button>';
+    });
+    h += '<span style="width:1px;height:20px;background:rgba(255,255,255,.08);margin:0 4px;display:inline-block;"></span>';
+  });
+  bar.innerHTML = h;
+}
+
+function ataEmojiTarget(el){
+  if(typeof el === 'string') _ataTarget = el;
+  else if(el && el.id) _ataTarget = el.id;
+}
+
+function ataInsertEmoji(emoji){
+  var el = document.getElementById(_ataTarget) || document.querySelector('#ata-editor-box textarea');
+  if(!el) return;
+  var s = el.selectionStart || 0;
+  var e = el.selectionEnd || 0;
+  el.value = el.value.slice(0,s) + emoji + el.value.slice(e);
+  el.selectionStart = el.selectionEnd = s + emoji.length;
+  el.focus();
+}
+
+/* Rascunho */
+function ataRascunho(){
+  var wk = document.getElementById('ata-wk-sel').value;
+  try { localStorage.setItem(_ataRascunhoKey+wk, JSON.stringify(ataColetarDados())); } catch(e){}
+  alert('Rascunho salvo!');
+}
+
+function ataColetarDados(){
+  /* Falas */
+  var falas = [];
+  document.querySelectorAll('#ata-falas-lista > div').forEach(function(d){
+    var inputs = d.querySelectorAll('input');
+    var fala = inputs[0] ? (inputs[0].value||'').trim() : '';
+    var autor = inputs[1] ? (inputs[1].value||'').trim() : '';
+    if(fala) falas.push({fala:fala, autor:autor});
+  });
+  /* Blocos jogadores */
+  var jogadores = {};
+  document.querySelectorAll('[data-jog-bloco]').forEach(function(d){
+    var nome = d.getAttribute('data-jog-bloco');
+    var ta = d.querySelector('textarea');
+    if(ta && ta.value.trim()) jogadores[nome] = ta.value.trim();
+  });
+  return {
+    titulo:      (document.getElementById('ata-ep-titulo').value||'').trim(),
+    subtitulo:   (document.getElementById('ata-ep-sub').value||'').trim(),
+    clima:       parseInt(document.getElementById('ata-clima-slider').value)||5,
+    intro:       (document.getElementById('ata-intro').value||'').trim(),
+    maoTitulo:   (document.getElementById('ata-mao-titulo').value||'').trim(),
+    maoDesc:     (document.getElementById('ata-mao-desc').value||'').trim(),
+    persJogador: (document.getElementById('ata-pers-jogador').value||'').trim(),
+    persArq:     (document.getElementById('ata-pers-arq').value||'').trim(),
+    falas:       falas,
+    jogadores:   jogadores
+  };
+}
+
+function ataSalvarRich(){
+  nfRequireAdmin(function(){
+    var wk = document.getElementById('ata-wk-sel').value;
+    var data = ataColetarDados();
+    if(!NF_DATA.atas) NF_DATA.atas = {};
+    NF_DATA.atas[wk] = data;
+    nfSave();
+    try { localStorage.removeItem(_ataRascunhoKey+wk); } catch(e){}
+    ataCarregar();
+    ataFecharEditor();
+    alert('✅ Ata de ' + wk + ' salva!');
+  });
+}
+
+/* Keep old ataSalvar/ataLimpar for compatibility */
+function ataSalvar(){ ataSalvarRich(); }
 function ataLimpar(){
   nfRequireAdmin(function(){
-    var wk=document.getElementById('ata-wk-sel').value;
+    var wk = document.getElementById('ata-wk-sel').value;
     if(!confirm('Apagar ata da '+wk+'?')) return;
     delete NF_DATA.atas[wk];
     nfSave(); ataCarregar();
   });
 }
+
 
 /* MIDIA */
 function midiaInit(){
@@ -5270,6 +5855,20 @@ function midiaAbrirLB(url){
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(init,1200); });
   } else { setTimeout(init,1200); }
+
+  /* Re-init atas quando RAW estiver disponível (dados do campeonato carregados) */
+  var _ataReinitDone = false;
+  function waitForRAW(){
+    if(_ataReinitDone) return;
+    if(window.RAW && window.RAW.length > 0){
+      _ataReinitDone = true;
+      ataInit();   /* recarrega seletor com WKs reais */
+      midiaInit();
+    } else {
+      setTimeout(waitForRAW, 500);
+    }
+  }
+  setTimeout(waitForRAW, 800);
 })();
 </script>
 
