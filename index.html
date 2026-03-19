@@ -2705,6 +2705,10 @@ document.addEventListener('DOMContentLoaded', function(){
     /* Clip circular */
     ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.clip();
 
+    /* Zera shadow DENTRO do clip — a foto não pode receber shadow de fora */
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur  = 0;
+
     /* Fundo cor */
     ctx.fillStyle=s.cor; ctx.fillRect(sx-r,sy-r,r*2,r*2);
 
@@ -2837,21 +2841,61 @@ document.addEventListener('DOMContentLoaded', function(){
     tickSpot();
     updateStars();
 
-    /* Desenha não-spotlight primeiro, spotlight por cima */
     var spot = stars[spotIdx];
-    var spotR = 7 * spot.scale;  /* raio atual do spotlight */
+    var spotR = 7 * spot.scale;
+
+    /* ── Desenha estrelas de fundo ── */
     stars.forEach(function(s){
       if(s===spot) return;
-      /* Não desenha estrelas que fisicamente se sobreponham ao spotlight */
+      /* Não desenha se sobrepõe o spotlight */
       var dx = s.drawX - spot.drawX;
       var dy = s.drawY - spot.drawY;
-      var dist = Math.sqrt(dx*dx + dy*dy);
-      if(dist < spotR + 7 * s.scale) return;  /* dentro da área do spotlight */
+      if(Math.sqrt(dx*dx + dy*dy) < spotR + 7*s.scale) return;
+      /* Garante shadow zerado antes de cada estrela de fundo */
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur  = 0;
       drawStar(s);
     });
-    /* Pulsar só aparece quando spotlight não está no centro */
-    if(spot.scale < 1.5) drawPulsar();
-    drawStar(spot);  /* spotlight sempre no topo, limpo */
+
+    /* Pulsar só quando spotlight pequeno */
+    if(spot.scale < 1.5){
+      ctx.shadowColor = 'transparent'; ctx.shadowBlur = 0;
+      drawPulsar();
+    }
+
+    /* ── Spotlight num canvas offscreen isolado ── */
+    /* Garante reset TOTAL do contexto antes de desenhar o spotlight */
+    ctx.save();
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur  = 0;
+    ctx.globalAlpha = 1;
+    ctx.restore();
+
+    /* Cria (ou reutiliza) canvas offscreen */
+    if(!loop._oc || loop._oc.width !== W){
+      loop._oc = document.createElement('canvas');
+      loop._oc.width = W; loop._oc.height = H;
+    }
+    var oc = loop._oc;
+    var ox = oc.getContext('2d');
+    ox.clearRect(0,0,W,H);
+    /* Contexto limpo: zero shadow, zero alpha herdado */
+    ox.shadowColor = 'transparent';
+    ox.shadowBlur  = 0;
+    ox.globalAlpha = 1;
+
+    /* Desenha o spotlight no contexto limpo */
+    var _ctx = ctx;
+    ctx = ox;
+    drawStar(spot);
+    ctx = _ctx;
+
+    /* Compõe o offscreen sobre o canvas principal */
+    ctx.save();
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur  = 0;
+    ctx.drawImage(oc, 0, 0);
+    ctx.restore();
 
     raf=requestAnimationFrame(loop);
   }
