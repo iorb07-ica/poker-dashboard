@@ -4,7 +4,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; font-src 'self';"/>
-<meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/>
+<meta content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" name="viewport"/>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
 <meta http-equiv="Expires" content="0"/>
@@ -1308,7 +1308,34 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 .mini-header select{ display:inline-block !important; visibility:visible !important; opacity:1 !important; }
 .card.mini-card .mini-header{ position:relative; z-index:5; }
 /* Avoid any global overflow creating horizontal scrollbar */
-body { overflow-x: hidden; overflow-y: auto; }
+body { overflow-x: hidden; overflow-y: auto; scroll-padding-bottom: 70px; }
+
+/* Android / Samsung fix — prevent touch freeze */
+* {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+}
+button, [onclick], a, select, input, textarea {
+  touch-action: manipulation;
+  cursor: pointer;
+}
+/* Prevent grey overlay on tap (Android WebView / Samsung Internet) */
+button:focus, [onclick]:focus { outline: none; }
+/* Hardware acceleration for fixed elements — prevents Android repaint freeze */
+#plaza-tabbar, .perfil-modal, #tor-wizard-modal, #feedback-modal {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+
+/* Cross-platform scroll lock — works on iOS and Android */
+body.scroll-locked {
+  overflow: hidden !important;
+  /* iOS needs position:fixed — Android doesn't need it and it breaks things */
+  /* We use a JS check to apply position:fixed only on iOS */
+}
+
 .grid-charts { overflow: visible; }
 
 
@@ -3277,6 +3304,94 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
+
+
+<!-- ATAS DAS NOITES -->
+<!-- ══════ CARD 1: ATAS SEMANAIS ══════ -->
+<div class="nf-card card" id="card-atas" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('atas-body','atas-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">📝</div>
+      <div>
+        <div class="nf-title">Atas das Noites</div>
+        <div class="nf-sub">Crônicas, mãos épicas e destaques de cada rodada</div>
+      </div>
+    </div>
+    <span id="atas-arrow" class="nf-arrow" style="color:#6366f1;">▼</span>
+  </div>
+  <div id="atas-body" data-open="false" style="display:none;" class="nf-body">
+
+    <div class="ata-select-wrap">
+      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
+      <select id="ata-wk-sel" onchange="ataCarregar()"></select>
+    </div>
+
+    <!-- Leitura pública -->
+    <div id="ata-leitura">
+      <div id="ata-texto-view" class="ata-texto vazio">Nenhuma ata registrada para esta semana.</div>
+      <div id="ata-frase-view" class="ata-frase" style="display:none;"></div>
+    </div>
+
+    <!-- Edição (só admin) -->
+    <div class="nf-admin-only ata-admin-wrap" id="ata-admin-wrap">
+      <div style="font-size:11px;color:#6b82a0;margin-bottom:6px;font-weight:700;">✏️ NARRATIVA DA NOITE</div>
+      <textarea id="ata-texto-input" class="ata-admin-wrap" placeholder="Conte o que aconteceu… mãos épicas, blefes, momentos, quem brilhou…"></textarea>
+      <input id="ata-frase-input" class="ata-frase-input" placeholder="Frase da noite (opcional)" />
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="nf-btn-save indigo" onclick="ataSalvar()">💾 Salvar Ata</button>
+        <button class="nf-btn-save" style="background:rgba(255,255,255,.07);color:#c8d8f0;" onclick="ataLimpar()">🗑 Limpar</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════ CARD 2: REPOSITÓRIO DE MÍDIA ══════ -->
+<div class="nf-card card" id="card-midia" style="padding:0;">
+  <div class="nf-hdr" onclick="window.toggleCard('midia-body','midia-arrow')">
+    <div class="nf-hdr-left">
+      <div class="nf-icon">📸</div>
+      <div>
+        <div class="nf-title">Mem&#243;rias do Plaza</div>
+        <div class="nf-sub">Fotos e vídeos das mãos épicas e momentos do grupo</div>
+      </div>
+    </div>
+    <span id="midia-arrow" class="nf-arrow" style="color:#ec4899;">▼</span>
+  </div>
+  <div id="midia-body" data-open="false" style="display:none;" class="nf-body">
+
+    <div class="midia-wk-wrap">
+      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
+      <select id="midia-wk-sel" onchange="midiaCarregar()"></select>
+    </div>
+
+    <!-- Galeria pública -->
+    <div id="midia-galeria" class="midia-grid">
+      <div class="midia-empty">Nenhuma mídia registrada para esta semana.</div>
+    </div>
+
+    <!-- Lightbox simples -->
+    <div id="midia-lightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;">
+      <img id="midia-lb-img" src="" style="max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;" />
+    </div>
+
+    <!-- Administração -->
+    <div class="nf-admin-only" id="midia-admin-wrap" style="margin-top:14px;">
+      <div style="font-size:11px;color:#6b82a0;margin-bottom:8px;font-weight:700;">📎 ADICIONAR LINKS DE MÍDIA</div>
+      <div style="font-size:11px;color:#4a6080;margin-bottom:8px;">Cole URLs de imagens (GitHub raw, Imgur, etc). Uma por linha.</div>
+      <div id="midia-url-list" class="midia-url-list"></div>
+      <button onclick="midiaAddLinha()" style="margin-top:8px;background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.25);border-radius:8px;color:#f472b6;padding:6px 14px;font-size:12px;cursor:pointer;">+ Adicionar URL</button>
+      <div style="margin-top:10px;display:flex;gap:8px;">
+        <button class="nf-btn-save pink" onclick="midiaSalvar()">💾 Salvar Mídia</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
 <div id="card-torneios" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
 
@@ -3288,14 +3403,21 @@ document.addEventListener('DOMContentLoaded', function(){
         <div style="font-size:11px;color:#9fb3d4;text-transform:uppercase;letter-spacing:.7px;margin-top:2px;">Poker do Plaza · Ranking de Títulos</div>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <button onclick="event.stopPropagation();window.abrirEdicaoAdmin('torneios')" title="Editar Torneios Especiais" style="background:rgba(245,158,11,0.12);border:1px solid rgba(245,158,11,0.3);border-radius:8px;width:30px;height:30px;color:#fbbf24;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✏️</button>
-        <span id="torneios-arrow" style="font-size:20px;color:#9fb3d4;transition:transform .3s;">▾</span>
+
+        <span id="torneios-arrow" style="font-size:20px;color:#9fb3d4;transition:transform .3s;transform:rotate(180deg);">&#9662;</span>
       </div>
     </div>
 
     <!-- Corpo colapsável -->
-    <div id="torneios-body" data-open="false" style="padding:0 18px 18px;display:none;">
+    <div id="torneios-body" data-open="true" style="padding:0 18px 18px;display:block;">
 
+      <!-- Títulos históricos colapsável -->
+      <div style="margin-bottom:8px;">
+        <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:8px;">
+          <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;">&#129351; Ranking de Títulos</div>
+          <span style="font-size:14px;color:#4a6080;">&#9660;</span>
+        </div>
+        <div style="display:none;">
       <!-- Jogadores -->
       <div>
 
@@ -3381,6 +3503,171 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
 
       </div>
+
+        </div>
+      </div>
+      <!-- ══ WIZARD: REGISTRO DE TORNEIO ESPECIAL ══ -->
+      <div style="margin-top:20px;border-top:1px solid rgba(255,255,255,.08);padding-top:16px;">
+
+        <!-- Histórico de torneios -->
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="font-size:12px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;">&#127942; Torneios Registrados</div>
+          <button onclick="torAdminNovo()" style="background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(245,158,11,.1));border:1px solid rgba(245,158,11,.4);border-radius:8px;color:#fbbf24;font-size:12px;font-weight:700;padding:6px 14px;cursor:pointer;">+ Novo Torneio</button>
+        </div>
+        <div id="tor-historico" style="display:flex;flex-direction:column;gap:8px;margin-bottom:4px;"></div>
+
+        </div>
+      </div>
+
+      <!-- ══ WIZARD MODAL ══ -->
+      <div id="tor-wizard-modal" style="display:none;position:fixed;inset:0;z-index:9995;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;">
+        <div id="tor-wizard-box" style="background:linear-gradient(145deg,#0a1020,#0d1629);border:1px solid rgba(245,158,11,.2);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;overscroll-behavior:contain;padding:0 0 env(safe-area-inset-bottom);">
+
+          <!-- Header -->
+          <div style="position:sticky;top:0;background:#0a1020;border-bottom:1px solid rgba(255,255,255,.07);padding:14px 18px 10px;z-index:2;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div id="tor-wiz-titulo" style="font-size:16px;font-weight:900;color:#e6edf3;">Novo Torneio</div>
+              <div style="display:flex;gap:8px;align-items:center;">
+                <button onclick="torWizRascunho()" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);border-radius:7px;color:#fbbf24;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;">&#128190; Rascunho</button>
+                <button onclick="torWizFechar()" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:8px;color:#fca5a5;font-size:16px;font-weight:800;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#10005;</button>
+              </div>
+            </div>
+            <!-- Progress bar -->
+            <div style="display:flex;gap:4px;">
+              <div class="tor-step-dot" data-step="1" style="flex:1;height:4px;border-radius:2px;background:rgba(245,158,11,.8);"></div>
+              <div class="tor-step-dot" data-step="2" style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.15);"></div>
+              <div class="tor-step-dot" data-step="3" style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.15);"></div>
+              <div class="tor-step-dot" data-step="4" style="flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.15);"></div>
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;">
+              <span style="font-size:9px;color:#4a6080;">Jogadores</span>
+              <span style="font-size:9px;color:#4a6080;">Financeiro</span>
+              <span style="font-size:9px;color:#4a6080;">Despesas</span>
+              <span style="font-size:9px;color:#4a6080;">Resultado</span>
+            </div>
+          </div>
+
+          <!-- Steps container -->
+          <div style="padding:16px 18px 20px;">
+
+            <!-- STEP 1: Jogadores -->
+            <div id="tor-step-1">
+              <div style="font-size:13px;font-weight:700;color:#f59e0b;margin-bottom:4px;">&#127919; Informações do Torneio</div>
+              <input id="tor-nome" placeholder="Nome do torneio (ex: Churrasco de Verão)" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.25);border-radius:8px;color:#e6edf3;padding:9px 12px;font-size:13px;margin-bottom:8px;" />
+              <input id="tor-data" placeholder="Data (ex: Mar 2026)" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.25);border-radius:8px;color:#e6edf3;padding:9px 12px;font-size:13px;margin-bottom:16px;" />
+
+              <div style="font-size:13px;font-weight:700;color:#f59e0b;margin-bottom:10px;">&#128101; Quem vai jogar?</div>
+              <div id="tor-jogadores-list" style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px;"></div>
+
+              <!-- Adicionar convidado -->
+              <div style="display:flex;gap:8px;margin-bottom:4px;">
+                <input id="tor-conv-input" placeholder="Nome do convidado" style="flex:1;background:#060d1a;border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#e6edf3;padding:8px 12px;font-size:13px;" />
+                <button onclick="torAddConvidado()" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.35);border-radius:8px;color:#a78bfa;font-size:13px;font-weight:700;padding:8px 14px;cursor:pointer;white-space:nowrap;">+ Add</button>
+              </div>
+              <div id="tor-convidados-list" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;"></div>
+            </div>
+
+            <!-- STEP 2: Financeiro -->
+            <div id="tor-step-2" style="display:none;">
+              <div style="font-size:13px;font-weight:700;color:#a5b4fc;margin-bottom:12px;">&#128176; Valores do Torneio</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+                <div>
+                  <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">BUYIN (R$)</div>
+                  <input id="tor-vlr-buyin" type="number" value="25" min="0" step="0.01" oninput="torRecalcFinanceiro()" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.3);border-radius:8px;color:#fbbf24;padding:9px 8px;font-size:14px;font-weight:700;text-align:center;" />
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">REBUY (R$)</div>
+                  <input id="tor-vlr-rebuy" type="number" value="25" min="0" step="0.01" oninput="torRecalcFinanceiro()" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;padding:9px 8px;font-size:14px;font-weight:700;text-align:center;" />
+                </div>
+                <div>
+                  <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">ADDON (R$)</div>
+                  <input id="tor-vlr-addon" type="number" value="50" min="0" step="0.01" oninput="torRecalcFinanceiro()" style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(16,185,129,.3);border-radius:8px;color:#34d399;padding:9px 8px;font-size:14px;font-weight:700;text-align:center;" />
+                </div>
+              </div>
+
+              <!-- Tabela jogadores -->
+              <div style="font-size:11px;color:#4a6080;margin-bottom:6px;font-weight:700;text-transform:uppercase;">Registrar por jogador</div>
+              <div style="display:grid;grid-template-columns:1fr 80px 50px 64px;gap:6px;padding:4px 8px;margin-bottom:4px;">
+                <span style="font-size:10px;color:#4a6080;font-weight:700;">JOGADOR</span>
+                <span style="font-size:10px;color:#a5b4fc;font-weight:700;text-align:center;">REBUYS</span>
+                <span style="font-size:10px;color:#34d399;font-weight:700;text-align:center;">ADD</span>
+                <span style="font-size:10px;color:#6b82a0;font-weight:700;text-align:right;">TOTAL</span>
+              </div>
+              <div id="tor-fin-rows" style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px;"></div>
+
+              <div style="padding:10px 12px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <span style="font-size:12px;color:#c8d8f0;">&#127974; Pote acumulado</span>
+                <span id="tor-pote-display" style="font-size:17px;font-weight:900;color:#fbbf24;">R$ 0,00</span>
+              </div>
+
+              <!-- Prêmios -->
+              <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:12px 14px;">
+                <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#127942; Distribuição do Pote (%)</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:18px;width:22px;text-align:center;">&#129351;</span>
+                    <span style="font-size:12px;color:#fde68a;width:60px;">1&#186; lugar</span>
+                    <input id="tor-pct-1" type="number" min="0" max="100" value="50" oninput="torAtualizarPremios()" style="width:60px;background:#060d1a;border:1px solid rgba(253,230,138,.3);border-radius:8px;color:#fde68a;padding:7px;font-size:13px;text-align:center;" />
+                    <span style="font-size:11px;color:#6b82a0;">%</span>
+                    <span id="tor-val-p1" style="flex:1;text-align:right;font-size:13px;font-weight:700;color:#fde68a;">R$ 0,00</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:18px;width:22px;text-align:center;">&#129352;</span>
+                    <span style="font-size:12px;color:#c8d8f0;width:60px;">2&#186; lugar</span>
+                    <input id="tor-pct-2" type="number" min="0" max="100" value="30" oninput="torAtualizarPremios()" style="width:60px;background:#060d1a;border:1px solid rgba(200,216,240,.2);border-radius:8px;color:#c8d8f0;padding:7px;font-size:13px;text-align:center;" />
+                    <span style="font-size:11px;color:#6b82a0;">%</span>
+                    <span id="tor-val-p2" style="flex:1;text-align:right;font-size:13px;font-weight:700;color:#c8d8f0;">R$ 0,00</span>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:18px;width:22px;text-align:center;">&#129353;</span>
+                    <span style="font-size:12px;color:#fdba74;width:60px;">3&#186; lugar</span>
+                    <input id="tor-pct-3" type="number" min="0" max="100" value="20" oninput="torAtualizarPremios()" style="width:60px;background:#060d1a;border:1px solid rgba(253,186,116,.2);border-radius:8px;color:#fdba74;padding:7px;font-size:13px;text-align:center;" />
+                    <span style="font-size:11px;color:#6b82a0;">%</span>
+                    <span id="tor-val-p3" style="flex:1;text-align:right;font-size:13px;font-weight:700;color:#fdba74;">R$ 0,00</span>
+                  </div>
+                  <div id="tor-pct-aviso" style="display:none;font-size:11px;color:#f87171;">&#9888; Soma <span id="tor-pct-soma">0</span>% — ajuste para 100%</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- STEP 3: Despesas -->
+            <div id="tor-step-3" style="display:none;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <div style="font-size:13px;font-weight:700;color:#34d399;">&#128184; Despesas Extras</div>
+                <button onclick="torAddDespesa()" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);border-radius:7px;color:#34d399;font-size:12px;font-weight:700;padding:5px 12px;cursor:pointer;">+ Despesa</button>
+              </div>
+              <div style="font-size:11px;color:#4a6080;margin-bottom:10px;">Cada despesa pode ser rateada só entre quem consumiu.</div>
+              <div id="tor-despesas-lista" style="display:flex;flex-direction:column;gap:10px;"></div>
+              <div id="tor-desp-total" style="display:none;margin-top:10px;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);font-size:12px;color:#6b82a0;"></div>
+            </div>
+
+            <!-- STEP 4: Resultado -->
+            <div id="tor-step-4" style="display:none;">
+              <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">&#127942; Resultado Final</div>
+              <div id="tor-resultado-content" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
+              <div style="margin-bottom:14px;">
+                <div style="font-size:11px;font-weight:700;color:#6b82a0;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">Transferências mínimas</div>
+                <div id="tor-trans-lista" style="display:flex;flex-direction:column;gap:4px;"></div>
+              </div>
+              <div id="tor-admin-salvar" style="display:none;padding:12px;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);margin-bottom:12px;">
+                <div style="font-size:12px;color:#fbbf24;font-weight:700;margin-bottom:4px;">&#128274; Admin — Salvar no histórico</div>
+                <div style="font-size:11px;color:#6b82a0;margin-bottom:8px;">Salva definitivamente para todos os jogadores verem.</div>
+                <button onclick="torSalvarDefinitivo()" style="width:100%;background:linear-gradient(135deg,#92400e,#f59e0b);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:800;padding:11px;cursor:pointer;">&#128190; Salvar no Histórico</button>
+              </div>
+              <button onclick="torCompartilharWA()" style="width:100%;background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.35);border-radius:10px;color:#34d399;font-size:13px;font-weight:700;padding:11px;cursor:pointer;">&#128231; Compartilhar no WhatsApp</button>
+            </div>
+
+          </div>
+
+          <!-- Footer navigation -->
+          <div style="position:sticky;bottom:0;background:#0a1020;border-top:1px solid rgba(255,255,255,.07);padding:12px 18px;display:flex;gap:8px;">
+            <button id="tor-btn-voltar" onclick="torWizVoltar()" style="display:none;flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:10px;color:#6b82a0;font-size:14px;font-weight:700;padding:12px;cursor:pointer;">&#8592; Voltar</button>
+            <button id="tor-btn-avancar" onclick="torWizAvancar()" style="flex:1;background:linear-gradient(135deg,#92400e,#f59e0b);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;padding:12px;cursor:pointer;">Avançar &#8594;</button>
+          </div>
+
+        </div>
+      </div>
+
     </div><!-- fim torneios-body -->
   </div>
 </div>
@@ -3407,6 +3694,8 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 })();
 </script>
+
+
 
 <!-- ====== CARD: Calculador de Equity ====== -->
 <div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
@@ -3518,27 +3807,187 @@ document.addEventListener('DOMContentLoaded', function(){
   </div>
 </div>
 
-<div class="footer" style="margin-top:32px;padding-bottom:16px;">Feito com &#9829; &#8212; arquivo único v4.7</div>
+<div class="footer" style="margin-top:32px;padding-bottom:120px;">Feito com &#9829; &#8212; arquivo único v4.7</div>
+
+<!-- ═══ TAB BAR ═══ -->
+<style>
+#plaza-tabbar {
+  position:fixed;
+  bottom:0;left:0;right:0;
+  z-index:9980;
+  background:linear-gradient(180deg,rgba(6,11,26,.0) 0%,rgba(6,11,26,.97) 12px);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:1px solid rgba(255,255,255,.08);
+  display:flex;
+  align-items:stretch;
+  padding-bottom:env(safe-area-inset-bottom);
+  box-shadow:0 -4px 32px rgba(0,0,0,.5);
+}
+.tab-item {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  padding:8px 2px 10px;
+  cursor:pointer;
+  border:none;
+  background:transparent;
+  -webkit-tap-highlight-color:transparent;
+  position:relative;
+  transition:all .18s;
+}
+.tab-item:active { transform:scale(.93); }
+.tab-icon {
+  font-size:22px;
+  line-height:1;
+  filter:grayscale(1) opacity(.5);
+  transition:filter .18s, transform .18s;
+}
+.tab-label {
+  font-size:9px;
+  font-weight:700;
+  color:#4a6080;
+  text-transform:uppercase;
+  letter-spacing:.4px;
+  transition:color .18s;
+  white-space:nowrap;
+}
+.tab-item.active .tab-icon {
+  filter:grayscale(0) opacity(1) drop-shadow(0 0 6px var(--tab-color));
+  transform:translateY(-2px) scale(1.15);
+}
+.tab-item.active .tab-label { color:var(--tab-color); }
+.tab-item.active::after {
+  content:'';
+  position:absolute;
+  bottom:0;left:20%;right:20%;
+  height:2.5px;
+  border-radius:2px 2px 0 0;
+  background:var(--tab-color);
+  box-shadow:0 0 8px var(--tab-color);
+}
+/* Ripple ao tocar */
+.tab-item::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:12px;
+  background:radial-gradient(circle at center, rgba(255,255,255,.08) 0%, transparent 70%);
+  opacity:0;
+  transition:opacity .15s;
+}
+.tab-item:active::before { opacity:1; }
+</style>
+
+<nav id="plaza-tabbar" role="navigation" aria-label="Navegacao rapida">
+  <button class="tab-item" style="--tab-color:#f59e0b" onclick="tabNav('card-perfis')" data-tab="perfis">
+    <span class="tab-icon">&#128101;</span>
+    <span class="tab-label">Perfis</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#c9a227" onclick="tabNav('card-medalhas-periodo')" data-tab="medalhas">
+    <span class="tab-icon">&#127941;</span>
+    <span class="tab-label">Medalhas</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#3b82f6" onclick="tabNav('card-ranking-anual')" data-tab="ranking">
+    <span class="tab-icon">&#127942;</span>
+    <span class="tab-label">Anual</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#34d399" onclick="tabNav('card-saldo-financeiro')" data-tab="saldo">
+    <span class="tab-icon">&#128176;</span>
+    <span class="tab-label">Saldo</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#f97316" onclick="tabNav('card-calculadora')" data-tab="calc">
+    <span class="tab-icon">&#129518;</span>
+    <span class="tab-label">Calc.</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#a78bfa" onclick="tabNav('card-atas')" data-tab="atas">
+    <span class="tab-icon">&#128221;</span>
+    <span class="tab-label">Atas</span>
+  </button>
+  <!-- Feedback discreto na tab bar -->
+  <button class="tab-item" style="--tab-color:#6366f1" onclick="feedbackOpen()" data-tab="feedback" title="Reportar bug ou sugestao">
+    <span class="tab-icon">&#128172;</span>
+    <span class="tab-label">Feedback</span>
+  </button>
+</nav>
+
+<script>
+/* Tab navigation */
+var _tabScrolling = false;
+var _tabScrollTimer = null;
+
+function tabNav(cardId){
+  var el = document.getElementById(cardId);
+  if(!el) return;
+  var yOffset = -72;
+  var y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  /* Lock scroll detection while animating */
+  _tabScrolling = true;
+  clearTimeout(_tabScrollTimer);
+  _tabScrollTimer = setTimeout(function(){ _tabScrolling = false; }, 800);
+  window.scrollTo({ top: y, behavior: 'smooth' });
+}
+
+/* Detecta qual card está visível e marca a aba ativa */
+(function(){
+  /* Order MUST match DOM order (top to bottom) */
+  var tabMap = [
+    { tab:'perfis',   id:'card-perfis' },
+    { tab:'medalhas', id:'card-medalhas-periodo' },
+    { tab:'ranking',  id:'card-ranking-anual' },
+    { tab:'calc',     id:'card-calculadora' },
+    { tab:'saldo',    id:'card-saldo-financeiro' },
+    { tab:'atas',     id:'card-atas' }
+  ];
+
+  function setActive(tabKey){
+    document.querySelectorAll('.tab-item').forEach(function(btn){
+      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabKey);
+    });
+  }
+
+  /* Force active immediately on tab click — and lock */
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('.tab-item');
+    if(!btn) return;
+    var tab = btn.getAttribute('data-tab');
+    if(!tab) return;
+    if(tab === 'feedback'){
+      /* Stay active while modal is open — feedbackClose will clear it */
+      btn.classList.add('active');
+      return;
+    }
+    /* Set immediately and stay locked until scroll ends */
+    setActive(tab);
+  });
+
+  function onScroll(){
+    /* Skip auto-detection while user tapped a tab */
+    if(_tabScrolling) return;
+    var mid = window.pageYOffset + window.innerHeight * 0.4;
+    var active = null;
+    tabMap.forEach(function(t){
+      var el = document.getElementById(t.id);
+      if(!el) return;
+      var top = el.getBoundingClientRect().top + window.pageYOffset;
+      if(top <= mid) active = t.tab;
+    });
+    if(active) setActive(active);
+  }
+
+  window.addEventListener('scroll', onScroll, { passive:true });
+  setTimeout(onScroll, 800);
+})();
+</script>
 
 <!-- FEEDBACK BUTTON -->
 <style>
 #feedback-fab {
-  position:fixed;
-  bottom:24px;
-  right:18px;
-  z-index:9990;
-  width:48px;height:48px;
-  border-radius:50%;
-  background:linear-gradient(135deg,#4338ca,#6366f1);
-  border:none;
-  box-shadow:0 4px 20px rgba(99,102,241,.5);
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;
-  transition:transform .2s, box-shadow .2s;
-  -webkit-tap-highlight-color:transparent;
+  display:none !important;
 }
-#feedback-fab:active { transform:scale(.92); }
 #feedback-modal {
   display:none;
   position:fixed;inset:0;z-index:9991;
@@ -3923,6 +4372,9 @@ function feedbackOpen(){
 }
 function feedbackClose(){
   document.getElementById('feedback-modal').classList.remove('open');
+  /* Remove active state from feedback tab */
+  var btn = document.querySelector('.tab-item[data-tab="feedback"]');
+  if(btn) btn.classList.remove('active');
 }
 function feedbackTipo(btn, tipo){
   _feedbackTipoSel = tipo;
@@ -3986,10 +4438,6 @@ function feedbackEnviar(){
 /* Bruxarias */
 #card-bruxarias .nf-hdr  { background:linear-gradient(135deg,rgba(139,92,246,.10) 0%,transparent 100%); }
 #card-bruxarias .nf-icon { background:linear-gradient(145deg,#1e1430,#2a1a40);border:1px solid rgba(139,92,246,.3); }
-
-/* Churrasco */
-#card-churrasco .nf-hdr  { background:linear-gradient(135deg,rgba(245,158,11,.10) 0%,transparent 100%); }
-#card-churrasco .nf-icon { background:linear-gradient(145deg,#2a1e0a,#3a2a0a);border:1px solid rgba(245,158,11,.3); }
 
 /* Atas — crônica */
 .ata-select-wrap { display:flex;align-items:center;gap:8px;margin-bottom:14px; }
@@ -4075,55 +4523,6 @@ function feedbackEnviar(){
   font-family:inherit;width:100%;box-sizing:border-box;
 }
 .brux-add-form textarea { resize:vertical;min-height:60px; }
-
-/* Churrasco */
-.chur-evento { font-size:13px;font-weight:700;color:#fbbf24;margin-bottom:14px; }
-.chur-rows { display:flex;flex-direction:column;gap:6px;margin-bottom:14px; }
-.chur-row {
-  display:flex;align-items:center;gap:10px;
-  padding:8px 12px;background:rgba(245,158,11,.06);
-  border:1px solid rgba(245,158,11,.15);border-radius:10px;
-}
-.chur-nome { flex:1;font-size:13px;color:#e6edf3;font-weight:600; }
-.chur-val {
-  width:90px;background:#060d1a;border:1px solid rgba(245,158,11,.25);
-  border-radius:8px;color:#fbbf24;padding:6px 8px;font-size:13px;
-  text-align:right;
-}
-.chur-resultado {
-  padding:14px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(245,158,11,.10),rgba(245,158,11,.04));
-  border:1px solid rgba(245,158,11,.25);
-}
-.chur-res-linha {
-  display:flex;align-items:center;justify-content:space-between;
-  padding:5px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:13px;
-}
-.chur-res-linha:last-child { border-bottom:none; }
-.chur-res-nome { color:#c8d8f0; }
-.chur-res-val { font-weight:800; }
-.chur-res-val.deve { color:#f87171; }
-.chur-res-val.recebe { color:#34d399; }
-.chur-res-val.ok { color:#6b82a0; }
-.chur-transferencias {
-  margin-top:12px;padding:12px;border-radius:10px;
-  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
-}
-.chur-trans-titulo { font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px; }
-.chur-trans-item { font-size:12px;color:#c8d8f0;padding:3px 0; }
-.chur-trans-item strong { color:#fbbf24; }
-.chur-btn-calcular {
-  width:100%;padding:11px;border-radius:10px;
-  background:linear-gradient(135deg,#92400e,#f59e0b);
-  border:none;color:#fff;font-size:14px;font-weight:800;cursor:pointer;
-  margin-bottom:14px;
-}
-.chur-btn-calcular:active { opacity:.85; }
-.chur-campo-evento {
-  width:100%;box-sizing:border-box;background:#060d1a;
-  border:1px solid rgba(245,158,11,.25);border-radius:8px;
-  color:#e6edf3;padding:8px 12px;font-size:13px;margin-bottom:10px;
-}
 .nf-btn-save {
   padding:8px 18px;border-radius:8px;font-size:13px;font-weight:700;
   border:none;cursor:pointer;
@@ -4138,238 +4537,593 @@ body.admin-mode .nf-admin-only { display:block; }
 body.admin-mode .nf-admin-only.flex { display:flex; }
 </style>
 
-<!-- ══════ CARD 1: ATAS SEMANAIS ══════ -->
-<div class="nf-card card" id="card-atas" style="padding:0;">
-  <div class="nf-hdr" onclick="window.toggleCard('atas-body','atas-arrow')">
-    <div class="nf-hdr-left">
-      <div class="nf-icon">📝</div>
-      <div>
-        <div class="nf-title">Atas das Noites</div>
-        <div class="nf-sub">Crônicas, mãos épicas e destaques de cada rodada</div>
-      </div>
-    </div>
-    <span id="atas-arrow" class="nf-arrow" style="color:#6366f1;">▼</span>
-  </div>
-  <div id="atas-body" data-open="false" style="display:none;" class="nf-body">
 
-    <div class="ata-select-wrap">
-      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
-      <select id="ata-wk-sel" onchange="ataCarregar()"></select>
-    </div>
-
-    <!-- Leitura pública -->
-    <div id="ata-leitura">
-      <div id="ata-texto-view" class="ata-texto vazio">Nenhuma ata registrada para esta semana.</div>
-      <div id="ata-frase-view" class="ata-frase" style="display:none;"></div>
-    </div>
-
-    <!-- Edição (só admin) -->
-    <div class="nf-admin-only ata-admin-wrap" id="ata-admin-wrap">
-      <div style="font-size:11px;color:#6b82a0;margin-bottom:6px;font-weight:700;">✏️ NARRATIVA DA NOITE</div>
-      <textarea id="ata-texto-input" class="ata-admin-wrap" placeholder="Conte o que aconteceu… mãos épicas, blefes, momentos, quem brilhou…"></textarea>
-      <input id="ata-frase-input" class="ata-frase-input" placeholder="Frase da noite (opcional)" />
-      <div style="margin-top:10px;display:flex;gap:8px;">
-        <button class="nf-btn-save indigo" onclick="ataSalvar()">💾 Salvar Ata</button>
-        <button class="nf-btn-save" style="background:rgba(255,255,255,.07);color:#c8d8f0;" onclick="ataLimpar()">🗑 Limpar</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- ══════ CARD 2: REPOSITÓRIO DE MÍDIA ══════ -->
-<div class="nf-card card" id="card-midia" style="padding:0;">
-  <div class="nf-hdr" onclick="window.toggleCard('midia-body','midia-arrow')">
-    <div class="nf-hdr-left">
-      <div class="nf-icon">📸</div>
-      <div>
-        <div class="nf-title">Memórias da Mesa</div>
-        <div class="nf-sub">Fotos e vídeos das mãos épicas e momentos do grupo</div>
-      </div>
-    </div>
-    <span id="midia-arrow" class="nf-arrow" style="color:#ec4899;">▼</span>
-  </div>
-  <div id="midia-body" data-open="false" style="display:none;" class="nf-body">
-
-    <div class="midia-wk-wrap">
-      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
-      <select id="midia-wk-sel" onchange="midiaCarregar()"></select>
-    </div>
-
-    <!-- Galeria pública -->
-    <div id="midia-galeria" class="midia-grid">
-      <div class="midia-empty">Nenhuma mídia registrada para esta semana.</div>
-    </div>
-
-    <!-- Lightbox simples -->
-    <div id="midia-lightbox" onclick="this.style.display='none'" style="display:none;position:fixed;inset:0;z-index:99990;background:rgba(0,0,0,.92);align-items:center;justify-content:center;padding:20px;">
-      <img id="midia-lb-img" src="" style="max-width:100%;max-height:90vh;border-radius:12px;object-fit:contain;" />
-    </div>
-
-    <!-- Administração -->
-    <div class="nf-admin-only" id="midia-admin-wrap" style="margin-top:14px;">
-      <div style="font-size:11px;color:#6b82a0;margin-bottom:8px;font-weight:700;">📎 ADICIONAR LINKS DE MÍDIA</div>
-      <div style="font-size:11px;color:#4a6080;margin-bottom:8px;">Cole URLs de imagens (GitHub raw, Imgur, etc). Uma por linha.</div>
-      <div id="midia-url-list" class="midia-url-list"></div>
-      <button onclick="midiaAddLinha()" style="margin-top:8px;background:rgba(236,72,153,.12);border:1px solid rgba(236,72,153,.25);border-radius:8px;color:#f472b6;padding:6px 14px;font-size:12px;cursor:pointer;">+ Adicionar URL</button>
-      <div style="margin-top:10px;display:flex;gap:8px;">
-        <button class="nf-btn-save pink" onclick="midiaSalvar()">💾 Salvar Mídia</button>
-      </div>
-    </div>
-
-  </div>
-</div>
 
 <!-- ══════ CARD 3: BRUXARIAS DO ED ══════ -->
-<div class="nf-card card" id="card-bruxarias" style="padding:0;">
-  <div class="nf-hdr" onclick="window.toggleCard('bruxarias-body','bruxarias-arrow')">
-    <div class="nf-hdr-left">
-      <div class="nf-icon">⚡</div>
-      <div>
-        <div class="nf-title" style="background:linear-gradient(90deg,#c4b5fd,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Bruxarias do Plaza</div>
-        <div class="nf-sub">Feitos históricos e momentos lendários</div>
-      </div>
-    </div>
-    <span id="bruxarias-arrow" class="nf-arrow" style="color:#8b5cf6;">▼</span>
-  </div>
-  <div id="bruxarias-body" data-open="false" style="display:none;" class="nf-body">
 
-    <div id="bruxarias-lista" class="brux-grid">
-      <!-- preenchido por JS -->
-    </div>
 
-    <!-- Form de adição (só admin) -->
-    <div class="nf-admin-only brux-add-form" id="brux-add-form">
-      <div style="font-size:11px;color:#6b82a0;font-weight:700;margin-bottom:2px;">✨ REGISTRAR NOVO FEITO</div>
-      <input id="brux-input-nome" placeholder="Nome do feito (ex: Royal Straight Flush)" />
-      <textarea id="brux-input-desc" placeholder="Descrição (quem, quando, o que aconteceu…)"></textarea>
-      <div style="display:flex;gap:8px;">
-        <input id="brux-input-emoji" placeholder="Emoji" style="width:70px;" />
-        <input id="brux-input-data" placeholder="Data (ex: WK11 · Mar 2026)" style="flex:1;" />
-      </div>
-      <input id="brux-input-jogador" placeholder="Jogador (opcional)" />
-      <div style="display:flex;gap:8px;margin-top:4px;">
-        <button class="nf-btn-save purple" onclick="bruxSalvar()">⚡ Registrar Bruxaria</button>
-      </div>
-    </div>
 
-  </div>
-</div>
+<script>
+/* ═══════════════════════════════════════════════
+   WIZARD TORNEIOS ESPECIAIS
+   ═══════════════════════════════════════════════ */
+var _torState = {
+  step: 1,
+  id: null,
+  nome: '', data: '',
+  jogadores: [],   /* {nome, presente, convidado} */
+  fin: {},         /* nome -> {buyin, rebuys, addon} */
+  despesas: [],    /* {id, desc, valor, quem:[]} */
+  _despId: 0,
+  pct: [50,30,20]
+};
+var _torHistorico = [];
 
-<!-- ══════ CARD 4: RATEIO DO CHURRASCO ══════ -->
-<div class="nf-card card" id="card-churrasco" style="padding:0;">
-  <div class="nf-hdr" onclick="window.toggleCard('churrasco-body','churrasco-arrow')">
-    <div class="nf-hdr-left">
-      <div class="nf-icon">&#127830;</div>
-      <div>
-        <div class="nf-title">Rateio do Torneio</div>
-        <div class="nf-sub">Controle em tempo real + divisao de despesas</div>
-      </div>
-    </div>
-    <span id="churrasco-arrow" class="nf-arrow" style="color:#f59e0b;">&#9660;</span>
-  </div>
-  <div id="churrasco-body" data-open="false" style="display:none;" class="nf-body">
+function torLoadHistorico(){
+  try { _torHistorico = JSON.parse(localStorage.getItem('tor_historico_plaza')||'[]'); } catch(e){ _torHistorico=[]; }
+}
+function torSaveHistoricoLS(){ try{ localStorage.setItem('tor_historico_plaza', JSON.stringify(_torHistorico)); }catch(e){} }
+function torSaveRascunho(){ try{ localStorage.setItem('tor_rascunho_plaza', JSON.stringify(_torState)); }catch(e){} alert('Rascunho salvo!'); }
+function torLoadRascunho(){
+  try{
+    var r = JSON.parse(localStorage.getItem('tor_rascunho_plaza')||'null');
+    if(r){ _torState = r; return true; }
+  }catch(e){}
+  return false;
+}
 
-    <!-- Nome evento -->
-    <input id="chur-evento-nome" class="chur-campo-evento" placeholder="Nome do evento (ex: Torneio Especial Marco 2026)" />
+function torWizNovo(){
+  torLoadHistorico();
+  var rascunho = localStorage.getItem('tor_rascunho_plaza');
+  if(rascunho){
+    if(confirm('Existe um rascunho salvo. Continuar de onde parou?')){
+      torLoadRascunho();
+    } else {
+      torStateReset();
+    }
+  } else {
+    torStateReset();
+  }
+  torWizAbrir();
+}
 
-    <!-- Valores buyin/rebuy -->
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <div style="flex:1;">
-        <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">BUYIN (R$)</div>
-        <input id="chur-vlr-buyin" type="number" min="0" step="0.01" value="25" oninput="churRecalcGastos()"
-          style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(245,158,11,.3);border-radius:8px;color:#fbbf24;padding:10px 12px;font-size:15px;font-weight:700;" />
-      </div>
-      <div style="flex:1;">
-        <div style="font-size:10px;color:#6b82a0;margin-bottom:4px;font-weight:700;">REBUY (R$)</div>
-        <input id="chur-vlr-rebuy" type="number" min="0" step="0.01" value="25" oninput="churRecalcGastos()"
-          style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;padding:10px 12px;font-size:15px;font-weight:700;" />
-      </div>
-    </div>
+function torStateReset(){
+  var jogadores = (typeof nfPlayers==='function') ? nfPlayers()
+    : ['Charles','Cristiano','Heron','Israel','Rafa','Magu','Marcus','Oscar','Pedro'];
+  _torState = {
+    step:1, id: Date.now()+'',
+    nome:'', data:'',
+    jogadores: jogadores.map(function(n){ return {nome:n,presente:true,convidado:false}; }),
+    fin:{}, despesas:[], _despId:0, pct:[50,30,20]
+  };
+  jogadores.forEach(function(n){ _torState.fin[n]={buyin:1,rebuys:0,addon:false}; });
+}
 
-    <!-- Header controle -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-      <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;">&#127919; Controle do Torneio</div>
-      <button onclick="churAddConvidado()" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.3);border-radius:8px;color:#a78bfa;font-size:12px;font-weight:700;padding:7px 14px;cursor:pointer;white-space:nowrap;">+ Convidado</button>
-    </div>
+function torWizAbrir(){
+  var modal = document.getElementById('tor-wizard-modal');
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
 
-    <!-- Tabela jogadores -->
-    <div id="chur-rows" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
+  var isAdmin = typeof nfIsAdmin==='function' && nfIsAdmin();
 
-    <!-- Pote -->
-    <div style="padding:12px 14px;border-radius:10px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;">
-      <span style="font-size:13px;color:#c8d8f0;">&#127974; Pote acumulado</span>
-      <span id="chur-pote-calc" style="font-size:18px;font-weight:900;color:#fbbf24;">R$ 0,00</span>
-    </div>
+  /* Show/hide admin-only controls */
+  var btnRasc = modal.querySelector('button[onclick="torWizRascunho()"]');
+  if(btnRasc) btnRasc.style.display = isAdmin ? '' : 'none';
 
-    <!-- Despesas com rateio seletivo -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-      <div style="font-size:11px;font-weight:700;color:#6b82a0;text-transform:uppercase;letter-spacing:.5px;">&#128184; Despesas extras</div>
-      <button onclick="churAddDespesa()" style="background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.25);border-radius:7px;color:#34d399;font-size:12px;font-weight:700;padding:5px 12px;cursor:pointer;">+ Despesa</button>
-    </div>
-    <div style="font-size:11px;color:#4a6080;margin-bottom:10px;">Cada despesa pode ser rateada so entre quem consumiu.</div>
-    <div id="chur-despesas-lista" style="display:flex;flex-direction:column;gap:10px;margin-bottom:6px;"></div>
-    <div id="chur-desp-preview" style="display:none;padding:8px 12px;border-radius:8px;background:rgba(255,255,255,.04);font-size:12px;color:#6b82a0;margin-bottom:14px;"></div>
+  var btnAv = document.getElementById('tor-btn-avancar');
+  var btnVo = document.getElementById('tor-btn-voltar');
+  if(btnAv) btnAv.style.display = isAdmin ? '' : 'none';
+  if(btnVo) btnVo.style.display = isAdmin ? '' : 'none';
 
-    <!-- Distribuicao do pote -->
-    <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.20);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#127942; Distribuicao do Pote (%)</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:18px;width:22px;text-align:center;">&#129351;</span>
-          <span style="font-size:12px;color:#fde68a;width:60px;">1&#186; lugar</span>
-          <input id="chur-pct-1" type="number" min="0" max="100" step="1" value="50" oninput="churAtualizarPremios()"
-            style="width:60px;background:#060d1a;border:1px solid rgba(253,230,138,.3);border-radius:8px;color:#fde68a;padding:8px;font-size:14px;text-align:center;" />
-          <span style="font-size:12px;color:#6b82a0;">%</span>
-          <span id="chur-val-premio-1" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#fde68a;">R$ 0,00</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:18px;width:22px;text-align:center;">&#129352;</span>
-          <span style="font-size:12px;color:#c8d8f0;width:60px;">2&#186; lugar</span>
-          <input id="chur-pct-2" type="number" min="0" max="100" step="1" value="30" oninput="churAtualizarPremios()"
-            style="width:60px;background:#060d1a;border:1px solid rgba(200,216,240,.2);border-radius:8px;color:#c8d8f0;padding:8px;font-size:14px;text-align:center;" />
-          <span style="font-size:12px;color:#6b82a0;">%</span>
-          <span id="chur-val-premio-2" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#c8d8f0;">R$ 0,00</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:10px;">
-          <span style="font-size:18px;width:22px;text-align:center;">&#129353;</span>
-          <span style="font-size:12px;color:#fdba74;width:60px;">3&#186; lugar</span>
-          <input id="chur-pct-3" type="number" min="0" max="100" step="1" value="20" oninput="churAtualizarPremios()"
-            style="width:60px;background:#060d1a;border:1px solid rgba(253,186,116,.2);border-radius:8px;color:#fdba74;padding:8px;font-size:14px;text-align:center;" />
-          <span style="font-size:12px;color:#6b82a0;">%</span>
-          <span id="chur-val-premio-3" style="flex:1;text-align:right;font-size:14px;font-weight:700;color:#fdba74;">R$ 0,00</span>
-        </div>
-        <div id="chur-pct-aviso" style="display:none;font-size:11px;color:#f87171;padding-top:2px;">
-          &#9888; Percentuais somam <span id="chur-pct-soma">0</span>% — ajuste para 100%
-        </div>
-      </div>
-    </div>
+  /* Read-only badge for non-admins */
+  var titulo = document.getElementById('tor-wiz-titulo');
+  if(!isAdmin && titulo){
+    /* Add read-only label if not already there */
+    if(!document.getElementById('tor-readonly-badge')){
+      var badge = document.createElement('span');
+      badge.id = 'tor-readonly-badge';
+      badge.style.cssText = 'font-size:10px;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:5px;color:#818cf8;padding:2px 7px;margin-left:8px;font-weight:600;';
+      badge.textContent = 'somente leitura';
+      titulo.appendChild(badge);
+    }
+  } else {
+    var b = document.getElementById('tor-readonly-badge');
+    if(b) b.remove();
+  }
 
-    <button class="chur-btn-calcular" onclick="churCalcular()">&#127830; Calcular Rateio Completo</button>
+  torWizRenderStep();
+}
+function torWizFechar(){
+  document.getElementById('tor-wizard-modal').style.display = 'none';
+  document.body.style.overflow = '';
+  document.body.style.position = '';
+  document.body.style.width = '';
+  torRenderHistorico();
+}
+function torWizRascunho(){ torSaveRascunho(); }
 
-    <div id="chur-resultado" style="display:none;">
-      <div id="chur-res-pote" style="display:none;margin-bottom:10px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(245,158,11,.12),rgba(245,158,11,.04));border:1px solid rgba(245,158,11,.25);">
-        <div style="font-size:11px;font-weight:700;color:#f59e0b;text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px;">&#127942; Premios do Torneio</div>
-        <div id="chur-res-pote-linhas"></div>
-      </div>
-      <div class="chur-resultado">
-        <div style="font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px;">Saldo Final por Pessoa</div>
-        <div style="font-size:10px;color:#4a6080;margin-bottom:10px;">buy+reb + despesas pagas - cota das despesas - cota do pote + premio</div>
-        <div id="chur-res-linhas"></div>
-      </div>
-      <div class="chur-transferencias">
-        <div class="chur-trans-titulo">Transferencias minimas</div>
-        <div id="chur-trans-lista"></div>
-      </div>
-      <div style="margin-top:10px;display:flex;gap:8px;">
-        <button onclick="churCompartilhar()" style="flex:1;padding:11px;border-radius:8px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:#fbbf24;font-size:13px;font-weight:700;cursor:pointer;">&#128231; Compartilhar</button>
-        <button onclick="churLimpar()" style="padding:11px 14px;border-radius:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:#6b82a0;font-size:13px;cursor:pointer;">&#128260; Reiniciar</button>
-      </div>
-    </div>
+function torWizRenderStep(){
+  var s = _torState.step;
+  /* progress dots */
+  document.querySelectorAll('.tor-step-dot').forEach(function(d){
+    var ds = parseInt(d.getAttribute('data-step'));
+    d.style.background = ds <= s ? 'rgba(245,158,11,.8)' : 'rgba(255,255,255,.15)';
+  });
+  /* show/hide steps */
+  [1,2,3,4].forEach(function(n){
+    var el = document.getElementById('tor-step-'+n);
+    if(el) el.style.display = n===s ? '' : 'none';
+  });
+  /* nav buttons */
+  var btnV = document.getElementById('tor-btn-voltar');
+  var btnA = document.getElementById('tor-btn-avancar');
+  if(btnV) btnV.style.display = s>1 ? '' : 'none';
+  if(btnA){
+    if(s===4){ btnA.style.display='none'; }
+    else { btnA.style.display=''; btnA.textContent = s===3 ? 'Calcular Resultado \u2192' : 'Avan\u00e7ar \u2192'; }
+  }
+  /* title */
+  var titles = ['','Jogadores','Financeiro','Despesas','Resultado'];
+  var el = document.getElementById('tor-wiz-titulo');
+  if(el) el.textContent = (_torState.nome||'Novo Torneio') + ' \u2014 ' + titles[s];
 
-  </div>
-</div>
+  /* render step content */
+  if(s===1) torRenderStep1();
+  if(s===2) torRenderStep2();
+  if(s===3) torRenderStep3();
+  if(s===4) torRenderStep4();
 
+  /* scroll to top */
+  var box = document.getElementById('tor-wizard-box');
+  if(box) box.scrollTop = 0;
+}
+
+/* STEP 1 */
+function torRenderStep1(){
+  var inp = document.getElementById('tor-nome');
+  var dat = document.getElementById('tor-data');
+  if(inp) inp.value = _torState.nome;
+  if(dat) dat.value = _torState.data;
+
+  var list = document.getElementById('tor-jogadores-list');
+  if(!list) return;
+  list.innerHTML = _torState.jogadores.map(function(pl){
+    var chkBrd = pl.presente ? '#34d399' : 'rgba(107,130,160,.4)';
+    var chkBg  = pl.presente ? 'rgba(52,211,153,.2)' : 'transparent';
+    var chkMrk = pl.presente ? '<span style="color:#34d399;font-size:13px;font-weight:900;">&#10003;</span>' : '';
+    var nc = pl.presente ? '#e6edf3' : '#4a6080';
+    var rem = pl.convidado ? '<button data-n="'+pl.nome+'" onclick="torRemConvidado(this)" style="margin-left:auto;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2);border-radius:5px;color:#f87171;font-size:10px;padding:2px 8px;cursor:pointer;">&#10005;</button>' : '';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);">'
+      +'<div data-n="'+pl.nome+'" onclick="torToggleJog(this.getAttribute(\'data-n\'))" style="cursor:pointer;width:22px;height:22px;border-radius:5px;border:2px solid '+chkBrd+';background:'+chkBg+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+chkMrk+'</div>'
+      +'<span data-n="'+pl.nome+'" onclick="torToggleJog(this.getAttribute(\'data-n\'))" style="font-size:14px;font-weight:700;color:'+nc+';cursor:pointer;flex:1;user-select:none;">'+pl.nome+(pl.convidado?' <span style="font-size:10px;color:#a78bfa;">[conv]</span>':'')+'</span>'
+      +rem
+    +'</div>';
+  }).join('');
+
+  /* convidados adicionados */
+  var cl = document.getElementById('tor-convidados-list');
+  if(cl) cl.innerHTML = '';
+}
+
+function torToggleJog(nome){
+  var pl = _torState.jogadores.find(function(p){ return p.nome===nome; });
+  if(!pl) return;
+  pl.presente = !pl.presente;
+  if(!pl.presente && _torState.fin[nome]){ _torState.fin[nome]={buyin:0,rebuys:0,addon:false}; }
+  else if(pl.presente && _torState.fin[nome]){ _torState.fin[nome].buyin=1; }
+  torRenderStep1();
+}
+
+function torAddConvidado(){
+  var inp = document.getElementById('tor-conv-input');
+  var nome = (inp.value||'').trim();
+  if(!nome) return;
+  _torState.jogadores.push({nome:nome,presente:true,convidado:true});
+  _torState.fin[nome] = {buyin:1,rebuys:0,addon:false};
+  inp.value='';
+  torRenderStep1();
+}
+function torRemConvidado(btn){
+  var nome = btn.getAttribute('data-n');
+  _torState.jogadores = _torState.jogadores.filter(function(p){ return p.nome!==nome; });
+  delete _torState.fin[nome];
+  _torState.despesas.forEach(function(d){ d.quem=d.quem.filter(function(n){ return n!==nome; }); });
+  torRenderStep1();
+}
+
+/* STEP 2 */
+function torRenderStep2(){
+  var presentes = _torState.jogadores.filter(function(p){ return p.presente; });
+  var rows = document.getElementById('tor-fin-rows');
+  if(!rows) return;
+  var vlrB = parseFloat(document.getElementById('tor-vlr-buyin').value)||25;
+  var vlrR = parseFloat(document.getElementById('tor-vlr-rebuy').value)||25;
+  var vlrA = parseFloat(document.getElementById('tor-vlr-addon').value)||50;
+
+  /* Update header — hide BUY column */
+  var hdr = document.getElementById('tor-fin-hdr');
+  if(hdr) hdr.style.display = 'none';
+
+  rows.innerHTML = presentes.map(function(pl){
+    var f = _torState.fin[pl.nome] || {buyin:1,rebuys:0,addon:false};
+    /* buyin is always 1 — auto */
+    f.buyin = 1;
+    var tot = f.buyin*vlrB + f.rebuys*vlrR + (f.addon?vlrA:0);
+
+    function stp(field,val,r,g,b){
+      return '<div style="display:flex;align-items:center;justify-content:center;gap:3px;">'
+        +'<button data-n="'+pl.nome+'" data-f="'+field+'" data-d="-1" onclick="torFinBtn(this)" style="width:30px;height:34px;background:rgba('+r+','+g+','+b+',.18);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:700;cursor:pointer;">-</button>'
+        +'<span style="font-size:14px;font-weight:800;color:rgb('+r+','+g+','+b+');min-width:22px;text-align:center;">'+val+'</span>'
+        +'<button data-n="'+pl.nome+'" data-f="'+field+'" data-d="1" onclick="torFinBtn(this)" style="width:30px;height:34px;background:rgba('+r+','+g+','+b+',.18);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:700;cursor:pointer;">+</button>'
+        +'</div>';
+    }
+
+    var addonBtn = '<div style="display:flex;align-items:center;justify-content:center;">'
+      +'<button data-n="'+pl.nome+'" onclick="torToggleAddon(this)" style="width:34px;height:34px;background:'+(f.addon?'rgba(16,185,129,.25)':'rgba(255,255,255,.06)')+';border:1.5px solid '+(f.addon?'rgba(16,185,129,.5)':'rgba(255,255,255,.15)')+';border-radius:6px;color:'+(f.addon?'#34d399':'#4a6080')+';font-size:16px;cursor:pointer;font-weight:700;">'+(f.addon?'&#10003;':'+')+'</button>'
+      +'</div>';
+
+    return '<div style="display:grid;grid-template-columns:1fr 80px 50px 64px;gap:6px;align-items:center;padding:9px 8px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);">'
+      +'<span style="font-size:14px;font-weight:700;color:#e6edf3;">'+pl.nome+'</span>'
+      +stp('rebuys',f.rebuys,99,102,241)
+      +addonBtn
+      +'<span style="font-size:12px;font-weight:700;color:#34d399;text-align:right;">R$'+tot.toFixed(2).replace('.',',')+'</span>'
+    +'</div>';
+  }).join('');
+  torRecalcFinanceiro();
+}
+
+function torFinBtn(btn){
+  var nome=btn.getAttribute('data-n'), field=btn.getAttribute('data-f'), delta=parseInt(btn.getAttribute('data-d'));
+  if(!_torState.fin[nome]) _torState.fin[nome]={buyin:1,rebuys:0,addon:false};
+  var min = field==='buyin'?1:0;
+  _torState.fin[nome][field] = Math.max(min,(_torState.fin[nome][field]||0)+delta);
+  torRenderStep2();
+}
+function torToggleAddon(btn){
+  var nome=btn.getAttribute('data-n');
+  if(!_torState.fin[nome]) _torState.fin[nome]={buyin:1,rebuys:0,addon:false};
+  _torState.fin[nome].addon = !_torState.fin[nome].addon;
+  torRenderStep2();
+}
+
+function torRecalcFinanceiro(){
+  var vlrB=parseFloat(document.getElementById('tor-vlr-buyin').value)||25;
+  var vlrR=parseFloat(document.getElementById('tor-vlr-rebuy').value)||25;
+  var vlrA=parseFloat(document.getElementById('tor-vlr-addon').value)||50;
+  var pote=0;
+  _torState.jogadores.filter(function(p){return p.presente;}).forEach(function(pl){
+    var f=_torState.fin[pl.nome]||{buyin:1,rebuys:0,addon:false};
+    pote+=f.buyin*vlrB+f.rebuys*vlrR+(f.addon?vlrA:0);
+  });
+  var el=document.getElementById('tor-pote-display');
+  if(el) el.textContent='R$ '+pote.toFixed(2).replace('.',',');
+  torAtualizarPremios();
+}
+function torAtualizarPremios(){
+  var vlrB=parseFloat(document.getElementById('tor-vlr-buyin').value)||25;
+  var vlrR=parseFloat(document.getElementById('tor-vlr-rebuy').value)||25;
+  var vlrA=parseFloat(document.getElementById('tor-vlr-addon').value)||50;
+  var pote=0;
+  _torState.jogadores.filter(function(p){return p.presente;}).forEach(function(pl){
+    var f=_torState.fin[pl.nome]||{buyin:1,rebuys:0,addon:false};
+    pote+=f.buyin*vlrB+f.rebuys*vlrR+(f.addon?vlrA:0);
+  });
+  var p1=parseFloat(document.getElementById('tor-pct-1').value)||0;
+  var p2=parseFloat(document.getElementById('tor-pct-2').value)||0;
+  var p3=parseFloat(document.getElementById('tor-pct-3').value)||0;
+  var soma=p1+p2+p3;
+  var av=document.getElementById('tor-pct-aviso'),so=document.getElementById('tor-pct-soma');
+  if(av&&so){so.textContent=soma;av.style.display=(soma!==100&&soma>0)?'':'none';}
+  function sv(id,v){var e=document.getElementById(id);if(e)e.textContent='R$ '+v.toFixed(2).replace('.',',');}
+  sv('tor-val-p1',pote*p1/100);sv('tor-val-p2',pote*p2/100);sv('tor-val-p3',pote*p3/100);
+  _torState.pct=[p1,p2,p3];
+}
+
+/* STEP 3 */
+function torRenderStep3(){
+  var wrap=document.getElementById('tor-despesas-lista');
+  if(!wrap) return;
+  var presentes=_torState.jogadores.filter(function(p){return p.presente;});
+  if(!_torState.despesas.length){
+    wrap.innerHTML='<div style="font-size:12px;color:#4a6080;padding:8px 0;">Nenhuma despesa. Clique em "+ Despesa" para adicionar.</div>';
+    torAtualizarDespTotal(); return;
+  }
+  wrap.innerHTML=_torState.despesas.map(function(d){
+    var chips=presentes.map(function(pl){
+      var sel=d.quem.indexOf(pl.nome)>=0;
+      return '<button data-id="'+d.id+'" data-nome="'+pl.nome+'" onclick="torToggleDesp(this)" style="padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid '+(sel?'rgba(52,211,153,.6)':'rgba(255,255,255,.12)')+';background:'+(sel?'rgba(52,211,153,.18)':'transparent')+';color:'+(sel?'#34d399':'#4a6080')+';">'+pl.nome+'</button>';
+    }).join('');
+    var cota=d.quem.length>0&&d.valor>0?'  cota: R$'+(d.valor/d.quem.length).toFixed(2).replace('.',','):'';
+    return '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px;">'
+      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">'
+        +'<input data-id="'+d.id+'" onchange="torDespDesc(this)" placeholder="Descricao (ex: carne, chopp)" value="'+(d.desc||'')+'" style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:12px;min-width:0;" />'
+        +'<div style="display:flex;align-items:center;gap:3px;flex-shrink:0;">'
+          +'<span style="font-size:11px;color:#34d399;font-weight:700;">R$</span>'
+          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="torDespVal(this)" placeholder="0,00" value="'+(d.valor||'')+'" style="width:72px;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;color:#34d399;padding:7px;font-size:12px;font-weight:700;text-align:right;" />'
+        +'</div>'
+        +'<button data-id="'+d.id+'" onclick="torRemDespesa(parseInt(this.getAttribute(\'data-id\')))" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:12px;padding:5px 9px;cursor:pointer;flex-shrink:0;">&#10005;</button>'
+      +'</div>'
+      +'<div style="font-size:10px;color:#6b82a0;margin-bottom:6px;font-weight:700;text-transform:uppercase;">Quem divide'+cota+'</div>'
+      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
+        +'<button data-id="'+d.id+'" onclick="torDespTodos(parseInt(this.getAttribute(\'data-id\')))" style="padding:4px 10px;border-radius:999px;font-size:11px;cursor:pointer;border:1px solid rgba(99,102,241,.3);background:rgba(99,102,241,.1);color:#818cf8;">Todos</button>'
+        +chips
+      +'</div>'
+    +'</div>';
+  }).join('');
+  torAtualizarDespTotal();
+}
+function torAddDespesa(){
+  var presentes=_torState.jogadores.filter(function(p){return p.presente;}).map(function(p){return p.nome;});
+  _torState.despesas.push({id:++_torState._despId,desc:'',valor:0,quem:presentes.slice()});
+  torRenderStep3();
+}
+function torRemDespesa(id){ _torState.despesas=_torState.despesas.filter(function(d){return d.id!==id;}); torRenderStep3(); }
+function torToggleDesp(btn){
+  var id=parseInt(btn.getAttribute('data-id')),nome=btn.getAttribute('data-nome');
+  var d=_torState.despesas.find(function(x){return x.id===id;});
+  if(!d) return;
+  var idx=d.quem.indexOf(nome);
+  if(idx>=0) d.quem.splice(idx,1); else d.quem.push(nome);
+  torRenderStep3();
+}
+function torDespTodos(id){
+  var d=_torState.despesas.find(function(x){return x.id===id;});
+  if(!d) return;
+  d.quem=_torState.jogadores.filter(function(p){return p.presente;}).map(function(p){return p.nome;});
+  torRenderStep3();
+}
+function torDespDesc(inp){ var d=_torState.despesas.find(function(x){return x.id===parseInt(inp.getAttribute('data-id'));}); if(d) d.desc=inp.value; }
+function torDespVal(inp){ var d=_torState.despesas.find(function(x){return x.id===parseInt(inp.getAttribute('data-id'));}); if(d){ d.valor=parseFloat(inp.value)||0; torAtualizarDespTotal(); } }
+function torAtualizarDespTotal(){
+  var total=_torState.despesas.reduce(function(s,d){return s+(d.valor||0);},0);
+  var el=document.getElementById('tor-desp-total');
+  if(!el) return;
+  if(total>0){ el.style.display=''; el.textContent='Total despesas: R$'+total.toFixed(2).replace('.',','); }
+  else el.style.display='none';
+}
+
+/* STEP 4 */
+function torRenderStep4(){
+  var vlrB=parseFloat(document.getElementById('tor-vlr-buyin').value)||25;
+  var vlrR=parseFloat(document.getElementById('tor-vlr-rebuy').value)||25;
+  var vlrA=parseFloat(document.getElementById('tor-vlr-addon').value)||50;
+  var p1=(_torState.pct[0]||0)/100, p2=(_torState.pct[1]||0)/100, p3=(_torState.pct[2]||0)/100;
+  var presentes=_torState.jogadores.filter(function(pl){return pl.presente;});
+  var n=presentes.length;
+
+  /* Pote */
+  var pote=0;
+  presentes.forEach(function(pl){ var f=_torState.fin[pl.nome]||{buyin:1,rebuys:0,addon:false}; pote+=f.buyin*vlrB+f.rebuys*vlrR+(f.addon?vlrA:0); });
+
+  /* Cota despesas por jogador */
+  var cotaDesp={};
+  presentes.forEach(function(pl){cotaDesp[pl.nome]=0;});
+  _torState.despesas.forEach(function(d){
+    if(!d.valor||!d.quem.length) return;
+    var c=d.valor/d.quem.length;
+    d.quem.forEach(function(nome){if(cotaDesp[nome]!==undefined)cotaDesp[nome]+=c;});
+  });
+
+  /* Cota pote */
+  var cotaPote=pote/n;
+
+  /* Premios — top 3 */
+  var sorted=presentes.slice().sort(function(a,b){ return 0; }); /* user input position */
+  /* For now use pct order as 1st,2nd,3rd — user can set position later via KO */
+  var premios={};
+  presentes.forEach(function(p){premios[p.nome]=0;});
+  if(presentes[0]) premios[presentes[0].nome]+=pote*p1;
+  if(presentes[1]) premios[presentes[1].nome]+=pote*p2;
+  if(presentes[2]) premios[presentes[2].nome]+=pote*p3;
+
+  /* Saldo */
+  var saldos={};
+  presentes.forEach(function(pl){
+    var f=_torState.fin[pl.nome]||{buyin:1,rebuys:0,addon:false};
+    var gasto=f.buyin*vlrB+f.rebuys*vlrR+(f.addon?vlrA:0);
+    saldos[pl.nome]=gasto-cotaPote-cotaDesp[pl.nome]+premios[pl.nome];
+  });
+
+  /* Render saldos */
+  var rc=document.getElementById('tor-resultado-content');
+  if(rc) rc.innerHTML=presentes.map(function(pl){
+    var s=saldos[pl.nome];
+    var cls=s>0.005?'#34d399':s<-0.005?'#f87171':'#6b82a0';
+    var txt=s>0.005?'+R$'+s.toFixed(2).replace('.',','):s<-0.005?'-R$'+Math.abs(s).toFixed(2).replace('.',','):'em dia';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);">'
+      +'<span style="font-size:13px;font-weight:700;color:#e6edf3;">'+pl.nome+'</span>'
+      +'<span style="font-size:14px;font-weight:900;color:'+cls+';">'+txt+'</span>'
+    +'</div>';
+  }).join('');
+
+  /* Transferencias */
+  var creds=[],devs=[];
+  presentes.forEach(function(pl){ var s=Math.round(saldos[pl.nome]*100)/100; if(s>0.005)creds.push({nome:pl.nome,val:s}); else if(s<-0.005)devs.push({nome:pl.nome,val:-s}); });
+  creds.sort(function(a,b){return b.val-a.val;}); devs.sort(function(a,b){return b.val-a.val;});
+  var trans=[],ci=0,di=0;
+  var cc=creds.map(function(x){return{nome:x.nome,val:x.val};}), dd=devs.map(function(x){return{nome:x.nome,val:x.val};});
+  while(ci<cc.length&&di<dd.length){ var tv=Math.min(cc[ci].val,dd[di].val); trans.push({de:dd[di].nome,para:cc[ci].nome,val:tv}); cc[ci].val-=tv; dd[di].val-=tv; if(cc[ci].val<0.005)ci++; if(dd[di].val<0.005)di++; }
+  var tl=document.getElementById('tor-trans-lista');
+  if(tl) tl.innerHTML=!trans.length
+    ?'<div style="color:#34d399;font-size:12px;">Todos quites!</div>'
+    :trans.map(function(tr){return '<div style="font-size:13px;color:#c8d8f0;padding:4px 0;"><strong style="color:#fbbf24;">'+tr.de+'</strong> paga <strong style="color:#fbbf24;">R$ '+tr.val.toFixed(2).replace('.',',')+'</strong> para <strong style="color:#fbbf24;">'+tr.para+'</strong></div>';}).join('');
+
+  /* Admin button */
+  var adm=document.getElementById('tor-admin-salvar');
+  if(adm) adm.style.display=(typeof nfIsAdmin==='function'&&nfIsAdmin())?'':'none';
+
+  /* Store for save */
+  _torState._saldosCalc=saldos;
+  _torState._vlrB=vlrB; _torState._vlrR=vlrR; _torState._vlrA=vlrA;
+  _torState._pote=pote;
+}
+
+/* Navigation */
+function torWizAvancar(){
+  var s=_torState.step;
+  if(s===1){
+    var n=(document.getElementById('tor-nome').value||'').trim();
+    var d=(document.getElementById('tor-data').value||'').trim();
+    if(!n){ alert('Informe o nome do torneio.'); return; }
+    _torState.nome=n; _torState.data=d;
+    var presentes=_torState.jogadores.filter(function(p){return p.presente;});
+    if(!presentes.length){ alert('Selecione ao menos um jogador.'); return; }
+  }
+  if(s<4){ _torState.step++; torWizRenderStep(); }
+}
+function torWizVoltar(){
+  if(_torState.step>1){ _torState.step--; torWizRenderStep(); }
+}
+
+/* Save definitivo */
+function torSalvarDefinitivo(){
+  torLoadHistorico();
+  var record={
+    id:_torState.id,
+    nome:_torState.nome,
+    data:_torState.data,
+    jogadores:_torState.jogadores,
+    fin:_torState.fin,
+    despesas:_torState.despesas,
+    pct:_torState.pct,
+    saldos:_torState._saldosCalc,
+    pote:_torState._pote,
+    savedAt:new Date().toISOString()
+  };
+  var idx=_torHistorico.findIndex(function(t){return t.id===record.id;});
+  if(idx>=0) _torHistorico[idx]=record; else _torHistorico.unshift(record);
+  torSaveHistoricoLS();
+  localStorage.removeItem('tor_rascunho_plaza');
+  alert('Torneio salvo no historico!');
+  torWizFechar();
+}
+
+/* Compartilhar */
+function torCompartilharWA(){
+  var txt='[Torneio] '+_torState.nome+' - '+_torState.data+'\n\n';
+  txt+='Pote: R$ '+(_torState._pote||0).toFixed(2).replace('.',',')+'\n\n';
+  txt+='Resultado:\n';
+  if(_torState._saldosCalc){
+    _torState.jogadores.filter(function(p){return p.presente;}).forEach(function(pl){
+      var s=_torState._saldosCalc[pl.nome]||0;
+      var txt2=s>0.005?'+R$'+s.toFixed(2).replace('.',','):s<-0.005?'-R$'+Math.abs(s).toFixed(2).replace('.',','):'em dia';
+      txt+=pl.nome+': '+txt2+'\n';
+    });
+  }
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+
+/* Historico */
+function torRenderHistorico(){
+  torLoadHistorico();
+  var wrap=document.getElementById('tor-historico');
+  if(!wrap) return;
+  var isAdmin = typeof nfIsAdmin==='function' && nfIsAdmin();
+  if(!_torHistorico.length){
+    wrap.innerHTML='<div style="font-size:12px;color:#4a6080;padding:6px 0;">Nenhum torneio registrado ainda.</div>';
+    return;
+  }
+  wrap.innerHTML=_torHistorico.map(function(t){
+    var nJog=(t.jogadores||[]).filter(function(p){return p.presente;}).length;
+    var btnLabel = isAdmin ? '&#9998; Editar' : '&#128065; Ver';
+    return '<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.15);">'
+      +'<div style="flex:1;min-width:0;">'
+        +'<div style="font-size:13px;font-weight:700;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+t.nome+'</div>'
+        +'<div style="font-size:11px;color:#6b82a0;margin-top:1px;">'+t.data+' &nbsp;&#183;&nbsp; '+nJog+' jogadores &nbsp;&#183;&nbsp; pote R$'+(t.pote||0).toFixed(2).replace('.',',')+'</div>'
+      +'</div>'
+      +'<button data-id="'+t.id+'" onclick="torVerTorneio(this.getAttribute(\'data-id\'))" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.3);border-radius:7px;color:#fbbf24;font-size:11px;font-weight:700;padding:5px 10px;cursor:pointer;flex-shrink:0;">'+btnLabel+'</button>'
+    +'</div>';
+  }).join('');
+}
+
+/* Admin gates */
+function torAdminNovo(){
+  if(window._adminAuthed){
+    torWizNovo();
+    return;
+  }
+  /* Prompt de senha próprio — não depende de pedirSenha */
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML = '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:28px 24px;width:100%;max-width:300px;">'
+    +'<div style="font-size:17px;font-weight:800;color:#e6edf3;margin-bottom:6px;">&#128274; Área Admin</div>'
+    +'<div style="font-size:12px;color:#6b82a0;margin-bottom:16px;">Digite a senha para continuar</div>'
+    +'<input id="tor-pwd" type="password" placeholder="Senha..." style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 14px;color:#e6edf3;font-size:15px;margin-bottom:8px;outline:none;">'
+    +'<div id="tor-pwd-err" style="color:#f87171;font-size:12px;margin-bottom:10px;display:none;">Senha incorreta.</div>'
+    +'<div style="display:flex;gap:8px;">'
+      +'<button id="tor-pwd-cancel" style="flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;">Cancelar</button>'
+      +'<button id="tor-pwd-ok" style="flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Entrar</button>'
+    +'</div>'
+  +'</div>';
+  document.body.appendChild(overlay);
+  var inp = overlay.querySelector('#tor-pwd');
+  var err = overlay.querySelector('#tor-pwd-err');
+  setTimeout(function(){ inp.focus(); }, 100);
+
+  /* Get password from existing system */
+  function getSenha(){
+    if(typeof ADMIN_HASH !== 'undefined') return null; /* hash-based */
+    /* Try to find the raw password from the auth system */
+    return window._ADMIN_PWD || null;
+  }
+
+  function tryAuth(){
+    var v = inp.value.trim();
+    if(!v) return;
+    /* Use same SHA-256 check as the existing admin system */
+    function sha256hex(str){
+      /* Simple check: compute hash and compare */
+      var encoder = new TextEncoder();
+      return crypto.subtle.digest('SHA-256', encoder.encode(str)).then(function(buf){
+        return Array.from(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('');
+      });
+    }
+    var HASH = 'c2c17fc98c6b90e3d488ffdf36781064657fd7653ae09efd148be7799d55b10f';
+    var customHash = window._RN_CUSTOM_HASH || null;
+    sha256hex(v).then(function(h){
+      if(h === HASH || (customHash && h === customHash)){
+        window._adminAuthed = true;
+        document.body.classList.add('admin-mode');
+        document.body.removeChild(overlay);
+        torWizNovo();
+      } else {
+        err.style.display = '';
+        inp.value = '';
+        inp.focus();
+      }
+    });
+  }
+
+  overlay.querySelector('#tor-pwd-ok').onclick = tryAuth;
+  overlay.querySelector('#tor-pwd-cancel').onclick = function(){ document.body.removeChild(overlay); };
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') tryAuth(); });
+}
+
+function torVerTorneio(id){
+  torLoadHistorico();
+  var t=_torHistorico.find(function(x){return x.id===id;});
+  if(!t) return;
+
+  var isAdmin = typeof nfIsAdmin==='function' && nfIsAdmin();
+
+  _torState=JSON.parse(JSON.stringify(t));
+  _torState._vlrB=_torState._vlrB||50;
+  _torState._vlrR=_torState._vlrR||50;
+  _torState._vlrA=_torState._vlrA||0;
+
+  /* Non-admin goes straight to result (read-only) */
+  _torState.step = isAdmin ? 1 : 4;
+  torWizAbrir();
+}
+
+/* Init on load */
+(function(){
+  function initTor(){ torRenderHistorico(); }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){setTimeout(initTor,1500);});
+  else setTimeout(initTor,1500);
+})();
+
+</script>
 
 <script>
 /* FEATURES DATA */
@@ -4505,525 +5259,12 @@ function midiaAbrirLB(url){
   lb.style.display='flex';
 }
 
-/* BRUXARIAS */
-var BRUX_DEFAULT = [
-  { emoji:'&#127183;', nome:'Royal Straight Flush', desc:'A mao mais rara do poker.', count:0, datas:[] }
-];
-function bruxInit(){
-  if(!NF_DATA.bruxarias.length){
-    NF_DATA.bruxarias=[{emoji:'RSF',nome:'Royal Straight Flush',desc:'A mao mais rara do poker.',count:0,datas:[]}];
-    nfSave();
-  }
-  bruxRender();
-}
-function bruxRender(){
-  var lista=document.getElementById('bruxarias-lista');
-  if(!lista) return;
-  if(!NF_DATA.bruxarias.length){
-    lista.innerHTML='<div style="color:#4a6080;font-size:13px;padding:16px;text-align:center;">Nenhuma bruxaria registrada ainda.</div>';
-    return;
-  }
-  lista.innerHTML=NF_DATA.bruxarias.map(function(b,i){
-    var adminBtns='';
-    if(nfIsAdmin()){
-      adminBtns='<div style="display:flex;gap:6px;margin-top:6px;">'
-        +'<button onclick="bruxIncrement('+i+')" style="background:rgba(139,92,246,.2);border:1px solid rgba(139,92,246,.3);border-radius:6px;color:#a78bfa;padding:3px 10px;font-size:11px;cursor:pointer;">+1</button>'
-        +'<button onclick="bruxRemover('+i+')" style="background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);border-radius:6px;color:#f87171;padding:3px 8px;font-size:11px;cursor:pointer;">x</button>'
-        +'</div>';
-    }
-    var ultData=b.datas&&b.datas.length?b.datas[b.datas.length-1]:'';
-    return '<div class="brux-item">'
-      +'<div class="brux-icon-big">'+b.emoji+'</div>'
-      +'<div class="brux-info">'
-        +'<div class="brux-nome">'+b.nome+'</div>'
-        +(b.desc?'<div class="brux-desc">'+b.desc+'</div>':'')
-        +(ultData?'<div class="brux-date">Ultimo: '+ultData+'</div>':'')
-        +(b.jogador?'<div class="brux-date" style="color:#a78bfa;">'+b.jogador+'</div>':'')
-        +adminBtns
-      +'</div>'
-      +'<div><div class="brux-count">'+b.count+'</div><div style="font-size:9px;color:#4a6080;text-align:right;">vez'+(b.count!==1?'es':'')+'</div></div>'
-    +'</div>';
-  }).join('');
-}
-function bruxIncrement(i){
-  var d=prompt('Data/contexto (ex: WK11 - Mar 2026)','');
-  if(d===null) return;
-  NF_DATA.bruxarias[i].count++;
-  if(d.trim()) NF_DATA.bruxarias[i].datas.push(d.trim());
-  nfSave(); bruxRender();
-}
-function bruxRemover(i){
-  if(!confirm('Remover esta bruxaria?')) return;
-  NF_DATA.bruxarias.splice(i,1);
-  nfSave(); bruxRender();
-}
-function bruxSalvar(){
-  nfRequireAdmin(function(){
-    var nome=(document.getElementById('brux-input-nome').value||'').trim();
-    if(!nome){ alert('Informe o nome do feito.'); return; }
-    var b={
-      emoji:(document.getElementById('brux-input-emoji').value||'').trim()||'!',
-      nome:nome,
-      desc:(document.getElementById('brux-input-desc').value||'').trim(),
-      jogador:(document.getElementById('brux-input-jogador').value||'').trim(),
-      count:1,
-      datas:[(document.getElementById('brux-input-data').value||'').trim()].filter(Boolean)
-    };
-    NF_DATA.bruxarias.push(b);
-    nfSave(); bruxRender();
-    ['brux-input-nome','brux-input-desc','brux-input-emoji','brux-input-data','brux-input-jogador']
-      .forEach(function(id){ document.getElementById(id).value=''; });
-    alert('Bruxaria registrada!');
-  });
-}
-
-/* CHURRASCO */
-var _churPlayers = [];
-var _churDespesas = [];  /* [{id, desc, valor, quem:[nomes]}] */
-var _churDespId = 0;
-
-function churInit(){
-  _churPlayers = nfPlayers().map(function(p){
-    return { nome:p, presente:true, buyin:1, rebuys:0, kos:0, pos:0, convidado:false };
-  });
-  _churDespesas = [];
-  churRenderRows();
-  churAtualizarPremios();
-}
-
-function churAddConvidado(){
-  var nome = prompt('Nome do convidado:','');
-  if(!nome || !nome.trim()) return;
-  _churPlayers.push({ nome:nome.trim(), presente:true, buyin:1, rebuys:0, kos:0, pos:0, convidado:true });
-  churRenderRows();
-  churRenderDespesas();
-}
-
-function churToggle(nome){
-  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
-  if(!pl) return;
-  pl.presente = !pl.presente;
-  if(!pl.presente){ pl.buyin=0; pl.rebuys=0; pl.kos=0; pl.pos=0; }
-  else { pl.buyin=1; }
-  /* atualiza participacao nas despesas */
-  _churDespesas.forEach(function(d){
-    if(!pl.presente){
-      d.quem = d.quem.filter(function(n){ return n!==nome; });
-    } else {
-      if(d.quem.indexOf(nome) < 0) d.quem.push(nome);
-    }
-  });
-  churRenderRows();
-  churRenderDespesas();
-}
-
-function churRenderRows(){
-  var rows = document.getElementById('chur-rows');
-  if(!rows) return;
-  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
-  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
-
-  var sorted = _churPlayers.slice().sort(function(a,b){
-    if(a.presente !== b.presente) return a.presente ? -1 : 1;
-    if(a.pos===0 && b.pos===0) return 0;
-    if(a.pos===0) return -1;
-    if(b.pos===0) return 1;
-    return b.pos - a.pos;
-  });
-
-  var html = '';
-  sorted.forEach(function(pl){
-    var eli = pl.presente && pl.pos > 0;
-    var aus = !pl.presente;
-    var tot = pl.presente ? (pl.buyin*vlrB + pl.rebuys*vlrR) : 0;
-
-    var bg  = aus ? 'rgba(107,130,160,.05)' : eli ? 'rgba(248,113,113,.07)' : 'rgba(52,211,153,.06)';
-    var brd = aus ? 'rgba(107,130,160,.15)' : eli ? 'rgba(248,113,113,.18)' : 'rgba(52,211,153,.15)';
-    var opa = aus ? '.5' : '1';
-
-    var chkBrd = pl.presente ? '#34d399' : 'rgba(107,130,160,.4)';
-    var chkBg  = pl.presente ? 'rgba(52,211,153,.2)' : 'transparent';
-    var chkMrk = pl.presente ? '<span style="color:#34d399;font-size:14px;font-weight:900;line-height:1;">&#10003;</span>' : '';
-    var nc = aus ? '#4a6080' : eli ? '#6b82a0' : '#e6edf3';
-    var nex = pl.convidado ? ' <span style="font-size:10px;color:#a78bfa;">[conv]</span>' : '';
-    var dis = aus ? 'opacity:.3;pointer-events:none;' : '';
-
-    function stp(f,v,r,g,b){
-      return '<div style="display:flex;align-items:center;justify-content:center;gap:4px;width:68px;">'
-        +'<button data-n="'+pl.nome+'" data-f="'+f+'" data-d="-1" onclick="churBtn(this)" style="width:28px;height:32px;background:rgba('+r+','+g+','+b+',.2);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:900;line-height:1;cursor:pointer;flex-shrink:0;'+dis+'">-</button>'
-        +'<span style="font-size:14px;font-weight:800;color:rgb('+r+','+g+','+b+');min-width:16px;text-align:center;flex-shrink:0;">'+v+'</span>'
-        +'<button data-n="'+pl.nome+'" data-f="'+f+'" data-d="1" onclick="churBtn(this)" style="width:28px;height:32px;background:rgba('+r+','+g+','+b+',.2);border:1.5px solid rgba('+r+','+g+','+b+',.4);border-radius:6px;color:rgb('+r+','+g+','+b+');font-size:17px;font-weight:900;line-height:1;cursor:pointer;flex-shrink:0;'+dis+'">+</button>'
-        +'</div>';
-    }
-
-    var posLbl = aus
-      ? '<span style="font-size:11px;color:#4a6080;width:44px;text-align:center;">-</span>'
-      : eli
-        ? '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:44px;">'
-            +'<span style="font-size:13px;font-weight:800;color:#f87171;">'+pl.pos+'&#186;</span>'
-            +'<button data-n="'+pl.nome+'" onclick="churBtnReativar(this)" style="font-size:9px;background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2);border-radius:4px;color:#34d399;padding:2px 5px;cursor:pointer;white-space:nowrap;">&#8617;</button>'
-          +'</div>'
-        : '<div style="display:flex;flex-direction:column;align-items:center;gap:3px;width:44px;">'
-            +'<span style="font-size:10px;color:#34d399;">ativo</span>'
-            +'<button data-n="'+pl.nome+'" onclick="churBtnEliminar(this)" style="font-size:9px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2);border-radius:4px;color:#f87171;padding:2px 6px;cursor:pointer;">out</button>'
-          +'</div>';
-
-    var remBtn = pl.convidado
-      ? '<button data-n="'+pl.nome+'" onclick="churBtnRemover(this)" style="margin-left:4px;background:rgba(248,113,113,.12);border:1px solid rgba(248,113,113,.2);border-radius:5px;color:#f87171;font-size:11px;cursor:pointer;padding:3px 7px;line-height:1;flex-shrink:0;">&#10005;</button>'
-      : '';
-
-    html += '<div style="display:flex;align-items:center;gap:8px;padding:10px 10px;border-radius:11px;background:'+bg+';border:1px solid '+brd+';opacity:'+opa+';">'
-      +'<div data-n="'+pl.nome+'" onclick="churToggle(this.getAttribute(\'data-n\'))" style="cursor:pointer;width:26px;height:26px;border-radius:6px;border:2px solid '+chkBrd+';background:'+chkBg+';display:flex;align-items:center;justify-content:center;flex-shrink:0;">'+chkMrk+'</div>'
-      +'<span data-n="'+pl.nome+'" onclick="churToggle(this.getAttribute(\'data-n\'))" style="font-size:14px;font-weight:700;color:'+nc+';cursor:pointer;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none;">'+pl.nome+nex+'</span>'
-      +stp('buyin',pl.buyin,245,158,11)
-      +stp('rebuys',pl.rebuys,99,102,241)
-      +stp('kos',pl.kos,248,113,113)
-      +'<span style="font-size:12px;font-weight:700;color:#34d399;width:68px;text-align:right;flex-shrink:0;">'+(aus?'-':('R$'+tot.toFixed(2).replace('.',',')))+'</span>'
-      +posLbl
-      +remBtn
-    +'</div>';
-  });
-  rows.innerHTML = html;
-  churRecalcGastos();
-}
-
-/* ── Despesas com rateio seletivo ── */
-function churAddDespesa(){
-  var presentes = _churPlayers.filter(function(p){ return p.presente; });
-  _churDespesas.push({
-    id: ++_churDespId,
-    desc: '',
-    valor: 0,
-    quem: presentes.map(function(p){ return p.nome; })  /* default: todos presentes */
-  });
-  churRenderDespesas();
-}
-
-function churRemoveDespesa(id){
-  _churDespesas = _churDespesas.filter(function(d){ return d.id!==id; });
-  churRenderDespesas();
-}
-
-function churRenderDespesas(){
-  var wrap = document.getElementById('chur-despesas-lista');
-  if(!wrap) return;
-  if(!_churDespesas.length){
-    wrap.innerHTML = '<div style="font-size:12px;color:#4a6080;padding:6px 0;">Nenhuma despesa cadastrada. Clique em "+ Despesa" para adicionar.</div>';
-    churAtualizarDespPreview();
-    return;
-  }
-  var presentes = _churPlayers.filter(function(p){ return p.presente; });
-  var html = '';
-  _churDespesas.forEach(function(d){
-    /* chips dos participantes */
-    var chipsHtml = presentes.map(function(pl){
-      var sel = d.quem.indexOf(pl.nome) >= 0;
-      return '<button data-id="'+d.id+'" data-nome="'+pl.nome+'" onclick="churToggleDesp(this)"'
-        +' style="padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;cursor:pointer;'
-        +'border:1.5px solid '+(sel?'rgba(52,211,153,.6)':'rgba(255,255,255,.12)')+';'
-        +'background:'+(sel?'rgba(52,211,153,.18)':'transparent')+';'
-        +'color:'+(sel?'#34d399':'#4a6080')+';'
-        +'transition:all .15s;">'+pl.nome+'</button>';
-    }).join('');
-
-    var cota = d.quem.length > 0 && d.valor > 0 ? '  cota: R$'+(d.valor/d.quem.length).toFixed(2).replace('.',',') : '';
-
-    html += '<div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 12px 10px;">'
-      /* linha 1: descricao + valor + remover */
-      +'<div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">'
-        +'<input data-id="'+d.id+'" onchange="churDespDescChange(this)" placeholder="Descricao (ex: carne, chopp, limpeza)" value="'+(d.desc||'')+'"'
-        +' style="flex:1;background:#060d1a;border:1px solid rgba(255,255,255,.1);border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:13px;min-width:0;" />'
-        +'<div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">'
-          +'<span style="font-size:12px;color:#34d399;font-weight:700;">R$</span>'
-          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="churDespValChange(this)" placeholder="0,00" value="'+(d.valor||'')+'"'
-          +' style="width:80px;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;color:#34d399;padding:8px;font-size:13px;font-weight:700;text-align:right;" />'
-        +'</div>'
-        +'<button data-id="'+d.id+'" onclick="churRemoveDespesa(this.getAttribute(\'data-id\')*1)" style="background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:12px;padding:6px 10px;cursor:pointer;flex-shrink:0;">&#10005;</button>'
-      +'</div>'
-      /* linha 2: quem paga */
-      +'<div style="font-size:10px;color:#6b82a0;margin-bottom:6px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;">Quem divide esta despesa'+cota+'</div>'
-      +'<div style="display:flex;flex-wrap:wrap;gap:6px;">'
-        +'<button data-id="'+d.id+'" onclick="churDespTodos(this.getAttribute(\'data-id\')*1)" style="padding:4px 10px;border-radius:999px;font-size:11px;cursor:pointer;border:1px solid rgba(99,102,241,.3);background:rgba(99,102,241,.1);color:#818cf8;">Todos</button>'
-        +chipsHtml
-      +'</div>'
-    +'</div>';
-  });
-  wrap.innerHTML = html;
-  churAtualizarDespPreview();
-}
-
-function churToggleDesp(btn){
-  var id   = parseInt(btn.getAttribute('data-id'));
-  var nome = btn.getAttribute('data-nome');
-  var d = _churDespesas.find(function(x){ return x.id===id; });
-  if(!d) return;
-  var idx = d.quem.indexOf(nome);
-  if(idx >= 0) d.quem.splice(idx,1);
-  else         d.quem.push(nome);
-  churRenderDespesas();
-}
-
-function churDespTodos(id){
-  var d = _churDespesas.find(function(x){ return x.id===id; });
-  if(!d) return;
-  d.quem = _churPlayers.filter(function(p){ return p.presente; }).map(function(p){ return p.nome; });
-  churRenderDespesas();
-}
-
-function churDespDescChange(inp){
-  var id = parseInt(inp.getAttribute('data-id'));
-  var d = _churDespesas.find(function(x){ return x.id===id; });
-  if(d) d.desc = inp.value;
-}
-
-function churDespValChange(inp){
-  var id = parseInt(inp.getAttribute('data-id'));
-  var d = _churDespesas.find(function(x){ return x.id===id; });
-  if(d){ d.valor = parseFloat(inp.value)||0; churRenderDespesas(); }
-}
-
-function churAtualizarDespPreview(){
-  var total = _churDespesas.reduce(function(s,d){ return s+(d.valor||0); }, 0);
-  var prev = document.getElementById('chur-desp-preview');
-  if(!prev) return;
-  if(total > 0){
-    prev.style.display = '';
-    var partes = _churDespesas.filter(function(d){ return d.valor>0; }).map(function(d){
-      return (d.desc||'Despesa')+' R$'+d.valor.toFixed(2).replace('.',',')+'/'+(d.quem.length||1)+'px';
-    });
-    prev.textContent = 'Total: R$'+total.toFixed(2).replace('.',',') + '   |   ' + partes.join('  +  ');
-  } else { prev.style.display = 'none'; }
-}
-
-/* ── Botoes ── */
-function churBtn(btn){
-  var nome  = btn.getAttribute('data-n');
-  var field = btn.getAttribute('data-f');
-  var delta = parseInt(btn.getAttribute('data-d'));
-  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
-  if(!pl || !pl.presente) return;
-  var min = field==='buyin' ? 1 : 0;
-  pl[field] = Math.max(min, (pl[field]||0) + delta);
-  churRenderRows();
-}
-function churBtnEliminar(btn){
-  var nome = btn.getAttribute('data-n');
-  var ativos = _churPlayers.filter(function(p){ return p.presente && p.pos===0; }).length;
-  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
-  if(!pl || !pl.presente || pl.pos!==0) return;
-  pl.pos = ativos;
-  churRenderRows();
-}
-function churBtnReativar(btn){
-  var nome = btn.getAttribute('data-n');
-  var pl = _churPlayers.find(function(p){ return p.nome===nome; });
-  if(!pl) return;
-  var posLib = pl.pos;
-  _churPlayers.forEach(function(p){ if(p.pos>posLib) p.pos--; });
-  pl.pos = 0;
-  churRenderRows();
-}
-function churBtnRemover(btn){
-  var nome = btn.getAttribute('data-n');
-  _churPlayers = _churPlayers.filter(function(p){ return p.nome!==nome; });
-  _churDespesas.forEach(function(d){ d.quem = d.quem.filter(function(n){ return n!==nome; }); });
-  churRenderRows();
-  churRenderDespesas();
-}
-
-function churRecalcGastos(){
-  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
-  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
-  var pote = 0;
-  _churPlayers.forEach(function(pl){ if(pl.presente) pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
-  var el = document.getElementById('chur-pote-calc');
-  if(el) el.textContent = 'R$ '+pote.toFixed(2).replace('.',',');
-  churAtualizarPremios();
-}
-
-function churAtualizarPremios(){
-  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
-  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
-  var pote = 0;
-  _churPlayers.forEach(function(pl){ if(pl.presente) pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
-  var p1=parseFloat(document.getElementById('chur-pct-1').value)||0;
-  var p2=parseFloat(document.getElementById('chur-pct-2').value)||0;
-  var p3=parseFloat(document.getElementById('chur-pct-3').value)||0;
-  var soma = p1+p2+p3;
-  var aviso = document.getElementById('chur-pct-aviso');
-  var somaEl = document.getElementById('chur-pct-soma');
-  if(aviso&&somaEl){ somaEl.textContent=soma; aviso.style.display=(soma!==100&&soma>0)?'':'none'; }
-  function sv(id,v){ var el=document.getElementById(id); if(el) el.textContent='R$ '+v.toFixed(2).replace('.',','); }
-  sv('chur-val-premio-1',pote*p1/100);
-  sv('chur-val-premio-2',pote*p2/100);
-  sv('chur-val-premio-3',pote*p3/100);
-}
-
-function churCalcular(){
-  var presentes = _churPlayers.filter(function(p){ return p.presente; });
-  if(!presentes.length){ alert('Nenhum jogador presente.'); return; }
-  var vlrB = parseFloat(document.getElementById('chur-vlr-buyin').value)||25;
-  var vlrR = parseFloat(document.getElementById('chur-vlr-rebuy').value)||25;
-  var pct1 = (parseFloat(document.getElementById('chur-pct-1').value)||0)/100;
-  var pct2 = (parseFloat(document.getElementById('chur-pct-2').value)||0)/100;
-  var pct3 = (parseFloat(document.getElementById('chur-pct-3').value)||0)/100;
-  var n = presentes.length;
-
-  var pote = 0;
-  presentes.forEach(function(pl){ pote += pl.buyin*vlrB + pl.rebuys*vlrR; });
-  var cotaPote = pote / n;
-
-  /* Despesas: cada uma rateada so entre quem participa */
-  var cotaDesp = {};
-  presentes.forEach(function(pl){ cotaDesp[pl.nome] = 0; });
-  _churDespesas.forEach(function(d){
-    if(!d.valor || !d.quem.length) return;
-    var cota = d.valor / d.quem.length;
-    d.quem.forEach(function(nome){ if(cotaDesp[nome]!==undefined) cotaDesp[nome] += cota; });
-  });
-
-  /* Vencedores */
-  var ativos = presentes.filter(function(p){ return p.pos===0; });
-  var campeao = ativos.length===1 ? ativos[0].nome : '';
-  function lugar(pl){
-    if(pl.nome===campeao) return 1;
-    if(pl.pos===0) return 999;
-    return pl.pos+1;
-  }
-  var premios = {};
-  presentes.forEach(function(pl){ premios[pl.nome]=0; });
-  presentes.forEach(function(pl){
-    var l=lugar(pl);
-    if(l===1) premios[pl.nome]+=pote*pct1;
-    if(l===2) premios[pl.nome]+=pote*pct2;
-    if(l===3) premios[pl.nome]+=pote*pct3;
-  });
-
-  /* Saldo: gastou_buyin_reb - cota_pote - cota_despesas + premio */
-  /* Quem pagou uma despesa recebe de volta o valor que nao e dele */
-  var pagouDesp = {};
-  presentes.forEach(function(pl){ pagouDesp[pl.nome] = 0; });
-  _churDespesas.forEach(function(d){
-    /* quem pagou fisicamente? usamos o campo desc para identificar — nao temos campo "quem pagou"
-       então usamos uma abordagem diferente: a despesa foi bancada por alguem, mas aqui
-       consideramos que o valor JA foi adiantado — entao quem esta na lista "quem" paga a cota
-       e o restante vira credito para quem pagou. Como nao temos "pagador", ignoramos aqui
-       e apenas calculamos a cota devida por cada um. */
-  });
-
-  var saldos = {};
-  presentes.forEach(function(pl){
-    var gastoBuyin = pl.buyin*vlrB + pl.rebuys*vlrR;
-    saldos[pl.nome] = gastoBuyin - cotaPote - cotaDesp[pl.nome] + premios[pl.nome];
-  });
-
-  /* Bloco premios */
-  var resPote = document.getElementById('chur-res-pote');
-  var rPL = document.getElementById('chur-res-pote-linhas');
-  var temP = presentes.some(function(pl){ return premios[pl.nome]>0; });
-  if(pote>0 && temP){
-    resPote.style.display='';
-    rPL.innerHTML=[{pos:'1o',pct:pct1,l:1},{pos:'2o',pct:pct2,l:2},{pos:'3o',pct:pct3,l:3}].map(function(lp){
-      var v=presentes.find(function(pl){ return lugar(pl)===lp.l; });
-      if(!v || pote*lp.pct<0.005) return '';
-      return '<div class="chur-res-linha"><span class="chur-res-nome">'+lp.pos+' '+v.nome+'</span><span class="chur-res-val recebe">+'+nfFmt(pote*lp.pct)+'</span></div>';
-    }).filter(Boolean).join('');
-  } else { resPote.style.display='none'; }
-
-  /* Saldo final */
-  var sorted2 = presentes.slice().sort(function(a,b){ return lugar(a)-lugar(b); });
-  document.getElementById('chur-res-linhas').innerHTML = sorted2.map(function(pl){
-    var s = saldos[pl.nome];
-    var cls = s>0.005?'recebe':s<-0.005?'deve':'ok';
-    var txt = s>0.005?'+'+nfFmt(s)+' a receber':s<-0.005?'-'+nfFmt(Math.abs(s))+' a pagar':'em dia';
-    var l = lugar(pl);
-    var lt = l===1?'1o':l===2?'2o':l===3?'3o':l<999?(l+'o'):'ativo';
-    var det = '('+lt+' | buy:'+pl.buyin+' reb:'+pl.rebuys+' ko:'+pl.kos
-      +(cotaDesp[pl.nome]>0?' | desp:-'+nfFmt(cotaDesp[pl.nome]):'')
-      +(premios[pl.nome]>0?' | premio:+'+nfFmt(premios[pl.nome]):'')
-      +')';
-    return '<div class="chur-res-linha">'
-      +'<span class="chur-res-nome">'+pl.nome+' <span style="font-size:10px;color:#4a6080;">'+det+'</span></span>'
-      +'<span class="chur-res-val '+cls+'">'+txt+'</span>'
-      +'</div>';
-  }).join('');
-
-  /* Transferencias */
-  var creds=[],devs=[];
-  presentes.forEach(function(pl){
-    var s=Math.round(saldos[pl.nome]*100)/100;
-    if(s>0.005) creds.push({nome:pl.nome,val:s});
-    else if(s<-0.005) devs.push({nome:pl.nome,val:-s});
-  });
-  creds.sort(function(a,b){return b.val-a.val;});
-  devs.sort(function(a,b){return b.val-a.val;});
-  var trans=[],ci=0,di=0;
-  var cc=creds.map(function(x){return{nome:x.nome,val:x.val};});
-  var dd=devs.map(function(x){return{nome:x.nome,val:x.val};});
-  while(ci<cc.length && di<dd.length){
-    var tv=Math.min(cc[ci].val,dd[di].val);
-    trans.push({de:dd[di].nome,para:cc[ci].nome,val:tv});
-    cc[ci].val-=tv; dd[di].val-=tv;
-    if(cc[ci].val<0.005) ci++;
-    if(dd[di].val<0.005) di++;
-  }
-  var tL=document.getElementById('chur-trans-lista');
-  tL.innerHTML = !trans.length
-    ? '<div class="chur-trans-item" style="color:#34d399;">Todos estao quites!</div>'
-    : trans.map(function(tr){
-        return '<div class="chur-trans-item"><strong>'+tr.de+'</strong> paga <strong>'+nfFmt(tr.val)+'</strong> para <strong>'+tr.para+'</strong></div>';
-      }).join('');
-  document.getElementById('chur-resultado').style.display='';
-}
-
-function churLimpar(){
-  _churPlayers = _churPlayers.filter(function(p){ return !p.convidado; });
-  _churPlayers.forEach(function(pl){ pl.presente=true; pl.buyin=1; pl.rebuys=0; pl.kos=0; pl.pos=0; });
-  _churDespesas = [];
-  var el=document.getElementById('chur-evento-nome'); if(el) el.value='';
-  document.getElementById('chur-pct-1').value='50';
-  document.getElementById('chur-pct-2').value='30';
-  document.getElementById('chur-pct-3').value='20';
-  var dp=document.getElementById('chur-desp-preview'); if(dp) dp.style.display='none';
-  document.getElementById('chur-resultado').style.display='none';
-  churRenderRows();
-  churRenderDespesas();
-}
-
-function churCompartilhar(){
-  var evento = document.getElementById('chur-evento-nome').value || 'Rateio';
-  var presentes = _churPlayers.filter(function(p){ return p.presente; });
-  var txt = '[Rateio] '+evento+'\n';
-  txt += 'Presentes: '+presentes.map(function(p){return p.nome;}).join(', ')+'\n\n';
-  var poteEl = document.getElementById('chur-pote-calc');
-  if(poteEl) txt += 'Pote: '+poteEl.textContent+'\n';
-  if(_churDespesas.length){
-    txt += '\nDespesas:\n';
-    _churDespesas.forEach(function(d){
-      if(d.valor>0) txt += '- '+(d.desc||'Despesa')+': R$'+d.valor.toFixed(2).replace('.',',')
-        +' ('+d.quem.join(', ')+')\n';
-    });
-  }
-  txt += '\n';
-  var pL = document.querySelectorAll('#chur-res-pote-linhas .chur-res-linha');
-  if(pL.length){ txt+='Premios:\n'; pL.forEach(function(l){ txt+=l.querySelector('.chur-res-nome').textContent+': '+l.querySelector('.chur-res-val').textContent+'\n'; }); txt+='\n'; }
-  txt += 'Saldo final:\n';
-  document.querySelectorAll('#chur-res-linhas .chur-res-linha').forEach(function(l){
-    var nome = l.querySelector('.chur-res-nome').childNodes[0].textContent.trim();
-    txt += nome+': '+l.querySelector('.chur-res-val').textContent+'\n';
-  });
-  var trans = document.querySelectorAll('#chur-trans-lista .chur-trans-item');
-  if(trans.length){ txt+='\nTransferencias:\n'; trans.forEach(function(t){ txt+=t.textContent+'\n'; }); }
-  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
-}
 
 /* BOOT */
 (function nfBoot(){
   function init(){
     ataInit();
     midiaInit();
-    bruxInit();
-    churInit();
     nfRefreshAdminUI();
   }
   if(document.readyState==='loading'){
@@ -5031,6 +5272,8 @@ function churCompartilhar(){
   } else { setTimeout(init,1200); }
 })();
 </script>
+
+
 
 <!-- ═══ TORNEIOS ESPECIAIS ═══ -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -14984,15 +15227,20 @@ window.abrirPerfil = function(jogadorNome){
   modal.id = 'perfil-modal';
   var _isMob = window.innerWidth <= 640 || document.body.classList.contains('mobile-mode');
   modal.style.cssText = _isMob
-    ? 'position:fixed;inset:0;z-index:99990;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:rgba(0,0,0,0.97);touch-action:none;'
+    ? 'position:fixed;inset:0;z-index:99990;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:rgba(0,0,0,0.97);touch-action:pan-y;'
     : 'position:fixed;inset:0;z-index:99990;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);';
   modal.addEventListener('click', function(e){ if(e.target===modal) window.fecharPerfil(); });
-  /* Bloquear scroll do body enquanto modal estiver aberto */
-  var _bodyScrollY = window.scrollY;
+  /* Bloquear scroll — iOS needs position:fixed, Android just needs overflow:hidden */
+  var _bodyScrollY = window.scrollY || document.documentElement.scrollTop;
+  var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   document.body.style.overflow = 'hidden';
-  document.body.style.position = 'fixed';
-  document.body.style.top = '-'+_bodyScrollY+'px';
-  document.body.style.width = '100%';
+  if(_isIOS){
+    document.body.style.position = 'fixed';
+    document.body.style.top = '-'+_bodyScrollY+'px';
+    document.body.style.width = '100%';
+  }
+  modal._bodyScrollY = _bodyScrollY;
+  modal._isIOS = _isIOS;
 
   /* Estrutura principal */
   var box = document.createElement('div');
@@ -15985,12 +16233,13 @@ window.fecharPerfil = function(){
   if(m) m.remove();
   if(ePerfilEvo){ try{ePerfilEvo.dispose();}catch(e){} ePerfilEvo=null; }
   /* Restaurar scroll do body */
-  var scrollY = parseInt(document.body.style.top || '0') * -1;
   document.body.style.overflow = '';
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.width = '';
-  window.scrollTo(0, scrollY);
+  if(m && m._bodyScrollY !== undefined){
+    window.scrollTo(0, m._bodyScrollY);
+  }
 };
 
 /* ═══════════════════════════════════════
@@ -17885,6 +18134,7 @@ var _adminAuthed = false;
 var DEFAULT_HOF = {"Israel":{"ouro":5,"prata":2,"bronze":0},"Magu":{"ouro":2,"prata":4,"bronze":1},"Marcus":{"ouro":1,"prata":1,"bronze":0},"Cristiano":{"ouro":0,"prata":1,"bronze":0},"Pedro":{"ouro":0,"prata":0,"bronze":2},"Rafa":{"ouro":0,"prata":0,"bronze":3},"Filipe":{"ouro":0,"prata":0,"bronze":1},"Oscar":{"ouro":0,"prata":0,"bronze":1}};
 
 function pedirSenha(cb){
+  window.pedirSenha = pedirSenha; /* expose globally */
   if(_adminAuthed){ cb(); return; }
   var modal = document.createElement('div');
   modal.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:20px;';
