@@ -2500,7 +2500,7 @@ document.addEventListener('DOMContentLoaded', function(){
     rgba(212,175,55,0.15) 85%,
     transparent 100%);
   background-size: 200% auto;
-  animation: perfis-gold-shimmer 3s linear infinite;
+  animation: perfis-gold-shimmer 14s linear infinite;
   border-radius: 12px 12px 0 0;
 }
 #perfis-lava-wrap {
@@ -2531,7 +2531,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div>
-        <div style="font-size:15px;font-weight:900;letter-spacing:.2px;background:linear-gradient(90deg,#e6edf3 0%,#fde68a 55%,#e6edf3 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:perfis-gold-shimmer 4s linear infinite;">Perfis dos Jogadores</div>
+        <div style="font-size:15px;font-weight:900;letter-spacing:.2px;background:linear-gradient(90deg,#e6edf3 0%,#fde68a 55%,#e6edf3 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:perfis-gold-shimmer 14s linear infinite;">Perfis dos Jogadores</div>
         <div style="font-size:11px;color:#8a7040;margin-top:1px;">✨ Toque num jogador para ver suas estatísticas</div>
       </div>
     </div>
@@ -2544,23 +2544,32 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <script>
 /* ═══════════════════════════════════════════════════════════════
-   PERFIS ICON — Supernova de Avatares
-   Os jogadores são estrelas num sistema solar minúsculo.
-   Um pulsar central explode em ondas de energia douradas.
-   Cada avatar orbita em anel próprio, deixa trilha cometária
-   e pulsa ao ser atingido pela onda de choque.
+   PERFIS ICON — Spotlight Suave
+   Cada avatar fica em destaque por ~4s, grande e bem visível.
+   Os outros orbitam pequenos e discretos ao redor.
+   Transição lenta e elegante entre jogadores.
    Canvas 88×88 retina → exibido 44×44 via CSS.
    ═══════════════════════════════════════════════════════════════ */
-(function initPerfisSuperNova(){
+(function initPerfisSpotlight(){
   var CORES=['#3b82f6','#8b5cf6','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6','#f97316','#06b6d4'];
-  var W=88,H=88,CX=44,CY=44;
-  var imgCache={}, names=[], stars=[], waves=[], trails=[];
+  var W=88, H=88, CX=44, CY=44;
+  var imgCache={}, names=[], stars=[];
   var raf=null, canvas, ctx;
   var t=0;
 
+  /* Qual estrela está em destaque agora (índice) */
+  var spotIdx   = 0;
+  var spotPhase = 0;  /* 0=entrando 1=exibindo 2=saindo */
+  var spotT     = 0;  /* tempo dentro da fase atual */
+
+  /* Durações em frames (60fps) */
+  var DUR_IN   = 80;   /* ~1.3s crescendo */
+  var DUR_SHOW = 300;  /* ~5s em exibição plena */
+  var DUR_OUT  = 80;   /* ~1.3s encolhendo */
+
   /* ── Imagens ── */
   function loadImg(n){
-    if(imgCache[n]!==undefined)return;
+    if(imgCache[n]!==undefined) return;
     imgCache[n]=null;
     var f=window.photoFor?window.photoFor(n):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[n]);
     if(!f){imgCache[n]='err';return;}
@@ -2570,174 +2579,232 @@ document.addEventListener('DOMContentLoaded', function(){
     img.src=f;
   }
 
-  /* ── Monta estrelas (planetas) ── */
+  /* ── Easing suave ── */
+  function easeInOut(x){
+    return x<0.5 ? 2*x*x : 1-Math.pow(-2*x+2,2)/2;
+  }
+
+  /* ── Monta estrelas em anel único ── */
   function makeStars(ns){
+    var N=ns.length;
     stars=ns.map(function(name,i){
-      var N=ns.length;
-      /* Distribui em 3 anéis concêntricos */
-      var ring= i<3 ? 0 : i<6 ? 1 : 2;
-      var rBase=[14,21,28][ring];
-      var offset=(i - (ring===0?0:ring===1?3:6));
-      var perRing=[3,3,3][ring]||3;
-      var baseAngle=(Math.PI*2/perRing)*offset + ring*0.52;
-      var spd=[0.022,0.015,0.010][ring] * (i%2===0?1:-1);
+      var startAngle = (Math.PI*2/N)*i - Math.PI/2;
       return {
-        name:name, cor:CORES[i%CORES.length],
-        ring:ring, r:rBase,
-        angle:baseAngle, spd:spd,
-        radius: 7 - ring*1.2,   /* menor conforme afasta */
-        pulse:0,                /* quanto está pulsando */
-        trailBuf:[]             /* últimas posições */
+        name: name,
+        cor:  CORES[i%CORES.length],
+        angle: startAngle,
+        spd:   0.0018,
+        baseR: 28,
+        scale: 1.0,
+        alpha: 1.0,
+        labelAlpha: 0.0,
+        drawX: CX + Math.cos(startAngle)*28,  /* posição real interpolada */
+        drawY: CY + Math.sin(startAngle)*28
       };
     });
   }
 
-  /* ── Dispara onda de choque ── */
-  function fireWave(){
-    waves.push({ r:4, maxR:46, alpha:0.9, gold: Math.random()>0.4 });
-  }
+  /* ── Calcula scale/alpha alvo de cada estrela ── */
+  function updateStars(){
+    var N=stars.length;
+    stars.forEach(function(s,i){
+      s.angle += s.spd;
 
-  /* ── Desenha pulsar central ── */
-  function drawPulsar(){
-    /* Núcleo */
-    var pulse = 0.55 + 0.45*Math.sin(t*0.055);
-    var gcore = ctx.createRadialGradient(CX,CY,0,CX,CY,7*pulse);
-    gcore.addColorStop(0,'rgba(255,255,220,1)');
-    gcore.addColorStop(0.3,'rgba(255,215,0,0.9)');
-    gcore.addColorStop(0.7,'rgba(180,100,0,0.5)');
-    gcore.addColorStop(1,'rgba(180,80,0,0)');
-    ctx.beginPath(); ctx.arc(CX,CY,7*pulse,0,Math.PI*2);
-    ctx.fillStyle=gcore; ctx.fill();
+      /* Posição orbital real */
+      var orbX = CX + Math.cos(s.angle) * s.baseR;
+      var orbY = CY + Math.sin(s.angle) * s.baseR;
 
-    /* Raios de luz saindo do núcleo */
-    var nRays=8;
-    for(var r=0;r<nRays;r++){
-      var ra= t*0.04 + (Math.PI*2/nRays)*r;
-      var len= 9 + 5*Math.sin(t*0.07+r*1.3);
-      var alpha= 0.15 + 0.12*Math.sin(t*0.05+r);
-      ctx.save();
-      ctx.strokeStyle='rgba(255,215,0,'+alpha+')';
-      ctx.lineWidth=0.8;
-      ctx.shadowColor='rgba(255,215,0,0.5)'; ctx.shadowBlur=3;
-      ctx.beginPath();
-      ctx.moveTo(CX+Math.cos(ra)*5, CY+Math.sin(ra)*5);
-      ctx.lineTo(CX+Math.cos(ra)*(5+len), CY+Math.sin(ra)*(5+len));
-      ctx.stroke();
-      ctx.restore();
-    }
-  }
+      var isSpot = (i===spotIdx);
+      var prog = spotT / (spotPhase===0 ? DUR_IN : spotPhase===1 ? DUR_SHOW : DUR_OUT);
+      var ease = easeInOut(Math.min(prog,1));
 
-  /* ── Desenha ondas de choque ── */
-  function drawWaves(){
-    waves=waves.filter(function(w){return w.alpha>0.01;});
-    waves.forEach(function(w){
-      w.r += 0.9;
-      w.alpha *= 0.955;
-      /* Verifica se atingiu alguma estrela */
-      stars.forEach(function(s){
-        var sx=CX+Math.cos(s.angle)*s.r;
-        var sy=CY+Math.sin(s.angle)*s.r;
-        var d=Math.sqrt((sx-CX)**2+(sy-CY)**2);
-        if(Math.abs(d-w.r)<2.5 && s.pulse<0.3) s.pulse=1.0;
-      });
-      ctx.save();
-      ctx.globalAlpha=w.alpha;
-      ctx.strokeStyle=w.gold?'rgba(255,215,0,1)':'rgba(120,180,255,1)';
-      ctx.lineWidth=w.gold?1.2:0.8;
-      ctx.shadowColor=w.gold?'rgba(255,215,0,0.7)':'rgba(100,160,255,0.5)';
-      ctx.shadowBlur=5;
-      ctx.beginPath(); ctx.arc(CX,CY,w.r,0,Math.PI*2);
-      ctx.stroke();
-      ctx.restore();
+      var targetScale, targetAlpha, targetLabel, targetX, targetY;
+      if(isSpot){
+        /* Quando em spotlight, vai para o centro */
+        targetX = CX;
+        targetY = CY;
+        if(spotPhase===0){
+          targetScale = 1 + ease * 4.0;
+          targetAlpha = 1;
+          targetLabel = ease;
+        } else if(spotPhase===1){
+          var breathe = 0.04 * Math.sin(t * 0.018);
+          targetScale = 5.0 + breathe;
+          targetAlpha = 1;
+          targetLabel = 1;
+        } else {
+          targetScale = 5.0 - ease * 4.0;
+          targetAlpha = 1;
+          targetLabel = 1 - ease;
+        }
+      } else {
+        /* Não-spotlight: fica no anel */
+        targetX = orbX;
+        targetY = orbY;
+        targetScale = 0.85;
+        targetAlpha = 0.30 + 0.12*Math.sin(t*0.012 + i*0.9);
+        targetLabel = 0;
+      }
+
+      /* Interpola posição e visual suavemente */
+      s.drawX  += (targetX     - s.drawX)  * 0.04;
+      s.drawY  += (targetY     - s.drawY)  * 0.04;
+      s.scale  += (targetScale - s.scale)  * 0.04;
+      s.alpha  += (targetAlpha - s.alpha)  * 0.04;
+      s.labelAlpha += (targetLabel - s.labelAlpha) * 0.04;
     });
   }
 
-  /* ── Desenha anéis de órbita ── */
-  function drawOrbits(){
-    [14,21,28].forEach(function(r,i){
-      ctx.save();
-      ctx.strokeStyle='rgba(255,255,255,0.04)';
-      ctx.lineWidth=0.6;
-      ctx.setLineDash([2,4]);
-      ctx.beginPath(); ctx.arc(CX,CY,r,0,Math.PI*2);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      ctx.restore();
-    });
-  }
-
-  /* ── Desenha trilha cometária de uma estrela ── */
-  function drawTrail(s){
-    var buf=s.trailBuf;
-    if(buf.length<2)return;
-    for(var i=1;i<buf.length;i++){
-      var prog=i/(buf.length-1);
-      var alpha=prog*0.35;
-      ctx.save();
-      ctx.globalAlpha=alpha;
-      ctx.strokeStyle=s.cor;
-      ctx.lineWidth=s.radius*0.55*prog;
-      ctx.shadowColor=s.cor; ctx.shadowBlur=3*prog;
-      ctx.beginPath();
-      ctx.moveTo(buf[i-1].x,buf[i-1].y);
-      ctx.lineTo(buf[i].x,buf[i].y);
-      ctx.stroke();
-      ctx.restore();
+  /* ── Avança máquina de estado do spotlight ── */
+  function tickSpot(){
+    spotT++;
+    var dur = spotPhase===0 ? DUR_IN : spotPhase===1 ? DUR_SHOW : DUR_OUT;
+    if(spotT >= dur){
+      spotT = 0;
+      spotPhase++;
+      if(spotPhase > 2){
+        spotPhase = 0;
+        spotIdx = (spotIdx + 1) % stars.length;
+      }
     }
   }
 
-  /* ── Desenha avatar de uma estrela ── */
+  /* ── Desenha uma estrela ── */
   function drawStar(s){
-    var sx=CX+Math.cos(s.angle)*s.r;
-    var sy=CY+Math.sin(s.angle)*s.r;
-    var r=s.radius * (1 + s.pulse*0.45);
-    var glow= s.pulse>0.05;
+    var sx = s.drawX;
+    var sy = s.drawY;
+    var r  = 7 * s.scale;
+    var isSpot = (stars[spotIdx]===s);
 
     ctx.save();
-    if(glow){
-      ctx.shadowColor=s.cor;
-      ctx.shadowBlur=6+s.pulse*8;
+    ctx.globalAlpha = s.alpha;
+
+    /* Aura dourada atrás do spotlight */
+    if(isSpot && s.scale > 1.8){
+      var auraStrength = Math.min((s.scale-1.8)/3.2, 1);
+      var aura = ctx.createRadialGradient(sx,sy, r*0.5, sx,sy, r*1.6);
+      aura.addColorStop(0,   'rgba(212,175,55,'+(0.30*auraStrength)+')');
+      aura.addColorStop(0.5, 'rgba(212,175,55,'+(0.10*auraStrength)+')');
+      aura.addColorStop(1,   'rgba(212,175,55,0)');
+      ctx.fillStyle=aura;
+      ctx.beginPath(); ctx.arc(sx,sy,r*1.6,0,Math.PI*2); ctx.fill();
     }
+
+    /* Sombra/glow */
+    if(isSpot){
+      ctx.shadowColor = s.cor;
+      ctx.shadowBlur  = 6 * Math.min(s.scale/5.0, 1) + 4;
+    } else {
+      /* Sem sombra nas estrelas de fundo quando spotlight está crescido
+         — evita que o shadowBlur vaze sobre o avatar em evidência */
+      var spotScale = stars[spotIdx] ? stars[spotIdx].scale : 0;
+      ctx.shadowColor = spotScale > 1.5 ? 'transparent' : s.cor;
+      ctx.shadowBlur  = spotScale > 1.5 ? 0 : 3;
+    }
+
     /* Clip circular */
     ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.clip();
-    /* Fundo */
+
+    /* Fundo cor */
     ctx.fillStyle=s.cor; ctx.fillRect(sx-r,sy-r,r*2,r*2);
-    /* Foto */
+
+    /* Foto ou inicial */
     var img=imgCache[s.name];
-    if(img&&img!=='err'){
-      try{ctx.drawImage(img,sx-r,sy-r,r*2,r*2);}catch(e){}
+    if(img && img!=='err'){
+      try{ ctx.drawImage(img, sx-r, sy-r, r*2, r*2); }catch(e){}
     } else {
+      /* Gradiente de fundo */
       var gr=ctx.createRadialGradient(sx-r*0.3,sy-r*0.3,r*0.1,sx,sy,r);
-      gr.addColorStop(0,'rgba(255,255,255,0.2)');
-      gr.addColorStop(1,'rgba(0,0,0,0.2)');
+      gr.addColorStop(0,'rgba(255,255,255,0.22)'); gr.addColorStop(1,'rgba(0,0,0,0.2)');
       ctx.fillStyle=gr; ctx.fillRect(sx-r,sy-r,r*2,r*2);
+      /* Inicial */
       ctx.fillStyle='#fff';
-      ctx.font='bold '+(r*1.05)+'px system-ui';
+      ctx.font='bold '+Math.round(r*0.9)+'px system-ui,sans-serif';
       ctx.textAlign='center'; ctx.textBaseline='middle';
-      ctx.shadowColor='rgba(0,0,0,0.7)'; ctx.shadowBlur=2;
-      ctx.fillText(s.name?s.name[0].toUpperCase():'?',sx,sy+0.5);
+      ctx.shadowColor='rgba(0,0,0,0.8)'; ctx.shadowBlur=3;
+      ctx.fillText(s.name?s.name[0].toUpperCase():'?', sx, sy+1);
     }
-    /* Reflexo */
-    var sh=ctx.createRadialGradient(sx-r*0.3,sy-r*0.45,r*0.05,sx-r*0.1,sy-r*0.2,r*0.65);
-    sh.addColorStop(0,'rgba(255,255,255,0.35)');
-    sh.addColorStop(0.5,'rgba(255,255,255,0.06)');
+
+    /* Reflexo especular vidro */
+    var sh=ctx.createRadialGradient(sx-r*0.3,sy-r*0.45,r*0.04,sx-r*0.1,sy-r*0.2,r*0.65);
+    sh.addColorStop(0,'rgba(255,255,255,0.38)');
+    sh.addColorStop(0.5,'rgba(255,255,255,0.07)');
     sh.addColorStop(1,'rgba(255,255,255,0)');
     ctx.fillStyle=sh; ctx.fillRect(sx-r,sy-r,r*2,r*2);
     ctx.restore();
 
-    /* Anel */
+    /* Anel externo */
     ctx.save();
-    ctx.strokeStyle=glow
-      ?'rgba(255,255,255,'+(0.5+s.pulse*0.4)+')'
-      :'rgba(255,255,255,0.15)';
-    ctx.lineWidth=glow?1.1:0.6;
-    if(glow){ctx.shadowColor=s.cor;ctx.shadowBlur=5+s.pulse*5;}
+    ctx.globalAlpha = s.alpha * (isSpot ? 0.9 : 0.3);
+    ctx.strokeStyle = isSpot ? 'rgba(255,215,0,0.9)' : 'rgba(255,255,255,0.4)';
+    ctx.lineWidth   = isSpot ? Math.max(0.8, 1.4 * Math.min(s.scale/3.2, 1)) : 0.5;
+    if(isSpot){ ctx.shadowColor='rgba(212,175,55,0.8)'; ctx.shadowBlur=6; }
     ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.stroke();
     ctx.restore();
 
-    /* Atualiza trilha */
-    s.trailBuf.push({x:sx,y:sy});
-    if(s.trailBuf.length>18) s.trailBuf.shift();
+    /* Nome: dentro do avatar quando grande, abaixo quando pequeno */
+    if(s.labelAlpha > 0.02){
+      ctx.save();
+      ctx.globalAlpha = s.labelAlpha;
+      var label = s.name.charAt(0).toUpperCase() + s.name.slice(1,8).toLowerCase();
+
+      /* Quando grande (spotlight): nome dentro do avatar, faixa na base */
+      if(s.scale > 2.0){
+        var bandH = Math.min(r * 0.32, 14);
+        var bandY = sy + r - bandH;
+        /* Faixa escura semitransparente na base da bolinha */
+        ctx.save();
+        ctx.beginPath(); ctx.arc(sx,sy,r,0,Math.PI*2); ctx.clip();
+        var band = ctx.createLinearGradient(0, bandY, 0, sy+r);
+        band.addColorStop(0, 'rgba(0,0,0,0)');
+        band.addColorStop(0.4,'rgba(0,0,0,0.55)');
+        band.addColorStop(1, 'rgba(0,0,0,0.75)');
+        ctx.fillStyle=band;
+        ctx.fillRect(sx-r, bandY, r*2, bandH+1);
+        ctx.restore();
+        /* Texto */
+        ctx.fillStyle='#fff';
+        var fs = Math.max(6, Math.min(bandH*0.62, 11));
+        ctx.font='bold '+fs+'px system-ui,sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowColor='rgba(0,0,0,0.9)'; ctx.shadowBlur=3;
+        ctx.fillText(label, sx, bandY + bandH*0.55);
+      } else {
+        /* Quando pequeno: pill abaixo */
+        var ly = sy + r + 5;
+        if(ly < H - 3){
+          var lw = Math.min(label.length*4.5+8, 38);
+          var lx = Math.max(lw/2+2, Math.min(W-lw/2-2, sx));
+          var lg=ctx.createLinearGradient(lx-lw/2,0,lx+lw/2,0);
+          lg.addColorStop(0,'rgba(100,65,0,0)');
+          lg.addColorStop(0.3,'rgba(212,175,55,0.55)');
+          lg.addColorStop(0.7,'rgba(212,175,55,0.55)');
+          lg.addColorStop(1,'rgba(100,65,0,0)');
+          ctx.fillStyle=lg;
+          ctx.beginPath();
+          if(ctx.roundRect) ctx.roundRect(lx-lw/2, ly-4, lw, 9, 3);
+          else ctx.rect(lx-lw/2, ly-4, lw, 9);
+          ctx.fill();
+          ctx.fillStyle='#ffe57a';
+          ctx.font='bold 5.5px system-ui,sans-serif';
+          ctx.textAlign='center'; ctx.textBaseline='middle';
+          ctx.shadowColor='rgba(0,0,0,0.9)'; ctx.shadowBlur=3;
+          ctx.fillText(label, lx, ly+0.5);
+        }
+      }
+      ctx.restore();
+    }
+  }
+
+  /* ── Desenha pulsar central (menor e mais sutil) ── */
+  function drawPulsar(){
+    var pulse = 0.6 + 0.4*Math.sin(t*0.03);
+    var gc=ctx.createRadialGradient(CX,CY,0,CX,CY,5*pulse);
+    gc.addColorStop(0,'rgba(255,255,220,0.9)');
+    gc.addColorStop(0.4,'rgba(255,215,0,0.6)');
+    gc.addColorStop(1,'rgba(180,100,0,0)');
+    ctx.beginPath(); ctx.arc(CX,CY,5*pulse,0,Math.PI*2);
+    ctx.fillStyle=gc; ctx.fill();
   }
 
   /* ── Loop ── */
@@ -2745,36 +2812,46 @@ document.addEventListener('DOMContentLoaded', function(){
     t++;
     ctx.clearRect(0,0,W,H);
 
-    /* Fundo estelar */
+    /* Fundo */
     var bg=ctx.createRadialGradient(CX,CY,0,CX,CY,W*0.65);
-    bg.addColorStop(0,'#0a1628'); bg.addColorStop(0.5,'#060d1a'); bg.addColorStop(1,'#020710');
+    bg.addColorStop(0,'#0a1628'); bg.addColorStop(0.6,'#060d1a'); bg.addColorStop(1,'#020710');
     ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
 
-    /* Estrelas de fundo minúsculas */
-    ctx.fillStyle='rgba(255,255,255,0.55)';
+    /* Estrelinhas de fundo */
     [[8,12],[73,7],[18,78],[82,65],[40,4],[5,50],[88,30],[55,82],[30,38]].forEach(function(p,i){
-      var a=0.25+0.22*Math.sin(t*0.02+i*1.7);
-      ctx.globalAlpha=a;
-      ctx.beginPath(); ctx.arc(p[0]*W/100,p[1]*H/100,0.7,0,Math.PI*2); ctx.fill();
+      ctx.globalAlpha=0.18+0.12*Math.sin(t*0.015+i*1.7);
+      ctx.fillStyle='rgba(255,255,255,0.8)';
+      ctx.beginPath(); ctx.arc(p[0]*W/100,p[1]*H/100,0.6,0,Math.PI*2); ctx.fill();
     });
     ctx.globalAlpha=1;
 
-    /* Onda periódica */
-    if(t%90===0) fireWave();
-    /* Onda dourada mais rara */
-    if(t%210===105) { waves.push({r:4,maxR:46,alpha:0.75,gold:true}); }
+    /* Anel de órbita sutil */
+    ctx.save();
+    ctx.strokeStyle='rgba(255,255,255,0.05)';
+    ctx.lineWidth=0.5;
+    ctx.setLineDash([2,5]);
+    ctx.beginPath(); ctx.arc(CX,CY,28,0,Math.PI*2); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
 
-    drawOrbits();
-    drawWaves();
-    drawPulsar();
+    tickSpot();
+    updateStars();
 
-    /* Atualiza e desenha estrelas (trilha antes do avatar) */
+    /* Desenha não-spotlight primeiro, spotlight por cima */
+    var spot = stars[spotIdx];
+    var spotR = 7 * spot.scale;  /* raio atual do spotlight */
     stars.forEach(function(s){
-      s.angle += s.spd;
-      s.pulse *= 0.92;
-      drawTrail(s);
+      if(s===spot) return;
+      /* Não desenha estrelas que fisicamente se sobreponham ao spotlight */
+      var dx = s.drawX - spot.drawX;
+      var dy = s.drawY - spot.drawY;
+      var dist = Math.sqrt(dx*dx + dy*dy);
+      if(dist < spotR + 7 * s.scale) return;  /* dentro da área do spotlight */
+      drawStar(s);
     });
-    stars.forEach(function(s){ drawStar(s); });
+    /* Pulsar só aparece quando spotlight não está no centro */
+    if(spot.scale < 1.5) drawPulsar();
+    drawStar(spot);  /* spotlight sempre no topo, limpo */
 
     raf=requestAnimationFrame(loop);
   }
@@ -2790,9 +2867,7 @@ document.addEventListener('DOMContentLoaded', function(){
     names=players.slice(0,9);
     names.forEach(loadImg);
     makeStars(names);
-    /* Dispara primeira onda imediatamente */
-    fireWave();
-    if(raf)cancelAnimationFrame(raf);
+    if(raf) cancelAnimationFrame(raf);
     requestAnimationFrame(loop);
   }
 
