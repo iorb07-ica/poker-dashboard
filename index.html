@@ -3956,6 +3956,29 @@ document.addEventListener('DOMContentLoaded', function(){
             <!-- STEP 4: Resultado -->
             <div id="tor-step-4" style="display:none;">
               <div style="font-size:13px;font-weight:700;color:#e6edf3;margin-bottom:14px;">&#127942; Resultado Final</div>
+
+              <!-- Seleção dos vencedores -->
+              <div style="background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);border-radius:12px;padding:12px 14px;margin-bottom:14px;">
+                <div style="font-size:11px;font-weight:800;color:#f59e0b;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;">&#127942; Quem ficou no pódio?</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;width:24px;text-align:center;">&#129351;</span>
+                    <span style="font-size:12px;color:#fde68a;font-weight:700;width:60px;">1º lugar</span>
+                    <select id="tor-venc-1" onchange="torRenderStep4()" style="flex:1;background:#060d1a;border:1px solid rgba(253,230,138,.3);border-radius:8px;color:#fde68a;padding:8px 10px;font-size:13px;font-weight:700;"></select>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;width:24px;text-align:center;">&#129352;</span>
+                    <span style="font-size:12px;color:#c8d8f0;font-weight:700;width:60px;">2º lugar</span>
+                    <select id="tor-venc-2" onchange="torRenderStep4()" style="flex:1;background:#060d1a;border:1px solid rgba(200,216,240,.2);border-radius:8px;color:#c8d8f0;padding:8px 10px;font-size:13px;font-weight:700;"></select>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="font-size:20px;width:24px;text-align:center;">&#129353;</span>
+                    <span style="font-size:12px;color:#fdba74;font-weight:700;width:60px;">3º lugar</span>
+                    <select id="tor-venc-3" onchange="torRenderStep4()" style="flex:1;background:#060d1a;border:1px solid rgba(253,186,116,.2);border-radius:8px;color:#fdba74;padding:8px 10px;font-size:13px;font-weight:700;"></select>
+                  </div>
+                </div>
+              </div>
+
               <div id="tor-resultado-content" style="display:flex;flex-direction:column;gap:6px;margin-bottom:14px;"></div>
               <div id="tor-admin-salvar" style="display:none;padding:12px;border-radius:12px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2);margin-bottom:12px;">
                 <div style="font-size:12px;color:#fbbf24;font-weight:700;margin-bottom:4px;">&#128274; Admin — Salvar no histórico</div>
@@ -5260,8 +5283,8 @@ function torRenderStep3(){
         +' style="flex:1;min-width:0;background:#060d1a;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:8px 10px;font-size:13px;" />'
         +'<div style="display:flex;align-items:center;gap:3px;flex-shrink:0;background:#060d1a;border:1px solid rgba(52,211,153,.25);border-radius:8px;padding:0 8px;">'
           +'<span style="font-size:11px;color:#34d399;font-weight:700;">R$</span>'
-          +'<input data-id="'+d.id+'" type="number" min="0" step="0.01" onchange="torDespVal(this)" placeholder="0,00" value="'+(d.valor||'')+'"'
-          +' style="width:66px;background:transparent;border:none;color:#34d399;padding:8px 4px;font-size:13px;font-weight:700;text-align:right;outline:none;" />'
+          +'<input data-id="'+d.id+'" type="text" inputmode="decimal" onchange="torDespVal(this)" oninput="torDespVal(this)" placeholder="0,00" value="'+(d.valor||'')+'"'
+          +' style="width:72px;background:transparent;border:none;color:#34d399;padding:8px 4px;font-size:13px;font-weight:700;text-align:right;outline:none;" />'
         +'</div>'
         +'<button data-id="'+d.id+'" onclick="torRemDespesa(parseInt(this.getAttribute(\'data-id\')))"'
         +' style="width:30px;height:34px;background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);border-radius:7px;color:#f87171;font-size:14px;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;">&#10005;</button>'
@@ -5298,7 +5321,7 @@ function torDespTodos(id){
   torRenderStep3();
 }
 function torDespDesc(inp){ var d=_torState.despesas.find(function(x){return x.id===parseInt(inp.getAttribute('data-id'));}); if(d) d.desc=inp.value; }
-function torDespVal(inp){ var d=_torState.despesas.find(function(x){return x.id===parseInt(inp.getAttribute('data-id'));}); if(d){ d.valor=parseFloat(inp.value)||0; torAtualizarDespTotal(); } }
+function torDespVal(inp){ var d=_torState.despesas.find(function(x){return x.id===parseInt(inp.getAttribute('data-id'));}); if(d){ var v=(inp.value||'').replace(',','.'); d.valor=parseFloat(v)||0; torAtualizarDespTotal(); } }
 function torAtualizarDespTotal(){
   var total=_torState.despesas.reduce(function(s,d){return s+(d.valor||0);},0);
   var el=document.getElementById('tor-desp-total');
@@ -5316,6 +5339,22 @@ function torRenderStep4(){
   var presentes=_torState.jogadores.filter(function(pl){return pl.presente;});
   var n=presentes.length;
 
+  /* Preenche selects de vencedores */
+  var optBase = '<option value="">— Selecionar —</option>' + presentes.map(function(pl){
+    return '<option value="'+pl.nome+'">'+pl.nome+'</option>';
+  }).join('');
+  ['tor-venc-1','tor-venc-2','tor-venc-3'].forEach(function(id, i){
+    var sel = document.getElementById(id);
+    if(!sel) return;
+    var cur = sel.value || (_torState.vencedores && _torState.vencedores[i]) || '';
+    sel.innerHTML = optBase;
+    if(cur) sel.value = cur;
+  });
+
+  /* Salva vencedores no state */
+  function getVenc(id){ var s=document.getElementById(id); return s?s.value:''; }
+  _torState.vencedores = [getVenc('tor-venc-1'), getVenc('tor-venc-2'), getVenc('tor-venc-3')];
+
   /* Pote */
   var pote=0;
   presentes.forEach(function(pl){ var f=_torState.fin[pl.nome]||{buyin:1,rebuys:0,addon:false}; pote+=f.buyin*vlrB+f.rebuys*vlrR+(f.addon?vlrA:0); });
@@ -5332,14 +5371,13 @@ function torRenderStep4(){
   /* Cota pote */
   var cotaPote=pote/n;
 
-  /* Premios — top 3 */
-  var sorted=presentes.slice().sort(function(a,b){ return 0; }); /* user input position */
-  /* For now use pct order as 1st,2nd,3rd — user can set position later via KO */
+  /* Prêmios — usa vencedores selecionados */
   var premios={};
   presentes.forEach(function(p){premios[p.nome]=0;});
-  if(presentes[0]) premios[presentes[0].nome]+=pote*p1;
-  if(presentes[1]) premios[presentes[1].nome]+=pote*p2;
-  if(presentes[2]) premios[presentes[2].nome]+=pote*p3;
+  var v1=_torState.vencedores[0], v2=_torState.vencedores[1], v3=_torState.vencedores[2];
+  if(v1 && premios[v1]!==undefined) premios[v1]+=pote*p1;
+  if(v2 && premios[v2]!==undefined) premios[v2]+=pote*p2;
+  if(v3 && premios[v3]!==undefined) premios[v3]+=pote*p3;
 
   /* Saldo */
   var saldos={};
@@ -5349,14 +5387,27 @@ function torRenderStep4(){
     saldos[pl.nome]=gasto-cotaPote-cotaDesp[pl.nome]+premios[pl.nome];
   });
 
-  /* Render saldos */
+  /* Aviso se vencedores não selecionados */
   var rc=document.getElementById('tor-resultado-content');
-  if(rc) rc.innerHTML=presentes.map(function(pl){
+  if(!v1 || !v2 || !v3){
+    if(rc) rc.innerHTML='<div style="font-size:12px;color:#f59e0b;padding:8px 0;">&#9888; Selecione os 3 colocados acima para calcular o resultado.</div>';
+    _torState._saldosCalc=null;
+    return;
+  }
+
+  /* Render saldos ordenado: recebem primeiro, depois pagam */
+  var lista = presentes.slice().sort(function(a,b){ return saldos[b.nome]-saldos[a.nome]; });
+  if(rc) rc.innerHTML=lista.map(function(pl){
     var s=saldos[pl.nome];
     var cls=s>0.005?'#34d399':s<-0.005?'#f87171':'#6b82a0';
     var txt=s>0.005?'+R$'+s.toFixed(2).replace('.',','):s<-0.005?'-R$'+Math.abs(s).toFixed(2).replace('.',','):'em dia';
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);">'
-      +'<span style="font-size:13px;font-weight:700;color:#e6edf3;">'+pl.nome+'</span>'
+    /* Badge de pódio */
+    var badge='';
+    if(pl.nome===v1) badge='&#129351; ';
+    else if(pl.nome===v2) badge='&#129352; ';
+    else if(pl.nome===v3) badge='&#129353; ';
+    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 10px;border-radius:9px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);">'
+      +'<span style="font-size:13px;font-weight:700;color:#e6edf3;">'+badge+pl.nome+'</span>'
       +'<span style="font-size:14px;font-weight:900;color:'+cls+';">'+txt+'</span>'
     +'</div>';
   }).join('');
@@ -5454,6 +5505,16 @@ function torCompartilharWA(){
       linhas.push('  • ' + desc + ': R$' + d.valor.toFixed(2).replace('.',',')
         + ' ÷ ' + d.quem.length + 'px = R$' + cota + '/pessoa');
     });
+    linhas.push('');
+  }
+
+  /* Pódio */
+  var v = _torState.vencedores || [];
+  if(v[0] || v[1] || v[2]){
+    linhas.push('🏆 *PÓDIO*');
+    if(v[0]) linhas.push('  🥇 ' + v[0]);
+    if(v[1]) linhas.push('  🥈 ' + v[1]);
+    if(v[2]) linhas.push('  🥉 ' + v[2]);
     linhas.push('');
   }
 
@@ -5624,9 +5685,13 @@ function nfRequireAdmin(cb){
   setTimeout(function(){ clearInterval(t); }, 30000);
 }
 function nfRefreshAdminUI(){
+  /* Sincroniza com o sistema principal de admin */
+  if(typeof _adminAuthed !== 'undefined' && _adminAuthed === true){
+    window._adminAuthed = true;
+  }
   if(nfIsAdmin()) document.body.classList.add('admin-mode');
 }
-setInterval(nfRefreshAdminUI, 1000);
+setInterval(nfRefreshAdminUI, 500);
 
 function nfWKs(){
   var wks = [];
@@ -19156,7 +19221,12 @@ function pedirSenha(cb){
   function tryAuth(){
     var val = inp.value.replace(/[\u200B-\u200D\uFEFF\u00A0]/g, '').trim();
     var check = function(h){
-      if(h===ADMIN_HASH || (window._RN_CUSTOM_HASH && h===window._RN_CUSTOM_HASH)){ _adminAuthed=true; modal.remove(); cb(); }
+      if(h===ADMIN_HASH || (window._RN_CUSTOM_HASH && h===window._RN_CUSTOM_HASH)){ 
+        _adminAuthed=true; 
+        window._adminAuthed=true; /* sync com sistema NF */
+        document.body.classList.add('admin-mode');
+        modal.remove(); cb(); 
+      }
       else { err.style.display='block'; inp.value=''; inp.focus(); }
     };
     // Usar sha256sync global se disponível, senão fallback interno
