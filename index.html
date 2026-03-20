@@ -6024,6 +6024,132 @@ function ataColetarDados(){
   };
 }
 
+/* ═══ GITHUB ATAS PUBLISH ═══ */
+var _GH_USER  = 'iorb07-ica';
+var _GH_REPO  = 'poker-dashboard';
+var _GH_FILE  = 'atas.json';
+var _GH_BRANCH = 'main';
+
+function ataGetToken(){
+  try { return localStorage.getItem('plaza_gh_token') || ''; } catch(e){ return ''; }
+}
+function ataSetToken(t){
+  try { localStorage.setItem('plaza_gh_token', t); } catch(e){}
+}
+
+/* Publica todas as atas no GitHub como atas.json */
+function ataPublicarGitHub(callback){
+  var token = ataGetToken();
+  if(!token){
+    ataConfigurarToken(function(){
+      ataPublicarGitHub(callback);
+    });
+    return;
+  }
+
+  var payload = JSON.stringify(NF_DATA.atas || {}, null, 2);
+  var b64 = btoa(unescape(encodeURIComponent(payload)));
+  var apiUrl = 'https://api.github.com/repos/'+_GH_USER+'/'+_GH_REPO+'/contents/'+_GH_FILE;
+
+  /* Primeiro busca o SHA atual do arquivo (necessário para atualizar) */
+  fetch(apiUrl, {
+    headers: {
+      'Authorization': 'token ' + token,
+      'Accept': 'application/vnd.github.v3+json'
+    }
+  })
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(existing){
+    var body = {
+      message: 'Ata atualizada via dashboard',
+      content: b64,
+      branch: _GH_BRANCH
+    };
+    if(existing && existing.sha) body.sha = existing.sha;
+
+    return fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': 'token ' + token,
+        'Accept': 'application/vnd.github.v3+json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    });
+  })
+  .then(function(r){
+    if(r && r.ok){
+      if(callback) callback(true);
+    } else {
+      /* Token inválido ou expirado */
+      if(r && r.status === 401){
+        localStorage.removeItem('plaza_gh_token');
+        alert('Token inválido ou expirado. Configure novamente.');
+        ataConfigurarToken(function(){ ataPublicarGitHub(callback); });
+      } else {
+        if(callback) callback(false);
+        alert('Erro ao publicar no GitHub. Tente novamente.');
+      }
+    }
+  })
+  .catch(function(e){
+    console.error('GitHub publish error:', e);
+    if(callback) callback(false);
+    alert('Erro de conexão ao publicar. Verifique sua internet.');
+  });
+}
+
+/* Modal para configurar o token */
+function ataConfigurarToken(onSuccess){
+  var overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,.88);display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML =
+    '<div style="background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(99,102,241,.3);border-radius:16px;padding:24px;width:100%;max-width:320px;">'
+      +'<div style="font-size:16px;font-weight:800;color:#e6edf3;margin-bottom:6px;">🔑 Configurar GitHub</div>'
+      +'<div style="font-size:12px;color:#6b82a0;margin-bottom:16px;line-height:1.5;">Cole o Personal Access Token do GitHub para publicar as atas automaticamente.</div>'
+      +'<input id="gh-token-input" type="password" placeholder="ghp_..." style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#e6edf3;padding:10px 12px;font-size:14px;margin-bottom:8px;outline:none;">'
+      +'<div id="gh-token-err" style="color:#f87171;font-size:11px;margin-bottom:10px;display:none;">Token inválido.</div>'
+      +'<div style="display:flex;gap:8px;">'
+        +'<button id="gh-tok-cancel" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;">Cancelar</button>'
+        +'<button id="gh-tok-save" style="flex:1;padding:10px;border-radius:8px;border:none;background:linear-gradient(135deg,#312e81,#6366f1);color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Salvar</button>'
+      +'</div>'
+    +'</div>';
+  document.body.appendChild(overlay);
+  var inp = overlay.querySelector('#gh-token-input');
+  var err = overlay.querySelector('#gh-token-err');
+  setTimeout(function(){ inp.focus(); }, 100);
+
+  overlay.querySelector('#gh-tok-cancel').onclick = function(){ document.body.removeChild(overlay); };
+  overlay.querySelector('#gh-tok-save').onclick = function(){
+    var t = (inp.value || '').trim();
+    if(!t || !t.startsWith('ghp_')){ err.style.display=''; return; }
+    ataSetToken(t);
+    document.body.removeChild(overlay);
+    if(onSuccess) onSuccess();
+  };
+  inp.addEventListener('keydown', function(e){ if(e.key==='Enter') overlay.querySelector('#gh-tok-save').click(); });
+}
+
+/* Carrega atas do GitHub ao inicializar */
+function ataCarregarDoGitHub(){
+  var apiUrl = 'https://api.github.com/repos/'+_GH_USER+'/'+_GH_REPO+'/contents/'+_GH_FILE;
+  fetch(apiUrl, { headers:{ 'Accept':'application/vnd.github.v3+json' } })
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(data){
+    if(!data || !data.content) return;
+    try{
+      var json = JSON.parse(decodeURIComponent(escape(atob(data.content.replace(/\n/g,'')))));
+      if(json && typeof json === 'object'){
+        if(!NF_DATA.atas) NF_DATA.atas = {};
+        /* Merge: GitHub tem prioridade sobre localStorage */
+        Object.keys(json).forEach(function(wk){ NF_DATA.atas[wk] = json[wk]; });
+        ataCarregar();
+      }
+    }catch(e){ console.warn('Erro ao carregar atas do GitHub:', e); }
+  })
+  .catch(function(){ /* Sem conexão — usa dados locais */ });
+}
+
 function ataSalvarRich(){
   nfRequireAdmin(function(){
     var wk = document.getElementById('ata-wk-sel').value;
@@ -6034,9 +6160,24 @@ function ataSalvarRich(){
     try { localStorage.removeItem(_ataRascunhoKey+wk); } catch(e){}
     ataCarregar();
     ataFecharEditor();
-    alert('✅ Ata de ' + wk + ' salva!');
+
+    /* Publica no GitHub */
+    var btn = document.createElement('div');
+    btn.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:99999;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;';
+    btn.innerHTML = '<div style="background:#0d1629;border-radius:14px;padding:20px 28px;text-align:center;"><div style="font-size:22px;margin-bottom:8px;">⏳</div><div style="color:#e6edf3;font-size:14px;font-weight:700;">Publicando no GitHub...</div></div>';
+    document.body.appendChild(btn);
+
+    ataPublicarGitHub(function(ok){
+      document.body.removeChild(btn);
+      if(ok){
+        alert('✅ Ata de ' + wk + ' publicada! Todos os jogadores já podem ver.');
+      } else {
+        alert('⚠️ Ata salva localmente mas não publicada no GitHub. Tente novamente.');
+      }
+    });
   });
 }
+
 
 /* Keep old ataSalvar/ataLimpar for compatibility */
 function ataSalvar(){ ataSalvarRich(); }
@@ -6110,6 +6251,8 @@ function midiaAbrirLB(url){
     ataInit();
     midiaInit();
     nfRefreshAdminUI();
+    /* Carrega atas do GitHub para todos verem */
+    setTimeout(ataCarregarDoGitHub, 1500);
   }
   if(document.readyState==='loading'){
     document.addEventListener('DOMContentLoaded', function(){ setTimeout(init,1200); });
