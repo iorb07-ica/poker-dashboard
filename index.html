@@ -440,8 +440,8 @@ function escHTML(str){
 
 /* ═══ HALL DA FAMA — efeito dourado especial ═══ */
 @keyframes hofGlow {
-  0%,100% { box-shadow: 0 0 18px rgba(255,215,0,0.25), 0 0 40px rgba(255,180,0,0.10); }
-  50%      { box-shadow: 0 0 32px rgba(255,215,0,0.55), 0 0 70px rgba(255,180,0,0.25); }
+  0%,100% { box-shadow: 0 0 8px rgba(255,215,0,0.2), 0 0 16px rgba(255,180,0,0.08); }
+  50%      { box-shadow: 0 0 16px rgba(255,215,0,0.4), 0 0 28px rgba(255,180,0,0.15); }
 }
 @keyframes hofBorderShimmer {
   0%   { border-color: rgba(255,215,0,0.30); }
@@ -457,6 +457,21 @@ function escHTML(str){
   0%,100% { text-shadow: 0 0 8px rgba(255,215,0,0.4); color: #e6edf3; }
   50%     { text-shadow: 0 0 20px rgba(255,215,0,0.9); color: #ffd700; }
 }
+/* Esconde filtros e controles em TODOS os modos */
+#main-controls,
+#heatmetric,
+.card:has(#chips-parent) { display: none !important; }
+/* card-dados (Carregar XLSX) — visível só no modo admin */
+#card-dados { display: none !important; }
+body.admin-mode #card-dados { display: flex !important; }
+
+/* Remove barra lateral cinza em todos os modos */
+html, body { overflow-x: hidden !important; max-width: 100vw !important; }
+::-webkit-scrollbar { width: 0px !important; background: transparent !important; }
+
+#torneios-hof-wrapper { display: flex !important; flex-direction: column !important; gap: 0 !important; }
+#card-torneios { margin-bottom: 0 !important; }
+#card-hall-da-fama { margin-top: 10px !important; }
 #card-hall-da-fama .card {
   background: linear-gradient(145deg, rgba(30,20,0,0.95) 0%, rgba(15,10,0,0.98) 100%) !important;
   border: 1.5px solid rgba(255,215,0,0.35) !important;
@@ -1262,7 +1277,36 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
   pointer-events:none; z-index:0;
 }
 
-/* Sweep reveal on period change (kept) */
+/* Desktop header compacto — igual ao mobile */
+@media (min-width: 769px) {
+  header {
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
+    z-index: 9990;
+    background: linear-gradient(135deg,#060d1a 0%,#0d1629 100%) !important;
+    border-bottom: 1px solid rgba(59,130,246,0.20) !important;
+    padding: 0 20px !important;
+    min-height: 64px !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    box-shadow: 0 3px 24px rgba(0,0,0,0.6) !important;
+    gap: 12px !important;
+    box-sizing: border-box !important;
+  }
+  header > h1 { display: none !important; }
+  .container { padding-top: 80px !important; }
+  html { scroll-behavior: auto !important; overflow-x: hidden !important; }
+  body { overflow-y: scroll !important; overflow-x: hidden !important; overscroll-behavior: none !important; }
+  #main-controls { display: none !important; }
+  #heatmetric { display: none !important; }
+  .card:has(#chips-parent) { display: none !important; }
+  #btn-view-toggle { display: none !important; }
+}
+
 #card-medalhas .podium .slot::before{
   content:""; position:absolute; top:0;left:0;right:0;bottom:0; pointer-events:none; z-index:1;
   background: linear-gradient(90deg, rgba(255,255,255,.85) 0%, rgba(255,255,255,.35) 22%, rgba(255,255,255,0) 60%);
@@ -1307,6 +1351,10 @@ body.mobile-mode #btn-view-toggle { display: none !important; }
 .card.mini-card .mini-header{ position:relative; z-index:5; }
 /* Avoid any global overflow creating horizontal scrollbar */
 body { overflow-x: hidden; overflow-y: auto; scroll-padding-bottom: 70px; padding-bottom: 80px; padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)); }
+@media (min-width: 769px) {
+  body { padding-bottom: 20px !important; }
+  .container { padding-bottom: 20px !important; }
+}
 
 /* ═══ ANDROID SCROLL GUARANTEE ═══ */
 /* Ensure body is ALWAYS scrollable unless a modal is explicitly open */
@@ -1791,10 +1839,13 @@ body.mobile-mode .grid-charts .chart {
   background: radial-gradient(ellipse at 50% 30%, #0d1629 0%, #060d1a 100%) !important;
   /* Garante que quando opacity=0, não bloqueia toques */
   transition: opacity 0.5s;
+  /* Nunca bloqueia scroll do body */
+  overflow: hidden;
 }
 #loading-overlay[style*="opacity: 0"],
 #loading-overlay[style*="opacity:0"] {
   pointer-events: none !important;
+  display: none !important;
 }
 @keyframes headerLogoGlow {
   0%,100% { box-shadow: 0 2px 8px rgba(255,215,0,0.2); }
@@ -2293,62 +2344,62 @@ var _revealAt = Date.now() + 5000;
   var d=document.getElementById('dots'), i=0;
   if(!d) return;
   setInterval(function(){ d.textContent=['.','..','...'][i++%3]; }, 500);
-})(); // minimum 3s loading
+})(); // minimum 5s loading
 function revealDashboard(){
-  // Forçar WK máxima ANTES de revelar — elimina a piscada
-  try{
-    var _raw = window.RAW || [];
-    if(_raw.length){
-      var _maxWK = Math.max.apply(null, _raw.map(function(r){ return +r.wk||0; }).filter(Boolean));
-      if(_maxWK){
-        var _sel = document.getElementById('mini-wk');
-        if(_sel){
-          // Garantir que a option existe
-          var _exists = Array.from(_sel.options).some(function(o){ return +o.value === _maxWK; });
-          if(!_exists){
-            var _o = document.createElement('option');
-            _o.value = String(_maxWK);
-            _o.textContent = 'WK'+String(_maxWK).padStart(2,'0');
-            _sel.appendChild(_o);
-          }
-          _sel.value = String(_maxWK);
-        }
-        // Renderizar com WK correta antes de mostrar
-        if(typeof window.renderMini === 'function') window.renderMini('semana', _maxWK);
-      }
-    }
-  }catch(e){}
-
   var delay = Math.max(0, _revealAt - Date.now());
   setTimeout(function(){
     var overlay = document.getElementById('loading-overlay');
     var container = document.getElementById('main-container');
-    if(overlay){ 
-      /* Imediatamente desabilita toques no overlay para não bloquear a tela */
+    if(overlay){
       overlay.style.pointerEvents = 'none';
-      overlay.style.transition='opacity 0.5s'; 
-      overlay.style.opacity='0'; 
-      setTimeout(function(){ 
-        overlay.style.display='none';
-        overlay.style.pointerEvents = 'none';
-        /* Android: remove completamente do DOM para garantir */
-        if(/Android/i.test(navigator.userAgent)){
-          try{ overlay.parentNode && overlay.parentNode.removeChild(overlay); }catch(e){}
-        }
-      }, 600); 
+      overlay.style.transition='opacity 0.4s';
+      overlay.style.opacity='0';
+      setTimeout(function(){ overlay.style.display='none'; }, 450);
     }
-    if(container){ container.style.visibility='visible'; container.style.opacity='1'; 
-      /* Activar animações APÓS o container estar visível */
-      setTimeout(function(){ container.classList.add('fade-ready'); }, 50); }
-    setTimeout(function(){
-      try{ [window.eRanking,window.eKOs,window.eEvo,window.eMed,window.eRadar,window.eAwards,window.eRisk].forEach(function(c){if(c&&c.resize)c.resize();}); }catch(e){}
-    }, 100);
+    if(container){
+      container.style.visibility='visible';
+      container.style.opacity='1';
+      setTimeout(function(){ container.classList.add('fade-ready'); }, 50);
+    }
+    // Garantir scroll no desktop
+    if(window.innerWidth >= 768 && !document.body.classList.contains('mobile-mode')){
+      document.documentElement.style.overflowY = 'scroll';
+      document.body.style.overflowY = 'scroll';
+    }
+    // RENDER ÚNICO — acontece só aqui, depois que o overlay some
     setTimeout(function(){
       try{
-        [window.eRanking,window.eKOs,window.eEvo,window.eMed,window.eRadar,window.eAwards,window.eRisk].forEach(function(c){if(c&&c.resize)c.resize();});
-        if(typeof refresh==='function' && typeof RAW!=='undefined' && RAW.length) refresh();
+        var _rm = window.renderMini || renderMini;
+        if(typeof _rm !== 'function') return;
+        // Sempre recalcular maxWK do RAW atual (pode ter vindo do GitHub)
+        var _raw = window.RAW || [];
+        var _maxWK = _raw.length ? Math.max.apply(null, _raw.map(function(r){ return +r.wk||0; }).filter(Boolean)) : 0;
+        var sels = {
+          wk:  document.getElementById('mini-wk'),
+          mes: document.getElementById('mini-mes'),
+          tri: document.getElementById('mini-tri')
+        };
+        // Forçar WK máxima no select antes de renderizar
+        if(_maxWK && sels.wk){
+          var _wkStr = String(_maxWK);
+          // Garantir que a option existe
+          if(!Array.from(sels.wk.options).some(function(o){ return +o.value === _maxWK; })){
+            var _o = document.createElement('option');
+            _o.value = _wkStr;
+            _o.textContent = 'WK' + String(_maxWK).padStart(2,'0');
+            sels.wk.appendChild(_o);
+          }
+          sels.wk.value = _wkStr;
+          _rm('semana', _maxWK);
+        } else if(sels.wk && sels.wk.value) {
+          _rm('semana', +sels.wk.value);
+        }
+        if(sels.mes && sels.mes.value)  _rm('mes',       +sels.mes.value);
+        if(sels.tri && sels.tri.value)  _rm('trimestre', +sels.tri.value);
       }catch(e){}
-    }, 600);
+      // Resize charts
+      try{ [window.eRanking,window.eKOs,window.eEvo,window.eMed,window.eRadar,window.eAwards,window.eRisk].forEach(function(c){if(c&&c.resize)c.resize();}); }catch(e){}
+    }, 100);
   }, delay);
 }
 function setLoadingProgress(pct, msg){
@@ -2407,6 +2458,22 @@ function setLoadingProgress(pct, msg){
           el.style.background = bg.replace(/rgba\(([^)]+),\s*[\d.]+\)/, 'rgba($1, 0.96)');
         }
       });
+      /* Remove gap between Torneios and Hall da Fama */
+      function _fixHofGap(){
+        var wrapper = document.getElementById('torneios-hof-wrapper');
+        var tor = document.getElementById('card-torneios');
+        var hof = document.getElementById('card-hall-da-fama');
+        if(wrapper){
+          wrapper.style.setProperty('display','flex','important');
+          wrapper.style.setProperty('flex-direction','column','important');
+          wrapper.style.setProperty('gap','0','important');
+        }
+        if(tor){ tor.style.setProperty('margin-bottom','0','important'); }
+        if(hof){ hof.style.setProperty('margin-top','10px','important'); }
+      }
+      _fixHofGap();
+      setTimeout(_fixHofGap, 300);
+      setTimeout(_fixHofGap, 1000);
     });
   }
 })();
@@ -2511,19 +2578,31 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;">
-<h1 style="display:flex;align-items:center;gap:10px;margin:0;"><div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 2px 16px rgba(255,215,0,0.45);animation:headerLogoGlow 3s ease-in-out infinite;"><img src="data:image/png;base64,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" style="width:44px;height:44px;display:block;border-radius:50%;"/></div><span>Poker do Plaza - Dashboard 2026</span></h1>
-<div style="display:flex;gap:8px;align-items:center;">
-  <div id="desktop-mode-btns" style="display:flex;gap:4px;background:rgba(255,255,255,0.07);border-radius:10px;padding:3px;">
-    <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-mobile">📱</button>
-    <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:rgba(59,130,246,0.35);border:none;border-radius:7px;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="hdr-btn-desktop">🖥️</button>
+<header style="display:flex;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:8px;">
+<!-- Logo + título -->
+<div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+  <div style="width:44px;height:44px;border-radius:50%;overflow:hidden;flex-shrink:0;box-shadow:0 2px 16px rgba(255,215,0,0.45);animation:headerLogoGlow 3s ease-in-out infinite;">
+    <img src="data:image/png;base64,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" style="width:44px;height:44px;display:block;border-radius:50%;"/>
   </div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:12px;padding:8px 16px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.3px;box-shadow:0 4px 14px rgba(34,197,94,.35);display:flex;align-items:center;gap:6px;">➕ Registrar Noite</button>
-    <button onclick="avisarWhatsApp()" title="Avisar grupo no WhatsApp" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:12px;padding:8px 12px;font-size:18px;cursor:pointer;box-shadow:0 4px 14px rgba(37,211,102,.4);display:flex;align-items:center;justify-content:center;transition:transform 0.15s,box-shadow 0.15s;" onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
-      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-    </button>
+  <div>
+    <div style="font-size:15px;font-weight:800;color:#e6edf3;line-height:1.2;">Poker do Plaza</div>
+    <div style="font-size:11px;color:#4a9ef5;font-weight:700;letter-spacing:1px;text-transform:uppercase;">Dashboard 2026</div>
   </div>
+</div>
+<!-- Botões lado direito — igual ao mobile -->
+<div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
+  <div id="desktop-mode-btns" style="display:flex;gap:4px;align-items:center;background:rgba(255,255,255,0.06);border-radius:10px;padding:4px;">
+    <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:1.5px solid transparent;border-radius:8px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;opacity:0.3;transition:all 0.2s;" id="hdr-btn-mobile">📱</button>
+    <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:rgba(59,130,246,0.25);border:2px solid rgba(59,130,246,0.8);border-radius:8px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:1;transition:all 0.2s;box-shadow:0 0 10px rgba(59,130,246,0.4);" id="hdr-btn-desktop">🖥️</button>
+  </div>
+  <button onclick="iniciarTour&&iniciarTour()" title="Tour guiado" style="background:rgba(255,255,255,0.07);border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;color:#6b82a0;font-weight:700;">?</button>
+  <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" title="Registrar Noite" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(34,197,94,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
+    <svg width="20" height="20" viewBox="0 0 22 22" fill="none"><line x1="11" y1="3" x2="11" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="3" y1="11" x2="19" y2="11" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+  </button>
+  <button onclick="avisarWhatsApp()" title="Avisar grupo no WhatsApp" style="background:linear-gradient(135deg,#128C7E,#25D366);color:#fff;border:none;border-radius:50%;width:36px;height:36px;cursor:pointer;box-shadow:0 2px 12px rgba(37,211,102,.35);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+  </button>
+</div>
 
   <script>
   window.toggleCard = function(bodyId, arrowId) {
@@ -2643,9 +2722,9 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
-    <div id="topbar-mode-btns" style="display:flex;gap:4px;background:rgba(255,255,255,0.07);border-radius:10px;padding:3px;">
-      <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-mobile">📱</button>
-      <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:transparent;border:none;border-radius:7px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;transition:background 0.15s;" id="btn-mode-desktop">🖥️</button>
+    <div id="topbar-mode-btns" style="display:flex;gap:4px;align-items:center;background:rgba(255,255,255,0.06);border-radius:10px;padding:4px;">
+      <button onclick="if(!document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Mobile" style="background:rgba(59,130,246,0.25);border:2px solid rgba(59,130,246,0.8);border-radius:8px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:1;transition:all 0.2s;box-shadow:0 0 10px rgba(59,130,246,0.4);" id="btn-mode-mobile">📱</button>
+      <button onclick="if(document.body.classList.contains('mobile-mode'))toggleViewMode();" title="Modo Desktop" style="background:transparent;border:2px solid transparent;border-radius:8px;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;opacity:0.3;transition:all 0.2s;" id="btn-mode-desktop">🖥️</button>
     </div>
 
     <div style="display:flex;align-items:center;gap:6px;">
@@ -3459,7 +3538,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
       <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
     </div>
-    <div id="equity-calc-body" data-open="true" style="padding:0 16px 20px;">
+    <div id="equity-calc-body" data-open="false" style="padding:0 16px 20px;display:none;">
 
       <!-- Jogadores -->
       <div style="margin-bottom:14px;">
@@ -3710,7 +3789,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
 
 
-<div id="card-torneios" style="margin-top:16px;width:100%;box-sizing:border-box;">
+<div id="torneios-hof-wrapper" style="margin-top:16px;width:100%;display:flex;flex-direction:column;gap:0;">
+<div id="card-torneios" style="width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
@@ -3727,7 +3807,7 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <!-- Corpo colapsável -->
-    <div id="torneios-body" data-open="true" style="padding:0 18px 18px;display:block;">
+    <div id="torneios-body" data-open="false" style="padding:0 18px 18px;display:none;">
 
       <!-- Títulos históricos colapsável -->
       <div style="margin-bottom:8px;">
@@ -4007,35 +4087,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     </div><!-- fim torneios-body -->
   </div>
-</div>
-
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// Carrega fotos nos cards de Torneios Especiais
-(function() {
-  function loadTorneiosPhotos() {
-    // Carrega fotos em TODOS os data-player do dashboard (Hall da Fama + Torneios Especiais)
-    var divs = document.querySelectorAll('#card-hall-da-fama [data-player], #card-torneios [data-player]');
-    divs.forEach(function(div) {
-      var name = div.getAttribute('data-player');
-      var photo = window.photoFor ? window.photoFor(name) : (window.PLAYER_PHOTOS && window.PLAYER_PHOTOS[name]);
-      if (photo) {
-        div.innerHTML = '<img src="' + escHTML(photo) + '" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />';
-      }
-    });
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadTorneiosPhotos);
-  } else {
-    loadTorneiosPhotos();
-    setTimeout(loadTorneiosPhotos, 500);
-  }
-})();
-</script>
-
-
-
-<!-- ====== CARD: Calculador de Equity ====== -->
-<div id="card-hall-da-fama" style="margin-top:16px;width:100%;box-sizing:border-box;">
+</div><div id="card-hall-da-fama" style="width:100%;box-sizing:border-box;position:relative;z-index:1;">
   <div class="card" style="padding:0;">
 
     <!-- Título colapsável -->
@@ -4143,8 +4195,9 @@ document.addEventListener('DOMContentLoaded', function(){
     </div><!-- fim hof-body -->
   </div>
 </div>
+</div><!-- fim torneios-hof-wrapper -->
 
-<div class="footer" style="margin-top:32px;padding-bottom:100px;padding-bottom:calc(80px + env(safe-area-inset-bottom, 20px));">Feito com &#9829; &#8212; arquivo único v4.7</div>
+<div class="footer" style="margin-top:28px;padding-bottom:calc(80px + env(safe-area-inset-bottom, 16px));">🃏 Poker Series Plaza Mediterrâneo &mdash; Ano 9</div>
 
 <!-- ═══ TAB BAR ═══ -->
 <style>
@@ -4152,25 +4205,28 @@ document.addEventListener('DOMContentLoaded', function(){
   position:fixed;
   bottom:0;left:0;right:0;
   z-index:9980;
-  background:rgba(6,11,26,0.97);
-  border-top:1px solid rgba(255,255,255,.08);
+  background:rgba(8,13,26,0.96);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-top:none;
+  border-radius:22px 22px 0 0;
   display:flex;
-  align-items:stretch;
-  /* Android 12 fix: env(safe-area-inset-bottom) pode retornar valor errado */
+  align-items:center;
   padding-bottom:0;
   padding-bottom:env(safe-area-inset-bottom, 0px);
-  box-shadow:0 -4px 32px rgba(0,0,0,.5);
-  /* Altura máxima explícita para evitar expansão indevida no Android */
-  max-height:72px;
-  height:auto;
-  /* Garante que fique abaixo de tudo, sem sobrepor a página */
+  box-shadow:0 -1px 0 rgba(255,255,255,0.07), 0 -12px 40px rgba(0,0,0,.5);
+  height:54px;
+  max-height:54px;
   pointer-events:auto;
 }
-/* Android: tab bar com altura fixa sem safe area */
 .is-android #plaza-tabbar {
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  background:rgba(8,13,26,0.99) !important;
   padding-bottom:0 !important;
-  max-height:60px !important;
-  height:60px !important;
+  height:54px !important;
+  max-height:54px !important;
+  border-radius:20px 20px 0 0 !important;
 }
 .tab-item {
   flex:1;
@@ -4178,81 +4234,73 @@ document.addEventListener('DOMContentLoaded', function(){
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  gap:3px;
   padding:8px 2px 10px;
   cursor:pointer;
   border:none;
   background:transparent;
   -webkit-tap-highlight-color:transparent;
   position:relative;
-  transition:all .18s;
-  /* Altura explícita para evitar expansão */
-  max-height:60px;
+  transition:all .2s ease;
+  height:54px;
   overflow:hidden;
+  gap:4px;
 }
-.tab-item:active { transform:scale(.93); }
+.tab-item:active { transform:scale(.88); }
 .tab-icon {
   font-size:22px;
   line-height:1;
-  filter:grayscale(1) opacity(.5);
-  transition:filter .18s, transform .18s;
+  filter:grayscale(1) opacity(.35);
+  transition:filter .25s ease, transform .25s ease;
 }
-.tab-label {
-  font-size:9px;
-  font-weight:700;
-  color:#4a6080;
-  text-transform:uppercase;
-  letter-spacing:.4px;
-  transition:color .18s;
-  white-space:nowrap;
-}
+.tab-label { display:none; }
+
+/* Ativo: ícone maior e colorido */
 .tab-item.active .tab-icon {
-  filter:grayscale(0) opacity(1) drop-shadow(0 0 6px var(--tab-color));
-  transform:translateY(-2px) scale(1.15);
+  filter:grayscale(0) opacity(1);
+  transform:scale(1.22);
 }
-.tab-item.active .tab-label { color:var(--tab-color); }
+/* Ponto minúsculo embaixo */
 .tab-item.active::after {
   content:'';
   position:absolute;
-  bottom:0;left:20%;right:20%;
-  height:2.5px;
-  border-radius:2px 2px 0 0;
+  bottom:7px;
+  left:50%;
+  transform:translateX(-50%);
+  width:4px;height:4px;
+  border-radius:50%;
   background:var(--tab-color);
-  box-shadow:0 0 8px var(--tab-color);
+  opacity:0.9;
 }
-/* Ripple ao tocar */
-.tab-item::before {
-  content:'';
-  position:absolute;
-  top:0;left:0;right:0;bottom:0;
-  border-radius:12px;
-  background:radial-gradient(circle at center, rgba(255,255,255,.08) 0%, transparent 70%);
-  opacity:0;
-  transition:opacity .15s;
-}
-.tab-item:active::before { opacity:1; }
+/* Sem pill, sem linha, sem blur extra */
+.tab-item::before { display:none; }
 </style>
 
 <nav id="plaza-tabbar" role="navigation" aria-label="Navegacao rapida">
-  <button class="tab-item" style="--tab-color:#f59e0b" onclick="tabNav('card-perfis')" data-tab="perfis">
-    <span class="tab-icon">&#128101;</span>
+  <button class="tab-item" style="--tab-color:#a78bfa" onclick="tabNav('card-perfis')" data-tab="perfis">
+    <span class="tab-icon">🃏</span>
     <span class="tab-label">Perfis</span>
   </button>
-  <button class="tab-item" style="--tab-color:#c9a227" onclick="tabNav('card-medalhas-periodo')" data-tab="medalhas">
-    <span class="tab-icon">&#127941;</span>
+  <button class="tab-item" style="--tab-color:#fbbf24" onclick="tabNav('card-medalhas-periodo')" data-tab="medalhas">
+    <span class="tab-icon">🥇</span>
     <span class="tab-label">Medalhas</span>
   </button>
   <button class="tab-item" style="--tab-color:#3b82f6" onclick="tabNav('card-ranking-anual')" data-tab="ranking">
     <span class="tab-icon">&#127942;</span>
     <span class="tab-label">Anual</span>
   </button>
-  <button class="tab-item" style="--tab-color:#34d399" onclick="tabNav('card-saldo-financeiro')" data-tab="saldo">
-    <span class="tab-icon">&#128176;</span>
-    <span class="tab-label">Saldo</span>
-  </button>
   <button class="tab-item" style="--tab-color:#f97316" onclick="tabNav('card-calculadora')" data-tab="calc">
     <span class="tab-icon">&#129518;</span>
     <span class="tab-label">Calc.</span>
+  </button>
+  <button class="tab-item" style="--tab-color:#34d399" onclick="tabNav('card-saldo-financeiro')" data-tab="saldo">
+    <span class="tab-icon" style="font-size:0;line-height:0;">
+      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="14" cy="14" r="13" fill="#064e3b" stroke="#34d399" stroke-width="1.8"/>
+        <circle cx="14" cy="14" r="9.5" fill="none" stroke="#34d399" stroke-width="0.7" opacity="0.3"/>
+        <text x="14" y="18" text-anchor="middle" font-size="11" font-weight="900" font-family="sans-serif" fill="#34d399">R$</text>
+      </svg>
+    </span>
+    <span class="tab-label">Saldo</span>
   </button>
   <button class="tab-item" style="--tab-color:#a78bfa" onclick="tabNav('card-atas');ataMarcarLida();" data-tab="atas">
     <span style="position:relative;display:inline-block;">
@@ -8386,43 +8434,9 @@ function afterDataLoaded(){
   initSelectors();
   document.getElementById('periodo').value='ano';
   document.getElementById('metrica').value='pontos';
+  // Apenas popula selects — NÃO renderiza (render único acontece no revealDashboard)
   (window.initMiniCombos || initMiniCombos)();
   initChampCombos();
-  // Render all 3 mini-cards after init
-  try{
-    var wksAll = Array.from(new Set(RAW.map(function(r){return +r.wk;}).filter(Boolean))).sort(function(a,b){return a-b;});
-    var _rm = window.renderMini;
-    if(typeof _rm !== 'function') throw 'renderMini not ready';
-    if(wksAll.length){
-      var lastWK = wksAll[wksAll.length-1];
-      var selWk = document.getElementById('mini-wk');
-      if(selWk) selWk.value = lastWK;
-      _rm('semana', lastWK);
-    }
-    // Renderiza mês
-    var selMes = document.getElementById('mini-mes');
-    if(selMes && selMes.value) setTimeout(function(){ _rm('mes', +selMes.value); }, 30);
-    // Renderiza trimestre com delay maior para garantir que semana/mes já rodaram
-    var selTri = document.getElementById('mini-tri');
-    if(selTri && selTri.value) setTimeout(function(){ _rm('trimestre', +selTri.value); }, 80);
-  }catch(e){}
-  // Auto-select last WK in mini ranking card
-  try{
-    const wks = RAW.map(r=>+r.wk||0).filter(Boolean);
-    if(wks.length){
-      const maxWK = Math.max(...wks);
-      const maxWKStr = 'WK'+String(maxWK).padStart(2,'0');
-      // mini-wk usa formato "WK11"
-      var miniWkSel = document.getElementById('mini-wk');
-      if(miniWkSel){
-        miniWkSel.value = maxWKStr;
-        // Disparar renderMini com a WK correta
-        if(typeof window.renderMini === 'function'){
-          window.renderMini('semana', maxWK);
-        }
-      }
-    }
-  }catch(e){}
 }
 
 function selectedPlayers(){ return Array.from(document.querySelectorAll('.chip.active')).map(x=>x.dataset.player); }
@@ -8590,15 +8604,11 @@ function aggregate(rows){
 
 // ===== Mini Ranks (Semana/Mês/Trimestre) =====
 function initMiniCombos(){
-  // Semana
   const sels = { wk: document.getElementById('mini-wk'), mes: document.getElementById('mini-mes'), tri: document.getElementById('mini-tri') };
-  // If no data has been loaded yet (RAW is empty), skip initializing mini combos. This prevents
-  // premature calls to renderMini() that cause the weekly ranking to flicker while the data is
-  // still being loaded. The combos will be properly populated once RAW has data.
   if (!Array.isArray(RAW) || RAW.length === 0 || !sels.wk) return;
-  // weeks
+  // weeks — usar formato numérico no value (renderMini recebe número)
   let wks = Array.from(new Set(RAW.map(r=>+r.wk).filter(Boolean))).sort((a,b)=>a-b);
-  sels.wk.innerHTML=''; wks.forEach(w=>{ const o=document.createElement('option'); o.value=w; o.textContent='WK'+String(w).padStart(2,'0'); sels.wk.appendChild(o); }); if(wks.length){ sels.wk.value = wks[wks.length-1]; }
+  sels.wk.innerHTML=''; wks.forEach(w=>{ const o=document.createElement('option'); o.value=w; o.textContent='WK'+String(w).padStart(2,'0'); sels.wk.appendChild(o); });
   // months
   const nomes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   let meses = Array.from(new Set(RAW.map(r=>+r.mes).filter(Boolean))).sort((a,b)=>a-b);
@@ -8610,17 +8620,12 @@ function initMiniCombos(){
   sels.mes.onchange = ()=> (window.renderMini || renderMini)('mes', +sels.mes.value);
   sels.tri.onchange = ()=> (window.renderMini || renderMini)('trimestre', +sels.tri.value);
 
-  // defaults: última semana, último mês com dados, trimestre atual
+  // Setar defaults — SEM renderizar (o render acontece uma única vez no revealDashboard)
   if(wks.length){ sels.wk.value = wks[wks.length-1]; }
   if(meses.length){ sels.mes.value = meses[meses.length-1]; }
-  // Trimestre atual pelo mês
   const _now = new Date(); const _tAtual = Math.floor(_now.getMonth()/3)+1;
   sels.tri.value = String(_tAtual);
-  // Usar setTimeout para garantir que todas as renderizações ocorram sem bloqueio mútuo
-  const _rm = window.renderMini || renderMini;
-  setTimeout(()=> _rm('semana', +sels.wk.value), 0);
-  setTimeout(()=> _rm('mes', +sels.mes.value), 20);
-  setTimeout(()=> _rm('trimestre', +sels.tri.value), 40);
+  // NÃO chamar renderMini aqui — evita piscadas durante carregamento
 }
 
 function renderMini(per, val){
@@ -10242,16 +10247,7 @@ document.addEventListener('DOMContentLoaded', function(){
   };
 
   /* ── 2. Estado local dos mini-cards (sobrevive ao refresh global) ── */
-  var state = { 
-    wk: (function(){ 
-      try{ 
-        var raw = window.RAW || (window.DATA && window.DATA.ledger) || [];
-        if(!raw.length) return null;
-        return Math.max.apply(null, raw.map(function(r){ return +r.wk||0; }).filter(Boolean)) || null;
-      }catch(e){ return null; }
-    })(), 
-    mes: null, tri: null 
-  };
+  var state = { wk: null, mes: null, tri: null };
 
   /* ── 3. Helpers internos ── */
   function byId(id){ return document.getElementById(id); }
@@ -10390,7 +10386,7 @@ document.addEventListener('DOMContentLoaded', function(){
         sel.value = String(target);
       }
     }
-    // Para WK: sempre usar a máxima do RAW, nunca restaurar valor antigo
+    // Para WK: sempre usar a máxima do RAW atual
     var _maxWK = Math.max.apply(null, (window.RAW||[]).map(function(r){ return +r.wk||0; }).filter(Boolean));
     if(_maxWK && Array.from(sels.wk.options).some(function(o){ return +o.value === _maxWK; })){
       sels.wk.value = String(_maxWK);
@@ -10406,13 +10402,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(sels.mes) sels.mes.onchange = function(){ state.mes = sels.mes.value; window.renderMini('mes',       +sels.mes.value); };
     if(sels.tri) sels.tri.onchange = function(){ state.tri = sels.tri.value; window.renderMini('trimestre', +sels.tri.value); };
 
-    // Render all 3 mini-cards with staggered timeouts (each period independent)
-    if(typeof window.renderMini === 'function'){
-      var _r = window.renderMini;
-      if(sels.wk.value)  setTimeout(function(){ _r('semana',    +sels.wk.value); },  0);
-      if(sels.mes && sels.mes.value) setTimeout(function(){ _r('mes',       +sels.mes.value); }, 30);
-      if(sels.tri && sels.tri.value) setTimeout(function(){ _r('trimestre', +sels.tri.value); }, 80);
-    }
+    // NÃO renderizar aqui — render único acontece no revealDashboard
   };
 
   /* ── 7. Auto-seleção inteligente ao inicializar ── */
@@ -14286,15 +14276,18 @@ window._forcarMaxWK = function(){
     if(!maxWK) return;
     var sel = document.getElementById('mini-wk');
     if(!sel) return;
-    // Garantir que a option existe
-    if(!Array.from(sel.options).some(function(o){ return +o.value === maxWK; })){
+    // initMiniCombos usa value numérico (11, não "WK11")
+    var valStr = String(maxWK);
+    if(sel.value === valStr) return; // já correto, não re-renderizar
+    // Verificar se option existe com valor numérico
+    if(!Array.from(sel.options).some(function(o){ return o.value === valStr; })){
       var o = document.createElement('option');
-      o.value = String(maxWK);
+      o.value = valStr;
       o.textContent = 'WK'+String(maxWK).padStart(2,'0');
       sel.appendChild(o);
     }
-    sel.value = String(maxWK);
-    if(window._miniState) window._miniState.wk = String(maxWK);
+    sel.value = valStr;
+    if(window._miniState) window._miniState.wk = valStr;
     if(typeof window.renderMini === 'function') window.renderMini('semana', maxWK);
   }catch(e){}
 };
@@ -14368,12 +14361,8 @@ window.ghCarregarDados = function(){
       refresh();
       window.RAW = RAW || [];
       try{ (window.initMiniCombos || initMiniCombos)(); }catch(e){}
-      // Forçar WK máxima após carregar dados do GitHub
-      try{ window._forcarMaxWK && window._forcarMaxWK(); }catch(e){}
       ghMostrarStatus('✅ Dados carregados do GitHub!', '#22c55e');
       revealDashboard();
-      // Forçar de novo após reveal (garante sem piscada)
-      setTimeout(function(){ try{ window._forcarMaxWK && window._forcarMaxWK(); }catch(e){}; }, 100);
     })
     .catch(function(e){
       console.warn('GitHub load failed:', e.message);
@@ -14633,12 +14622,13 @@ window.addEventListener('load', function(){
       // Highlight active mode buttons in topbar
       var bM = document.getElementById('btn-mode-mobile');
       var bD = document.getElementById('btn-mode-desktop');
-      if(bM) bM.style.background = 'rgba(59,130,246,0.35)';
-      if(bD) bD.style.background = 'transparent';
+      if(bM){ bM.style.background='rgba(59,130,246,0.2)'; bM.style.border='2px solid rgba(59,130,246,0.8)'; bM.style.borderRadius='8px'; bM.style.opacity='1'; bM.style.width='38px'; bM.style.height='38px'; bM.style.fontSize='20px'; bM.style.boxShadow='0 0 10px rgba(59,130,246,0.4)'; }
+      if(bD){ bD.style.background='transparent'; bD.style.border='1.5px solid transparent'; bD.style.borderRadius='8px'; bD.style.opacity='0.3'; bD.style.width='28px'; bD.style.height='28px'; bD.style.fontSize='13px'; bD.style.boxShadow='none'; }
       localStorage.setItem('viewMode','mobile');
       // Sync desktop header buttons
       var hM=document.getElementById('hdr-btn-mobile'); var hD=document.getElementById('hdr-btn-desktop');
-      if(hM) hM.style.background='rgba(59,130,246,0.35)'; if(hD) hD.style.background='transparent';
+      if(hM){ hM.style.background='rgba(59,130,246,0.2)'; hM.style.border='2px solid rgba(59,130,246,0.8)'; hM.style.borderRadius='8px'; hM.style.opacity='1'; hM.style.width='38px'; hM.style.height='38px'; hM.style.fontSize='20px'; hM.style.boxShadow='0 0 10px rgba(59,130,246,0.4)'; }
+      if(hD){ hD.style.background='transparent'; hD.style.border='1.5px solid transparent'; hD.style.borderRadius='8px'; hD.style.opacity='0.3'; hD.style.width='28px'; hD.style.height='28px'; hD.style.fontSize='13px'; hD.style.boxShadow='none'; }
 
       // ── Inject mobile styles directly via JS (Safari-proof) ──
       var styleId = 'rn-mobile-inject';
@@ -14652,7 +14642,7 @@ window.addEventListener('load', function(){
         ══════════════════════════════════════ */
         'header { display: none !important; }',
         '#mobile-topbar { display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 9999 !important; width: 100% !important; min-height: 64px !important; padding-top: env(safe-area-inset-top) !important; background: linear-gradient(135deg, #060d1a 0%, #0d1629 100%) !important; border-bottom: 1px solid rgba(59,130,246,0.18) !important; backdrop-filter: blur(12px) !important; -webkit-backdrop-filter: blur(12px) !important; box-shadow: 0 2px 20px rgba(0,0,0,0.5) !important; }',
-        '.container { padding-top: calc(64px + env(safe-area-inset-top)) !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: 180px !important; max-width: 100vw !important; overflow-x: hidden !important; }',
+        '.container { padding-top: calc(64px + env(safe-area-inset-top)) !important; padding-left: 10px !important; padding-right: 10px !important; padding-bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important; max-width: 100vw !important; overflow-x: hidden !important; }',
         'html, body { overflow-y: scroll !important; overflow-x: hidden !important; height: auto !important; min-height: 100% !important; }',
         'body { -webkit-overflow-scrolling: touch !important; }',
         '#main-container, .container { overflow: visible !important; }',
@@ -14814,7 +14804,9 @@ window.addEventListener('load', function(){
         '.stacked { flex-wrap: wrap !important; gap: 6px !important; }',
         '.pill { font-size: 11px !important; padding: 4px 8px !important; }',
         '.btn { font-size: 12px !important; min-height: 30px !important; }',
-        'select, button { font-size: 12px !important; }'
+        'select, button { font-size: 12px !important; }',
+        '#btn-mode-mobile { width: 38px !important; height: 38px !important; font-size: 20px !important; border-radius: 8px !important; border: 2px solid rgba(59,130,246,0.8) !important; background: rgba(59,130,246,0.25) !important; opacity: 1 !important; box-shadow: 0 0 10px rgba(59,130,246,0.4) !important; }',
+        '#btn-mode-desktop { width: 28px !important; height: 28px !important; font-size: 13px !important; border-radius: 8px !important; border: 2px solid transparent !important; background: transparent !important; opacity: 0.3 !important; box-shadow: none !important; }'
       ].join(' ');
       document.head.appendChild(s);
 
@@ -14895,14 +14887,20 @@ window.addEventListener('load', function(){
       if(btn) btn.innerHTML = '📱 Mobile';
       var bM = document.getElementById('btn-mode-mobile');
       var bD = document.getElementById('btn-mode-desktop');
-      if(bM) bM.style.background = 'transparent';
-      if(bD) bD.style.background = 'rgba(59,130,246,0.35)';
+      if(bM){ bM.style.background='transparent'; bM.style.border='1.5px solid transparent'; bM.style.borderRadius='8px'; bM.style.opacity='0.3'; bM.style.width='30px'; bM.style.height='30px'; bM.style.fontSize='14px'; bM.style.boxShadow='none'; }
+      if(bD){ bD.style.background='rgba(59,130,246,0.2)'; bD.style.border='2px solid rgba(59,130,246,0.8)'; bD.style.borderRadius='8px'; bD.style.opacity='1'; bD.style.width='36px'; bD.style.height='36px'; bD.style.fontSize='18px'; bD.style.boxShadow='0 0 8px rgba(59,130,246,0.3)'; }
       localStorage.setItem('viewMode','desktop');
       // Sync desktop header buttons
       var hM=document.getElementById('hdr-btn-mobile'); var hD=document.getElementById('hdr-btn-desktop');
-      if(hM) hM.style.background='transparent'; if(hD) hD.style.background='rgba(59,130,246,0.35)';
+      if(hM){ hM.style.background='transparent'; hM.style.border='1.5px solid transparent'; hM.style.borderRadius='8px'; hM.style.opacity='0.3'; hM.style.width='28px'; hM.style.height='28px'; hM.style.fontSize='13px'; hM.style.boxShadow='none'; }
+      if(hD){ hD.style.background='rgba(59,130,246,0.2)'; hD.style.border='2px solid rgba(59,130,246,0.8)'; hD.style.borderRadius='8px'; hD.style.opacity='1'; hD.style.width='38px'; hD.style.height='38px'; hD.style.fontSize='20px'; hD.style.boxShadow='0 0 10px rgba(59,130,246,0.4)'; }
       // Fix scroll for desktop
-      document.documentElement.style.overflowY='auto'; document.documentElement.style.overflowX='hidden'; document.body.style.overflow='';
+      document.documentElement.style.overflowY = 'scroll';
+      document.documentElement.style.overflowX = 'hidden';
+      document.body.style.overflowY = 'scroll';
+      document.body.style.overflowX = 'hidden';
+      document.documentElement.style.height = '';
+      document.body.style.height = '';
       // Restore elements hidden by JS inline styles
       ['card-dados','kpis-section','medalhas-right-hall'].forEach(function(id){
         var el = document.getElementById(id);
@@ -14942,7 +14940,12 @@ window.addEventListener('load', function(){
   } else {
     // Desktop: respeitar preferência salva
     if(saved === 'mobile') enableMobileMode(true);
-    else enableMobileMode(false);
+    else {
+      enableMobileMode(false);
+      // Garantir scroll imediato no desktop
+      document.documentElement.style.overflowY = 'scroll';
+      document.body.style.overflowY = 'scroll';
+    }
   }
 
   window.toggleViewMode = function(){
