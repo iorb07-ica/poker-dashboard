@@ -3542,11 +3542,13 @@ document.addEventListener('DOMContentLoaded', function(){
   <div id="atas-body" data-open="false" style="display:none;" class="nf-body">
 
     <!-- Seletor de semana + botão editar -->
-    <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-      <label style="font-size:12px;color:#6b82a0;white-space:nowrap;">Semana</label>
-      <select id="ata-wk-sel" onchange="ataCarregar()" style="flex:1;background:#0d1629;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:#e6edf3;padding:7px 10px;font-size:13px;"></select>
-      <button class="nf-admin-only" onclick="ataAbrirEditor()" style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;font-size:12px;font-weight:700;padding:7px 12px;cursor:pointer;white-space:nowrap;">✏️ Editar</button>
-      <button class="nf-admin-hidden" onclick="ataLoginAdmin()" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;color:#4a6080;font-size:12px;font-weight:700;padding:7px 12px;cursor:pointer;white-space:nowrap;">🔒</button>
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:14px;">
+      <div style="flex:1;position:relative;">
+        <select id="ata-wk-sel" onchange="_ataWKAtual=this.value;ataCarregar();" style="width:100%;appearance:none;-webkit-appearance:none;-moz-appearance:none;background:#0d1629;border:1px solid rgba(255,255,255,.18);border-radius:10px;color:#e6edf3 !important;padding:11px 36px 11px 16px;font-size:16px;font-weight:800;letter-spacing:.5px;cursor:pointer;outline:none;-webkit-text-fill-color:#e6edf3;"></select>
+        <span style="position:absolute;right:12px;top:50%;transform:translateY(-50%);color:#6b82a0;font-size:12px;pointer-events:none;">▼</span>
+      </div>
+      <button class="nf-admin-only" onclick="ataAbrirEditor()" style="background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:8px;color:#a5b4fc;font-size:12px;font-weight:700;padding:9px 14px;cursor:pointer;white-space:nowrap;">✏️ Editar</button>
+      <span class="nf-admin-hidden" onclick="ataLoginAdmin()" style="color:#1e2a38;font-size:11px;cursor:pointer;opacity:0.15;padding:0 2px;flex-shrink:0;user-select:none;">🔒</span>
     </div>
 
     <!-- LEITURA PÚBLICA -->
@@ -3557,7 +3559,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- ══ EDITOR DE ATA — MODAL ══ -->
 <div id="ata-editor-modal" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;z-index:9996;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);align-items:flex-end;justify-content:center;">
-  <div id="ata-editor-box" style="background:linear-gradient(145deg,#0a1020,#0d1629);border:1px solid rgba(99,102,241,.2);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:calc(94vh - 60px);display:flex;flex-direction:column;overflow:hidden;margin-bottom:60px;">
+  <div id="ata-editor-box" style="background:linear-gradient(145deg,#0a1020,#0d1629);border:1px solid rgba(99,102,241,.2);border-radius:20px 20px 0 0;width:100%;max-width:560px;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;">
 
     <!-- Header fixo -->
     <div style="position:sticky;top:0;background:#0a1020;border-bottom:1px solid rgba(255,255,255,.07);padding:14px 16px 10px;z-index:2;display:flex;align-items:center;justify-content:space-between;">
@@ -3649,13 +3651,12 @@ document.addEventListener('DOMContentLoaded', function(){
         <div id="ata-jogadores-blocos" style="display:flex;flex-direction:column;gap:8px;"></div>
       </div>
 
-    </div><!-- fim padding -->
-  </div><!-- fim scroll area -->
+      <!-- Botão Salvar no final do scroll -->
+      <div style="padding:8px 0 80px;">
+        <button onclick="ataSalvarRich()" style="width:100%;background:linear-gradient(135deg,#312e81,#6366f1);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;padding:16px;cursor:pointer;">💾 Salvar Ata</button>
+      </div>
 
-  <!-- Botão Salvar fixo no rodapé -->
-  <div style="padding:12px 16px;border-top:1px solid rgba(255,255,255,.08);background:#0a1020;padding-bottom:max(16px, env(safe-area-inset-bottom, 16px));flex-shrink:0;">
-    <button onclick="ataSalvarRich()" style="width:100%;background:linear-gradient(135deg,#312e81,#6366f1);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:800;padding:14px;cursor:pointer;">💾 Salvar Ata</button>
-  </div>
+    </div><!-- fim scroll area -->
 
   </div><!-- fim editor-box -->
 </div>
@@ -4253,8 +4254,11 @@ document.addEventListener('DOMContentLoaded', function(){
     <span class="tab-icon">&#129518;</span>
     <span class="tab-label">Calc.</span>
   </button>
-  <button class="tab-item" style="--tab-color:#a78bfa" onclick="tabNav('card-atas')" data-tab="atas">
-    <span class="tab-icon">&#128221;</span>
+  <button class="tab-item" style="--tab-color:#a78bfa" onclick="tabNav('card-atas');ataMarcarLida();" data-tab="atas">
+    <span style="position:relative;display:inline-block;">
+      <span class="tab-icon">&#128221;</span>
+      <span id="ata-badge" style="display:none;position:absolute;top:-4px;right:-6px;background:#ef4444;color:#fff;font-size:9px;font-weight:900;border-radius:999px;min-width:14px;height:14px;line-height:14px;text-align:center;padding:0 3px;border:1.5px solid #060d1a;">1</span>
+    </span>
     <span class="tab-label">Atas</span>
   </button>
   <!-- Feedback discreto na tab bar -->
@@ -4272,9 +4276,26 @@ var _tabScrollTimer = null;
 function tabNav(cardId){
   var el = document.getElementById(cardId);
   if(!el) return;
+
+  /* Se for o card de Atas, garante que está aberto e mostra a última ata */
+  if(cardId === 'card-atas'){
+    var body = document.getElementById('atas-body');
+    if(body && body.getAttribute('data-open') === 'false'){
+      window.toggleCard('atas-body','atas-arrow');
+    }
+    /* Garante que está na última semana */
+    setTimeout(function(){
+      var sel = document.getElementById('ata-wk-sel');
+      if(sel && sel.options.length){
+        sel.selectedIndex = sel.options.length - 1;
+        _ataWKAtual = sel.value;
+        ataCarregar();
+      }
+    }, 100);
+  }
+
   var yOffset = -72;
   var y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-  /* Lock scroll detection while animating */
   _tabScrolling = true;
   clearTimeout(_tabScrollTimer);
   _tabScrollTimer = setTimeout(function(){ _tabScrolling = false; }, 800);
@@ -4958,7 +4979,21 @@ body.admin-mode .nf-admin-hidden { display:none; }
 
 
 
-/* Android no-blur mode */
+/* Android/iOS select option fix */
+#ata-wk-sel option {
+  background: #0d1629;
+  color: #e6edf3;
+}
+/* Android fallback — se não suportar appearance:none */
+.is-android #ata-wk-sel {
+  background: #0d1629 !important;
+  color: #e6edf3 !important;
+  border: 1px solid rgba(255,255,255,.18) !important;
+  font-size: 16px !important;
+  font-weight: 800 !important;
+  padding: 10px 12px !important;
+  border-radius: 10px !important;
+}
 .no-blur [style*="backdrop-filter"],
 .no-blur #plaza-tabbar,
 .no-blur #ata-editor-modal,
@@ -6163,7 +6198,41 @@ function ataColetarDados(){
   };
 }
 
-/* ═══ GITHUB ATAS PUBLISH ═══ */
+/* ═══ BADGE DE NOTIFICAÇÃO — ATAS ═══ */
+var _ATA_BADGE_KEY = 'plaza_ata_ultima_lida';
+
+function ataMarcarLida(){
+  /* Guarda a WK mais recente como lida */
+  try {
+    var wks = nfWKs();
+    var ultima = wks[wks.length-1] || '';
+    localStorage.setItem(_ATA_BADGE_KEY, ultima);
+    document.getElementById('ata-badge').style.display = 'none';
+  } catch(e){}
+}
+
+function ataVerificarBadge(){
+  try {
+    var badge = document.getElementById('ata-badge');
+    if(!badge) return;
+    /* Pega a WK mais recente disponível */
+    var wks = nfWKs();
+    var ultima = wks[wks.length-1] || '';
+    if(!ultima) return;
+    /* Pega a última lida pelo usuário */
+    var ultimaLida = localStorage.getItem(_ATA_BADGE_KEY) || '';
+    /* Verifica se tem ata publicada na WK mais recente */
+    var temAta = NF_DATA.atas && NF_DATA.atas[ultima] && 
+                 (NF_DATA.atas[ultima].titulo || NF_DATA.atas[ultima].intro);
+    if(temAta && ultima !== ultimaLida){
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  } catch(e){}
+}
+
+
 var _GH_USER  = 'iorb07-ica';
 var _GH_REPO  = 'poker-dashboard';
 var _GH_FILE  = 'atas.json';
@@ -6283,6 +6352,7 @@ function ataCarregarDoGitHub(){
         /* Merge: GitHub tem prioridade sobre localStorage */
         Object.keys(json).forEach(function(wk){ NF_DATA.atas[wk] = json[wk]; });
         ataCarregar();
+        ataVerificarBadge();
       }
     }catch(e){ console.warn('Erro ao carregar atas do GitHub:', e); }
   })
@@ -6391,6 +6461,7 @@ function midiaAbrirLB(url){
     nfRefreshAdminUI();
     /* Carrega atas do GitHub para todos verem */
     setTimeout(ataCarregarDoGitHub, 1500);
+    setTimeout(ataVerificarBadge, 2000);
   }
 
   /* Aguarda RAW antes de inicializar atas — evita pisca */
