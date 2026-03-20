@@ -5750,6 +5750,8 @@ var ATA_CLIMA_LABELS = [
   '🌋🔥 APOCALIPSE — A noite mais louca da história do Plaza'
 ];
 
+var _ataWKAtual = null; /* WK selecionada — imune a resets do DOM */
+
 function ataInit(){
   var sel = document.getElementById('ata-wk-sel');
   if(!sel) return;
@@ -5757,22 +5759,24 @@ function ataInit(){
   sel.innerHTML = wks.map(function(w){ return '<option value="'+w+'">'+w+'</option>'; }).join('');
   /* Sempre seleciona a semana mais recente */
   sel.selectedIndex = wks.length - 1;
-  console.log('[ataInit] WKs:', wks, '→ selecionando:', wks[wks.length-1], 'RAW.length:', window.RAW ? window.RAW.length : 'sem RAW');
+  _ataWKAtual = wks[wks.length - 1] || '';
 
-  /* Debug: detecta quem muda o seletor depois */
-  var _lastVal = sel.value;
-  setInterval(function(){
-    if(sel.value !== _lastVal){
-      console.warn('[ata-wk-sel MUDOU] de', _lastVal, 'para', sel.value, new Error().stack);
-      _lastVal = sel.value;
-    }
-  }, 100);
+  /* Monitora mudanças externas no select e corrige */
+  sel.addEventListener('change', function(){
+    _ataWKAtual = sel.value;
+    ataCarregar();
+  });
 
+  /* Remove logs de debug */
   ataCarregar();
 }
 
 function ataCarregar(){
-  var wk  = document.getElementById('ata-wk-sel').value;
+  /* Usa _ataWKAtual se disponível, fallback para o select */
+  var sel = document.getElementById('ata-wk-sel');
+  var wk = _ataWKAtual || (sel && sel.value) || '';
+  /* Sincroniza o select com a variável */
+  if(sel && wk && sel.value !== wk) sel.value = wk;
   var d   = (NF_DATA.atas && NF_DATA.atas[wk]) || {};
   var wrap = document.getElementById('ata-leitura');
   if(!wrap) return;
