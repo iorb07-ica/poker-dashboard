@@ -5701,12 +5701,18 @@ setInterval(nfRefreshAdminUI, 500);
 function nfWKs(){
   var wks = [];
   if(window.RAW && RAW.length){
-    var set = {};
-    RAW.forEach(function(r){ if(r.wk) set['WK'+String(r.wk).padStart(2,'0')]=r.wk; });
-    Object.keys(set).sort().forEach(function(k){ wks.push(k); });
+    var nums = {};
+    RAW.forEach(function(r){ if(r.wk) nums[parseInt(r.wk)] = true; });
+    Object.keys(nums).map(Number).sort(function(a,b){return a-b;}).forEach(function(n){
+      wks.push('WK'+String(n).padStart(2,'0'));
+    });
   }
   if(!wks.length){ for(var i=1;i<=11;i++) wks.push('WK'+String(i).padStart(2,'0')); }
   return wks;
+}
+function nfMaxWK(){
+  var wks = nfWKs();
+  return wks[wks.length-1] || 'WK11';
 }
 function nfPlayers(){
   if(window.players && players.length) return players;
@@ -5749,13 +5755,19 @@ function ataInit(){
   if(!sel) return;
   var wks = nfWKs();
   sel.innerHTML = wks.map(function(w){ return '<option value="'+w+'">'+w+'</option>'; }).join('');
-  /* Sempre seleciona a semana mais recente (última da lista ordenada) */
-  var ultima = wks[wks.length-1] || '';
-  sel.value = ultima;
-  /* Garante que o valor foi aplicado */
-  if(sel.value !== ultima && wks.length){
-    sel.selectedIndex = wks.length - 1;
-  }
+  /* Sempre seleciona a semana mais recente */
+  sel.selectedIndex = wks.length - 1;
+  console.log('[ataInit] WKs:', wks, '→ selecionando:', wks[wks.length-1], 'RAW.length:', window.RAW ? window.RAW.length : 'sem RAW');
+
+  /* Debug: detecta quem muda o seletor depois */
+  var _lastVal = sel.value;
+  setInterval(function(){
+    if(sel.value !== _lastVal){
+      console.warn('[ata-wk-sel MUDOU] de', _lastVal, 'para', sel.value, new Error().stack);
+      _lastVal = sel.value;
+    }
+  }, 100);
+
   ataCarregar();
 }
 
@@ -6318,29 +6330,35 @@ function midiaAbrirLB(url){
 /* BOOT */
 (function nfBoot(){
   function init(){
-    ataInit();
     midiaInit();
     nfRefreshAdminUI();
     /* Carrega atas do GitHub para todos verem */
     setTimeout(ataCarregarDoGitHub, 1500);
   }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', function(){ setTimeout(init,1200); });
-  } else { setTimeout(init,1200); }
 
-  /* Re-init atas quando RAW estiver disponível (dados do campeonato carregados) */
-  var _ataReinitDone = false;
-  function waitForRAW(){
-    if(_ataReinitDone) return;
+  /* Aguarda RAW antes de inicializar atas — evita pisca */
+  function initComRAW(){
+    ataInit();
+    init();
+  }
+
+  function waitForRAW(tentativas){
+    tentativas = tentativas || 0;
     if(window.RAW && window.RAW.length > 0){
-      _ataReinitDone = true;
-      ataInit();   /* recarrega seletor com WKs reais */
-      midiaInit();
+      initComRAW();
+    } else if(tentativas < 20){ /* até 5 segundos */
+      setTimeout(function(){ waitForRAW(tentativas+1); }, 250);
     } else {
-      setTimeout(waitForRAW, 500);
+      /* Timeout — inicializa com fallback mesmo sem RAW */
+      initComRAW();
     }
   }
-  setTimeout(waitForRAW, 800);
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(waitForRAW, 400); });
+  } else {
+    setTimeout(waitForRAW, 400);
+  }
 })();
 </script>
 
