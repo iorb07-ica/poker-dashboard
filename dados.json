@@ -2262,7 +2262,7 @@
       "rebuys": 0,
       "kos": 3,
       "fichas_restantes": 25025,
-      "valor_fichas": 7507.5,
+      "valor_fichas": 75.075,
       "pontos_classificacao": 20000,
       "penalidade_rebuy": 0,
       "pontos_fichas": 7507.5,
@@ -2272,8 +2272,6 @@
       "premio_noite": 21.6,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": 49.46,
       "faltou": 0
     },
@@ -2289,7 +2287,7 @@
       "rebuys": 3,
       "kos": 2,
       "fichas_restantes": 23500,
-      "valor_fichas": 7050,
+      "valor_fichas": 70.5,
       "pontos_classificacao": 18000,
       "penalidade_rebuy": 4500,
       "pontos_fichas": 7050,
@@ -2299,8 +2297,6 @@
       "premio_noite": 16.2,
       "dealer": 22.22,
       "antecipacao_dealer": 200,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": 164.48,
       "faltou": 0
     },
@@ -2316,7 +2312,7 @@
       "rebuys": 3,
       "kos": 0,
       "fichas_restantes": 20650,
-      "valor_fichas": 6195,
+      "valor_fichas": 61.95,
       "pontos_classificacao": 16000,
       "penalidade_rebuy": 4500,
       "pontos_fichas": 6195,
@@ -2326,8 +2322,6 @@
       "premio_noite": 8.1,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -52.17,
       "faltou": 0
     },
@@ -2343,7 +2337,7 @@
       "rebuys": 1,
       "kos": 3,
       "fichas_restantes": 11275,
-      "valor_fichas": 3382.5,
+      "valor_fichas": 33.825,
       "pontos_classificacao": 14000,
       "penalidade_rebuy": 1500,
       "pontos_fichas": 3382.5,
@@ -2353,8 +2347,6 @@
       "premio_noite": 5.4,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -32.99,
       "faltou": 0
     },
@@ -2370,7 +2362,7 @@
       "rebuys": 0,
       "kos": 0,
       "fichas_restantes": 5900,
-      "valor_fichas": 1770,
+      "valor_fichas": 17.7,
       "pontos_classificacao": 12000,
       "penalidade_rebuy": 0,
       "pontos_fichas": 1770,
@@ -2380,8 +2372,6 @@
       "premio_noite": 2.7,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -26.82,
       "faltou": 0
     },
@@ -2397,7 +2387,7 @@
       "rebuys": 1,
       "kos": 1,
       "fichas_restantes": 3650,
-      "valor_fichas": 1095,
+      "valor_fichas": 10.95,
       "pontos_classificacao": 10000,
       "penalidade_rebuy": 1500,
       "pontos_fichas": 1095,
@@ -2407,8 +2397,6 @@
       "premio_noite": 0,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -61.27,
       "faltou": 0
     },
@@ -2434,8 +2422,6 @@
       "premio_noite": 0,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -97.22,
       "faltou": 0
     },
@@ -2461,8 +2447,6 @@
       "premio_noite": 0,
       "dealer": 22.22,
       "antecipacao_dealer": 0,
-      "despesa_grupo": null,
-      "despesa_desc": null,
       "saldo_semana_final": -47.22,
       "faltou": 0
     },
@@ -4218,5 +4202,5 @@
     }
   ],
   "podios": [],
-  "updated": "2026-03-19T05:13:27.210Z"
+  "updated": "2026-03-20T03:14:37.538Z"
 }
