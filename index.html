@@ -14449,7 +14449,7 @@ window.addEventListener('load', function(){
       style="width:100%;box-sizing:border-box;background:#060d1a;border:1px solid #1e3a5a;border-radius:10px;color:#e6edf3;padding:8px 12px;font-size:13px;margin-bottom:14px;"/>
     <div style="display:flex;gap:10px;justify-content:flex-end;">
       <button onclick="fecharConfigGH()" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:10px;padding:9px 18px;cursor:pointer;font-size:13px;">Cancelar</button>
-      <button onclick="salvarConfigGH();var s=document.getElementById('gh-senha-nova').value;if(s){(async function(){var h=(window.crypto&&crypto.subtle)?await sha256(s):sha256sync(s);localStorage.setItem('rn_senha_hash',h);RN_SENHA_HASH=h;document.getElementById('gh-senha-nova').value='';})();}if(document.getElementById('gh-save-pending').value==='1'){document.getElementById('gh-save-pending').value='0';ghSalvarDados();}" 
+      <button onclick="salvarConfigGH();var s=document.getElementById('gh-senha-nova').value;if(s){(async function(){var syncFn=window._sha256sync||function(x){return x;};var h=(window.crypto&&crypto.subtle&&window._sha256)?await window._sha256(s):syncFn(s);localStorage.setItem('rn_senha_hash',h);RN_SENHA_HASH=h;document.getElementById('gh-senha-nova').value='';})();}if(document.getElementById('gh-save-pending').value==='1'){document.getElementById('gh-save-pending').value='0';ghSalvarDados();}" 
         style="background:linear-gradient(135deg,#1a6e3a,#22c55e);color:#fff;border:none;border-radius:10px;padding:9px 18px;cursor:pointer;font-size:13px;font-weight:700;">Salvar</button>
     </div>
   </div>
