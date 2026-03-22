@@ -22124,9 +22124,9 @@ self.addEventListener('notificationclick',function(e){
 
   // Prefixo dos canais — mude para algo único do seu grupo
   var NTFY_BASE = 'https://ntfy.sh';
-  var CANAL_PREFIX = 'poker-plaza-mediterrano-2026';
+  var CANAL_PREFIX = 'poker-plaza-mediterraneo-2026';
 
-  // Canal de cada jogador: poker-plaza-mediterrano-2026-charles, etc.
+  // Canal de cada jogador: poker-plaza-mediterraneo-2026-charles, etc.
   function canal(nome) {
     return CANAL_PREFIX + '-' + nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
   }
