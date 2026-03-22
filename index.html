@@ -4189,6 +4189,16 @@ function tabNav(cardId){
   var el = document.getElementById(cardId);
   if(!el) return;
 
+  // Fechar perfil de jogador se estiver aberto
+  if(document.getElementById('perfil-modal')){
+    if(typeof window.fecharPerfil === 'function') window.fecharPerfil();
+  }
+  // Fechar feedback se estiver aberto
+  if(document.getElementById('feedback-modal') &&
+     document.getElementById('feedback-modal').classList.contains('open')){
+    if(typeof feedbackClose === 'function') feedbackClose();
+  }
+
   
   if(cardId === 'card-atas'){
     var body = document.getElementById('atas-body');
@@ -4378,14 +4388,6 @@ function tabNav(cardId){
   transition:transform .15s, box-shadow .15s;
 }
 #feedback-send:active { transform:scale(.97); box-shadow:0 2px 10px rgba(99,102,241,.3); }
-#feedback-cancel {
-  width:100%;padding:11px;border-radius:10px;
-  background:transparent;
-  border:1px solid rgba(255,255,255,.1);
-  color:#4a6080;font-size:13px;cursor:pointer;
-  transition:color .15s;
-}
-#feedback-cancel:active { color:#6b82a0; }
 #feedback-ok {
   display:none;text-align:center;padding:20px 0 8px;
 }
@@ -4413,7 +4415,6 @@ function tabNav(cardId){
 
  <div id="feedback-actions">
  <button id="feedback-send" onclick="feedbackEnviar()">&#128231; Enviar Feedback por Email</button>
- <button id="feedback-cancel" onclick="feedbackClose()">Cancelar</button>
  </div>
 
  <div id="feedback-ok">
@@ -16746,11 +16747,49 @@ window.abrirPerfil = function(jogadorNome){
 
       
       var telaHeader = document.createElement('div');
-      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:52px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;';
-      telaHeader.innerHTML = '<div>'
-        +'<div style="font-size:18px;font-weight:900;color:'+info.cor+';">'+info.label+'</div>'
-        +'<div style="font-size:11px;color:#6b82a0;margin-top:2px;">Toque numa relíquia para ver detalhes</div>'
-        +'</div>';
+      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top, 20px), 20px) 16px 14px;padding-top:calc(max(env(safe-area-inset-top, 0px), 0px) + 20px);border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;gap:12px;';
+
+      // Avatar + nome + título do nível
+      var avatarFoto = getPhoto ? getPhoto(jogadorNome) : null;
+      var headerLeft = document.createElement('div');
+      headerLeft.style.cssText = 'display:flex;align-items:center;gap:12px;flex:1;min-width:0;';
+
+      // Avatar circular do jogador
+      var avatarEl = document.createElement('div');
+      avatarEl.style.cssText = 'width:44px;height:44px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+info.cor+';box-shadow:0 0 8px '+info.cor+'66;';
+      if(avatarFoto){
+        var avatarImg = document.createElement('img');
+        avatarImg.src = avatarFoto;
+        avatarImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+        avatarEl.appendChild(avatarImg);
+      } else {
+        avatarEl.style.background = 'linear-gradient(135deg,#1e2e46,#0d1629)';
+        avatarEl.style.display = 'flex';
+        avatarEl.style.alignItems = 'center';
+        avatarEl.style.justifyContent = 'center';
+        avatarEl.style.fontSize = '22px';
+        avatarEl.textContent = '🃏';
+      }
+      headerLeft.appendChild(avatarEl);
+
+      // Textos: nome do jogador + nível
+      var headerTexts = document.createElement('div');
+      headerTexts.style.cssText = 'display:flex;flex-direction:column;gap:2px;min-width:0;';
+      var nomeDiv = document.createElement('div');
+      nomeDiv.style.cssText = 'font-size:15px;font-weight:900;color:#e6edf3;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+      nomeDiv.textContent = jogadorNome;
+      var nivelDiv = document.createElement('div');
+      nivelDiv.style.cssText = 'font-size:18px;font-weight:900;color:'+info.cor+';line-height:1.2;';
+      nivelDiv.textContent = info.label;
+      var subDiv = document.createElement('div');
+      subDiv.style.cssText = 'font-size:11px;color:#6b82a0;margin-top:1px;';
+      subDiv.textContent = 'Toque numa relíquia para ver detalhes';
+      headerTexts.appendChild(nomeDiv);
+      headerTexts.appendChild(nivelDiv);
+      headerTexts.appendChild(subDiv);
+      headerLeft.appendChild(headerTexts);
+
+      telaHeader.appendChild(headerLeft);
 
       var btnFecharTela = document.createElement('button');
       btnFecharTela.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:10px;width:36px;height:36px;color:#fca5a5;font-size:16px;font-weight:800;cursor:pointer;';
