@@ -162,6 +162,10 @@ function escHTML(str){
 .fade-ready #card-recordes,
 .fade-ready #card-hall-da-fama,
 .fade-ready #card-torneios,
+.fade-ready #card-estilo,
+.fade-ready #card-duelo,
+.fade-ready #card-voz,
+.fade-ready #card-roadmap,
 .fade-ready .row.mini-ranks > .card,
 .fade-ready #medal-standalone-row .card {
   animation-name: cardSpringUp !important;
@@ -2484,9 +2488,6 @@ document.addEventListener('DOMContentLoaded', function(){
  <button id="btnAbrirRegistro" onclick="abrirRegistroNoite()" title="Registrar Noite" style="background:linear-gradient(135deg,#1a6e3a,#22c55e);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;box-shadow:0 2px 6px rgba(34,197,94,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
   <svg width="14" height="14" viewBox="0 0 22 22" fill="none"><line x1="11" y1="3" x2="11" y2="19" stroke="white" stroke-width="2.5" stroke-linecap="round"/><line x1="3" y1="11" x2="19" y2="11" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
  </button>
- <button onclick="avisarWhatsApp()" title="WhatsApp" style="background:linear-gradient(135deg,#128C7E,#25D366);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;box-shadow:0 2px 6px rgba(37,211,102,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;">
-  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.122 1.532 5.859L.057 23.59a.75.75 0 0 0 .921.899l5.942-1.56A11.946 11.946 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.891 0-3.667-.511-5.193-1.403l-.372-.217-3.863 1.015 1.029-3.757-.237-.389A9.958 9.958 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
- </button>
 </div>
   <script>
   window.toggleCard = function(bodyId, arrowId) {
@@ -4067,6 +4068,228 @@ body.mobile-mode #libwarn { display: none !important; }
 </div>
 </div><!-- fim torneios-hof-wrapper -->
 
+<!-- ═══ CARD: ÍNDICE DE ESTILO DE JOGO ═══ -->
+<div id="card-estilo" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div class="card-title">Índice de Estilo</div>
+      <div style="font-size:18px;font-weight:900;color:#e6edf3;">Perfil dos Jogadores</div>
+    </div>
+    <div id="estilo-grid" style="padding:12px 14px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;"></div>
+  </div>
+</div>
+
+<!-- ═══ CARD: MODO DUELO ═══ -->
+<div id="card-duelo" style="margin-top:16px;width:100%;box-sizing:border-box;display:none;">
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div class="card-title">Head-to-Head</div>
+      <div style="font-size:18px;font-weight:900;color:#e6edf3;">Modo Duelo</div>
+    </div>
+    <div style="padding:12px 14px 6px;display:flex;gap:10px;align-items:center;">
+      <select id="duelo-p1" style="flex:1;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px 12px;font-size:14px;font-weight:700;outline:none;"></select>
+      <div style="font-size:20px;font-weight:900;color:#fbbf24;">VS</div>
+      <select id="duelo-p2" style="flex:1;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px 12px;font-size:14px;font-weight:700;outline:none;"></select>
+    </div>
+    <div id="duelo-resultado" style="padding:0 14px 14px;"></div>
+  </div>
+</div>
+
+<!-- ═══ CARD: VOZ ═══ -->
+<div id="card-voz" style="margin-top:16px;width:100%;box-sizing:border-box;display:none;">
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div class="card-title">Admin</div>
+        <div style="font-size:18px;font-weight:900;color:#e6edf3;">Registrar Semana</div>
+      </div>
+      <button id="voz-btn" onclick="vozIniciar()" style="padding:10px 14px;border-radius:12px;border:1.5px dashed rgba(249,115,22,0.5);background:rgba(249,115,22,0.08);color:#f97316;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;flex-shrink:0;">
+        <span id="voz-mic">🎙️</span><span id="voz-btn-label">Voz</span>
+      </button>
+    </div>
+    <div style="padding:14px;" id="wk-form-wrap">
+      <!-- Cabeçalho da semana -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;">
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Semana (WK)</div>
+          <input id="wk-num" type="number" value="12" min="1" max="52" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fbbf24;padding:10px;font-size:16px;font-weight:900;outline:none;text-align:center;">
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Data</div>
+          <input id="wk-data" type="date" value="2026-03-26" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px;font-size:13px;font-weight:700;outline:none;">
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:16px;">
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Buy-in R$</div>
+          <input id="wk-buyin" type="number" value="25" min="0" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;font-weight:700;outline:none;text-align:center;">
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Rebuy R$</div>
+          <input id="wk-rebuy" type="number" value="25" min="0" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;font-weight:700;outline:none;text-align:center;">
+        </div>
+        <div>
+          <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Dealer R$</div>
+          <input id="wk-dealer" type="number" value="22.22" min="0" step="0.01" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;font-weight:700;outline:none;text-align:center;">
+        </div>
+      </div>
+
+      <!-- Tabela de jogadores -->
+      <div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;">Resultados dos jogadores</div>
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">
+        <table id="wk-tabela" style="width:100%;border-collapse:collapse;font-size:13px;min-width:520px;">
+          <thead>
+            <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+              <th style="text-align:left;padding:6px 8px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);">Jogador</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">Pos</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">KOs</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">Rebuys</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">Fichas</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">Antec.</th>
+              <th style="padding:6px 4px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);text-align:center;">Faltou</th>
+            </tr>
+          </thead>
+          <tbody id="wk-tbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Voz transcript oculto -->
+      <div id="voz-transcript" style="margin-top:10px;display:none;">
+        <div style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;">Você disse:</div>
+        <div id="voz-texto" style="background:#0d1629;border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px;font-size:13px;color:#e6edf3;"></div>
+      </div>
+      <div id="voz-resultado" style="margin-top:8px;display:none;"></div>
+      <div id="voz-historico" style="display:none;"></div>
+
+      <!-- Preview e botão gerar -->
+      <div id="wk-preview" style="margin-top:14px;display:none;"></div>
+      <div style="display:flex;gap:8px;margin-top:14px;">
+        <button onclick="wkCalcular()" style="flex:1;padding:13px;background:linear-gradient(135deg,#1e40af,#3b82f6);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;cursor:pointer;">📊 Calcular</button>
+        <button onclick="wkGerarLedger()" id="wk-btn-gerar" style="flex:1;padding:13px;background:linear-gradient(135deg,#92400e,#d4a017);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;cursor:pointer;display:none;">💾 Gerar Ledger</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ CARD: ROADMAP ═══ -->
+<div id="card-roadmap" style="margin-top:16px;width:100%;box-sizing:border-box;">
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div class="card-title">Próximas versões</div>
+      <div style="font-size:18px;font-weight:900;color:#e6edf3;">Roadmap 2026</div>
+    </div>
+    <div style="padding:14px;">
+
+      <div style="border:1px solid rgba(212,160,23,0.3);background:rgba(212,160,23,0.06);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">🔔</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#d4a017;">Notificações Push individuais (ntfy)</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(212,160,23,0.2);color:#d4a017;border-radius:6px;padding:2px 8px;">PRIORIDADE ALTA</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Cada jogador recebe push no celular ao desbloquear uma relíquia. Canal individual por jogador via ntfy.sh (gratuito, sem servidor). Detecção automática ao registrar nova semana.</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.3);line-height:1.5;margin-bottom:8px;background:rgba(255,255,255,0.03);padding:8px;border-radius:8px;">
+              ✅ <strong style="color:rgba(255,255,255,0.5);">Código pronto</strong> — lógica de snapshot, detecção de relíquias novas, envio por canal individual, canal geral para resultados<br>
+              ⏳ <strong style="color:rgba(255,255,255,0.5);">Para ativar</strong> — cada jogador instala o app ntfy e se inscreve no canal com seu nome
+            </div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📱 ntfy.sh</span>
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">💰 R$0</span>
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">⏱ ~10 min setup</span>
+            </div>
+            <button onclick="ntfyAbrirPainelAdmin()" style="width:100%;padding:10px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(212,160,23,0.1));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#d4a017;font-size:13px;font-weight:800;cursor:pointer;">🔔 Abrir painel de notificações</button>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(236,72,153,0.2);background:rgba(236,72,153,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">⚔️</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#ec4899;">Modo Duelo — Head-to-Head</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(236,72,153,0.12);color:#ec4899;border-radius:6px;padding:2px 8px;">STAND BY</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Comparador head-to-head entre dois jogadores: vitórias, pódios, KOs, pontos, streak, ROI, rebuys e faltas. Placar final com vencedor do duelo.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">✅ Código pronto</span>
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">🔧 Só reativar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(96,165,250,0.2);background:rgba(96,165,250,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">📰</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#60a5fa;">Crônica automática da noite</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(96,165,250,0.12);color:#60a5fa;border-radius:6px;padding:2px 8px;">BACKLOG</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Após registrar a WK, gerar texto estilo jornalismo esportivo com os destaques da noite. Compartilhável direto no grupo do WhatsApp.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">🤖 IA generativa</span>
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">💬 WhatsApp-ready</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">🔥</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#ef4444;">Streak de presença</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(239,68,68,0.12);color:#ef4444;border-radius:6px;padding:2px 8px;">BACKLOG</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Contador de semanas consecutivas sem faltar no perfil, com animação de fogo. Relíquias para streaks de 4, 8 e 12 semanas. Queima ao faltar.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(34,197,94,0.2);background:rgba(34,197,94,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">💸</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#22c55e;">ROI por jogador no perfil</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(34,197,94,0.12);color:#22c55e;border-radius:6px;padding:2px 8px;">BACKLOG</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Total investido, total ganho e ROI em % no perfil de cada jogador. Todos os dados já estão no ledger.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="border:1px solid rgba(168,85,247,0.2);background:rgba(168,85,247,0.04);border-radius:12px;padding:14px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;">
+          <div style="font-size:22px;flex-shrink:0;">🗓️</div>
+          <div style="flex:1;">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
+              <div style="font-size:13px;font-weight:900;color:#a855f7;">Calendário visual da temporada</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(168,85,247,0.12);color:#a855f7;border-radius:6px;padding:2px 8px;">BACKLOG</span>
+            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Grade do ano inteiro com avatar do vencedor de cada semana. Semanas épicas em destaque dourado. Click em qualquer semana abre a ata daquela noite.</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
 <div class="footer" style="margin-top:28px;padding-bottom:calc(80px + env(safe-area-inset-bottom, 16px));">🃏 Poker Series Plaza Mediterrâneo &mdash; Ano 9</div>
 
 <!-- ═══ TAB BAR ═══ -->
@@ -4185,6 +4408,10 @@ body.mobile-mode #libwarn { display: none !important; }
  <span class="tab-icon">&#128172;</span>
  <span class="tab-label">Feedback</span>
  </button>
+ <button class="tab-item" style="--tab-color:#8b5cf6" onclick="tabNav('card-estilo')" data-tab="estilo">
+ <span class="tab-icon">🧠</span>
+ <span class="tab-label">Estilo</span>
+ </button>
 </nav>
 
 <script>
@@ -4274,7 +4501,11 @@ function tabNav(cardId){
     { tab:'ranking',  id:'card-ranking-anual' },
     { tab:'calc',     id:'card-calculadora' },
     { tab:'saldo',    id:'card-saldo-financeiro' },
-    { tab:'atas',     id:'card-atas' }
+    { tab:'atas',     id:'card-atas' },
+    { tab:'duelo',    id:'card-duelo' },
+    { tab:'estilo',   id:'card-estilo' },
+    { tab:'voz',      id:'card-voz' },
+    { tab:'roadmap',  id:'card-roadmap' },
   ];
 
   function setActive(tabKey){
@@ -5446,6 +5677,13 @@ function torSalvarDefinitivo(){
   if(idx>=0) _torHistorico[idx]=record; else _torHistorico.unshift(record);
   torSaveHistoricoLS();
   localStorage.removeItem('tor_rascunho_plaza');
+
+  // Guardar snapshot das relíquias atuais para comparar quando o HTML for baixado
+  if(typeof window.ntfySnapshotAntes === 'function') {
+    window._ntfySnapshotPendente = window.ntfySnapshotAntes();
+    window._ntfyWKPendente = _torState.nome || 'Semana';
+  }
+
   alert('Torneio salvo no historico!');
   torWizFechar();
 }
@@ -16739,38 +16977,7 @@ window.abrirPerfil = function(jogadorNome){
   header.appendChild(avatarWrap);
   header.appendChild(btnClose);
 
-  // Navegação entre jogadores — setas ← → abaixo do header
-  (function(){
-    var navDiv = document.createElement('div');
-    navDiv.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px 4px;';
 
-    var idx = jogs.indexOf(jogadorNome);
-
-    var btnPrev = document.createElement('button');
-    var prevTarget = idx > 0 ? jogs[idx-1] : jogs[jogs.length-1];
-    btnPrev.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;';
-    btnPrev.innerHTML = '← ' + prevTarget;
-    btnPrev.onclick = function(){
-      window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(prevTarget); }, 80);
-    };
-
-    var btnNext = document.createElement('button');
-    var nextTarget = idx < jogs.length-1 ? jogs[idx+1] : jogs[0];
-    btnNext.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;';
-    btnNext.innerHTML = nextTarget + ' →';
-    btnNext.onclick = function(){
-      window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(nextTarget); }, 80);
-    };
-
-    var posLabel = document.createElement('div');
-    posLabel.style.cssText = 'font-size:11px;color:#4a6080;font-weight:700;text-align:center;flex:1;';
-    posLabel.textContent = (idx+1) + ' / ' + jogs.length;
-
-    navDiv.appendChild(btnPrev);
-    navDiv.appendChild(posLabel);
-    navDiv.appendChild(btnNext);
-    box.insertBefore(navDiv, box.children[1]);
-  })();
 
   
   (function(){
@@ -17601,301 +17808,6 @@ window.abrirPerfil = function(jogadorNome){
     }
   })();
 
-  // ═══ FUNÇÃO GLOBAL: abre tela de relíquias para qualquer jogador sem passar pelo perfil ═══
-  window.abrirPerfilReliquias = function(jogNome, nivelInicial) {
-    // Fechar o modal do perfil se estiver aberto por baixo
-    var perfilModal = document.getElementById('perfil-modal');
-    if(perfilModal) perfilModal.remove();
-    document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
-
-    var ledger = (typeof getLedger === 'function') ? getLedger() : [];
-    var jogsAll = Array.from(new Set(ledger.map(function(r){ return r.jogador; })))
-                       .filter(Boolean)
-                       .sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
-    var jogIdx = jogsAll.indexOf(jogNome);
-
-    // Tentar cache primeiro, depois calcular direto com função standalone
-    var BRASOES_JOG = (window._BRASOES_JOGADOR && window._BRASOES_JOGADOR[jogNome]) || null;
-    if(!BRASOES_JOG && window.calcularBrasoesJogador) {
-      BRASOES_JOG = window.calcularBrasoesJogador(jogNome);
-      if(BRASOES_JOG) {
-        window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
-        window._BRASOES_JOGADOR[jogNome] = BRASOES_JOG;
-      }
-    }
-    _abrirTelaComDados(jogNome, nivelInicial||'faisca', BRASOES_JOG, window._NIVEL_INFO_GLOBAL, jogsAll, jogIdx);
-  };
-
-  function _abrirTelaComDados(jogNome, nivelAtivo, BRASOES, NIVEL_INFO, jogsAll, jogIdx){
-    document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
-
-    // ── BRASOES: calcular imediatamente se não fornecido ──
-    if(!BRASOES || !BRASOES[nivelAtivo]) {
-      BRASOES = (window._BRASOES_JOGADOR && window._BRASOES_JOGADOR[jogNome]) || null;
-    }
-    if(!BRASOES || !BRASOES[nivelAtivo]) {
-      BRASOES = window.calcularBrasoesJogador ? window.calcularBrasoesJogador(jogNome) : null;
-      if(BRASOES) {
-        window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
-        window._BRASOES_JOGADOR[jogNome] = BRASOES;
-      }
-    }
-    // NIVEL_INFO: sempre usar o global se não fornecido
-    if(!NIVEL_INFO) NIVEL_INFO = window._NIVEL_INFO_GLOBAL;
-
-    var _bodyTop = parseInt(document.body.style.top || '0', 10) || 0;
-    var _iosOffset = (_bodyTop < 0) ? (-_bodyTop) : 0;
-
-    var tela = document.createElement('div');
-    tela.className = 'brasao-tela';
-    tela.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999999;'
-      +'background:linear-gradient(145deg,#060d1a,#0d1629);'
-      +'display:flex;flex-direction:column;width:100%;max-width:100vw;box-sizing:border-box;overflow:hidden;'
-      +'top:'+_iosOffset+'px;';
-
-    var infoAtivo = NIVEL_INFO[nivelAtivo];
-    var avatarFoto = (typeof getPhoto === 'function') ? getPhoto(jogNome) : null;
-
-    // ── Linha 1: avatar + nome + tabs de nível + fechar ──
-    var hdr1 = document.createElement('div');
-    hdr1.style.cssText = 'display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 10px;flex-shrink:0;background:rgba(6,13,26,0.98);';
-
-    var avEl = document.createElement('div');
-    avEl.style.cssText = 'width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+infoAtivo.cor+';';
-    if(avatarFoto){
-      var avImg = document.createElement('img');
-      avImg.src = avatarFoto;
-      avImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-      avEl.appendChild(avImg);
-    } else {
-      avEl.style.cssText += 'background:linear-gradient(135deg,#1e2e46,#0d1629);display:flex;align-items:center;justify-content:center;font-size:18px;';
-      avEl.textContent = '🃏';
-    }
-
-    var nomeEl = document.createElement('div');
-    nomeEl.style.cssText = 'font-size:15px;font-weight:900;color:#e6edf3;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
-    nomeEl.textContent = jogNome;
-
-    var btnF = document.createElement('button');
-    btnF.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.45);border-radius:10px;width:32px;height:32px;color:#fca5a5;font-size:14px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;';
-    btnF.textContent = '✕';
-    btnF.onclick = function(){ tela.remove(); };
-
-    hdr1.appendChild(avEl);
-    hdr1.appendChild(nomeEl);
-    hdr1.appendChild(btnF);
-
-    // ── Linha 2: tabs dos 3 níveis ──
-    var tabsRow = document.createElement('div');
-    tabsRow.style.cssText = 'display:flex;align-items:stretch;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(6,13,26,0.98);';
-
-    ['faisca','chama','inferno'].forEach(function(niv){
-      var info = NIVEL_INFO[niv];
-      var cF = BRASOES[niv] ? BRASOES[niv].filter(function(b){ return b.conquistado; }).length : 0;
-      var isActive = (niv === nivelAtivo);
-      var tab = document.createElement('button');
-      tab.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;'
-        +'padding:8px 4px;background:none;border:none;cursor:pointer;'
-        +'border-bottom:2px solid '+(isActive ? info.cor : 'transparent')+';'
-        +'transition:all .15s;';
-
-      var tabLabel = document.createElement('div');
-      tabLabel.style.cssText = 'font-size:11px;font-weight:900;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.3)')+';letter-spacing:.3px;';
-      tabLabel.textContent = info.label;
-      var tabCount = document.createElement('div');
-      tabCount.style.cssText = 'font-size:9px;font-weight:700;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.2)')+';';
-      tabCount.textContent = cF+'/10';
-      tab.appendChild(tabLabel);
-      tab.appendChild(tabCount);
-
-      var _tabTouchY = 0;
-      tab.addEventListener('touchstart', function(e){ _tabTouchY = e.touches[0].clientY; }, {passive:true});
-      tab.addEventListener('touchend', function(e){
-        if(Math.abs(e.changedTouches[0].clientY - _tabTouchY) > 8) return;
-        e.preventDefault();
-        _abrirTelaComDados(jogNome, niv, BRASOES, NIVEL_INFO, jogsAll, jogIdx);
-      });
-      tab.onclick = function(){
-        _abrirTelaComDados(jogNome, niv, BRASOES, NIVEL_INFO, jogsAll, jogIdx);
-      };
-      tabsRow.appendChild(tab);
-    });
-
-    // ── Linha 3: navegação entre jogadores ──
-    var navRow = document.createElement('div');
-    navRow.style.cssText = 'display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.04);height:40px;flex-shrink:0;background:rgba(6,13,26,0.98);';
-
-    var prevJog = jogIdx > 0 ? jogsAll[jogIdx-1] : jogsAll[jogsAll.length-1];
-    var nextJog = jogIdx < jogsAll.length-1 ? jogsAll[jogIdx+1] : jogsAll[0];
-
-    function makeNav(label, sub, fn){
-      var b = document.createElement('button');
-      b.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;cursor:pointer;transition:background .15s;padding:0 8px;';
-      b.onmousedown = function(){ this.style.background='rgba(255,255,255,0.05)'; };
-      b.onmouseup   = function(){ this.style.background=''; };
-      // Touch com detecção de scroll
-      var _navTouchY = 0;
-      b.addEventListener('touchstart', function(e){ _navTouchY = e.touches[0].clientY; this.style.background='rgba(255,255,255,0.05)'; }, {passive:true});
-      b.addEventListener('touchend', function(e){
-        this.style.background='';
-        if(Math.abs(e.changedTouches[0].clientY - _navTouchY) > 8) return;
-        e.preventDefault();
-        fn();
-      });
-      b.addEventListener('click', fn);
-      var la = document.createElement('div');
-      la.style.cssText = 'font-size:11px;font-weight:900;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;';
-      la.textContent = label;
-      var su = document.createElement('div');
-      su.style.cssText = 'font-size:8px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:.5px;text-transform:uppercase;';
-      su.textContent = sub;
-      b.appendChild(su); b.appendChild(la);
-      return b;
-    }
-
-    var dotsDiv = document.createElement('div');
-    dotsDiv.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 8px;border-left:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);min-width:60px;';
-    var posLbl = document.createElement('div');
-    posLbl.style.cssText = 'font-size:9px;font-weight:900;color:rgba(255,255,255,0.35);';
-    posLbl.textContent = (jogIdx+1)+' / '+jogsAll.length;
-    var dotsWrap = document.createElement('div');
-    dotsWrap.style.cssText = 'display:flex;gap:3px;align-items:center;';
-    jogsAll.forEach(function(j,i){
-      var d = document.createElement('div');
-      d.style.cssText = i===jogIdx
-        ? 'width:12px;height:3px;border-radius:2px;background:'+infoAtivo.cor+';'
-        : 'width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.15);';
-      dotsWrap.appendChild(d);
-    });
-    dotsDiv.appendChild(posLbl); dotsDiv.appendChild(dotsWrap);
-
-    navRow.appendChild(makeNav('← '+prevJog, jogIdx===0?'voltar ao fim':'anterior', function(){
-      _abrirTelaComDados(prevJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(prevJog));
-    }));
-    navRow.appendChild(dotsDiv);
-    navRow.appendChild(makeNav(nextJog+' →', jogIdx===jogsAll.length-1?'voltar ao início':'próximo', function(){
-      _abrirTelaComDados(nextJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(nextJog));
-    }));
-
-    // ── Grid de relíquias ──
-    var telaScroll2 = document.createElement('div');
-    telaScroll2.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
-    var grid2 = document.createElement('div');
-    grid2.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 10px 40px;box-sizing:border-box;width:100%;';
-
-    var svgKeys = {
-      faisca: ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
-      chama:  ['Certeiro','Capitao','Podio Constante','Colecionador C','Exterminador','Gelo Vivo C','Fenix','Cofre C','Fortaleza C','Ceifador Imp'],
-      inferno:['Vulcao','Fortaleza I','Colecionador I','Dinastia','Tubarao Branco','Hat-trick','Dragao','Grand Slam','Olimpo','Eterno']
-    };
-
-    var brasoesTipo = (BRASOES && BRASOES[nivelAtivo]) ? BRASOES[nivelAtivo] : (function(){
-      var names = {faisca:['Explosivo','Colecionador','Soldado','Coleção Completa','Cofre','Caçador','Primeiro Ouro','Fortaleza','Gelo Vivo','Ceifador'],chama:['Certeiro','Capitão','Pódio Constante','Colecionador','Exterminador','Gelo Vivo','Fênix','Cofre','Fortaleza','Ceifador Implacável'],inferno:['Vulcão','Fortaleza','Colecionador','Dinastia','Tubarão Branco','Hat-trick','Dragão','Grand Slam','Olimpo','Eterno']};
-      return (names[nivelAtivo]||names.faisca).map(function(n){ return {emoji:'🏅',nome:n,desc:'',conquistado:false}; });
-    })();
-
-    // Pre-atribuir svgArt por índice
-    brasoesTipo.forEach(function(b, idx){
-      b.svgArt = (window.BRASAO_SVGS && svgKeys[nivelAtivo] && window.BRASAO_SVGS[svgKeys[nivelAtivo][idx]]) || null;
-    });
-
-    brasoesTipo.forEach(function(b, idx){
-      var item = document.createElement('div');
-      item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;'
-        +'background:none;border:none;cursor:pointer;position:relative;overflow:visible;'
-        +'padding:4px 6px 10px;transition:transform .18s;text-align:center;width:100%;';
-      item.addEventListener('mouseenter', function(){ this.style.transform='scale(1.04)'; });
-      item.addEventListener('mouseleave', function(){ this.style.transform='scale(1)'; });
-      item.onmousedown = function(){ this.style.transform='scale(0.95)'; };
-      item.onmouseup   = function(){ this.style.transform=''; };
-      item.ontouchstart= function(){ this.style.transform='scale(0.95)'; };
-      item.ontouchend  = function(){ this.style.transform=''; };
-
-      var animClass = b.conquistado ? ('brasao-anim-'+nivelAtivo) : '';
-
-      var fireWrap = document.createElement('div');
-      fireWrap.className = 'brasao-fire-wrap';
-      fireWrap.style.cssText = 'position:relative;width:100%;overflow:visible;background:none;display:block;';
-
-      var svgWrap = document.createElement('div');
-      svgWrap.className = 'brasao-svg-wrap brasao-svg-inner' + (animClass ? ' '+animClass : '');
-      svgWrap.style.cssText = 'width:100%;overflow:visible;flex-shrink:0;display:block;background:none;'
-        + (b.conquistado
-            ? 'filter:drop-shadow(0 0 4px '+infoAtivo.cor+');'
-            : 'filter:grayscale(1) brightness(0.18) opacity(0.5);');
-
-      var _svgKey = b.nome
-        .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-        .replace(/ç/g,'c').replace(/Ç/g,'C')
-        .replace(/ã/g,'a').replace(/õ/g,'o')
-        .replace('Ceifador Implacavel','Ceifador Imp')
-        .trim();
-      var _svgKeyNivel = _svgKey + (nivelAtivo==='chama' ? ' C' : nivelAtivo==='inferno' ? ' I' : '');
-      var _svgArt = (window.BRASAO_SVGS && (
-          window.BRASAO_SVGS[b.nome]
-        || window.BRASAO_SVGS[_svgKeyNivel]
-        || window.BRASAO_SVGS[_svgKey]
-        || b.svgArt
-      )) || null;
-      var _svgFinal = _svgArt
-        ? _svgArt
-            .replace('<svg ', '<svg style="width:100%;height:auto;display:block;background:transparent;overflow:visible;" ')
-            .replace(/<path[^>]+fill="#000"[^>]+opacity="\.52"[^>]+transform="translate\(5,8\)"[^>]*\/>/g,'')
-            .replace(/<path[^>]+opacity="\.52"[^>]+fill="#000"[^>]+transform="translate\(5,8\)"[^>]*\/>/g,'')
-            .replace(/<path[^>]+transform="translate\(5,8\)"[^>]+fill="#000"[^>]*\/>/g,'')
-        : '<div style="font-size:36px;text-align:center;">'+b.emoji+'</div>';
-      svgWrap.innerHTML = _svgFinal;
-
-      var nomeEl = document.createElement('div');
-      nomeEl.style.cssText = 'font-size:12px;font-weight:800;text-align:center;line-height:1.3;'
-        +'color:'+(b.conquistado ? infoAtivo.cor : '#3a4a60')+';width:96%;word-break:break-word;';
-      nomeEl.textContent = b.nome;
-
-      if(!b.conquistado){
-        var lock = document.createElement('div');
-        lock.style.cssText = 'position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:22px;opacity:0.7;pointer-events:none;z-index:3;';
-        lock.textContent = '🔒';
-        item.appendChild(lock);
-      }
-
-      fireWrap.appendChild(svgWrap);
-      item.appendChild(fireWrap);
-      item.appendChild(nomeEl);
-
-      item.addEventListener('click', function(){
-        document.querySelectorAll('.brasao-modal').forEach(function(m){ m.remove(); });
-        var overlay = document.createElement('div');
-        overlay.className = 'brasao-modal';
-        overlay.style.cssText = 'position:fixed;inset:0;z-index:1000001;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
-        overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
-        var card = document.createElement('div');
-        card.style.cssText = 'background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;max-width:320px;width:100%;text-align:center;cursor:default;';
-        var svgPreview = '';
-        if(_svgArt) svgPreview = '<div style="width:140px;height:140px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;'+(b.conquistado?'filter:drop-shadow(0 0 8px '+infoAtivo.cor+');':'filter:grayscale(1) brightness(0.3);')+'">'
-          +_svgArt.replace('<svg ','<svg style="width:100%;height:auto;" ')+'</div>';
-        else svgPreview = '<div style="font-size:48px;margin-bottom:14px;">'+b.emoji+'</div>';
-        card.innerHTML = svgPreview
-          +'<div style="display:inline-block;background:'+infoAtivo.bg+';border:1px solid '+infoAtivo.brd+';border-radius:6px;padding:2px 10px;font-size:10px;font-weight:700;color:'+infoAtivo.cor+';margin-bottom:12px;">'+infoAtivo.label+'</div>'
-          +'<div style="font-size:18px;font-weight:900;color:'+(b.conquistado?'#e6edf3':'#6b82a0')+';margin-bottom:8px;">'+b.nome+'</div>'
-          +'<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:16px;">'+b.desc+'</div>'
-          +'<div style="font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;display:inline-block;margin-bottom:12px;'+(b.conquistado?'background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);':'background:rgba(255,255,255,0.05);color:#4a6080;border:1px solid rgba(255,255,255,0.1);')+'">'+(b.conquistado?'✅ Conquistado!':'🔒 Bloqueado')+'</div>'
-          +'<button id="rel-fechar2" style="display:block;width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#9fb3d4;padding:9px;cursor:pointer;font-size:13px;font-weight:600;">Fechar</button>';
-        card.querySelector('#rel-fechar2').onclick = function(){ overlay.remove(); };
-        overlay.appendChild(card);
-        document.body.appendChild(overlay);
-      });
-
-      grid2.appendChild(item);
-    });
-
-    telaScroll2.appendChild(grid2);
-
-    tela.appendChild(hdr1);
-    tela.appendChild(tabsRow);
-    tela.appendChild(navRow);
-    tela.appendChild(telaScroll2);
-    document.body.appendChild(tela);
-  };
   (function(){
     var mesAtual = new Date().getMonth() + 1;
 
@@ -18266,6 +18178,304 @@ window.abrirPerfil = function(jogadorNome){
     },true);
   },80);
 };
+
+// ═══ RELÍQUIAS: funções globais (fora de abrirPerfil) ═══
+// ═══ FUNÇÃO GLOBAL: abre tela de relíquias para qualquer jogador sem passar pelo perfil ═══
+window.abrirPerfilReliquias = function(jogNome, nivelInicial) {
+  // Fechar o modal do perfil se estiver aberto por baixo
+  var perfilModal = document.getElementById('perfil-modal');
+  if(perfilModal) perfilModal.remove();
+  document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
+
+  var ledger = (typeof getLedger === 'function') ? getLedger() : [];
+  var jogsAll = Array.from(new Set(ledger.map(function(r){ return r.jogador; })))
+                     .filter(Boolean)
+                     .sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+  var jogIdx = jogsAll.indexOf(jogNome);
+
+  // Tentar cache primeiro, depois calcular direto com função standalone
+  var BRASOES_JOG = (window._BRASOES_JOGADOR && window._BRASOES_JOGADOR[jogNome]) || null;
+  if(!BRASOES_JOG && window.calcularBrasoesJogador) {
+    BRASOES_JOG = window.calcularBrasoesJogador(jogNome);
+    if(BRASOES_JOG) {
+      window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
+      window._BRASOES_JOGADOR[jogNome] = BRASOES_JOG;
+    }
+  }
+  _abrirTelaComDados(jogNome, nivelInicial||'faisca', BRASOES_JOG, window._NIVEL_INFO_GLOBAL, jogsAll, jogIdx);
+};
+
+function _abrirTelaComDados(jogNome, nivelAtivo, BRASOES, NIVEL_INFO, jogsAll, jogIdx){
+  document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
+
+  // ── BRASOES: calcular imediatamente se não fornecido ──
+  if(!BRASOES || !BRASOES[nivelAtivo]) {
+    BRASOES = (window._BRASOES_JOGADOR && window._BRASOES_JOGADOR[jogNome]) || null;
+  }
+  if(!BRASOES || !BRASOES[nivelAtivo]) {
+    BRASOES = window.calcularBrasoesJogador ? window.calcularBrasoesJogador(jogNome) : null;
+    if(BRASOES) {
+      window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
+      window._BRASOES_JOGADOR[jogNome] = BRASOES;
+    }
+  }
+  // NIVEL_INFO: sempre usar o global se não fornecido
+  if(!NIVEL_INFO) NIVEL_INFO = window._NIVEL_INFO_GLOBAL;
+
+  var _bodyTop = parseInt(document.body.style.top || '0', 10) || 0;
+  var _iosOffset = (_bodyTop < 0) ? (-_bodyTop) : 0;
+
+  var tela = document.createElement('div');
+  tela.className = 'brasao-tela';
+  tela.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999999;'
+    +'background:linear-gradient(145deg,#060d1a,#0d1629);'
+    +'display:flex;flex-direction:column;width:100%;max-width:100vw;box-sizing:border-box;overflow:hidden;'
+    +'top:'+_iosOffset+'px;';
+
+  var infoAtivo = NIVEL_INFO[nivelAtivo];
+  var avatarFoto = (typeof getPhoto === 'function') ? getPhoto(jogNome) : null;
+
+  // ── Linha 1: avatar + nome + tabs de nível + fechar ──
+  var hdr1 = document.createElement('div');
+  hdr1.style.cssText = 'display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 10px;flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+  var avEl = document.createElement('div');
+  avEl.style.cssText = 'width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+infoAtivo.cor+';';
+  if(avatarFoto){
+    var avImg = document.createElement('img');
+    avImg.src = avatarFoto;
+    avImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+    avEl.appendChild(avImg);
+  } else {
+    avEl.style.cssText += 'background:linear-gradient(135deg,#1e2e46,#0d1629);display:flex;align-items:center;justify-content:center;font-size:18px;';
+    avEl.textContent = '🃏';
+  }
+
+  var nomeEl = document.createElement('div');
+  nomeEl.style.cssText = 'font-size:15px;font-weight:900;color:#e6edf3;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+  nomeEl.textContent = jogNome;
+
+  var btnF = document.createElement('button');
+  btnF.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.45);border-radius:10px;width:32px;height:32px;color:#fca5a5;font-size:14px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;';
+  btnF.textContent = '✕';
+  btnF.onclick = function(){ tela.remove(); };
+
+  hdr1.appendChild(avEl);
+  hdr1.appendChild(nomeEl);
+  hdr1.appendChild(btnF);
+
+  // ── Linha 2: tabs dos 3 níveis ──
+  var tabsRow = document.createElement('div');
+  tabsRow.style.cssText = 'display:flex;align-items:stretch;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+  ['faisca','chama','inferno'].forEach(function(niv){
+    var info = NIVEL_INFO[niv];
+    var cF = BRASOES[niv] ? BRASOES[niv].filter(function(b){ return b.conquistado; }).length : 0;
+    var isActive = (niv === nivelAtivo);
+    var tab = document.createElement('button');
+    tab.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;'
+      +'padding:8px 4px;background:none;border:none;cursor:pointer;'
+      +'border-bottom:2px solid '+(isActive ? info.cor : 'transparent')+';'
+      +'transition:all .15s;';
+
+    var tabLabel = document.createElement('div');
+    tabLabel.style.cssText = 'font-size:11px;font-weight:900;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.3)')+';letter-spacing:.3px;';
+    tabLabel.textContent = info.label;
+    var tabCount = document.createElement('div');
+    tabCount.style.cssText = 'font-size:9px;font-weight:700;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.2)')+';';
+    tabCount.textContent = cF+'/10';
+    tab.appendChild(tabLabel);
+    tab.appendChild(tabCount);
+
+    var _tabTouchY = 0;
+    tab.addEventListener('touchstart', function(e){ _tabTouchY = e.touches[0].clientY; }, {passive:true});
+    tab.addEventListener('touchend', function(e){
+      if(Math.abs(e.changedTouches[0].clientY - _tabTouchY) > 8) return;
+      e.preventDefault();
+      _abrirTelaComDados(jogNome, niv, BRASOES, NIVEL_INFO, jogsAll, jogIdx);
+    });
+    tab.onclick = function(){
+      _abrirTelaComDados(jogNome, niv, BRASOES, NIVEL_INFO, jogsAll, jogIdx);
+    };
+    tabsRow.appendChild(tab);
+  });
+
+  // ── Linha 3: navegação entre jogadores ──
+  var navRow = document.createElement('div');
+  navRow.style.cssText = 'display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.04);height:40px;flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+  var prevJog = jogIdx > 0 ? jogsAll[jogIdx-1] : jogsAll[jogsAll.length-1];
+  var nextJog = jogIdx < jogsAll.length-1 ? jogsAll[jogIdx+1] : jogsAll[0];
+
+  function makeNav(label, sub, fn){
+    var b = document.createElement('button');
+    b.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;cursor:pointer;transition:background .15s;padding:0 8px;';
+    b.onmousedown = function(){ this.style.background='rgba(255,255,255,0.05)'; };
+    b.onmouseup   = function(){ this.style.background=''; };
+    // Touch com detecção de scroll
+    var _navTouchY = 0;
+    b.addEventListener('touchstart', function(e){ _navTouchY = e.touches[0].clientY; this.style.background='rgba(255,255,255,0.05)'; }, {passive:true});
+    b.addEventListener('touchend', function(e){
+      this.style.background='';
+      if(Math.abs(e.changedTouches[0].clientY - _navTouchY) > 8) return;
+      e.preventDefault();
+      fn();
+    });
+    b.addEventListener('click', fn);
+    var la = document.createElement('div');
+    la.style.cssText = 'font-size:11px;font-weight:900;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;';
+    la.textContent = label;
+    var su = document.createElement('div');
+    su.style.cssText = 'font-size:8px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:.5px;text-transform:uppercase;';
+    su.textContent = sub;
+    b.appendChild(su); b.appendChild(la);
+    return b;
+  }
+
+  var dotsDiv = document.createElement('div');
+  dotsDiv.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 8px;border-left:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);min-width:60px;';
+  var posLbl = document.createElement('div');
+  posLbl.style.cssText = 'font-size:9px;font-weight:900;color:rgba(255,255,255,0.35);';
+  posLbl.textContent = (jogIdx+1)+' / '+jogsAll.length;
+  var dotsWrap = document.createElement('div');
+  dotsWrap.style.cssText = 'display:flex;gap:3px;align-items:center;';
+  jogsAll.forEach(function(j,i){
+    var d = document.createElement('div');
+    d.style.cssText = i===jogIdx
+      ? 'width:12px;height:3px;border-radius:2px;background:'+infoAtivo.cor+';'
+      : 'width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.15);';
+    dotsWrap.appendChild(d);
+  });
+  dotsDiv.appendChild(posLbl); dotsDiv.appendChild(dotsWrap);
+
+  navRow.appendChild(makeNav('← '+prevJog, jogIdx===0?'voltar ao fim':'anterior', function(){
+    _abrirTelaComDados(prevJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(prevJog));
+  }));
+  navRow.appendChild(dotsDiv);
+  navRow.appendChild(makeNav(nextJog+' →', jogIdx===jogsAll.length-1?'voltar ao início':'próximo', function(){
+    _abrirTelaComDados(nextJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(nextJog));
+  }));
+
+  // ── Grid de relíquias ──
+  var telaScroll2 = document.createElement('div');
+  telaScroll2.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
+  var grid2 = document.createElement('div');
+  grid2.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 10px 40px;box-sizing:border-box;width:100%;';
+
+  var svgKeys = {
+    faisca: ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
+    chama:  ['Certeiro','Capitao','Podio Constante','Colecionador C','Exterminador','Gelo Vivo C','Fenix','Cofre C','Fortaleza C','Ceifador Imp'],
+    inferno:['Vulcao','Fortaleza I','Colecionador I','Dinastia','Tubarao Branco','Hat-trick','Dragao','Grand Slam','Olimpo','Eterno']
+  };
+
+  var brasoesTipo = (BRASOES && BRASOES[nivelAtivo]) ? BRASOES[nivelAtivo] : (function(){
+    var names = {faisca:['Explosivo','Colecionador','Soldado','Coleção Completa','Cofre','Caçador','Primeiro Ouro','Fortaleza','Gelo Vivo','Ceifador'],chama:['Certeiro','Capitão','Pódio Constante','Colecionador','Exterminador','Gelo Vivo','Fênix','Cofre','Fortaleza','Ceifador Implacável'],inferno:['Vulcão','Fortaleza','Colecionador','Dinastia','Tubarão Branco','Hat-trick','Dragão','Grand Slam','Olimpo','Eterno']};
+    return (names[nivelAtivo]||names.faisca).map(function(n){ return {emoji:'🏅',nome:n,desc:'',conquistado:false}; });
+  })();
+
+  // Pre-atribuir svgArt por índice
+  brasoesTipo.forEach(function(b, idx){
+    b.svgArt = (window.BRASAO_SVGS && svgKeys[nivelAtivo] && window.BRASAO_SVGS[svgKeys[nivelAtivo][idx]]) || null;
+  });
+
+  brasoesTipo.forEach(function(b, idx){
+    var item = document.createElement('div');
+    item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;'
+      +'background:none;border:none;cursor:pointer;position:relative;overflow:visible;'
+      +'padding:4px 6px 10px;transition:transform .18s;text-align:center;width:100%;';
+    item.addEventListener('mouseenter', function(){ this.style.transform='scale(1.04)'; });
+    item.addEventListener('mouseleave', function(){ this.style.transform='scale(1)'; });
+    item.onmousedown = function(){ this.style.transform='scale(0.95)'; };
+    item.onmouseup   = function(){ this.style.transform=''; };
+    item.ontouchstart= function(){ this.style.transform='scale(0.95)'; };
+    item.ontouchend  = function(){ this.style.transform=''; };
+
+    var animClass = b.conquistado ? ('brasao-anim-'+nivelAtivo) : '';
+
+    var fireWrap = document.createElement('div');
+    fireWrap.className = 'brasao-fire-wrap';
+    fireWrap.style.cssText = 'position:relative;width:100%;overflow:visible;background:none;display:block;';
+
+    var svgWrap = document.createElement('div');
+    svgWrap.className = 'brasao-svg-wrap brasao-svg-inner' + (animClass ? ' '+animClass : '');
+    svgWrap.style.cssText = 'width:100%;overflow:visible;flex-shrink:0;display:block;background:none;'
+      + (b.conquistado
+          ? 'filter:drop-shadow(0 0 4px '+infoAtivo.cor+');'
+          : 'filter:grayscale(1) brightness(0.18) opacity(0.5);');
+
+    var _svgKey = b.nome
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/ç/g,'c').replace(/Ç/g,'C')
+      .replace(/ã/g,'a').replace(/õ/g,'o')
+      .replace('Ceifador Implacavel','Ceifador Imp')
+      .trim();
+    var _svgKeyNivel = _svgKey + (nivelAtivo==='chama' ? ' C' : nivelAtivo==='inferno' ? ' I' : '');
+    var _svgArt = (window.BRASAO_SVGS && (
+        window.BRASAO_SVGS[b.nome]
+      || window.BRASAO_SVGS[_svgKeyNivel]
+      || window.BRASAO_SVGS[_svgKey]
+      || b.svgArt
+    )) || null;
+    var _svgFinal = _svgArt
+      ? _svgArt
+          .replace('<svg ', '<svg style="width:100%;height:auto;display:block;background:transparent;overflow:visible;" ')
+          .replace(/<path[^>]+fill="#000"[^>]+opacity="\.52"[^>]+transform="translate\(5,8\)"[^>]*\/>/g,'')
+          .replace(/<path[^>]+opacity="\.52"[^>]+fill="#000"[^>]+transform="translate\(5,8\)"[^>]*\/>/g,'')
+          .replace(/<path[^>]+transform="translate\(5,8\)"[^>]+fill="#000"[^>]*\/>/g,'')
+      : '<div style="font-size:36px;text-align:center;">'+b.emoji+'</div>';
+    svgWrap.innerHTML = _svgFinal;
+
+    var nomeEl = document.createElement('div');
+    nomeEl.style.cssText = 'font-size:12px;font-weight:800;text-align:center;line-height:1.3;'
+      +'color:'+(b.conquistado ? infoAtivo.cor : '#3a4a60')+';width:96%;word-break:break-word;';
+    nomeEl.textContent = b.nome;
+
+    if(!b.conquistado){
+      var lock = document.createElement('div');
+      lock.style.cssText = 'position:absolute;top:38%;left:50%;transform:translate(-50%,-50%);font-size:22px;opacity:0.7;pointer-events:none;z-index:3;';
+      lock.textContent = '🔒';
+      item.appendChild(lock);
+    }
+
+    fireWrap.appendChild(svgWrap);
+    item.appendChild(fireWrap);
+    item.appendChild(nomeEl);
+
+    item.addEventListener('click', function(){
+      document.querySelectorAll('.brasao-modal').forEach(function(m){ m.remove(); });
+      var overlay = document.createElement('div');
+      overlay.className = 'brasao-modal';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:1000001;background:rgba(0,0,0,0.88);display:flex;align-items:center;justify-content:center;padding:20px;cursor:pointer;';
+      overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+      var card = document.createElement('div');
+      card.style.cssText = 'background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;max-width:320px;width:100%;text-align:center;cursor:default;';
+      var svgPreview = '';
+      if(_svgArt) svgPreview = '<div style="width:140px;height:140px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;'+(b.conquistado?'filter:drop-shadow(0 0 8px '+infoAtivo.cor+');':'filter:grayscale(1) brightness(0.3);')+'">'
+        +_svgArt.replace('<svg ','<svg style="width:100%;height:auto;" ')+'</div>';
+      else svgPreview = '<div style="font-size:48px;margin-bottom:14px;">'+b.emoji+'</div>';
+      card.innerHTML = svgPreview
+        +'<div style="display:inline-block;background:'+infoAtivo.bg+';border:1px solid '+infoAtivo.brd+';border-radius:6px;padding:2px 10px;font-size:10px;font-weight:700;color:'+infoAtivo.cor+';margin-bottom:12px;">'+infoAtivo.label+'</div>'
+        +'<div style="font-size:18px;font-weight:900;color:'+(b.conquistado?'#e6edf3':'#6b82a0')+';margin-bottom:8px;">'+b.nome+'</div>'
+        +'<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:16px;">'+b.desc+'</div>'
+        +'<div style="font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;display:inline-block;margin-bottom:12px;'+(b.conquistado?'background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);':'background:rgba(255,255,255,0.05);color:#4a6080;border:1px solid rgba(255,255,255,0.1);')+'">'+(b.conquistado?'✅ Conquistado!':'🔒 Bloqueado')+'</div>'
+        +'<button id="rel-fechar2" style="display:block;width:100%;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#9fb3d4;padding:9px;cursor:pointer;font-size:13px;font-weight:600;">Fechar</button>';
+      card.querySelector('#rel-fechar2').onclick = function(){ overlay.remove(); };
+      overlay.appendChild(card);
+      document.body.appendChild(overlay);
+    });
+
+    grid2.appendChild(item);
+  });
+
+  telaScroll2.appendChild(grid2);
+
+  tela.appendChild(hdr1);
+  tela.appendChild(tabsRow);
+  tela.appendChild(navRow);
+  tela.appendChild(telaScroll2);
+  document.body.appendChild(tela);
+};
+
 
 window.fecharPerfil = function(){
   var m = document.getElementById('perfil-modal');
@@ -19215,6 +19425,17 @@ window.rnBaixarHTML = function(){
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
+    // ── Marcar que há resultado pendente de notificação (admin dispara manualmente) ──
+    window._ntfyResultadoPendente = true;
+    window._ntfyWKLabel = window._ntfyWKPendente || 'Semana';
+    // Persistir no localStorage para sobreviver ao fechar o browser
+    try {
+      localStorage.setItem('ntfy_pendente', JSON.stringify({
+        pendente: true,
+        wkLabel: window._ntfyWKLabel,
+        ts: Date.now()
+      }));
+    } catch(e) {}
     if(btn){
       btn.innerHTML = '✅ HTML baixado!';
       btn.style.background = 'linear-gradient(135deg,#0a3a1a,#16a34a)';
@@ -20892,5 +21113,1384 @@ window._tourReady = function(){ renderStep(0); };
   // Splash já tem sua própria lógica de remoção; o CSS global cobre o resto.
 
 })();
+
+
+// ═══════════════════════════════════════════════════════════════════════
+// FEATURE 1: ÍNDICE DE ESTILO DE JOGO
+// ═══════════════════════════════════════════════════════════════════════
+(function(){
+  function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+
+  function calcEstilo(nome, ledger) {
+    var rows = ledger.filter(function(r){ return r.jogador===nome && !fv(r.faltou); });
+    if(rows.length < 3) return null;
+    var jogos    = rows.length;
+    var vitorias = rows.filter(function(r){ return fv(r.posicao)===1; }).length;
+    var podios   = rows.filter(function(r){ return fv(r.posicao)>=1 && fv(r.posicao)<=3; }).length;
+    var kos      = rows.reduce(function(s,r){ return s+fv(r.kos); },0);
+    var rebuys   = rows.reduce(function(s,r){ return s+fv(r.rebuys); },0);
+    var fichas   = rows.reduce(function(s,r){ return s+fv(r.fichas_restantes); },0);
+    var posArr   = rows.map(function(r){ return fv(r.posicao); }).filter(function(p){ return p>0; });
+    var media    = posArr.reduce(function(s,p){ return s+p; },0)/Math.max(posArr.length,1);
+    var desvio   = Math.sqrt(posArr.reduce(function(s,p){ return s+Math.pow(p-media,2); },0)/Math.max(posArr.length,1));
+    var koRatio  = kos/Math.max(jogos,1);
+    var rbRatio  = rebuys/Math.max(jogos,1);
+    var winRate  = vitorias/Math.max(jogos,1);
+    var podRate  = podios/Math.max(jogos,1);
+    var ficMedia = fichas/Math.max(jogos,1);
+    var agressivo    = Math.min(100, koRatio*22 + winRate*35);
+    var consistente  = Math.min(100, podRate*55 + Math.max(0,18-desvio)*2.5);
+    var sobrevivente = Math.min(100, Math.max(0,100-rbRatio*28) + podRate*18);
+    var acumulador   = Math.min(100, ficMedia/1200*2 + winRate*45);
+    var styles = [
+      {label:'Agressivo',    icon:'💥', cor:'#ef4444', score:agressivo,    desc:'Alto foco em eliminar. Joga para atacar.'},
+      {label:'Consistente',  icon:'🎯', cor:'#22c55e', score:consistente,  desc:'Sempre no pódio. Poucas oscilações.'},
+      {label:'Sobrevivente', icon:'🛡️', cor:'#60a5fa', score:sobrevivente, desc:'Aguenta o tranco. Pouco rebuy.'},
+      {label:'Acumulador',   icon:'💰', cor:'#d4a017', score:acumulador,   desc:'Termina com muitas fichas quando vence.'},
+    ];
+    styles.sort(function(a,b){ return b.score-a.score; });
+    return { nome:nome, estilo:styles[0], jogos:jogos, vitorias:vitorias,
+             koRatio:koRatio.toFixed(1), rbRatio:rbRatio.toFixed(1) };
+  }
+
+  function renderEstilo() {
+    var grid = document.getElementById('estilo-grid');
+    if(!grid) return;
+    var ledger = typeof getLedger==='function' ? getLedger() : [];
+    var jogs = Array.from(new Set(ledger.map(function(r){return r.jogador;}))).filter(Boolean)
+                    .sort(function(a,b){return a.localeCompare(b,'pt-BR');});
+    grid.innerHTML = '';
+    jogs.forEach(function(nome){
+      var e = calcEstilo(nome, ledger);
+      if(!e) return;
+      var foto = window.photoFor?window.photoFor(nome):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[nome]);
+      var card = document.createElement('div');
+      card.style.cssText = 'background:linear-gradient(145deg,rgba(255,255,255,0.02),#0d1629);border:1px solid '+e.estilo.cor+'44;border-radius:14px;padding:14px 12px;text-align:center;transition:transform .2s;';
+      card.addEventListener('mouseenter',function(){this.style.transform='translateY(-2px)';});
+      card.addEventListener('mouseleave',function(){this.style.transform='';});
+      card.innerHTML =
+        (foto?'<img src="'+foto+'" style="width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid '+e.estilo.cor+';margin-bottom:8px;">'
+             :'<div style="width:52px;height:52px;border-radius:50%;background:#1e2e46;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 8px;">🃏</div>')
+        +'<div style="font-size:13px;font-weight:900;color:#e6edf3;margin-bottom:2px;">'+nome+'</div>'
+        +'<div style="font-size:24px;margin:6px 0;">'+e.estilo.icon+'</div>'
+        +'<div style="font-size:12px;font-weight:900;color:'+e.estilo.cor+';margin-bottom:4px;">'+e.estilo.label+'</div>'
+        +'<div style="font-size:10px;color:rgba(255,255,255,0.3);line-height:1.4;margin-bottom:8px;">'+e.estilo.desc+'</div>'
+        +'<div style="display:flex;justify-content:center;gap:6px;">'
+        +'<span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:3px 7px;color:rgba(255,255,255,0.4);">💥 '+e.koRatio+'/j</span>'
+        +'<span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:3px 7px;color:rgba(255,255,255,0.4);">🏆 '+e.vitorias+'v</span>'
+        +'</div>';
+      grid.appendChild(card);
+    });
+    if(!grid.children.length) grid.innerHTML='<div style="text-align:center;padding:24px;color:rgba(255,255,255,0.3);font-size:13px;">Dados insuficientes. Jogue mais rodadas!</div>';
+  }
+
+  window._renderEstilo = renderEstilo;
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(renderEstilo, 1200);
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════
+// FEATURE 2: MODO DUELO
+// ═══════════════════════════════════════════════════════════════════════
+(function(){
+  function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+
+  function populateSelects(){
+    var ledger = typeof getLedger==='function'?getLedger():[];
+    var jogs = Array.from(new Set(ledger.map(function(r){return r.jogador;}))).filter(Boolean)
+                    .sort(function(a,b){return a.localeCompare(b,'pt-BR');});
+    ['duelo-p1','duelo-p2'].forEach(function(id,idx){
+      var sel=document.getElementById(id); if(!sel)return;
+      sel.innerHTML=jogs.map(function(j,i){return '<option value="'+j+'"'+(i===idx?' selected':'')+'>'+j+'</option>';}).join('');
+    });
+  }
+
+  function calcStats(nome,ledger){
+    var rows=ledger.filter(function(r){return r.jogador===nome&&!fv(r.faltou);});
+    var all=ledger.filter(function(r){return r.jogador===nome;});
+    var j=rows.length, v=rows.filter(function(r){return fv(r.posicao)===1;}).length;
+    var pod=rows.filter(function(r){return fv(r.posicao)>=1&&fv(r.posicao)<=3;}).length;
+    var kos=rows.reduce(function(s,r){return s+fv(r.kos);},0);
+    var rbs=rows.reduce(function(s,r){return s+fv(r.rebuys);},0);
+    var flt=all.filter(function(r){return fv(r.faltou)===1;}).length;
+    var pts=rows.reduce(function(s,r){return s+fv(r.pontos_calc);},0);
+    var inv=all.reduce(function(s,r){return s+fv(r.buyin)+fv(r.rebuys);},0);
+    var gan=all.reduce(function(s,r){return s+fv(r.premio_mes||0)+fv(r.premio_ko||0);},0);
+    var roi=inv>0?Math.round((gan-inv)/inv*100):0;
+    // streak
+    var wks=Array.from(new Set(ledger.map(function(r){return +r.wk;}))).filter(Boolean).sort(function(a,b){return b-a;});
+    var streak=0;
+    for(var i=0;i<wks.length;i++){
+      var r=all.find(function(x){return +x.wk===wks[i];});
+      if(r&&!fv(r.faltou))streak++; else break;
+    }
+    return {nome:nome,jogos:j,vitorias:v,podios:pod,kos:kos,rebuys:rbs,faltas:flt,pontos:Math.round(pts),roi:roi,streak:streak};
+  }
+
+  function renderDuelo(){
+    var ledger=typeof getLedger==='function'?getLedger():[];
+    var s1=document.getElementById('duelo-p1'), s2=document.getElementById('duelo-p2');
+    var res=document.getElementById('duelo-resultado');
+    if(!s1||!s2||!res)return;
+    var p1=s1.value, p2=s2.value;
+    if(!p1||!p2||p1===p2){
+      res.innerHTML='<div style="text-align:center;padding:20px;color:rgba(255,255,255,0.3);font-size:13px;">Selecione dois jogadores diferentes</div>';
+      return;
+    }
+    var d1=calcStats(p1,ledger), d2=calcStats(p2,ledger);
+    var f1=window.photoFor?window.photoFor(p1):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[p1])||'';
+    var f2=window.photoFor?window.photoFor(p2):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[p2])||'';
+    var cats=[
+      {label:'Vitórias',k:'vitorias',icon:'🏆',low:false},
+      {label:'Pódios',  k:'podios',  icon:'🥇',low:false},
+      {label:'KOs',     k:'kos',     icon:'💥',low:false},
+      {label:'Pontos',  k:'pontos',  icon:'📊',low:false},
+      {label:'Streak',  k:'streak',  icon:'🔥',low:false,fmt:function(v){return v+'sem';}},
+      {label:'ROI %',   k:'roi',     icon:'💸',low:false,fmt:function(v){return v+'%';}},
+      {label:'Rebuys',  k:'rebuys',  icon:'♻️',low:true},
+      {label:'Faltas',  k:'faltas',  icon:'❌',low:true},
+    ];
+    var w1=0,w2=0;
+    var rowsHtml=cats.map(function(c){
+      var v1=+d1[c.k], v2=+d2[c.k];
+      var fmt=c.fmt||function(v){return v;};
+      var win1=c.low?v1<v2:v1>v2, win2=c.low?v2<v1:v2>v1;
+      if(win1)w1++; else if(win2)w2++;
+      var col1=win1?'#22c55e':win2?'rgba(255,255,255,0.2)':'rgba(255,255,255,0.5)';
+      var col2=win2?'#22c55e':win1?'rgba(255,255,255,0.2)':'rgba(255,255,255,0.5)';
+      var bg1=win1?'rgba(34,197,94,0.08)':''; var bg2=win2?'rgba(34,197,94,0.08)':'';
+      return '<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:4px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.04);">'
+        +'<div style="text-align:right;font-size:15px;font-weight:900;color:'+col1+';background:'+bg1+';border-radius:6px;padding:3px 8px;">'+fmt(v1)+'</div>'
+        +'<div style="text-align:center;font-size:9px;color:rgba(255,255,255,0.25);font-weight:700;white-space:nowrap;">'+c.icon+' '+c.label+'</div>'
+        +'<div style="text-align:left;font-size:15px;font-weight:900;color:'+col2+';background:'+bg2+';border-radius:6px;padding:3px 8px;">'+fmt(v2)+'</div>'
+        +'</div>';
+    }).join('');
+    var av=function(f,n,cor){return f?'<img src="'+f+'" style="width:48px;height:48px;border-radius:50%;object-fit:cover;border:2px solid '+cor+';">'
+      :'<div style="width:48px;height:48px;border-radius:50%;background:#1e2e46;display:flex;align-items:center;justify-content:center;font-size:22px;margin:0 auto;">🃏</div>';};
+    var vc1=w1>w2?'#22c55e':w2>w1?'#ef4444':'#fbbf24';
+    var vc2=w2>w1?'#22c55e':w1>w2?'#ef4444':'#fbbf24';
+    var winner=w1>w2?'🏆 '+p1+' vence o duelo!':w2>w1?'🏆 '+p2+' vence o duelo!':'🤝 Duelo empatado!';
+    var wcolor=w1!==w2?'#22c55e':'#fbbf24';
+    res.innerHTML=
+      '<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px;padding:10px 0 6px;text-align:center;">'
+      +'<div>'+av(f1,p1,vc1)+'<div style="font-size:12px;font-weight:900;color:'+vc1+';margin-top:4px;">'+p1+'</div><div style="font-size:24px;font-weight:900;color:'+vc1+';">'+w1+'</div></div>'
+      +'<div style="font-size:16px;font-weight:900;color:rgba(255,255,255,0.2);">VS</div>'
+      +'<div>'+av(f2,p2,vc2)+'<div style="font-size:12px;font-weight:900;color:'+vc2+';margin-top:4px;">'+p2+'</div><div style="font-size:24px;font-weight:900;color:'+vc2+';">'+w2+'</div></div>'
+      +'</div>'
+      +'<div>'+rowsHtml+'</div>'
+      +'<div style="text-align:center;padding:12px 0 4px;font-size:14px;font-weight:900;color:'+wcolor+';">'+winner+'</div>';
+  }
+
+  window._initDuelo=function(){
+    populateSelects();
+    ['duelo-p1','duelo-p2'].forEach(function(id){
+      var el=document.getElementById(id); if(el)el.onchange=renderDuelo;
+    });
+    renderDuelo();
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(window._initDuelo, 1400);
+  });
+})();
+
+// ═══════════════════════════════════════════════════════════════════════
+// FEATURE 3: CERIMÔNIA DE DESBLOQUEIO DE RELÍQUIA
+// ═══════════════════════════════════════════════════════════════════════
+window.celebrarReliquia=function(jogadorNome,brasaoNome,nivel){
+  var NI=window._NIVEL_INFO_GLOBAL||{faisca:{label:'💎 Raras',cor:'#60a5fa'},chama:{label:'🔶 Épicas',cor:'#a855f7'},inferno:{label:'👑 Lendárias',cor:'#d4a017'}};
+  var info=NI[nivel]||NI.inferno;
+  var foto=window.photoFor?window.photoFor(jogadorNome):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[jogadorNome])||'';
+  var old=document.getElementById('cer-overlay'); if(old)old.remove();
+  var ov=document.createElement('div');
+  ov.id='cer-overlay';
+  ov.style.cssText='position:fixed;inset:0;z-index:9999999;background:rgba(0,0,0,0.93);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;cursor:pointer;';
+  ov.addEventListener('click',function(){ov.remove();});
+  var parts='';
+  for(var i=0;i<24;i++){
+    var px=Math.random()*100,py=Math.random()*100,ps=Math.random()*6+2,pd=Math.random()*2,pdr=Math.random()*1.5+0.8;
+    parts+='<div style="position:absolute;left:'+px+'%;top:'+py+'%;width:'+ps+'px;height:'+ps+'px;border-radius:50%;background:'+info.cor+';opacity:0;animation:cerP '+pdr+'s ease '+pd+'s infinite;"></div>';
+  }
+  ov.innerHTML='<style>'
+    +'@keyframes cerP{0%{opacity:0;transform:scale(0)}50%{opacity:.9;transform:scale(1.8)}100%{opacity:0;transform:scale(0)}}'
+    +'@keyframes cerIn{0%{opacity:0;transform:scale(.3) translateY(50px)}65%{transform:scale(1.06) translateY(-6px)}100%{opacity:1;transform:scale(1) translateY(0)}}'
+    +'@keyframes cerGl{0%,100%{box-shadow:0 0 28px '+info.cor+'55}50%{box-shadow:0 0 70px '+info.cor+'bb}}'
+    +'@keyframes cerTt{0%{opacity:0;letter-spacing:10px}100%{opacity:1;letter-spacing:2px}}'
+    +'</style>'
+    +parts
+    +'<div style="position:relative;z-index:2;animation:cerIn .7s cubic-bezier(.175,.885,.32,1.275) forwards;">'
+    +(foto?'<img src="'+foto+'" style="width:86px;height:86px;border-radius:50%;object-fit:cover;border:3px solid '+info.cor+';margin-bottom:16px;animation:cerGl 2s ease-in-out infinite;">'
+          :'<div style="width:86px;height:86px;border-radius:50%;background:#1e2e46;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 16px;border:3px solid '+info.cor+';animation:cerGl 2s ease-in-out infinite;">🃏</div>')
+    +'<div style="font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:'+info.cor+';margin-bottom:8px;opacity:.7;">Nova relíquia desbloqueada</div>'
+    +'<div style="font-size:17px;font-weight:800;color:#e6edf3;margin-bottom:6px;">'+jogadorNome+'</div>'
+    +'<div style="display:inline-block;background:'+info.cor+'22;border:1px solid '+info.cor+'55;border-radius:8px;padding:3px 14px;font-size:11px;font-weight:800;color:'+info.cor+';margin-bottom:22px;">'+info.label+'</div>'
+    +'<div style="font-size:34px;font-weight:900;color:'+info.cor+';animation:cerTt .8s .4s ease both;line-height:1.2;margin-bottom:6px;">'+brasaoNome+'</div>'
+    +'<div style="font-size:11px;color:rgba(255,255,255,0.25);margin-top:16px;">Toque para fechar</div>'
+    +'</div>';
+  document.body.appendChild(ov);
+  setTimeout(function(){if(ov.parentNode)ov.remove();},7000);
+};
+
+window.abrirCerimoniaAdmin=function(){
+  var ledger=typeof getLedger==='function'?getLedger():[];
+  var jogs=Array.from(new Set(ledger.map(function(r){return r.jogador;}))).filter(Boolean).sort(function(a,b){return a.localeCompare(b,'pt-BR');});
+  var ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.82);display:flex;align-items:center;justify-content:center;padding:20px;';
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+  ov.innerHTML='<div style="background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;max-width:320px;width:100%;">'
+    +'<div style="font-size:16px;font-weight:900;color:#d4a017;margin-bottom:16px;">🏅 Cerimônia de Relíquia</div>'
+    +'<select id="cerJ" style="width:100%;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;margin-bottom:10px;">'
+    +jogs.map(function(j){return '<option value="'+j+'">'+j+'</option>';}).join('')
+    +'</select>'
+    +'<select id="cerN" style="width:100%;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;margin-bottom:10px;">'
+    +'<option value="faisca">💎 Rara</option><option value="chama">🔶 Épica</option><option value="inferno">👑 Lendária</option>'
+    +'</select>'
+    +'<input id="cerNm" placeholder="Nome da relíquia (ex: Ceifador)" style="width:100%;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e6edf3;padding:10px;font-size:14px;margin-bottom:14px;outline:none;">'
+    +'<button onclick="var j=document.getElementById(\'cerJ\').value,n=document.getElementById(\'cerN\').value,nm=document.getElementById(\'cerNm\').value||\'Relíquia\';this.closest(\'div\').parentNode.remove();window.celebrarReliquia(j,nm,n);" style="width:100%;padding:12px;background:linear-gradient(135deg,#92400e,#d4a017);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;">🎉 Iniciar Cerimônia</button>'
+    +'</div>';
+  document.body.appendChild(ov);
+};
+
+// Expor atalho no console
+console.log('%c🏅 Cerimônia: window.celebrarReliquia("Nome","Relíquia","faisca|chama|inferno") | Painel: window.abrirCerimoniaAdmin()','color:#d4a017;font-weight:bold;');
+
+// ═══════════════════════════════════════════════════════════════════════
+// FEATURE 4: REGISTRO POR VOZ
+// ═══════════════════════════════════════════════════════════════════════
+(function(){
+  var _ativo=false, _recog=null;
+
+  window.vozIniciar=function(){
+    var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert('Use Chrome (Android) ou Safari (iOS) para reconhecimento de voz.');return;}
+    if(_ativo){_vozParar();return;}
+    _recog=new SR(); _recog.lang='pt-BR'; _recog.continuous=false; _recog.interimResults=true;
+    _ativo=true;
+    var btn=document.getElementById('voz-btn'),mic=document.getElementById('voz-mic'),lbl=document.getElementById('voz-btn-label');
+    var tr=document.getElementById('voz-transcript'),tx=document.getElementById('voz-texto'),rs=document.getElementById('voz-resultado');
+    if(btn){btn.style.borderColor='#ef4444';btn.style.background='rgba(239,68,68,0.12)';btn.style.color='#ef4444';}
+    if(mic)mic.textContent='⏹️'; if(lbl)lbl.textContent='Ouvindo… toque para parar';
+    if(tr)tr.style.display='block'; if(tx)tx.textContent='…'; if(rs)rs.style.display='none';
+    _recog.onresult=function(e){var t='';for(var i=e.resultIndex;i<e.results.length;i++)t+=e.results[i][0].transcript;if(tx)tx.textContent=t;};
+    _recog.onend=function(){var frase=tx?tx.textContent:'';_vozParar();if(frase&&frase!=='…')_vozInterpretar(frase);};
+    _recog.onerror=function(e){_vozParar();alert('Erro: '+e.error);};
+    _recog.start();
+  };
+
+  function _vozParar(){
+    _ativo=false; if(_recog){try{_recog.stop();}catch(e){}_recog=null;}
+    var btn=document.getElementById('voz-btn'),mic=document.getElementById('voz-mic'),lbl=document.getElementById('voz-btn-label');
+    if(btn){btn.style.borderColor='rgba(249,115,22,0.4)';btn.style.background='rgba(249,115,22,0.06)';btn.style.color='#f97316';}
+    if(mic)mic.textContent='🎙️'; if(lbl)lbl.textContent='Toque para falar';
+  }
+
+  function _vozInterpretar(frase) {
+    var rs = document.getElementById('voz-resultado'); if(!rs) return;
+    rs.style.display = 'block';
+    rs.innerHTML = '<div style="font-size:12px;color:rgba(255,255,255,0.3);padding:12px;text-align:center;">Interpretando…</div>';
+
+    // Parser local — sem chamada de rede, funciona offline
+    var resultado = _vozParser(frase);
+
+    setTimeout(function() {
+      if(!resultado) {
+        rs.innerHTML = '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:12px;color:#fca5a5;font-size:13px;">❌ Não entendi. Tente: <em>"Marcus eliminado em 7º com 3 KOs e 2 rebuys"</em></div>';
+        return;
+      }
+      var cor = resultado.posicao === 1 ? '#d4a017' : resultado.posicao <= 3 ? '#22c55e' : 'rgba(255,255,255,0.6)';
+      rs.innerHTML = '<div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:12px;padding:14px;">'
+        + '<div style="font-size:13px;font-weight:900;color:#22c55e;margin-bottom:12px;">✅ Resultado reconhecido</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;">'
+        + '<div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Jogador</div><div style="font-size:15px;font-weight:900;color:#e6edf3;">' + resultado.jogador + '</div></div>'
+        + '<div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Posição</div><div style="font-size:15px;font-weight:900;color:' + cor + ';">' + (resultado.posicao ? resultado.posicao + 'º' : '?') + '</div></div>'
+        + '<div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">KOs</div><div style="font-size:15px;font-weight:900;color:#f97316;">' + (resultado.kos || 0) + '</div></div>'
+        + '<div style="background:rgba(255,255,255,0.04);border-radius:8px;padding:8px;text-align:center;"><div style="font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Rebuys</div><div style="font-size:15px;font-weight:900;color:#60a5fa;">' + (resultado.rebuys || 0) + '</div></div>'
+        + '</div>'
+        + (resultado.obs ? '<div style="font-size:11px;color:rgba(255,255,255,0.4);margin-bottom:10px;">📝 ' + resultado.obs + '</div>' : '')
+        + '<button onclick="vozCopiar(\'' + resultado.jogador + '\',' + resultado.posicao + ',' + resultado.kos + ',' + resultado.rebuys + ')" style="width:100%;padding:10px;background:linear-gradient(135deg,#92400e,#f59e0b);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;">📋 Copiar resultado</button>'
+        + '</div>';
+      // Histórico
+      var hist = document.getElementById('voz-historico'); if(!hist) return;
+      if(!hist.querySelector('.hist-ttl')) {
+        var t = document.createElement('div'); t.className = 'hist-ttl';
+        t.style.cssText = 'font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:6px;';
+        t.textContent = 'Histórico desta sessão'; hist.appendChild(t);
+      }
+      var item = document.createElement('div');
+      item.style.cssText = 'background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:8px;padding:8px 10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;';
+      item.innerHTML = '<span style="font-size:13px;font-weight:800;color:#e6edf3;">' + resultado.jogador + '</span>'
+        + '<span style="font-size:12px;color:' + cor + ';">' + resultado.posicao + 'º</span>'
+        + '<span style="font-size:11px;color:rgba(255,255,255,0.3);">💥' + (resultado.kos||0) + ' ♻️' + (resultado.rebuys||0) + '</span>';
+      hist.appendChild(item);
+    }, 400);
+  }
+
+  // Parser local: interpreta frases em português sobre resultados de poker
+  function _vozParser(frase) {
+    if(!frase) return null;
+    var f = frase.toLowerCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // remove acentos
+      .replace(/[^\w\s]/g,' ');
+
+    // Lista de jogadores reconhecidos
+    var jogadores = ['charles','cristiano','heron','israel','magu','marcus','oscar','pedro','rafa'];
+    var jogadorEncontrado = null;
+    for(var i = 0; i < jogadores.length; i++) {
+      if(f.indexOf(jogadores[i]) >= 0) { jogadorEncontrado = jogadores[i]; break; }
+    }
+    if(!jogadorEncontrado) return null;
+    // Capitalizar nome
+    jogadorEncontrado = jogadorEncontrado.charAt(0).toUpperCase() + jogadorEncontrado.slice(1);
+
+    // Posição — "em 7º", "em sétimo", "primeiro", "venceu", "ganhou", "eliminou em 3"
+    var posicao = 0;
+    var ordens = ['primeiro','segundo','terceiro','quarto','quinto','sexto','setimo','oitavo','nono'];
+    for(var p = 0; p < ordens.length; p++) {
+      if(f.indexOf(ordens[p]) >= 0) { posicao = p + 1; break; }
+    }
+    if(!posicao) {
+      if(/venceu|ganhou|campeao|vitoria/.test(f)) posicao = 1;
+    }
+    if(!posicao) {
+      var mPos = f.match(/(?:em|no|lugar|posicao|colocacao)\s+(\d+)/);
+      if(mPos) posicao = parseInt(mPos[1]);
+    }
+    if(!posicao) {
+      var mOrd = f.match(/(\d+)[oa°º]?\s*(?:lugar|posicao|colocado)/);
+      if(mOrd) posicao = parseInt(mOrd[1]);
+    }
+
+    // KOs — "3 KOs", "3 eliminacoes", "eliminou 3"
+    var kos = 0;
+    var mKo = f.match(/(\d+)\s*(?:ko|kos|kill|eliminac)/);
+    if(!mKo) mKo = f.match(/(?:eliminou|matou|derrubou)\s+(\d+)/);
+    if(mKo) kos = parseInt(mKo[1]);
+    // "nenhum ko" ou "sem ko"
+    if(/sem ko|nenhum ko|zero ko/.test(f)) kos = 0;
+
+    // Rebuys — "2 rebuys", "rebuyou 2 vezes", "duas recompras"
+    var rebuys = 0;
+    var mRb = f.match(/(\d+)\s*(?:rebuy|recompra|recarga|reentrada)/);
+    if(!mRb) mRb = f.match(/(?:rebuyou|recomprou)\s+(\d+)/);
+    if(mRb) rebuys = parseInt(mRb[1]);
+    if(/rebuyou|rebuy|recomprou/.test(f) && !mRb) rebuys = 1;
+    if(/sem rebuy|nao rebuyou|sem recompra/.test(f)) rebuys = 0;
+
+    // Observações
+    var obs = '';
+    if(/sem rebuy|nao rebuyou/.test(f)) obs = 'Saiu limpo — sem rebuy';
+    if(posicao === 1 && rebuys === 0) obs = 'Vitória limpa — sem rebuy!';
+    if(posicao === 1 && rebuys >= 3) obs = 'Fênix! Rebuyou ' + rebuys + 'x e ainda venceu';
+
+    return { jogador: jogadorEncontrado, posicao: posicao || 0, kos: kos, rebuys: rebuys, obs: obs };
+  }
+
+  window.vozCopiar=function(j,pos,kos,rbs){
+    var txt=j+' — '+pos+'º lugar | KOs: '+kos+' | Rebuys: '+rbs;
+    if(navigator.clipboard)navigator.clipboard.writeText(txt).then(function(){alert('Copiado!\n'+txt);});
+    else alert(txt);
+  };
+
+  window.vozTestarManual=function(){
+    var inp=document.getElementById('voz-manual'); if(!inp||!inp.value.trim())return;
+    var tx=document.getElementById('voz-texto');
+    var tr=document.getElementById('voz-transcript');
+    if(tr)tr.style.display='block';
+    if(tx)tx.textContent=inp.value;
+    _vozInterpretar(inp.value);
+  };
+})();
+
+// ═══════════════════════════════════════════════════════════════════════
+// FEATURE 5: NOTIFICAÇÕES PUSH (PWA)
+// ═══════════════════════════════════════════════════════════════════════
+(function(){
+  // Service Worker inline via Blob para gerenciar push
+  var SW_CODE = `
+self.addEventListener('push',function(e){
+  var d=e.data?e.data.json():{title:'Poker do Plaza',body:'Nova notificação!'};
+  e.waitUntil(self.registration.showNotification(d.title||'Poker do Plaza',{
+    body:d.body||'',icon:d.icon||'',badge:d.badge||'',
+    tag:d.tag||'plaza',renotify:true,
+    data:{url:d.url||'/'}
+  }));
+});
+self.addEventListener('notificationclick',function(e){
+  e.notification.close();
+  e.waitUntil(clients.openWindow(e.notification.data.url||'/'));
+});
+`;
+
+  // Registrar SW se não existir
+  function _regSW(){
+    if(!('serviceWorker' in navigator)||!('PushManager' in window)) return Promise.reject('não suportado');
+    // Verificar se já tem SW registrado
+    return navigator.serviceWorker.getRegistration().then(function(reg){
+      if(reg) return reg;
+      var blob=new Blob([SW_CODE],{type:'application/javascript'});
+      var url=URL.createObjectURL(blob);
+      return navigator.serviceWorker.register(url).then(function(r){
+        URL.revokeObjectURL(url); return r;
+      });
+    });
+  }
+
+  // Pedir permissão e assinar push
+  function _pedirPermissao(){
+    return Notification.requestPermission().then(function(p){
+      if(p!=='granted') throw new Error('Permissão negada');
+      return p;
+    });
+  }
+
+  // Disparar notificação local (sem servidor — funciona com SW local)
+  window.notifPlaza=function(titulo,corpo,opcoes){
+    if(!('Notification' in window)){alert('Seu navegador não suporta notificações.');return;}
+    if(Notification.permission==='granted'){
+      _regSW().then(function(reg){
+        reg.showNotification(titulo,Object.assign({
+          body:corpo,icon:'',tag:'plaza',renotify:true
+        },opcoes||{}));
+      }).catch(function(){
+        new Notification(titulo,{body:corpo});
+      });
+    } else if(Notification.permission!=='denied'){
+      _pedirPermissao().then(function(){window.notifPlaza(titulo,corpo,opcoes);});
+    }
+  };
+
+  // Interface de configuração
+  window.abrirPainelNotif=function(){
+    var perm=('Notification' in window)?Notification.permission:'não suportado';
+    var suporte=('Notification' in window)&&('serviceWorker' in navigator);
+    var ov=document.createElement('div');
+    ov.style.cssText='position:fixed;inset:0;z-index:999997;background:rgba(0,0,0,0.82);display:flex;align-items:center;justify-content:center;padding:20px;';
+    ov.addEventListener('click',function(e){if(e.target===ov)ov.remove();});
+
+    var permCor=perm==='granted'?'#22c55e':perm==='denied'?'#ef4444':'#fbbf24';
+    var permLabel=perm==='granted'?'✅ Ativas':perm==='denied'?'❌ Bloqueadas':'⏳ Aguardando';
+
+    ov.innerHTML='<div style="background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;max-width:340px;width:100%;max-height:80vh;overflow-y:auto;">'
+      +'<div style="font-size:16px;font-weight:900;color:#e6edf3;margin-bottom:4px;">🔔 Notificações Push</div>'
+      +'<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:16px;">Avisos do Poker do Plaza direto no seu celular</div>'
+      +(suporte?''+'<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;padding:10px;font-size:12px;color:#fca5a5;margin-bottom:14px;">⚠️ Instale o app via "Adicionar à tela inicial" para notificações completas.</div>':'')
+      +'<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;">'
+      +'<span style="font-size:13px;color:#e6edf3;">Status das notificações</span>'
+      +'<span style="font-size:12px;font-weight:800;color:'+permCor+';">'+permLabel+'</span>'
+      +'</div>'
+      +(perm!=='granted'?'<button id="notif-ativar" style="width:100%;padding:12px;background:linear-gradient(135deg,#1e40af,#3b82f6);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;margin-bottom:10px;">🔔 Ativar Notificações</button>':'')
+      +'<div style="font-size:11px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">Testar notificações</div>'
+      +'<div style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;">'
+      +'<button onclick="window.notifPlaza(\'🏆 Novo torneio!\',\'Quinta-feira às 19h. Confirme sua presença!\');this.textContent=\'✅ Enviado!\';setTimeout(function(){},2000);" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e6edf3;padding:10px;cursor:pointer;font-size:13px;text-align:left;">📅 Novo torneio</button>'
+      +'<button onclick="window.notifPlaza(\'🎯 Resultado publicado!\',\'Semana 9 — Israel venceu com 3 KOs. Veja o ranking!\');this.textContent=\'✅ Enviado!\';setTimeout(function(){},2000);" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e6edf3;padding:10px;cursor:pointer;font-size:13px;text-align:left;">📊 Resultado da semana</button>'
+      +'<button onclick="window.notifPlaza(\'🏅 Nova relíquia desbloqueada!\',\'Marcus conquistou: Ceifador Implacável!\');this.textContent=\'✅ Enviado!\';setTimeout(function(){},2000);" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e6edf3;padding:10px;cursor:pointer;font-size:13px;text-align:left;">🏅 Relíquia conquistada</button>'
+      +'<button onclick="window.notifPlaza(\'⚠️ Atenção: 2 faltas!\',\'Você está com 2 faltas acumuladas. Não falte semana que vem!\');this.textContent=\'✅ Enviado!\';setTimeout(function(){},2000);" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#e6edf3;padding:10px;cursor:pointer;font-size:13px;text-align:left;">⚠️ Aviso de faltas</button>'
+      +'</div>'
+      +'<button onclick="this.closest(\'div\').parentNode.remove();" style="width:100%;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#9fb3d4;font-size:13px;font-weight:600;cursor:pointer;">Fechar</button>'
+      +'</div>';
+    document.body.appendChild(ov);
+
+    var btnAtivar=document.getElementById('notif-ativar');
+    if(btnAtivar) btnAtivar.addEventListener('click',function(){
+      _pedirPermissao().then(function(){
+        ov.remove(); window.abrirPainelNotif();
+      }).catch(function(){
+        alert('Permissão negada. Habilite nas configurações do seu navegador.');
+      });
+    });
+  };
+
+  // Botão flutuante de notificações — só aparece se não ativo
+  document.addEventListener('DOMContentLoaded',function(){
+    if(!('Notification' in window)) return;
+    if(Notification.permission==='granted') return; // já ativo, não incomodar
+    // Só mostrar sugestão uma vez por sessão
+    if(sessionStorage.getItem('notif_sugerido')) return;
+    sessionStorage.setItem('notif_sugerido','1');
+    setTimeout(function(){
+      var toast=document.createElement('div');
+      toast.style.cssText='position:fixed;bottom:calc(70px + env(safe-area-inset-bottom,0px));right:14px;z-index:9999;background:#0d1629;border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:opacity .3s;';
+      toast.innerHTML='<span style="font-size:20px;">🔔</span><div><div style="font-size:12px;font-weight:800;color:#60a5fa;">Ativar notificações?</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">Receba avisos do Plaza</div></div><span style="font-size:16px;color:rgba(255,255,255,0.3);">›</span>';
+      toast.addEventListener('click',function(){ toast.remove(); window.abrirPainelNotif(); });
+      document.body.appendChild(toast);
+      setTimeout(function(){ toast.style.opacity='0'; setTimeout(function(){if(toast.parentNode)toast.remove();},400); },6000);
+    },4000);
+  });
+})();
+
+
+
+// ═══ REGISTRO DE SEMANA — formulário completo com cálculo e geração de ledger ═══
+(function(){
+  var JOGADORES = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+  var PONTOS_POS = {1:20000,2:18000,3:16000,4:14000,5:12000,6:10000,7:8000,8:6000,9:4000,10:2000};
+  var PREMIOS_PCT = [0.40,0.30,0.15,0.10,0.05];
+  var _wkResultado = null;
+
+  function r2(v){ return Math.round(v*100)/100; }
+
+  function wkInitTabela(){
+    var tbody = document.getElementById('wk-tbody');
+    if(!tbody||tbody.children.length) return;
+    JOGADORES.forEach(function(nome){
+      var tr = document.createElement('tr');
+      tr.id = 'wk-row-'+nome;
+      tr.style.cssText = 'border-bottom:1px solid rgba(255,255,255,0.04);transition:background .15s;';
+      function inp(id,ph,w,type,extra){
+        return '<input id="'+id+'" type="'+(type||'number')+'" placeholder="'+(ph||'')+'" '+(extra||'')+
+          ' style="width:'+(w||'100%')+';background:#060d1a;border:1px solid rgba(255,255,255,0.08);border-radius:8px;color:#e6edf3;padding:7px 4px;font-size:13px;font-weight:700;outline:none;text-align:center;box-sizing:border-box;">';
+      }
+      var foto = window.photoFor?window.photoFor(nome):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[nome]);
+      var fotoEl = foto?'<img src="'+foto+'" style="width:24px;height:24px;border-radius:50%;object-fit:cover;margin-right:6px;vertical-align:middle;">':'';
+      tr.innerHTML =
+        '<td style="padding:6px 8px;font-size:13px;font-weight:800;color:#e6edf3;white-space:nowrap;">'+fotoEl+nome+'</td>'
+        +'<td style="padding:4px 3px;">'+inp('wk-pos-'+nome,'—','52px')+'</td>'
+        +'<td style="padding:4px 3px;">'+inp('wk-kos-'+nome,'0','44px','number','min="0"')+'</td>'
+        +'<td style="padding:4px 3px;">'+inp('wk-reb-'+nome,'0','44px','number','min="0"')+'</td>'
+        +'<td style="padding:4px 3px;">'+inp('wk-fic-'+nome,'','72px','number','min="0"')+'</td>'
+        +'<td style="padding:4px 3px;">'+inp('wk-ant-'+nome,'','52px','number','min="0"')+'</td>'
+        +'<td style="padding:4px;text-align:center;"><input type="checkbox" id="wk-flt-'+nome+'" style="width:18px;height:18px;cursor:pointer;accent-color:#ef4444;" onchange="wkToggleFaltou(\''+nome+'\')"></td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  window.wkToggleFaltou = function(nome){
+    var flt=document.getElementById('wk-flt-'+nome);
+    var row=document.getElementById('wk-row-'+nome);
+    if(!flt||!row) return;
+    var faltou=flt.checked;
+    ['wk-pos-'+nome,'wk-kos-'+nome,'wk-reb-'+nome,'wk-fic-'+nome,'wk-ant-'+nome].forEach(function(id){
+      var el=document.getElementById(id); if(el){el.disabled=faltou;el.style.opacity=faltou?'0.3':'1';}
+    });
+    row.style.background=faltou?'rgba(239,68,68,0.04)':'';
+  };
+
+  window.wkCalcular = function(){
+    var wk=parseInt(document.getElementById('wk-num').value)||12;
+    var data=document.getElementById('wk-data').value||'2026-03-26';
+    var vlrB=parseFloat(document.getElementById('wk-buyin').value)||25;
+    var vlrR=parseFloat(document.getElementById('wk-rebuy').value)||25;
+    var dealer=parseFloat(document.getElementById('wk-dealer').value)||22.22;
+    var d=new Date(data+'T12:00:00');
+    var mes=d.getMonth()+1, tri=Math.ceil(mes/3), ano=d.getFullYear();
+
+    var jogadores=JOGADORES.map(function(nome){
+      var faltou=document.getElementById('wk-flt-'+nome)&&document.getElementById('wk-flt-'+nome).checked;
+      var posVal=document.getElementById('wk-pos-'+nome)&&document.getElementById('wk-pos-'+nome).value;
+      return {
+        nome:nome, faltou:faltou?1:0,
+        posicao:faltou?null:(posVal?parseInt(posVal):null),
+        kos:faltou?0:parseInt(document.getElementById('wk-kos-'+nome)&&document.getElementById('wk-kos-'+nome).value)||0,
+        rebuys:faltou?0:parseInt(document.getElementById('wk-reb-'+nome)&&document.getElementById('wk-reb-'+nome).value)||0,
+        fichas:faltou?0:parseInt(document.getElementById('wk-fic-'+nome)&&document.getElementById('wk-fic-'+nome).value)||0,
+        antecipacao:faltou?0:parseFloat(document.getElementById('wk-ant-'+nome)&&document.getElementById('wk-ant-'+nome).value)||0
+      };
+    });
+
+    var presentes=jogadores.filter(function(j){return !j.faltou;});
+    var totalRebuys=presentes.reduce(function(s,j){return s+j.rebuys;},0);
+    var pote=r2((presentes.length+totalRebuys)*vlrB);
+    var totalPremio=r2(pote*0.12);
+    var ordenados=presentes.filter(function(j){return j.posicao;}).sort(function(a,b){return a.posicao-b.posicao;});
+
+    var linhas=jogadores.map(function(j){
+      if(j.faltou) return {nome:j.nome,faltou:1,buyin:0,posicao:null,rebuys:0,kos:0,
+        fichas_restantes:0,valor_fichas:0,pontos_classificacao:0,penalidade_rebuy:0,
+        pontos_fichas:0,pontos_calc:0,custo_buyin:0,custo_rebuys:0,premio_noite:0,
+        dealer:dealer,antecipacao_dealer:0,saldo_semana_final:r2(-dealer),
+        wk:wk,mes:mes,trimestre:tri,ano:ano,data_wk:data};
+      var rankIdx=ordenados.findIndex(function(o){return o.nome===j.nome;});
+      var premio=rankIdx>=0&&rankIdx<5?r2(totalPremio*PREMIOS_PCT[rankIdx]):0;
+      var pts_class=j.posicao?PONTOS_POS[j.posicao]||0:0;
+      var pen=j.rebuys*1500, vf=r2(j.fichas*0.003), pf=r2(j.fichas*0.3);
+      var pts_calc=r2(pts_class-pen+pf+j.kos*100);
+      var custo_b=vlrB, custo_r=r2(j.rebuys*vlrR);
+      var saldo=r2(premio+vf-custo_b-custo_r-dealer+j.antecipacao);
+      return {nome:j.nome,faltou:0,buyin:1,posicao:j.posicao,rebuys:j.rebuys,kos:j.kos,
+        fichas_restantes:j.fichas,valor_fichas:vf,pontos_classificacao:pts_class,
+        penalidade_rebuy:pen,pontos_fichas:pf,pontos_calc:pts_calc,
+        custo_buyin:custo_b,custo_rebuys:custo_r,premio_noite:premio,dealer:dealer,
+        antecipacao_dealer:j.antecipacao,saldo_semana_final:saldo,
+        wk:wk,mes:mes,trimestre:tri,ano:ano,data_wk:data};
+    });
+
+    _wkResultado={linhas:linhas,pote:pote,nPres:presentes.length};
+
+    var prev=document.getElementById('wk-preview');
+    if(prev){
+      prev.style.display='block';
+      var sorted=linhas.slice().sort(function(a,b){
+        if(a.faltou&&!b.faltou)return 1;if(!a.faltou&&b.faltou)return -1;
+        return (a.posicao||99)-(b.posicao||99);
+      });
+      prev.innerHTML='<div style="background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:12px 4px;">'
+        +'<div style="display:flex;justify-content:space-between;padding:0 8px 8px;border-bottom:1px solid rgba(255,255,255,0.06);margin-bottom:4px;">'
+        +'<span style="font-size:11px;font-weight:800;color:rgba(255,255,255,0.3);">WK'+wk+' · '+presentes.length+' jogadores</span>'
+        +'<span style="font-size:11px;font-weight:800;color:#d4a017;">Pote R$'+pote.toFixed(2).replace('.',',')+'</span>'
+        +'</div>'
+        +'<table style="width:100%;border-collapse:collapse;">'
+        +'<thead><tr>'
+        +'<th style="text-align:left;padding:4px 8px;font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.25);">Jogador</th>'
+        +'<th style="padding:4px;font-size:9px;color:rgba(255,255,255,0.25);">KOs</th>'
+        +'<th style="padding:4px;font-size:9px;color:rgba(255,255,255,0.25);">Reb</th>'
+        +'<th style="padding:4px;font-size:9px;color:rgba(255,255,255,0.25);">Prêmio</th>'
+        +'<th style="text-align:right;padding:4px 8px;font-size:9px;color:rgba(255,255,255,0.25);">Saldo</th>'
+        +'</tr></thead><tbody>'
+        +sorted.map(function(l){
+          var cor=l.faltou?'#ef4444':l.posicao===1?'#d4a017':l.posicao<=3?'#22c55e':'#e6edf3';
+          var sc=l.saldo_semana_final>=0?'#22c55e':'#ef4444';
+          return '<tr style="border-bottom:1px solid rgba(255,255,255,0.04);">'
+            +'<td style="padding:6px 8px;font-size:13px;font-weight:800;color:'+cor+';">'+(l.faltou?'❌':l.posicao+'º')+' '+l.nome+'</td>'
+            +'<td style="padding:6px 4px;text-align:center;font-size:12px;color:#f97316;">'+l.kos+'</td>'
+            +'<td style="padding:6px 4px;text-align:center;font-size:12px;color:#60a5fa;">'+l.rebuys+'</td>'
+            +'<td style="padding:6px 4px;text-align:center;font-size:12px;color:#a855f7;">'+(l.premio_noite?'R$'+l.premio_noite.toFixed(2).replace('.',','):'-')+'</td>'
+            +'<td style="padding:6px 8px;text-align:right;font-size:12px;font-weight:800;color:'+sc+';">'+(l.saldo_semana_final>=0?'+':'')+l.saldo_semana_final.toFixed(2).replace('.',',')+'</td>'
+            +'</tr>';
+        }).join('')
+        +'</tbody></table></div>';
+    }
+    var btn=document.getElementById('wk-btn-gerar'); if(btn) btn.style.display='block';
+  };
+
+  window.wkGerarLedger = function(){
+    if(!_wkResultado) return;
+    var novas=_wkResultado.linhas.map(function(l){
+      return {ano:l.ano,trimestre:l.trimestre,mes:l.mes,data_wk:l.data_wk,wk:l.wk,
+        jogador:l.nome,buyin:l.buyin,posicao:l.posicao,rebuys:l.rebuys,kos:l.kos,
+        fichas_restantes:l.fichas_restantes,valor_fichas:l.valor_fichas,
+        pontos_classificacao:l.pontos_classificacao,penalidade_rebuy:l.penalidade_rebuy,
+        pontos_fichas:l.pontos_fichas,pontos_calc:l.pontos_calc,
+        custo_buyin:l.custo_buyin,custo_rebuys:l.custo_rebuys,
+        premio_noite:l.premio_noite,dealer:l.dealer,
+        antecipacao_dealer:l.antecipacao_dealer,saldo_semana_final:l.saldo_semana_final,faltou:l.faltou};
+    });
+    window._wkNovasLinhas=novas;
+    var json=JSON.stringify(novas,null,2);
+    var prev=document.getElementById('wk-preview'); if(!prev) return;
+    var div=document.createElement('div'); div.style.marginTop='12px';
+    div.innerHTML='<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;">JSON gerado para o ledger:</div>'
+      +'<textarea id="wk-json-out" rows="7" style="width:100%;background:#060d1a;border:1px solid rgba(34,197,94,0.3);border-radius:10px;color:#22c55e;padding:10px;font-size:11px;font-family:monospace;resize:vertical;outline:none;box-sizing:border-box;">'+json+'</textarea>'
+      +'<div style="display:flex;gap:8px;margin-top:8px;">'
+      +'<button onclick="wkCopiarJSON()" style="flex:1;padding:11px;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);border-radius:10px;color:#22c55e;font-size:13px;font-weight:800;cursor:pointer;">📋 Copiar JSON</button>'
+      +'<button onclick="wkInserirNoLedger()" style="flex:1;padding:11px;background:linear-gradient(135deg,#92400e,#d4a017);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;">⚡ Inserir agora</button>'
+      +'</div>'
+      +'<div style="margin-top:8px;font-size:11px;color:rgba(255,255,255,0.25);line-height:1.5;">⚠️ <strong style="color:rgba(255,255,255,0.4);">Inserir agora</strong> atualiza o dashboard imediatamente (temporário). <strong style="color:rgba(255,255,255,0.4);">Copiar JSON</strong> e fazer upload no GitHub salva permanentemente.</div>';
+    prev.appendChild(div);
+  };
+
+  window.wkCopiarJSON=function(){
+    var ta=document.getElementById('wk-json-out'); if(!ta) return;
+    if(navigator.clipboard) navigator.clipboard.writeText(ta.value).then(function(){alert('✅ JSON copiado!');});
+    else{ta.select();document.execCommand('copy');alert('✅ Copiado!');}
+  };
+
+  window.wkInserirNoLedger=function(){
+    if(!window._wkNovasLinhas) return;
+    var novas=window._wkNovasLinhas, wk=novas[0].wk;
+    var ledger=typeof getLedger==='function'?getLedger():((window.DATA&&window.DATA.ledger)||[]);
+    var semWK=ledger.filter(function(r){return +r.wk!==wk;});
+    var novo=semWK.concat(novas).sort(function(a,b){return a.wk-b.wk||(a.jogador||'').localeCompare(b.jogador||'');});
+    if(window.DATA) window.DATA.ledger=novo;
+    if(typeof RAW!=='undefined'){try{RAW.length=0;novo.forEach(function(r){RAW.push(r);});}catch(e){}}
+    if(window.PREMIO_ENGINE) window.PREMIO_ENGINE.reset();
+    window._BRASOES_JOGADOR={}; window._reliqCounts={};
+    if(typeof buildPlayerChips==='function') try{buildPlayerChips();}catch(e){}
+    if(typeof _renderEstilo==='function') try{_renderEstilo();}catch(e){}
+    if(typeof window._initDuelo==='function') try{window._initDuelo();}catch(e){}
+    alert('✅ WK'+wk+' inserida! Dashboard atualizado.\n\nBaixe o HTML (botão ⬇️) e suba no GitHub para salvar.');
+  };
+
+  document.addEventListener('DOMContentLoaded',function(){ setTimeout(wkInitTabela,600); });
+  setTimeout(function(){ if(document.getElementById('wk-tbody')&&!document.getElementById('wk-tbody').children.length) wkInitTabela(); },1600);
+})();
+
+
+// ═══════════════════════════════════════════════════════════════════════
+// SISTEMA DE NOTIFICAÇÕES NTFY — canais individuais por jogador
+// ═══════════════════════════════════════════════════════════════════════
+(function(){
+
+  // ── Prefixo dos canais (admin pode mudar no painel) ──────────────────
+  var NTFY_BASE = 'https://ntfy.sh';
+  var NTFY_PREFIX = 'poker-plaza-2026';
+
+  // ── Persistência da config no localStorage ───────────────────────────
+  function ntfyGetConfig() {
+    try { return JSON.parse(localStorage.getItem('ntfy_config_plaza')||'{}'); } catch(e){ return {}; }
+  }
+  function ntfySaveConfig(cfg) {
+    try { localStorage.setItem('ntfy_config_plaza', JSON.stringify(cfg)); } catch(e){}
+  }
+
+  // Canal de um jogador: prefixo-nome (ex: poker-plaza-2026-israel)
+  function ntfyCanal(nome) {
+    var cfg = ntfyGetConfig();
+    var canais = cfg.canais || {};
+    return canais[nome] || (NTFY_PREFIX + '-' + nome.toLowerCase());
+  }
+
+  // ── Enviar notificação para um jogador ───────────────────────────────
+  window.ntfyEnviar = function(nome, titulo, corpo, emoji) {
+    var cfg = ntfyGetConfig();
+    if(!cfg.ativo) return Promise.resolve(false);
+    var canal = ntfyCanal(nome);
+    var server = cfg.server || NTFY_BASE;
+    return fetch(server + '/' + canal, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Title': titulo,
+        'Tags': emoji || 'medal',
+        'Priority': 'high'
+      },
+      body: corpo
+    }).then(function(r){ return r.ok; })
+      .catch(function(){ return false; });
+  };
+
+  // ── Enviar para o canal geral do grupo ───────────────────────────────
+  window.ntfyEnviarGeral = function(titulo, corpo, emoji) {
+    var cfg = ntfyGetConfig();
+    if(!cfg.ativo) return Promise.resolve(false);
+    var canal = (cfg.canalGeral) || (NTFY_PREFIX + '-geral');
+    var server = cfg.server || NTFY_BASE;
+    return fetch(server + '/' + canal, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Title': titulo,
+        'Tags': emoji || 'poker',
+        'Priority': 'default'
+      },
+      body: corpo
+    }).then(function(r){ return r.ok; })
+      .catch(function(){ return false; });
+  };
+
+  // ── Tirar snapshot das relíquias de todos os jogadores ───────────────
+  function ntfySnapshot() {
+    var jogs = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    var snap = {};
+    jogs.forEach(function(nome) {
+      if(!window.calcularBrasoesJogador) return;
+      var b = window.calcularBrasoesJogador(nome);
+      if(!b) return;
+      var conquistados = [];
+      ['faisca','chama','inferno'].forEach(function(nivel) {
+        var lista = b[nivel] || [];
+        lista.forEach(function(r) {
+          if(r.conquistado) conquistados.push(nivel + ':' + r.nome);
+        });
+      });
+      snap[nome] = conquistados;
+    });
+    return snap;
+  }
+
+  // ── Detectar novas relíquias comparando dois snapshots ───────────────
+  function ntfyDetectarNovas(antes, depois) {
+    var novas = [];
+    Object.keys(depois).forEach(function(nome) {
+      var antesSet = new Set(antes[nome] || []);
+      (depois[nome] || []).forEach(function(r) {
+        if(!antesSet.has(r)) {
+          var partes = r.split(':');
+          novas.push({ jogador: nome, nivel: partes[0], nome: partes[1] });
+        }
+      });
+    });
+    return novas;
+  }
+
+  // Nível → label e emoji
+  var NIVEL_INFO = {
+    faisca:  { label: 'Rara',     emoji: '💎', icon: '💎' },
+    chama:   { label: 'Épica',    emoji: '🔶', icon: '🔶' },
+    inferno: { label: 'Lendária', emoji: '👑', icon: '👑' }
+  };
+
+  // ── Hook no wkInserirNoLedger para detectar relíquias automaticamente ─
+  var _wkOriginal = window.wkInserirNoLedger;
+  window.wkInserirNoLedger = function() {
+    // Tirar snapshot ANTES
+    var snapAntes = ntfySnapshot();
+    // Inserir dados
+    if(_wkOriginal) _wkOriginal();
+    // Tirar snapshot DEPOIS (aguardar um tick para o ledger atualizar)
+    setTimeout(function() {
+      var snapDepois = ntfySnapshot();
+      var novas = ntfyDetectarNovas(snapAntes, snapDepois);
+      if(!novas.length) return;
+      var cfg = ntfyGetConfig();
+      if(!cfg.ativo) {
+        console.log('[ntfy] Notificações desativadas. Novas relíquias:', novas);
+        return;
+      }
+      // Disparar notificação individual para cada jogador
+      var promessas = novas.map(function(r) {
+        var info = NIVEL_INFO[r.nivel] || { label: r.nivel, emoji: '🏅' };
+        var titulo = info.icon + ' Relíquia ' + info.label + ' desbloqueada!';
+        var corpo  = 'Parabéns, ' + r.jogador + '! Você conquistou: "' + r.nome + '" 🎉\n\nVeja no dashboard do Poker do Plaza!';
+        return window.ntfyEnviar(r.jogador, titulo, corpo, info.emoji)
+          .then(function(ok) {
+            console.log('[ntfy] ' + r.jogador + ' → ' + r.nome + ': ' + (ok ? '✅' : '❌'));
+            return { jogador: r.jogador, nome: r.nome, ok: ok };
+          });
+      });
+      // Também notificação geral
+      if(novas.length === 1) {
+        var r = novas[0]; var info = NIVEL_INFO[r.nivel]||{emoji:'🏅'};
+        window.ntfyEnviarGeral(
+          '🏅 Nova relíquia desbloqueada!',
+          r.jogador + ' conquistou: "' + r.nome + '" (' + (info.label||r.nivel) + ')',
+          info.emoji
+        );
+      } else if(novas.length > 1) {
+        window.ntfyEnviarGeral(
+          '🏅 ' + novas.length + ' relíquias desbloqueadas!',
+          novas.map(function(r){ return r.jogador + ': ' + r.nome; }).join('\n'),
+          'trophy'
+        );
+      }
+      Promise.all(promessas).then(function(results) {
+        var ok = results.filter(function(r){ return r.ok; });
+        var fail = results.filter(function(r){ return !r.ok; });
+        var msg = '🏅 ' + novas.length + ' relíquia(s) nova(s) detectada(s)!\n\n';
+        ok.forEach(function(r){ msg += '✅ ' + r.jogador + ': ' + r.nome + '\n'; });
+        fail.forEach(function(r){ msg += '❌ ' + r.jogador + ': ' + r.nome + ' (ntfy falhou)\n'; });
+        if(fail.length) msg += '\nVerifique as configurações ntfy no painel de notificações.';
+        alert(msg);
+      });
+    }, 800);
+  };
+
+  // ── Painel de configuração ntfy ───────────────────────────────────────
+  window.abrirPainelNotif = function() {
+    var cfg = ntfyGetConfig();
+    var jogs = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    var ov = document.createElement('div');
+    ov.id = 'ntfy-painel';
+    ov.style.cssText = 'position:fixed;inset:0;z-index:999997;background:rgba(0,0,0,0.85);display:flex;align-items:flex-end;justify-content:center;padding:0;';
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+
+    var canaisHtml = jogs.map(function(nome) {
+      var canal = ntfyCanal(nome);
+      var foto = window.photoFor?window.photoFor(nome):(window.PLAYER_PHOTOS&&window.PLAYER_PHOTOS[nome]);
+      var avatarEl = foto
+        ? '<img src="'+foto+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0;border:1.5px solid rgba(255,255,255,0.08);">'
+        : '<div style="width:36px;height:36px;border-radius:50%;background:#1e2e46;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🃏</div>';
+      return '<div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:10px 12px;margin-bottom:8px;">'
+        + '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+        + avatarEl
+        + '<div style="font-size:14px;font-weight:900;color:#e6edf3;">'+nome+'</div>'
+        + '</div>'
+        + '<div style="display:flex;gap:8px;align-items:center;">'
+        + '<input data-player="'+nome+'" class="ntfy-canal-inp" value="'+canal+'" placeholder="canal-do-'+nome.toLowerCase()+'" '
+        + 'style="flex:1;min-width:0;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:8px;color:#60a5fa;padding:8px 10px;font-size:12px;font-family:monospace;outline:none;box-sizing:border-box;">'
+        + '<button onclick="ntfyTestar(\''+nome+'\')" style="flex-shrink:0;padding:8px 14px;background:rgba(96,165,250,0.12);border:1px solid rgba(96,165,250,0.25);border-radius:8px;color:#60a5fa;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">Testar</button>'
+        + '</div>'
+        + '</div>';
+    }).join('');
+
+    var prefix = cfg.prefix || NTFY_PREFIX;
+    var server = cfg.server || NTFY_BASE;
+    var canalGeral = cfg.canalGeral || (NTFY_PREFIX + '-geral');
+
+    ov.innerHTML = '<div style="background:#0d1629;border-radius:20px 20px 0 0;width:100%;max-width:480px;max-height:88vh;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 16px 24px;box-sizing:border-box;">'
+      // Handle
+      + '<div style="width:36px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 18px;"></div>'
+      // Título
+      + '<div style="font-size:18px;font-weight:900;color:#e6edf3;margin-bottom:4px;">🔔 Notificações ntfy</div>'
+      + '<div style="font-size:12px;color:rgba(255,255,255,0.35);margin-bottom:18px;line-height:1.5;">Cada jogador instala o app <strong style="color:rgba(255,255,255,0.6);">ntfy</strong> (iOS/Android) e se inscreve no canal dele para receber relíquias e resultados.</div>'
+      // Toggle ativo
+      + '<div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:14px;margin-bottom:16px;">'
+      + '<div><div style="font-size:14px;font-weight:800;color:#e6edf3;">Notificações ativas</div><div style="font-size:11px;color:rgba(255,255,255,0.3);margin-top:2px;">Enviar automaticamente ao inserir WK</div></div>'
+      + '<label style="position:relative;display:inline-block;width:48px;height:26px;flex-shrink:0;">'
+      + '<input type="checkbox" id="ntfy-toggle" '+(cfg.ativo?'checked':'')+' style="opacity:0;width:0;height:0;">'
+      + '<span style="position:absolute;cursor:pointer;inset:0;background:'+(cfg.ativo?'#3b82f6':'rgba(255,255,255,0.15)')+';border-radius:26px;transition:.2s;" id="ntfy-toggle-track"></span>'
+      + '<span style="position:absolute;height:20px;width:20px;left:'+(cfg.ativo?'24px':'3px')+';top:3px;background:white;border-radius:50%;transition:.2s;" id="ntfy-toggle-thumb"></span>'
+      + '</label>'
+      + '</div>'
+      // Servidor
+      + '<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;">Servidor ntfy</div>'
+      + '<input id="ntfy-server" value="'+server+'" style="width:100%;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e6edf3;padding:10px 12px;font-size:13px;font-family:monospace;outline:none;box-sizing:border-box;margin-bottom:14px;">'
+      // Canal geral
+      + '<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;">Canal geral do grupo</div>'
+      + '<div style="display:flex;gap:8px;margin-bottom:18px;">'
+      + '<input id="ntfy-geral" value="'+canalGeral+'" style="flex:1;min-width:0;background:#060d1a;border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#e6edf3;padding:10px 12px;font-size:13px;font-family:monospace;outline:none;box-sizing:border-box;">'
+      + '<button onclick="ntfyTestarGeral()" style="flex-shrink:0;padding:10px 14px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:10px;color:#22c55e;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;">Testar</button>'
+      + '</div>'
+      // Canais individuais
+      + '<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:10px;">Canais individuais</div>'
+      + '<div id="ntfy-canais-lista">' + canaisHtml + '</div>'
+      // Info
+      + '<div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.15);border-radius:12px;padding:14px;margin-bottom:18px;">'
+      + '<div style="font-size:12px;font-weight:800;color:#60a5fa;margin-bottom:8px;">📱 Como cada jogador se inscreve:</div>'
+      + '<div style="font-size:12px;color:rgba(255,255,255,0.4);line-height:1.7;">'
+      + '1. Instalar app <strong style="color:rgba(255,255,255,0.6);">ntfy</strong> (App Store / Google Play)<br>'
+      + '2. Abrir app → "+" → digitar o nome do canal dele<br>'
+      + '3. Pronto — recebe push quando você inserir uma WK'
+      + '</div>'
+      + '</div>'
+      // Botões
+      + '<div style="display:flex;gap:8px;margin-bottom:10px;">'
+      + '<button onclick="ntfySalvarConfig()" style="flex:1;padding:13px;background:linear-gradient(135deg,#1e40af,#3b82f6);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:900;cursor:pointer;">💾 Salvar</button>'
+      + '<button onclick="ntfyTestarTodos()" style="flex:1;padding:13px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);border-radius:12px;color:#22c55e;font-size:14px;font-weight:900;cursor:pointer;">🧪 Testar todos</button>'
+      + '</div>'
+      + '<button onclick="document.getElementById(\'ntfy-painel\').remove()" style="width:100%;padding:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:12px;color:rgba(255,255,255,0.4);font-size:13px;font-weight:600;cursor:pointer;">Fechar</button>'
+      + '</div>';
+
+    document.body.appendChild(ov);
+
+    // Toggle handler
+    var tog = document.getElementById('ntfy-toggle');
+    var track = document.getElementById('ntfy-toggle-track');
+    var thumb = document.getElementById('ntfy-toggle-thumb');
+    if(tog) tog.addEventListener('change', function() {
+      track.style.background = tog.checked ? '#3b82f6' : 'rgba(255,255,255,0.15)';
+      thumb.style.left = tog.checked ? '22px' : '3px';
+    });
+  };
+
+  window.ntfySalvarConfig = function() {
+    var cfg = ntfyGetConfig();
+    cfg.ativo = document.getElementById('ntfy-toggle')&&document.getElementById('ntfy-toggle').checked;
+    cfg.server = (document.getElementById('ntfy-server')&&document.getElementById('ntfy-server').value.trim()) || NTFY_BASE;
+    cfg.canalGeral = (document.getElementById('ntfy-geral')&&document.getElementById('ntfy-geral').value.trim()) || (NTFY_PREFIX+'-geral');
+    cfg.canais = cfg.canais || {};
+    document.querySelectorAll('.ntfy-canal-inp').forEach(function(inp) {
+      var nome = inp.getAttribute('data-player');
+      if(nome && inp.value.trim()) cfg.canais[nome] = inp.value.trim();
+    });
+    ntfySaveConfig(cfg);
+    var painel = document.getElementById('ntfy-painel');
+    if(painel) painel.remove();
+    alert('✅ Configuração salva!\n\n' + (cfg.ativo ? '🔔 Notificações ATIVAS' : '🔕 Notificações desativadas'));
+  };
+
+  window.ntfyTestar = function(nome) {
+    var cfg = ntfyGetConfig();
+    var server = (document.getElementById('ntfy-server')&&document.getElementById('ntfy-server').value.trim()) || cfg.server || NTFY_BASE;
+    var canalEl = document.querySelector('.ntfy-canal-inp[data-player="'+nome+'"]');
+    var canal = canalEl ? canalEl.value.trim() : ntfyCanal(nome);
+    fetch(server + '/' + canal, {
+      method: 'POST',
+      headers: { 'Title': '🧪 Teste — Poker do Plaza', 'Tags': 'test', 'Priority': 'high' },
+      body: 'Olá ' + nome + '! As notificações do Poker do Plaza estão funcionando. 🃏'
+    }).then(function(r){
+      alert(r.ok ? '✅ Enviado para ' + nome + '!\nCanal: ' + canal : '❌ Falhou. Verifique o canal e o servidor.');
+    }).catch(function(){ alert('❌ Erro de conexão. Verifique o servidor ntfy.'); });
+  };
+
+  window.ntfyTestarTodos = function() {
+    var jogs = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    var cfg = ntfyGetConfig();
+    var server = (document.getElementById('ntfy-server')&&document.getElementById('ntfy-server').value.trim()) || cfg.server || NTFY_BASE;
+    var promessas = jogs.map(function(nome) {
+      var canalEl = document.querySelector('.ntfy-canal-inp[data-player="'+nome+'"]');
+      var canal = canalEl ? canalEl.value.trim() : ntfyCanal(nome);
+      return fetch(server + '/' + canal, {
+        method: 'POST',
+        headers: { 'Title': '🧪 Teste — Poker do Plaza', 'Tags': 'test' },
+        body: 'Olá ' + nome + '! Teste de notificação do Poker do Plaza. 🃏'
+      }).then(function(r){ return { nome: nome, ok: r.ok }; })
+        .catch(function(){ return { nome: nome, ok: false }; });
+    });
+    Promise.all(promessas).then(function(results) {
+      var msg = results.map(function(r){ return (r.ok?'✅':'❌') + ' ' + r.nome; }).join('\n');
+      alert('Resultado dos testes:\n\n' + msg);
+    });
+  };
+
+  // ── Expor função para envio manual de resultado geral ─────────────────
+  window.ntfyEnviarResultado = function(wk, vencedor, totalJogadores) {
+    return window.ntfyEnviarGeral(
+      '🏆 Resultado WK' + wk + ' publicado!',
+      vencedor + ' venceu com ' + totalJogadores + ' jogadores. Veja o ranking atualizado!',
+      'trophy'
+    );
+  };
+
+  // ── Botão flutuante de acesso rápido ─────────────────────────────────
+  document.addEventListener('DOMContentLoaded', function() {
+    var cfg = ntfyGetConfig();
+    // Toast de configuração — só se nunca configurou
+    if(!cfg.ativo && !sessionStorage.getItem('ntfy_visto')) {
+      sessionStorage.setItem('ntfy_visto','1');
+      setTimeout(function(){
+        var t = document.createElement('div');
+        t.style.cssText = 'position:fixed;bottom:calc(72px + env(safe-area-inset-bottom,0px));right:14px;z-index:9998;background:#0d1629;border:1px solid rgba(59,130,246,0.35);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.5);transition:opacity .3s;';
+        t.innerHTML = '<span style="font-size:20px;">🔔</span><div><div style="font-size:12px;font-weight:800;color:#60a5fa;">Configurar notificações</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">ntfy para todos os jogadores</div></div><span style="font-size:16px;color:rgba(255,255,255,0.3);">›</span>';
+        t.addEventListener('click', function(){ t.remove(); window.abrirPainelNotif(); });
+        document.body.appendChild(t);
+        setTimeout(function(){ t.style.opacity='0'; setTimeout(function(){if(t.parentNode)t.remove();},400); }, 8000);
+      }, 3000);
+    }
+  });
+
+  console.log('%c🔔 ntfy pronto. Painel: window.abrirPainelNotif() | Testar: window.ntfyTestar("Israel")', 'color:#60a5fa;font-weight:bold;');
+
+})();
+
+
+// ═══ NTFY — NOTIFICAÇÕES INDIVIDUAIS POR JOGADOR ═══
+(function(){
+
+  // Prefixo dos canais — mude para algo único do seu grupo
+  var NTFY_BASE = 'https://ntfy.sh';
+  var CANAL_PREFIX = 'poker-plaza-mediterrano-2026';
+
+  // Canal de cada jogador: poker-plaza-mediterrano-2026-charles, etc.
+  function canal(nome) {
+    return CANAL_PREFIX + '-' + nome.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  }
+
+  // Enviar notificação para um jogador específico
+  function ntfyEnviar(nome, titulo, corpo, emoji, prioridade) {
+    var url = NTFY_BASE + '/' + canal(nome);
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Title': titulo,
+        'Priority': prioridade || 'default',
+        'Tags': emoji || 'poker',
+        'Content-Type': 'text/plain; charset=utf-8'
+      },
+      body: corpo
+    }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+  }
+
+  // Enviar para todos (canal geral)
+  function ntfyGeral(titulo, corpo, emoji) {
+    var url = NTFY_BASE + '/' + CANAL_PREFIX + '-geral';
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'Title': titulo,
+        'Priority': 'default',
+        'Tags': emoji || 'poker',
+        'Content-Type': 'text/plain; charset=utf-8'
+      },
+      body: corpo
+    }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+  }
+
+  // ── Detectar relíquias novas após inserção de WK ──
+  // Snapshot do estado anterior de cada jogador
+  var _reliqSnapshot = {};
+
+  function tirarSnapshot() {
+    var snap = {};
+    var JOGADORES = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    if(typeof window.calcularBrasoesJogador !== 'function') return snap;
+    JOGADORES.forEach(function(nome) {
+      var b = window.calcularBrasoesJogador(nome);
+      if(!b) return;
+      var conquistados = {};
+      ['faisca','chama','inferno'].forEach(function(tier) {
+        (b[tier]||[]).forEach(function(r) {
+          if(r.conquistado) conquistados[r.nome] = tier;
+        });
+      });
+      snap[nome] = conquistados;
+    });
+    return snap;
+  }
+
+  function detectarNovas(snapAntes, snapDepois) {
+    var novas = [];
+    Object.keys(snapDepois).forEach(function(nome) {
+      var antes = snapAntes[nome] || {};
+      var depois = snapDepois[nome] || {};
+      Object.keys(depois).forEach(function(reliquia) {
+        if(!antes[reliquia]) {
+          novas.push({ nome: nome, reliquia: reliquia, tier: depois[reliquia] });
+        }
+      });
+    });
+    return novas;
+  }
+
+  var TIER_INFO = {
+    faisca: { label: 'Relíquia Rara',     emoji: 'gem',  prioridade: 'default' },
+    chama:  { label: 'Relíquia Épica',    emoji: 'fire', prioridade: 'high'    },
+    inferno:{ label: 'Relíquia Lendária', emoji: 'crown',prioridade: 'urgent'  }
+  };
+
+  // Expor função para tirar snapshot ANTES de inserir WK
+  window.ntfySnapshotAntes = function() {
+    _reliqSnapshot = tirarSnapshot();
+    console.log('📸 Snapshot tirado:', Object.keys(_reliqSnapshot).length, 'jogadores');
+    return _reliqSnapshot;
+  };
+
+  // Expor função para verificar novas relíquias DEPOIS de inserir WK e disparar notificações
+  window.ntfyVerificarENotificar = function(wk) {
+    var snapDepois = tirarSnapshot();
+    var novas = detectarNovas(_reliqSnapshot, snapDepois);
+    if(!novas.length) {
+      console.log('✅ Nenhuma relíquia nova detectada.');
+      return Promise.resolve([]);
+    }
+    console.log('🏅 Relíquias novas:', novas);
+    var promessas = novas.map(function(item) {
+      var info = TIER_INFO[item.tier] || TIER_INFO.faisca;
+      var titulo = '🏅 ' + info.label + ' desbloqueada!';
+      var corpo = item.nome + ', você conquistou a relíquia "' + item.reliquia + '"!\n\nAbra o dashboard para ver sua conquista 👑';
+      // Disparar notificação individual
+      ntfyEnviar(item.nome, titulo, corpo, info.emoji, info.prioridade);
+      // Também disparar a cerimônia visual se o dashboard estiver aberto
+      if(typeof window.celebrarReliquia === 'function') {
+        setTimeout(function(){ window.celebrarReliquia(item.nome, item.reliquia, item.tier); }, 500);
+      }
+      return item;
+    });
+    // Também avisar geral se houver novas relíquias
+    if(novas.length > 0) {
+      var resumo = novas.map(function(i){ return i.nome + ': ' + i.reliquia; }).join('\n');
+      ntfyGeral('🏅 Novas relíquias na WK' + (wk||''), 'Parabéns!\n' + resumo + '\n\nConfira o dashboard!', 'tada');
+    }
+    return Promise.resolve(promessas);
+  };
+
+  // ── Painel de configuração ntfy no dashboard ──
+  window.abrirPainelNtfy = function() {
+    var JOGADORES = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:999997;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:16px;';
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+
+    var canaisHtml = JOGADORES.map(function(nome){
+      var c = canal(nome);
+      return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">'
+        + '<span style="font-size:13px;font-weight:800;color:#e6edf3;">' + nome + '</span>'
+        + '<span style="font-size:11px;color:rgba(255,255,255,0.3);font-family:monospace;background:#060d1a;padding:3px 8px;border-radius:6px;">' + c + '</span>'
+        + '<button onclick="ntfyTestar(\'' + nome + '\')" style="padding:5px 10px;background:rgba(96,165,250,0.15);border:1px solid rgba(96,165,250,0.3);border-radius:8px;color:#60a5fa;font-size:11px;font-weight:800;cursor:pointer;">Testar</button>'
+        + '</div>';
+    }).join('');
+
+    ov.innerHTML = '<div style="background:#0d1629;border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px;max-width:420px;width:100%;max-height:85vh;overflow-y:auto;">'
+      + '<div style="font-size:17px;font-weight:900;color:#e6edf3;margin-bottom:4px;">🔔 Notificações ntfy</div>'
+      + '<div style="font-size:11px;color:rgba(255,255,255,0.3);margin-bottom:16px;line-height:1.5;">Cada jogador precisa instalar o app <strong style="color:#60a5fa;">ntfy</strong> (iOS/Android, gratuito) e se inscrever no canal abaixo com seu nome.</div>'
+
+      + '<div style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:12px;margin-bottom:16px;">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#60a5fa;margin-bottom:6px;">Canal geral (todos)</div>'
+      + '<div style="font-size:13px;font-family:monospace;color:#e6edf3;word-break:break-all;">' + CANAL_PREFIX + '-geral</div>'
+      + '<div style="font-size:10px;color:rgba(255,255,255,0.3);margin-top:4px;">Para receber avisos gerais: novo torneio, resultados, etc.</div>'
+      + '</div>'
+
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px;">Canais individuais (relíquias)</div>'
+      + canaisHtml
+
+      + '<div style="margin-top:16px;display:flex;flex-direction:column;gap:8px;">'
+      + '<button onclick="ntfyTestarGeral()" style="padding:11px;background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:10px;color:#22c55e;font-size:13px;font-weight:800;cursor:pointer;">📢 Testar canal geral</button>'
+      + '<button onclick="ntfyEnviarResultado()" style="padding:11px;background:linear-gradient(135deg,#92400e,#d4a017);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;">📊 Enviar resultado WK atual</button>'
+      + '</div>'
+
+      + '<div style="margin-top:14px;background:rgba(255,255,255,0.03);border-radius:10px;padding:12px;">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;">Como funciona</div>'
+      + '<div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.6;">'
+      + '1. Cada jogador instala <strong style="color:#60a5fa;">ntfy.sh</strong> (App Store / Google Play)<br>'
+      + '2. Abre o app e assina o canal com seu nome<br>'
+      + '3. Quando você registrar uma WK, relíquias novas disparam push automático<br>'
+      + '4. O canal é público por nome — use um nome longo para privacidade'
+      + '</div>'
+      + '</div>'
+      + '<button onclick="this.closest(\'div\').parentNode.remove();" style="margin-top:12px;width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;color:#9fb3d4;font-size:13px;font-weight:600;cursor:pointer;">Fechar</button>'
+      + '</div>';
+    document.body.appendChild(ov);
+  };
+
+  window.ntfyTestar = function(nome) {
+    ntfyEnviar(nome,
+      '🃏 Teste — Poker do Plaza',
+      'Olá ' + nome + '! Suas notificações estão funcionando. Você receberá alertas de relíquias desbloqueadas aqui 🏅',
+      'white_check_mark', 'default'
+    ).then(function(ok){
+      alert(ok ? '✅ Enviado para ' + nome + '!' : '❌ Erro ao enviar. Verifique a conexão.');
+    });
+  };
+
+  window.ntfyTestarGeral = function() {
+    ntfyGeral('🃏 Poker do Plaza — Teste', 'Notificações gerais funcionando! Você receberá resultados e avisos de torneio aqui.', 'white_check_mark')
+    .then(function(ok){ alert(ok ? '✅ Enviado no canal geral!' : '❌ Erro ao enviar.'); });
+  };
+
+  window.ntfyEnviarResultado = function() {
+    var ledger = typeof getLedger==='function' ? getLedger() : [];
+    if(!ledger.length) { alert('Nenhum dado disponível.'); return; }
+    var lastWK = Math.max.apply(null, ledger.map(function(r){ return +r.wk||0; }));
+    var wkRows = ledger.filter(function(r){ return +r.wk===lastWK && !+r.faltou; });
+    function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+    var sorted = wkRows.slice().sort(function(a,b){ return fv(a.posicao)-fv(b.posicao); });
+    var podio = sorted.slice(0,3).map(function(r,i){
+      return ['🥇','🥈','🥉'][i] + ' ' + r.jogador + ' (' + (r.kos||0) + ' KOs)';
+    }).join('\n');
+    var titulo = '🃏 Resultado WK' + lastWK + ' publicado!';
+    var corpo = 'Pódio da noite:\n' + podio + '\n\nAbra o dashboard para ver o ranking completo!';
+    ntfyGeral(titulo, corpo, 'trophy').then(function(ok){
+      alert(ok ? '✅ Resultado enviado para todos!' : '❌ Erro ao enviar.');
+    });
+  };
+
+  // Hook no wkInserirNoLedger para detectar relíquias automaticamente
+  var _wkInserirOriginal = window.wkInserirNoLedger;
+  window.wkInserirNoLedger = function() {
+    // Tirar snapshot ANTES
+    window.ntfySnapshotAntes();
+    // Executar inserção original
+    if(_wkInserirOriginal) _wkInserirOriginal();
+    // Verificar novas relíquias DEPOIS (aguardar re-render)
+    var wk = window._wkNovasLinhas && window._wkNovasLinhas[0] ? window._wkNovasLinhas[0].wk : '?';
+    setTimeout(function(){
+      window.ntfyVerificarENotificar(wk).then(function(novas){
+        if(novas.length) {
+          console.log('🏅 Notificações disparadas para:', novas.map(function(n){ return n.nome; }));
+        }
+      });
+    }, 1200);
+  };
+
+  console.log('%c🔔 ntfy: window.abrirPainelNtfy() para configurar | Canais: ' + CANAL_PREFIX + '-[nome]', 'color:#60a5fa;font-weight:bold;');
+})();
+
+
+// ═══ BOTÃO ADMIN — NOTIFICAR RESULTADO (só aparece para admin após download) ═══
+(function(){
+
+  // Mostrar botão flutuante de notificação apenas para admin
+  function mostrarBotaoNotif() {
+    if(typeof nfIsAdmin !== 'function' || !nfIsAdmin()) return;
+    if(document.getElementById('ntfy-admin-btn')) return;
+
+    var btn = document.createElement('div');
+    btn.id = 'ntfy-admin-btn';
+    btn.style.cssText = 'position:fixed;bottom:calc(74px + env(safe-area-inset-bottom,0px));right:14px;z-index:9998;'
+      + 'background:linear-gradient(135deg,#92400e,#d4a017);border-radius:14px;padding:10px 16px;'
+      + 'display:flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 4px 20px rgba(212,160,23,0.4);'
+      + 'animation:ntfy-pulse 2s ease-in-out infinite;';
+    btn.innerHTML = '<style>@keyframes ntfy-pulse{0%,100%{box-shadow:0 4px 20px rgba(212,160,23,0.4)}50%{box-shadow:0 4px 30px rgba(212,160,23,0.7)}}</style>'
+      + '<span style="font-size:18px;">🔔</span>'
+      + '<div><div style="font-size:12px;font-weight:900;color:#fff;">Notificar jogadores</div>'
+      + '<div style="font-size:10px;color:rgba(255,255,255,0.7);">Resultado pronto para envio</div></div>';
+    btn.addEventListener('click', function(){ ntfyAbrirConfirmacao(); });
+    document.body.appendChild(btn);
+  }
+
+  // Remover botão após disparar
+  function removerBotaoNotif() {
+    var btn = document.getElementById('ntfy-admin-btn');
+    if(btn) btn.remove();
+  }
+
+  // Confirmação antes de disparar
+  window.ntfyAbrirConfirmacao = function() {
+    if(typeof nfIsAdmin !== 'function' || !nfIsAdmin()) {
+      alert('Apenas o admin pode disparar notificações.');
+      return;
+    }
+    var ledger = typeof getLedger==='function' ? getLedger() : [];
+    function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+    var lastWK = Math.max.apply(null, ledger.map(function(r){ return +r.wk||0; }));
+    var wkRows = ledger.filter(function(r){ return +r.wk===lastWK && !+r.faltou; });
+    var sorted = wkRows.slice().sort(function(a,b){ return fv(a.posicao)-fv(b.posicao); });
+    var podio = sorted.slice(0,3).map(function(r,i){
+      return ['🥇','🥈','🥉'][i] + ' ' + r.jogador;
+    }).join(' · ');
+
+    var ov = document.createElement('div');
+    ov.style.cssText = 'position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;';
+    ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+    ov.innerHTML = '<div style="background:#0d1629;border:1px solid rgba(212,160,23,0.3);border-radius:16px;padding:22px;max-width:340px;width:100%;">'
+      + '<div style="font-size:16px;font-weight:900;color:#d4a017;margin-bottom:6px;">🔔 Notificar jogadores</div>'
+      + '<div style="font-size:12px;color:rgba(255,255,255,0.4);margin-bottom:16px;line-height:1.5;">Isso vai disparar notificações via ntfy para todos os jogadores com o resultado da WK' + lastWK + ' e eventuais relíquias desbloqueadas.</div>'
+      + '<div style="background:rgba(255,255,255,0.04);border-radius:10px;padding:10px 12px;margin-bottom:16px;">'
+      + '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:4px;">Pódio WK' + lastWK + '</div>'
+      + '<div style="font-size:13px;font-weight:800;color:#e6edf3;">' + (podio || 'Dados não encontrados') + '</div>'
+      + '</div>'
+      + '<div style="display:flex;gap:8px;">'
+      + '<button onclick="this.closest(\'div\').parentNode.remove();" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:10px;color:#9fb3d4;font-size:13px;font-weight:800;cursor:pointer;">Cancelar</button>'
+      + '<button onclick="ntfyDisparar();this.closest(\'div\').parentNode.remove();" style="flex:1;padding:11px;background:linear-gradient(135deg,#92400e,#d4a017);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:900;cursor:pointer;">🚀 Disparar</button>'
+      + '</div>'
+      + '</div>';
+    document.body.appendChild(ov);
+  };
+
+  // Disparar de facto
+  window.ntfyDisparar = function() {
+    if(typeof nfIsAdmin !== 'function' || !nfIsAdmin()) return;
+
+    var ledger = typeof getLedger==='function' ? getLedger() : [];
+    function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+    var lastWK = Math.max.apply(null, ledger.map(function(r){ return +r.wk||0; }));
+
+    // 1. Resultado geral
+    if(typeof window.ntfyEnviarResultado === 'function') {
+      window.ntfyEnviarResultado();
+    }
+
+    // 2. Relíquias individuais
+    var wkLabel = window._ntfyWKLabel || ('WK' + lastWK);
+    if(typeof window.ntfyVerificarENotificar === 'function') {
+      window.ntfyVerificarENotificar(wkLabel).then(function(novas) {
+        var msg = '✅ Resultado enviado para o canal geral!';
+        if(novas && novas.length) {
+          msg += '\n🏅 Relíquias notificadas: ' + novas.map(function(n){ return n.nome + ' (' + n.reliquia + ')'; }).join(', ');
+        } else {
+          msg += '\nNenhuma relíquia nova desta semana.';
+        }
+        alert(msg);
+      });
+    } else {
+      alert('✅ Resultado enviado!');
+    }
+
+    // Limpar flags e botão
+    window._ntfyResultadoPendente = false;
+    window._ntfySnapshotPendente = null;
+    window._ntfyWKPendente = null;
+    try { localStorage.removeItem('ntfy_pendente'); } catch(e) {}
+    removerBotaoNotif();
+  };
+
+  // Restaurar flag do localStorage ao abrir o dashboard
+  try {
+    var _ntfySalvo = localStorage.getItem('ntfy_pendente');
+    if(_ntfySalvo) {
+      var _ntfyData = JSON.parse(_ntfySalvo);
+      // Válido por 7 dias
+      if(_ntfyData.pendente && (Date.now() - _ntfyData.ts) < 7 * 24 * 60 * 60 * 1000) {
+        window._ntfyResultadoPendente = true;
+        window._ntfyWKLabel = _ntfyData.wkLabel || 'Semana';
+      } else {
+        localStorage.removeItem('ntfy_pendente');
+      }
+    }
+  } catch(e) {}
+
+  // Observar quando admin autentica E quando download é feito
+  // para mostrar o botão no momento certo
+  var _checkInterval = setInterval(function(){
+    if(typeof nfIsAdmin !== 'function') return;
+    if(nfIsAdmin() && window._ntfyResultadoPendente) {
+      mostrarBotaoNotif();
+    } else if(!window._ntfyResultadoPendente) {
+      removerBotaoNotif();
+    }
+  }, 1000);
+
+})();
+
+
+// ═══ PAINEL ADMIN NTFY — acessível via botão no Roadmap ═══
+window.ntfyAbrirPainelAdmin = function() {
+  if(typeof nfIsAdmin !== 'function' || !nfIsAdmin()) {
+    alert('🔒 Apenas o admin pode acessar o painel de notificações.\n\nFaça login primeiro na aba Atas.');
+    return;
+  }
+  window.abrirPainelNtfy();
+};
+
 </script>
 </html>
