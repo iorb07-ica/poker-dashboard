@@ -5,7 +5,7 @@
 <meta charset="utf-8"/>
 <!-- Stub antecipado: garante que iniciarTour nunca seja undefined antes do tour carregar -->
 <script>window.iniciarTour=function(){if(typeof window.renderStep==='function'){renderStep(0);}else{setTimeout(function(){if(typeof window.renderStep==='function')renderStep(0);else if(typeof window._tourReady==='function')window._tourReady();},400);}};</script>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; font-src 'self';"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; connect-src 'self' https://api.github.com https://raw.githubusercontent.com https://ntfy.sh https://api.anthropic.com; font-src 'self' data:;"/>
 <meta content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" name="viewport"/>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
 <meta http-equiv="Pragma" content="no-cache"/>
