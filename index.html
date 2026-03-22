@@ -2593,6 +2593,11 @@ document.addEventListener('DOMContentLoaded', function(){
  </script>
 </div>
 <div id="libwarn" style="width:100%;display:none;">⚠️ Não consegui carregar as bibliotecas (ECharts/XLSX). Verifique sua internet e recarregue. Posso gerar uma versão 100% offline, se preferir.</div>
+<style>
+/* Ocultar libwarn quando o header desktop está visível em telas estreitas (mobile) */
+@media (max-width: 768px) { #libwarn { display: none !important; } }
+body.mobile-mode #libwarn { display: none !important; }
+</style>
 </header>
 
 <!-- Barra mobile simples -->
@@ -4076,12 +4081,12 @@ document.addEventListener('DOMContentLoaded', function(){
   border-top:none;
   border-radius:22px 22px 0 0;
   display:flex;
-  align-items:center;
-  padding-bottom:0;
+  align-items:flex-start;
+  padding-top:6px;
   padding-bottom:env(safe-area-inset-bottom, 0px);
   box-shadow:0 -1px 0 rgba(255,255,255,0.07), 0 -12px 40px rgba(0,0,0,.5);
-  height:54px;
-  max-height:54px;
+  height:calc(54px + env(safe-area-inset-bottom, 0px));
+  max-height:calc(54px + env(safe-area-inset-bottom, 0px));
   pointer-events:auto;
 }
 .is-android #plaza-tabbar {
@@ -4089,9 +4094,11 @@ document.addEventListener('DOMContentLoaded', function(){
   -webkit-backdrop-filter:none !important;
   background:rgba(8,13,26,0.99) !important;
   padding-bottom:0 !important;
+  padding-top:6px !important;
   height:54px !important;
   max-height:54px !important;
   border-radius:20px 20px 0 0 !important;
+  align-items:flex-start !important;
 }
 .tab-item {
   flex:1;
@@ -8235,6 +8242,44 @@ function buildPlayerChips(players){
 
  card.appendChild(avatar);
  card.appendChild(nome);
+
+ // Contador de relíquias — soma das conquistadas em todos os níveis
+ // Usa window._perfilReliquias[p] se disponível (preenchido ao abrir perfil)
+ // Ou mostra badges genéricos de nível após calcular
+ var reliqDiv = document.createElement('div');
+ reliqDiv.setAttribute('data-reliq-player', p);
+ reliqDiv.style.cssText = 'display:flex;gap:3px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:16px;';
+ // Preencher assim que os dados estiverem disponíveis
+ setTimeout(function(){
+   var counts = window._reliqCounts && window._reliqCounts[p];
+   if(!counts) return;
+   reliqDiv.innerHTML = '';
+   var total = counts.faisca + counts.chama + counts.inferno;
+   if(total === 0){ reliqDiv.style.opacity='0'; return; }
+   if(counts.inferno > 0){
+     var s = document.createElement('span');
+     s.title = counts.inferno + ' Inferno';
+     s.style.cssText = 'font-size:11px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;';
+     s.textContent = '☀️' + counts.inferno;
+     reliqDiv.appendChild(s);
+   }
+   if(counts.chama > 0){
+     var s2 = document.createElement('span');
+     s2.title = counts.chama + ' Chama';
+     s2.style.cssText = 'font-size:11px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;';
+     s2.textContent = '🌋' + counts.chama;
+     reliqDiv.appendChild(s2);
+   }
+   if(counts.faisca > 0){
+     var s3 = document.createElement('span');
+     s3.title = counts.faisca + ' Faísca';
+     s3.style.cssText = 'font-size:11px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;';
+     s3.textContent = '🔥' + counts.faisca;
+     reliqDiv.appendChild(s3);
+   }
+ }, 1200);
+ card.appendChild(reliqDiv);
+
  grid.appendChild(card);
  });
  }
@@ -8300,6 +8345,163 @@ function afterDataLoaded(){
  
  (window.initMiniCombos || initMiniCombos)();
  initChampCombos();
+ // Calcular relíquias de todos os jogadores em background
+ setTimeout(calcularTodasReliquias, 800);
+}
+
+// ─── Cálculo compacto de relíquias para todos os jogadores ──────────────
+function calcularTodasReliquias(){
+  try {
+    var ledger = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+    if(!ledger.length) return;
+    var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).filter(Boolean);
+    var counts = {};
+    var engR = window.PREMIO_ENGINE ? window.PREMIO_ENGINE.get(ledger) : null;
+    function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+    function mesFechado(m){ return !!(engR && engR.mes[m] && engR.mes[m].fechado); }
+
+    jogs.forEach(function(jog){
+      var rows = ledger.filter(function(r){ return r.jogador===jog && fv(r.faltou)!==1; });
+      var all  = ledger.filter(function(r){ return r.jogador===jog; });
+      var wksSorted = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
+
+      // ── helpers ──
+      function maxConsec(arr, fn){ var m=0,c=0; arr.forEach(function(x){ if(fn(x)){c++;if(c>m)m=c;}else c=0; }); return m; }
+      var meses = Array.from(new Set(all.map(function(r){ return +r.mes; }))).filter(Boolean);
+      var mesesSemFalta = meses.filter(function(m){
+        var wksNoMes = ledger.filter(function(r){ return +r.mes===m; }).map(function(r){ return +r.wk; });
+        return !all.some(function(r){ return fv(r.faltou)===1 && wksNoMes.includes(+r.wk); });
+      });
+
+      // pontos e posições
+      var pts_total = rows.reduce(function(s,r){ return s+fv(r.pontos_calc); },0);
+      var kos_total = rows.reduce(function(s,r){ return s+fv(r.kos); },0);
+      var vitorias = rows.filter(function(r){ return fv(r.posicao)===1; }).length;
+      var medalOuro = rows.filter(function(r){ return fv(r.posicao)===1; }).length;
+      var medalPrata= rows.filter(function(r){ return fv(r.posicao)===2; }).length;
+      var medalBronze= rows.filter(function(r){ return fv(r.posicao)===3; }).length;
+      var totalMedalhas = medalOuro + medalPrata + medalBronze;
+
+      // noites com 2+ KOs
+      var noitesKO2 = rows.filter(function(r){ return fv(r.kos)>=2; }).length;
+      // noite com 3+ KOs
+      var noites3KO = rows.filter(function(r){ return fv(r.kos)>=3; }).length;
+      // pódios consecutivos
+      var podioConsec = maxConsec(wksSorted, function(wk){
+        var r = all.find(function(x){ return +x.wk===wk; });
+        return r && fv(r.posicao)>=1 && fv(r.posicao)<=3;
+      });
+      // meses sem falta count
+      var mesesSemFaltaCount = mesesSemFalta.length;
+      // vitórias com fichas altas
+      var cofreF = rows.some(function(r){ return fv(r.fichas_restantes)>=20000; });
+      var cofreC = rows.some(function(r){ return fv(r.fichas_restantes)>=50000; });
+      // venceu sem rebuyar
+      var venceuSemRebuy = rows.some(function(r){ return fv(r.posicao)===1 && fv(r.rebuys)===0; });
+      // rebuyou 3+ e venceu
+      var fenix = rows.some(function(r){ return fv(r.posicao)===1 && fv(r.rebuys)>=3; });
+      // hat-trick: 3 vitórias consecutivas
+      var hatTrick = maxConsec(wksSorted, function(wk){
+        var r = all.find(function(x){ return +x.wk===wk; });
+        return r && fv(r.posicao)===1;
+      }) >= 3;
+      // KO lider mensal
+      var koLider3meses = (function(){
+        var count=0;
+        meses.forEach(function(m){
+          if(!mesFechado(m)) return;
+          var maxKO = 0, jogKO = 0;
+          jogs.forEach(function(j){
+            var k = ledger.filter(function(r){ return r.jogador===j && +r.mes===m; }).reduce(function(s,r){ return s+fv(r.kos); },0);
+            if(k > maxKO){ maxKO=k; jogKO=k; }
+            if(j===jog) jogKO = k;
+          });
+          var myKO = ledger.filter(function(r){ return r.jogador===jog && +r.mes===m; }).reduce(function(s,r){ return s+fv(r.kos); },0);
+          var allKO = jogs.map(function(j2){ return ledger.filter(function(r){ return r.jogador===j2 && +r.mes===m; }).reduce(function(s,r){ return s+fv(r.kos); },0); });
+          if(myKO === Math.max.apply(null, allKO) && myKO > 0) count++;
+        });
+        return count >= 3;
+      })();
+
+      // HOF titulos
+      var HOF = {'Israel':5,'Magu':2,'Marcus':1};
+      var titulosAnuais = HOF[jog] || 0;
+      var olimpo = titulosAnuais >= 1;
+      var eterno  = titulosAnuais >= 3;
+
+      // ── FAÍSCA (10 relíquias) ──
+      var faisca = [
+        noitesKO2 >= 4,           // Explosivo
+        totalMedalhas >= 5,        // Colecionador F
+        mesesSemFaltaCount >= 3,   // Soldado
+        medalOuro>=1 && medalPrata>=1 && medalBronze>=1, // Coleção Completa
+        cofreF,                    // Cofre F
+        noites3KO >= 1,            // Caçador
+        vitorias >= 1,             // Primeiro Ouro
+        false,                     // Fortaleza F (complexo)
+        venceuSemRebuy && vitorias>=1, // Gelo Vivo F
+        false,                     // Ceifador F
+      ];
+      // ── CHAMA (10 relíquias) ──
+      var chama = [
+        venceuSemRebuy,            // Certeiro
+        mesesSemFaltaCount >= 6,   // Capitão
+        podioConsec >= 3,          // Pódio Constante
+        totalMedalhas >= 10,       // Colecionador C
+        kos_total >= 50,           // Exterminador
+        false,                     // Gelo Vivo C
+        fenix,                     // Fênix
+        cofreC,                    // Cofre C
+        false,                     // Fortaleza C
+        koLider3meses,             // Ceifador Implacável
+      ];
+      // ── INFERNO (10 relíquias) ──
+      var inferno = [
+        podioConsec >= 5,          // Vulcão
+        false,                     // Fortaleza I
+        totalMedalhas >= 20,       // Colecionador I
+        false,                     // Dinastia
+        kos_total >= 100,          // Tubarão Branco (ajustado)
+        hatTrick,                  // Hat-trick
+        false,                     // Dragão
+        false,                     // Grand Slam
+        olimpo,                    // Olimpo
+        eterno,                    // Eterno
+      ];
+
+      counts[jog] = {
+        faisca:  faisca.filter(Boolean).length,
+        chama:   chama.filter(Boolean).length,
+        inferno: inferno.filter(Boolean).length,
+      };
+    });
+    window._reliqCounts = counts;
+    // Atualizar os badges nos cards de perfil já renderizados
+    document.querySelectorAll('[data-reliq-player]').forEach(function(el){
+      var pName = el.getAttribute('data-reliq-player');
+      var c = counts[pName];
+      if(!c) return;
+      var total = c.faisca + c.chama + c.inferno;
+      el.innerHTML = '';
+      if(total === 0){ el.style.opacity='0'; return; }
+      el.style.opacity = '1';
+      if(c.inferno > 0){
+        var s = document.createElement('span');
+        s.title = c.inferno + ' Inferno'; s.style.cssText = 'font-size:10px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;';
+        s.textContent = '☀️'+c.inferno; el.appendChild(s);
+      }
+      if(c.chama > 0){
+        var s2 = document.createElement('span');
+        s2.title = c.chama + ' Chama'; s2.style.cssText = 'font-size:10px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;';
+        s2.textContent = '🌋'+c.chama; el.appendChild(s2);
+      }
+      if(c.faisca > 0){
+        var s3 = document.createElement('span');
+        s3.title = c.faisca + ' Faísca'; s3.style.cssText = 'font-size:10px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;';
+        s3.textContent = '🔥'+c.faisca; el.appendChild(s3);
+      }
+    });
+  } catch(e){ console.warn('reliq calc:', e); }
 }
 
 function selectedPlayers(){ return Array.from(document.querySelectorAll('.chip.active')).map(x=>x.dataset.player); }
@@ -16365,6 +16567,37 @@ window.abrirPerfil = function(jogadorNome){
   header.appendChild(avatarWrap);
   header.appendChild(btnClose);
 
+  // Navegação entre jogadores — setas ← → abaixo do header
+  (function(){
+    var navDiv = document.createElement('div');
+    navDiv.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 20px 4px;';
+
+    var idx = jogs.indexOf(jogadorNome);
+
+    var btnPrev = document.createElement('button');
+    btnPrev.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;' + (idx <= 0 ? 'opacity:0.3;pointer-events:none;' : '');
+    btnPrev.innerHTML = '← ' + (idx > 0 ? jogs[idx-1] : '');
+    btnPrev.onclick = function(){
+      if(idx > 0){ window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(jogs[idx-1]); }, 80); }
+    };
+
+    var btnNext = document.createElement('button');
+    btnNext.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;' + (idx >= jogs.length-1 ? 'opacity:0.3;pointer-events:none;' : '');
+    btnNext.innerHTML = (idx < jogs.length-1 ? jogs[idx+1] : '') + ' →';
+    btnNext.onclick = function(){
+      if(idx < jogs.length-1){ window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(jogs[idx+1]); }, 80); }
+    };
+
+    var posLabel = document.createElement('div');
+    posLabel.style.cssText = 'font-size:11px;color:#4a6080;font-weight:700;text-align:center;flex:1;';
+    posLabel.textContent = (idx+1) + ' / ' + jogs.length;
+
+    navDiv.appendChild(btnPrev);
+    navDiv.appendChild(posLabel);
+    navDiv.appendChild(btnNext);
+    box.insertBefore(navDiv, box.children[1]);
+  })();
+
   
   (function(){
     var ledger = getLedger();
@@ -16682,17 +16915,131 @@ window.abrirPerfil = function(jogadorNome){
     window.abrirTelaBrasoes = function(nivel){ window._abrirBrasoesComDados(nivel, window._BRASOES_GLOBAL, window._NIVEL_INFO_GLOBAL); };
 
     
+    // ── Nova seção de Relíquias — design luxuoso ──────────────────
     var section = document.createElement('div');
-    section.style.cssText = 'padding:8px 16px 4px;';
+    section.style.cssText = 'padding:10px 16px 4px;';
 
-    
-    var filtroRow = document.createElement('div');
-    filtroRow.style.cssText = 'display:flex;align-items:center;justify-content:center;gap:10px;padding:2px 0;';
+    var cF = BRASOES.faisca.filter(function(b){ return b.conquistado; }).length;
+    var cC = BRASOES.chama.filter(function(b){ return b.conquistado; }).length;
+    var cI = BRASOES.inferno.filter(function(b){ return b.conquistado; }).length;
+    var totalReliq = cF + cC + cI;
 
-    var tituloB = document.createElement('div');
-    tituloB.style.cssText = 'font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;';
-    tituloB.textContent = 'Relíquias';
-    filtroRow.appendChild(tituloB);
+    // Salvar em _reliqCounts para os cards de perfil
+    window._reliqCounts = window._reliqCounts || {};
+    window._reliqCounts[jogadorNome] = { faisca: cF, chama: cC, inferno: cI };
+    // Atualizar badge no card se já estiver visível
+    (function(){
+      var el = document.querySelector('[data-reliq-player="'+jogadorNome+'"]');
+      if(!el) return;
+      el.innerHTML = '';
+      el.style.opacity = '1';
+      if(cI > 0){ var s=document.createElement('span'); s.style.cssText='font-size:10px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;'; s.textContent='☀️'+cI; el.appendChild(s); }
+      if(cC > 0){ var s2=document.createElement('span'); s2.style.cssText='font-size:10px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;'; s2.textContent='🌋'+cC; el.appendChild(s2); }
+      if(cF > 0){ var s3=document.createElement('span'); s3.style.cssText='font-size:10px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;'; s3.textContent='🔥'+cF; el.appendChild(s3); }
+    })();
+
+    var reliqWrap = document.createElement('div');
+    reliqWrap.style.cssText = [
+      'background:linear-gradient(160deg,#0a1020 0%,#0d1629 100%)',
+      'border-radius:16px',
+      'overflow:hidden',
+      'border:1px solid rgba(255,255,255,0.07)',
+    ].join(';');
+
+    // Hero header
+    var reliqHero = document.createElement('div');
+    reliqHero.style.cssText = 'padding:14px 16px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);';
+    reliqHero.innerHTML = [
+      '<div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(145deg,rgba(255,215,0,0.15),rgba(255,100,0,0.08));border:1px solid rgba(255,215,0,0.22);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏅</div>',
+      '<div>',
+        '<div style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:2px;">Conquistas</div>',
+        '<div style="font-size:15px;font-weight:900;background:linear-gradient(90deg,#ffd700 0%,#f97316 55%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;">Relíquias do Plaza</div>',
+        '<div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:1px;">Toque num nível para explorar</div>',
+      '</div>',
+    ].join('');
+    reliqWrap.appendChild(reliqHero);
+
+    // Tiers
+    var tiersDiv = document.createElement('div');
+    tiersDiv.style.cssText = 'padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;';
+
+    var tierDefs = [
+      { nivel:'faisca',  icon:'🔥', nome:'Faísca',  cor:'#ffd700', bg:'rgba(255,215,0,0.06)',  brd:'rgba(255,215,0,0.15)',  stripe:'linear-gradient(180deg,#ffd700,#aa8800)', count:cF },
+      { nivel:'chama',   icon:'🌋', nome:'Chama',   cor:'#f97316', bg:'rgba(249,115,22,0.06)', brd:'rgba(249,115,22,0.15)', stripe:'linear-gradient(180deg,#f97316,#aa4400)', count:cC },
+      { nivel:'inferno', icon:'☀️', nome:'Inferno', cor:'#ef4444', bg:'rgba(239,68,68,0.06)',  brd:'rgba(239,68,68,0.15)',  stripe:'linear-gradient(180deg,#ef4444,#990000)', count:cI },
+    ];
+
+    tierDefs.forEach(function(t){
+      var row = document.createElement('div');
+      row.style.cssText = [
+        'border-radius:12px',
+        'padding:10px 13px',
+        'display:flex',
+        'align-items:center',
+        'gap:12px',
+        'cursor:pointer',
+        'position:relative',
+        'overflow:hidden',
+        'background:'+t.bg,
+        'border:1px solid '+t.brd,
+        'transition:transform .15s',
+      ].join(';');
+      row.onmousedown = function(){ this.style.transform='scale(0.97)'; };
+      row.onmouseup = function(){ this.style.transform=''; };
+      row.ontouchstart = function(){ this.style.transform='scale(0.97)'; };
+      row.ontouchend = function(){ this.style.transform=''; abrirTelaBrasoes(t.nivel); };
+      row.onclick = function(){ abrirTelaBrasoes(t.nivel); };
+
+      // Stripe lateral
+      var stripe = document.createElement('div');
+      stripe.style.cssText = 'position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:12px 0 0 12px;background:'+t.stripe+';';
+      row.appendChild(stripe);
+
+      // Icon
+      var icon = document.createElement('div');
+      icon.style.cssText = 'font-size:18px;flex-shrink:0;width:28px;text-align:center;';
+      icon.textContent = t.icon;
+      row.appendChild(icon);
+
+      // Body: nome + dots
+      var body = document.createElement('div');
+      body.style.cssText = 'flex:1;min-width:0;';
+      var nameEl = document.createElement('div');
+      nameEl.style.cssText = 'font-size:12px;font-weight:900;color:'+t.cor+';letter-spacing:.3px;margin-bottom:5px;';
+      nameEl.textContent = t.nome;
+      body.appendChild(nameEl);
+
+      var dotsEl = document.createElement('div');
+      dotsEl.style.cssText = 'display:flex;gap:3px;';
+      for(var d=0; d<10; d++){
+        var dot = document.createElement('div');
+        dot.style.cssText = 'width:9px;height:9px;border-radius:2px;background:'+(d < t.count ? t.cor : 'rgba(255,255,255,0.08)')+';';
+        dotsEl.appendChild(dot);
+      }
+      body.appendChild(dotsEl);
+      row.appendChild(body);
+
+      // Número direita
+      var numWrap = document.createElement('div');
+      numWrap.style.cssText = 'text-align:right;flex-shrink:0;';
+      numWrap.innerHTML = '<div style="font-size:22px;font-weight:900;line-height:1;color:'+t.cor+';">'+t.count+'</div>'
+        +'<div style="font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:1px;">de 10</div>';
+      row.appendChild(numWrap);
+
+      tiersDiv.appendChild(row);
+    });
+    reliqWrap.appendChild(tiersDiv);
+
+    // Footer total
+    var reliqFooter = document.createElement('div');
+    reliqFooter.style.cssText = 'border-top:1px solid rgba(255,255,255,0.04);padding:8px 14px;display:flex;align-items:center;justify-content:space-between;';
+    reliqFooter.innerHTML = '<span style="font-size:9px;color:rgba(255,255,255,0.2);font-weight:800;letter-spacing:1px;text-transform:uppercase;">Total conquistado</span>'
+      +'<span style="font-size:12px;color:rgba(255,255,255,0.5);font-weight:800;"><span style="color:#ffd700;">'+totalReliq+'</span> / 30 relíquias</span>';
+    reliqWrap.appendChild(reliqFooter);
+
+    section.appendChild(reliqWrap);
+    box._badgeWrap = section;
+    box._badgeWrapData = section;
 
     function abrirTelaBrasoes(nivel){
       document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
@@ -16932,47 +17279,8 @@ window.abrirPerfil = function(jogadorNome){
       tela.appendChild(grid);
       document.body.appendChild(tela);
     }
-
-    var btnsDiv = document.createElement('div');
-    btnsDiv.style.cssText = 'display:flex;gap:8px;align-items:center;';
-
-    // Animacoes dos icones dos botoes
-    var iconAnims = {
-      faisca:  'brasao-btn-faisca',
-      chama:   'brasao-btn-chama',
-      inferno: 'brasao-btn-inferno'
-    };
-    var iconLabels = { faisca: '🔥', chama: '🌋', inferno: '☀️' };
-    var nomeLabels  = { faisca: 'Faísca', chama: 'Chama', inferno: 'Inferno' };
-
-    ['faisca','chama','inferno'].forEach(function(nivel){
-      var info = NIVEL_INFO[nivel];
-      var btn = document.createElement('button');
-      btn.style.cssText = 'border:1px solid '+info.brd+';background:'+info.bg+';color:'+info.cor+';'
-        +'border-radius:20px;padding:5px 12px 5px 8px;font-size:14px;font-weight:800;cursor:pointer;'
-        +'display:inline-flex;align-items:center;gap:5px;transition:all .2s;white-space:nowrap;'
-        +'box-shadow:0 2px 8px rgba(0,0,0,0.3);';
-
-      var iconSpan = document.createElement('span');
-      iconSpan.className = iconAnims[nivel];
-      iconSpan.style.cssText = 'font-size:16px;display:inline-block;line-height:1;';
-      iconSpan.textContent = iconLabels[nivel];
-
-      var labelSpan = document.createElement('span');
-      labelSpan.style.cssText = 'font-size:14px;font-weight:800;letter-spacing:.2px;color:'+info.cor+';';
-      labelSpan.textContent = nomeLabels[nivel];
-
-      btn.appendChild(iconSpan);
-      btn.appendChild(labelSpan);
-      btn.addEventListener('click', function(){ abrirTelaBrasoes(nivel); });
-      btnsDiv.appendChild(btn);
-    });
-
-    filtroRow.appendChild(btnsDiv);
-    section.appendChild(filtroRow);
-    box._badgeWrap = section;
-    box._badgeWrapData = section;
   })();
+
 
   /* ── Banner Saldo Mês Atual ── */
   (function(){
@@ -17306,6 +17614,15 @@ window.abrirPerfil = function(jogadorNome){
   box.appendChild(header);
   if(box._bannerMes) box.appendChild(box._bannerMes);
   if(box._badgeWrapData) box.appendChild(box._badgeWrapData);
+
+  // Divisor visual entre relíquias e estatísticas
+  var divider = document.createElement('div');
+  divider.style.cssText = 'display:flex;align-items:center;gap:10px;padding:6px 16px 4px;';
+  divider.innerHTML = '<div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>'
+    +'<div style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);">Estatísticas da temporada</div>'
+    +'<div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>';
+  box.appendChild(divider);
+
   box.appendChild(kpisGrid);
   box.appendChild(chartLabel);
   box.appendChild(tabelaWrap);
@@ -19548,8 +19865,7 @@ window.abrirEdicaoAdmin=function(tipo){
 </script>
 
 <script id="tour-script">
-(function(){
-
+// Tour guiado — expira 21/04/2026
 var TOUR_STEPS = [
   {
     target: 'header',
