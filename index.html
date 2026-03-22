@@ -2171,10 +2171,11 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 // _revealAt é atualizado no window.load para garantir 5s a partir
 // do momento em que a página está visível para o usuário, não do parse
 var _revealAt = Date.now() + 5000;
+var _revealAtLocked = false; // depois do load, não deixa encurtar mais
 window.addEventListener('load', function(){
-  // Reinicia o timer a partir do load event — o parse do JSON embutido
-  // pode levar 1-2s antes disso, o que encurtava o splash indevidamente
+  // Reinicia o timer a partir do load event
   _revealAt = Date.now() + 5000;
+  _revealAtLocked = true;
 }, { once: true });
 
 (function(){
@@ -2183,6 +2184,10 @@ window.addEventListener('load', function(){
   setInterval(function(){ d.textContent=['.','..','...'][i++%3]; }, 500);
 })(); 
 function revealDashboard(){
+  // Garante que _revealAt seja pelo menos 5s a partir de agora se ainda não houve load
+  if(!_revealAtLocked){
+    _revealAt = Math.max(_revealAt, Date.now() + 5000);
+  }
   var delay = Math.max(0, _revealAt - Date.now());
   setTimeout(function(){
     var overlay = document.getElementById('loading-overlay');
@@ -4208,19 +4213,21 @@ function tabNav(cardId){
   function getHeaderHeight(){
     try{
       var mb = document.getElementById('mobile-topbar');
-      if(mb && mb.offsetParent !== null && mb.getBoundingClientRect().height > 0){
-        return mb.getBoundingClientRect().height + 8;
+      if(mb && getComputedStyle(mb).display !== 'none'){
+        var rect = mb.getBoundingClientRect();
+        if(rect.height > 0) return rect.bottom + 16; // bottom já inclui safe-area + 16px de folga visual
       }
       var hd = document.querySelector('header');
-      if(hd && hd.getBoundingClientRect().height > 0){
-        return hd.getBoundingClientRect().height + 8;
+      if(hd){
+        var rect2 = hd.getBoundingClientRect();
+        if(rect2.height > 0) return rect2.bottom + 16;
       }
     }catch(e){}
-    return 82; // fallback seguro
+    return 90; // fallback seguro
   }
 
-  var yOffset = -getHeaderHeight();
-  var y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+  var headerH = getHeaderHeight();
+  var y = el.getBoundingClientRect().top + window.pageYOffset - headerH;
   _tabScrolling = true;
   clearTimeout(_tabScrollTimer);
   _tabScrollTimer = setTimeout(function(){ _tabScrolling = false; }, 800);
@@ -15999,28 +16006,31 @@ window.addEventListener('load', function(){
     if(holdTimer){ clearTimeout(holdTimer); holdTimer = null; }
   }
 
-  // Indicador PTR: posicionado abaixo do header, logo menor (36px chip SVG)
+  // Indicador PTR: barra fina que cresce abaixo do header com chip no centro
   var ind = document.createElement('div');
   ind.id  = 'ptr-indicator';
-  ind.style.cssText = 'position:fixed;top:60px;left:0;right:0;height:0;display:flex;align-items:flex-start;justify-content:center;padding-top:8px;z-index:999998;pointer-events:none;overflow:visible;';
+  // top será setado dinamicamente pelo updateIndTop
+  ind.style.cssText = 'position:fixed;top:82px;left:0;right:0;height:0;overflow:hidden;display:flex;align-items:flex-start;justify-content:center;padding-top:6px;z-index:999997;pointer-events:none;background:transparent;';
 
   ind.innerHTML = '<div id="ptr-icon" style="'
-    + 'width:36px;height:36px;border-radius:50%;'
-    + 'background:rgba(6,13,26,0.92);'
-    + 'border:1.5px solid rgba(255,215,0,0.35);'
+    + 'width:38px;height:38px;border-radius:50%;'
+    + 'background:rgba(6,13,26,0.95);'
+    + 'border:2px solid rgba(255,215,0,0.5);'
     + 'display:flex;align-items:center;justify-content:center;'
-    + 'box-shadow:0 2px 10px rgba(255,215,0,0.25);'
+    + 'box-shadow:0 2px 14px rgba(255,215,0,0.3);'
     + 'transform:scale(0) rotate(0deg);opacity:0;'
-    + 'transition:transform .18s cubic-bezier(0.34,1.3,0.64,1),opacity .18s,box-shadow .25s;'
+    + 'transition:transform .2s cubic-bezier(0.34,1.3,0.64,1),opacity .2s,box-shadow .25s,border-color .25s;'
+    + 'flex-shrink:0;'
     + '">'
-    + '<svg width="22" height="22" viewBox="0 0 24 24" fill="none">'
-    + '<circle cx="12" cy="12" r="9" stroke="rgba(255,215,0,0.65)" stroke-width="1.4"/>'
-    + '<circle cx="12" cy="12" r="5.5" stroke="rgba(255,215,0,0.45)" stroke-width="1"/>'
-    + '<circle cx="12" cy="12" r="2" fill="rgba(255,215,0,0.85)"/>'
-    + '<line x1="2.5" y1="12" x2="6.5" y2="12" stroke="rgba(255,215,0,0.55)" stroke-width="1.4" stroke-linecap="round"/>'
-    + '<line x1="17.5" y1="12" x2="21.5" y2="12" stroke="rgba(255,215,0,0.55)" stroke-width="1.4" stroke-linecap="round"/>'
-    + '<line x1="12" y1="2.5" x2="12" y2="6.5" stroke="rgba(255,215,0,0.55)" stroke-width="1.4" stroke-linecap="round"/>'
-    + '<line x1="12" y1="17.5" x2="12" y2="21.5" stroke="rgba(255,215,0,0.55)" stroke-width="1.4" stroke-linecap="round"/>'
+    // Chip SVG animado — 3 círculos concêntricos + 4 marcas cardinais
+    + '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">'
+    + '<circle cx="12" cy="12" r="10" stroke="rgba(255,215,0,0.7)" stroke-width="1.5"/>'
+    + '<circle cx="12" cy="12" r="6" stroke="rgba(255,215,0,0.45)" stroke-width="1"/>'
+    + '<circle cx="12" cy="12" r="2.5" fill="rgba(255,215,0,0.9)"/>'
+    + '<line x1="2" y1="12" x2="6" y2="12" stroke="rgba(255,215,0,0.65)" stroke-width="1.5" stroke-linecap="round"/>'
+    + '<line x1="18" y1="12" x2="22" y2="12" stroke="rgba(255,215,0,0.65)" stroke-width="1.5" stroke-linecap="round"/>'
+    + '<line x1="12" y1="2" x2="12" y2="6" stroke="rgba(255,215,0,0.65)" stroke-width="1.5" stroke-linecap="round"/>'
+    + '<line x1="12" y1="18" x2="12" y2="22" stroke="rgba(255,215,0,0.65)" stroke-width="1.5" stroke-linecap="round"/>'
     + '</svg>'
     + '</div>';
   document.body.appendChild(ind);
@@ -16077,8 +16087,20 @@ window.addEventListener('load', function(){
     if(ratio >= 1){
       
       if(!holdTimer && !readyToFire){
-        // Feedback tátil leve: "estou segurando"
-        try{ if(navigator.vibrate) navigator.vibrate(20); }catch(e){}
+        // Feedback tátil leve ao atingir threshold
+        // iOS usa AudioContext (único jeito no Safari), Android usa vibrate
+        try{
+          if(window.DeviceMotionEvent && typeof DeviceMotionEvent.requestPermission === 'function'){
+            // iOS — tenta criar impacto de audio curto como proxy tátil
+            var ctx = new (window.AudioContext || window.webkitAudioContext)();
+            var o = ctx.createOscillator(); var g = ctx.createGain();
+            o.connect(g); g.connect(ctx.destination);
+            o.frequency.value = 80; g.gain.setValueAtTime(0.3, ctx.currentTime);
+            g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+            o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.08);
+          }
+          if(navigator.vibrate) navigator.vibrate(25);
+        }catch(e){}
         icon.style.background = 'rgba(30,50,10,0.95)';
         icon.style.borderColor = 'rgba(255,215,0,0.9)';
         icon.style.boxShadow = '0 0 16px rgba(255,215,0,0.6),0 0 32px rgba(255,215,0,0.2)';
@@ -16091,8 +16113,17 @@ window.addEventListener('load', function(){
             ic.style.boxShadow = '0 0 20px rgba(34,197,94,0.7),0 0 40px rgba(34,197,94,0.3)';
             ic.style.background = 'rgba(10,40,20,0.95)';
           }
-          // Feedback tátil forte: "pode soltar!"
-          try{ if(navigator.vibrate) navigator.vibrate([40,20,40]); }catch(e){}
+          // Feedback tátil forte: "pode soltar!" — dois pulsos
+          try{
+            if(navigator.vibrate) navigator.vibrate([50,30,50]);
+            // iOS audio proxy
+            var ctx2 = new (window.AudioContext || window.webkitAudioContext)();
+            var o2 = ctx2.createOscillator(); var g2 = ctx2.createGain();
+            o2.connect(g2); g2.connect(ctx2.destination);
+            o2.frequency.value = 120; g2.gain.setValueAtTime(0.4, ctx2.currentTime);
+            g2.gain.exponentialRampToValueAtTime(0.001, ctx2.currentTime + 0.12);
+            o2.start(ctx2.currentTime); o2.stop(ctx2.currentTime + 0.12);
+          }catch(e){}
         }, HOLD_MS);
       } else if(readyToFire){
         icon.style.boxShadow = '0 0 22px rgba(34,197,94,0.6)';
