@@ -8256,25 +8256,25 @@ function buildPlayerChips(players){
    reliqDiv.innerHTML = '';
    var total = counts.faisca + counts.chama + counts.inferno;
    if(total === 0){ reliqDiv.style.opacity='0'; return; }
-   if(counts.inferno > 0){
+   if(counts.faisca > 0){
      var s = document.createElement('span');
-     s.title = counts.inferno + ' Inferno';
-     s.style.cssText = 'font-size:11px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;';
-     s.textContent = '☀️' + counts.inferno;
+     s.title = counts.faisca + ' Raras';
+     s.style.cssText = 'font-size:11px;background:rgba(96,165,250,0.18);border:1px solid rgba(96,165,250,0.4);border-radius:8px;padding:1px 5px;color:#60a5fa;font-weight:800;';
+     s.textContent = '💎' + counts.faisca;
      reliqDiv.appendChild(s);
    }
    if(counts.chama > 0){
      var s2 = document.createElement('span');
-     s2.title = counts.chama + ' Chama';
-     s2.style.cssText = 'font-size:11px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;';
-     s2.textContent = '🌋' + counts.chama;
+     s2.title = counts.chama + ' Épicas';
+     s2.style.cssText = 'font-size:11px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);border-radius:8px;padding:1px 5px;color:#a855f7;font-weight:800;';
+     s2.textContent = '🔶' + counts.chama;
      reliqDiv.appendChild(s2);
    }
-   if(counts.faisca > 0){
+   if(counts.inferno > 0){
      var s3 = document.createElement('span');
-     s3.title = counts.faisca + ' Faísca';
-     s3.style.cssText = 'font-size:11px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;';
-     s3.textContent = '🔥' + counts.faisca;
+     s3.title = counts.inferno + ' Lendárias';
+     s3.style.cssText = 'font-size:11px;background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.4);border-radius:8px;padding:1px 5px;color:#d4a017;font-weight:800;';
+     s3.textContent = '👑' + counts.inferno;
      reliqDiv.appendChild(s3);
    }
  }, 1200);
@@ -8485,20 +8485,20 @@ function calcularTodasReliquias(){
       el.innerHTML = '';
       if(total === 0){ el.style.opacity='0'; return; }
       el.style.opacity = '1';
-      if(c.inferno > 0){
+      if(c.faisca > 0){
         var s = document.createElement('span');
-        s.title = c.inferno + ' Inferno'; s.style.cssText = 'font-size:10px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;';
-        s.textContent = '☀️'+c.inferno; el.appendChild(s);
+        s.title = c.faisca + ' Raras'; s.style.cssText = 'font-size:10px;background:rgba(96,165,250,0.18);border:1px solid rgba(96,165,250,0.4);border-radius:8px;padding:1px 5px;color:#60a5fa;font-weight:800;';
+        s.textContent = '💎'+c.faisca; el.appendChild(s);
       }
       if(c.chama > 0){
         var s2 = document.createElement('span');
-        s2.title = c.chama + ' Chama'; s2.style.cssText = 'font-size:10px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;';
-        s2.textContent = '🌋'+c.chama; el.appendChild(s2);
+        s2.title = c.chama + ' Épicas'; s2.style.cssText = 'font-size:10px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);border-radius:8px;padding:1px 5px;color:#a855f7;font-weight:800;';
+        s2.textContent = '🔶'+c.chama; el.appendChild(s2);
       }
-      if(c.faisca > 0){
+      if(c.inferno > 0){
         var s3 = document.createElement('span');
-        s3.title = c.faisca + ' Faísca'; s3.style.cssText = 'font-size:10px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;';
-        s3.textContent = '🔥'+c.faisca; el.appendChild(s3);
+        s3.title = c.inferno + ' Lendárias'; s3.style.cssText = 'font-size:10px;background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.4);border-radius:8px;padding:1px 5px;color:#d4a017;font-weight:800;';
+        s3.textContent = '👑'+c.inferno; el.appendChild(s3);
       }
     });
   } catch(e){ console.warn('reliq calc:', e); }
@@ -16267,9 +16267,9 @@ window.addEventListener('load', function(){
     st.id = 'ptr-style';
     st.textContent = '@keyframes ptr-spin{to{transform:rotate(360deg)}}'
       + '@keyframes ptr-ring{from{stroke-dashoffset:88}to{stroke-dashoffset:0}}'
-      + '@keyframes brasao-pulse-faisca{0%,100%{filter:drop-shadow(0 0 4px #ffd700) drop-shadow(0 0 10px #aa7700)}50%{filter:drop-shadow(0 0 14px #ffd700) drop-shadow(0 0 30px #ffaa00)}}'
-      + '@keyframes brasao-pulse-chama{0%,100%{filter:drop-shadow(0 0 4px #ff8800) drop-shadow(0 0 10px #993300)}50%{filter:drop-shadow(0 0 14px #ff8800) drop-shadow(0 0 30px #ff5500)}}'
-      + '@keyframes brasao-pulse-inferno{0%,100%{filter:drop-shadow(0 0 4px #ff3300) drop-shadow(0 0 10px #770000)}50%{filter:drop-shadow(0 0 14px #ff2200) drop-shadow(0 0 32px #cc0000)}}'
+      + '@keyframes brasao-pulse-faisca{0%,100%{filter:drop-shadow(0 0 4px #60a5fa) drop-shadow(0 0 10px #1d4ed8)}50%{filter:drop-shadow(0 0 14px #60a5fa) drop-shadow(0 0 30px #3b82f6)}}'
+      + '@keyframes brasao-pulse-chama{0%,100%{filter:drop-shadow(0 0 4px #a855f7) drop-shadow(0 0 10px #6d28d9)}50%{filter:drop-shadow(0 0 14px #a855f7) drop-shadow(0 0 30px #9333ea)}}'
+      + '@keyframes brasao-pulse-inferno{0%,100%{filter:drop-shadow(0 0 4px #d4a017) drop-shadow(0 0 10px #92400e)}50%{filter:drop-shadow(0 0 14px #d4a017) drop-shadow(0 0 32px #fbbf24)}}'
       + '@keyframes brasao-float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-5px)}}'
       + '.brasao-anim-faisca{animation:brasao-pulse-faisca 2.8s ease-in-out infinite,brasao-float 4s ease-in-out infinite!important}'
       + '.brasao-anim-chama{animation:brasao-pulse-chama 2.6s ease-in-out infinite,brasao-float 4.2s ease-in-out infinite .4s!important}'
@@ -16415,6 +16415,171 @@ function getPhoto(nome){
 }
 
 var ePerfilEvo = null;
+
+// ═══ Cálculo de BRASOES standalone — sem abrir UI ═══
+window.calcularBrasoesJogador = function(jogadorNome) {
+  var ledger = getLedger();
+  if(!ledger.length) return null;
+  var playerRows = ledger.filter(function(r){ return r.jogador===jogadorNome && !+r.faltou; });
+  var allRows    = ledger.filter(function(r){ return r.jogador===jogadorNome; });
+  var wksSorted  = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
+  function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
+  function maxConsec(arr, fn){ var m=0,c=0; arr.forEach(function(x){ if(fn(x)){c++;if(c>m)m=c;}else c=0; }); return m; }
+  var _engR = window.PREMIO_ENGINE ? window.PREMIO_ENGINE.get(ledger) : null;
+  function mesFechado(m){ return !!(_engR&&_engR.mes[m]&&_engR.mes[m].fechado); }
+  function triFechado(t){ return !!(_engR&&_engR.tri[t]&&_engR.tri[t].fechado); }
+  var mesesJogados = Array.from(new Set(allRows.map(function(r){ return +r.mes; }))).filter(Boolean);
+  var mesesFechadosJogados = mesesJogados.filter(mesFechado);
+  var trimestres = Array.from(new Set(ledger.map(function(r){ return +r.trimestre; }))).filter(Boolean);
+  var trimestresFechados = trimestres.filter(triFechado);
+  var _anoPorDezembro = mesFechado(12);
+  var HOF = {'Israel':5,'Magu':2,'Marcus':1};
+  var _titulosHOF = HOF[jogadorNome] || 0;
+  var _olimpoHOF = _titulosHOF >= 1;
+
+  // ── Cálculos ──
+  var expNights = playerRows.filter(function(r){ return fv(r.kos)>=2; }).length;
+  var explosivo = expNights >= 4;
+  // Medalhas: conta até a última semana lançada, independente do mês estar fechado
+  var totalMedalhas = playerRows.filter(function(r){ return fv(r.posicao)>=1 && fv(r.posicao)<=3; }).length;
+  var colecionadorF = totalMedalhas >= 5;
+  var mesesSemFalta = 0;
+  mesesJogados.forEach(function(m){
+    if(!mesFechado(m)) return;
+    var wksMes = Array.from(new Set(ledger.filter(function(r){ return +r.mes===m; }).map(function(r){ return +r.wk; })));
+    if(!wksMes.some(function(wk){ var r=allRows.find(function(x){ return +x.wk===wk; }); return !r||fv(r.faltou)===1; })) mesesSemFalta++;
+  });
+  var soldado = mesesSemFalta >= 3;
+  var temOuro=playerRows.some(function(r){ return fv(r.posicao)===1; });
+  var temPrata=playerRows.some(function(r){ return fv(r.posicao)===2; });
+  var temBronze=playerRows.some(function(r){ return fv(r.posicao)===3; });
+  var colecaoCompleta = temOuro&&temPrata&&temBronze;
+  var cofreF = playerRows.some(function(r){ return fv(r.fichas_restantes)>20000; });
+  var cacador = playerRows.some(function(r){ return fv(r.kos)>=3; });
+  var primeiroOuro = temOuro;
+  var fortF=true;
+  mesesFechadosJogados.forEach(function(m){
+    var wksMes=ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; });
+    var nJogs=Array.from(new Set(wksMes.map(function(r){ return r.jogador; }))).length;
+    var minhas=playerRows.filter(function(r){ return +r.mes===m; });
+    if(minhas.some(function(r){ return fv(r.posicao)===nJogs; })) fortF=false;
+  });
+  var fortalezaF = mesesFechadosJogados.length>0&&fortF;
+  var geloVivoF = playerRows.some(function(r){ return fv(r.posicao)<=3&&fv(r.rebuys)===0; });
+  var ceifador=false;
+  mesesFechadosJogados.forEach(function(m){
+    var kos={};
+    ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; }).forEach(function(r){ kos[r.jogador]=(kos[r.jogador]||0)+fv(r.kos); });
+    var mx=Math.max.apply(null,Object.values(kos));
+    if(mx>0&&(kos[jogadorNome]||0)===mx) ceifador=true;
+  });
+  var certeiro = playerRows.some(function(r){ return fv(r.posicao)===1&&fv(r.rebuys)===0; });
+  var capitao = mesesSemFalta>=6;
+  var podioCons = maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)<=3; })>=3;
+  var colecionadorC = totalMedalhas>=10;
+  var totalKOs = playerRows.reduce(function(s,r){ return s+fv(r.kos); },0);
+  var exterminador = totalKOs>=50;
+  var geloVivoC=false;
+  mesesFechadosJogados.forEach(function(m){ var mn=playerRows.filter(function(r){ return +r.mes===m; }); if(mn.length>0&&mn.every(function(r){ return fv(r.rebuys)===0; })) geloVivoC=true; });
+  var fenix = playerRows.some(function(r){ return fv(r.posicao)===1&&fv(r.rebuys)>=3; });
+  var cofreC = playerRows.some(function(r){ return fv(r.fichas_restantes)>50000; });
+  var fortC=true;
+  trimestresFechados.forEach(function(t){
+    var wksTri=ledger.filter(function(r){ return +r.trimestre===t&&!+r.faltou; });
+    var nJogs=Array.from(new Set(wksTri.map(function(r){ return r.jogador; }))).length;
+    var minhas=playerRows.filter(function(r){ return +r.trimestre===t; });
+    if(minhas.some(function(r){ return fv(r.posicao)===nJogs; })) fortC=false;
+  });
+  var fortalezaC = trimestresFechados.length>0&&fortC;
+  var mesesCampeaoKO=0;
+  mesesFechadosJogados.forEach(function(m){
+    var kos={};
+    ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; }).forEach(function(r){ kos[r.jogador]=(kos[r.jogador]||0)+fv(r.kos); });
+    var mx=Math.max.apply(null,Object.values(kos));
+    if(mx>0&&(kos[jogadorNome]||0)===mx) mesesCampeaoKO++;
+  });
+  var ceifadorImp = mesesCampeaoKO>=3;
+  var vulcao = _anoPorDezembro&&maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)<=3; })>=5;
+  var fortI=true;
+  var _wksI=Array.from(new Set(playerRows.filter(function(r){ return fv(r.posicao)>0; }).map(function(r){ return +r.wk; }))).filter(Boolean);
+  if(_wksI.length===0||!_anoPorDezembro) fortI=false;
+  _wksI.forEach(function(wk){
+    var rowsWk=ledger.filter(function(r){ return +r.wk===wk&&fv(r.posicao)>0; });
+    var myRow=playerRows.find(function(r){ return +r.wk===wk&&fv(r.posicao)>0; });
+    if(myRow&&rowsWk.length>0&&fv(myRow.posicao)===rowsWk.length) fortI=false;
+  });
+  var fortalezaI = _wksI.length>0&&fortI;
+  var colecionadorI = _anoPorDezembro&&totalMedalhas>=20;
+  var campMes=mesesFechadosJogados.slice().sort(function(a,b){return a-b;}).map(function(m){
+    var pts={}; ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; }).forEach(function(r){ pts[r.jogador]=(pts[r.jogador]||0)+fv(r.pontos_calc); });
+    var top=Object.entries(pts).sort(function(a,b){return b[1]-a[1];})[0]; return top&&top[0]===jogadorNome;
+  });
+  var _dynastiaAtual=_anoPorDezembro&&maxConsec(campMes,function(x){return x;})>=3;
+  var dinastia=_dynastiaAtual;
+  var tubarao=_anoPorDezembro&&playerRows.some(function(r){ return fv(r.kos)>=10; });
+  var hatTrick=_anoPorDezembro&&maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)===1; })>=3;
+  var dragao=false;
+  if(_anoPorDezembro) wksSorted.forEach(function(wk){
+    var wkAll=ledger.filter(function(r){ return +r.wk===wk&&!+r.faltou; });
+    if(wkAll.length<3) return;
+    var meuRow=playerRows.find(function(r){ return +r.wk===wk; });
+    if(!meuRow||fv(meuRow.posicao)!==1) return;
+    if(wkAll.every(function(r){ return r.jogador===jogadorNome||fv(r.fichas_restantes)===0; })) dragao=true;
+  });
+  var grandSlam=false;
+  if(_engR&&_anoPorDezembro) trimestres.forEach(function(t){
+    var triData=_engR.tri[t]; if(!triData||!triData.fechado) return;
+    var ptsTri={}; ledger.filter(function(r){ return +r.trimestre===t&&!+r.faltou; }).forEach(function(r){ ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+fv(r.pontos_calc); });
+    var topTri=Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0]; if(!topTri||topTri[0]!==jogadorNome) return;
+    Array.from(new Set(ledger.filter(function(r){ return +r.trimestre===t; }).map(function(r){ return +r.mes; }))).forEach(function(m){
+      var mesData=_engR.mes[m]; if(!mesData||!mesData.fechado) return;
+      var ptsMes={}; ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; }).forEach(function(r){ ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+fv(r.pontos_calc); });
+      var topMes=Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0]; if(!topMes||topMes[0]!==jogadorNome) return;
+      if(playerRows.some(function(r){ return +r.mes===m&&fv(r.posicao)===1; })) grandSlam=true;
+    });
+  });
+  var olimpo=_olimpoHOF;
+  var eterno=_titulosHOF>=3;
+
+  return {
+    faisca:[
+      {emoji:'💥',nome:'Explosivo',       desc:'Fez 2+ KOs em 4 noites diferentes.',conquistado:explosivo},
+      {emoji:'🏅',nome:'Colecionador',    desc:'5 medalhas conquistadas no ano.',conquistado:colecionadorF},
+      {emoji:'🪖',nome:'Soldado',         desc:'3 meses sem faltar.',conquistado:soldado},
+      {emoji:'🎨',nome:'Coleção Completa',desc:'Conquistou ouro, prata e bronze.',conquistado:colecaoCompleta},
+      {emoji:'🏦',nome:'Cofre',           desc:'Terminou com mais de 20.000 fichas.',conquistado:cofreF},
+      {emoji:'💀',nome:'Caçador',         desc:'3 ou mais KOs numa noite.',conquistado:cacador},
+      {emoji:'🥇',nome:'Primeiro Ouro',   desc:'A primeira vitória.',conquistado:primeiroOuro},
+      {emoji:'🏰',nome:'Fortaleza',       desc:'Nunca terminou em último num mês.',conquistado:fortalezaF},
+      {emoji:'🧊',nome:'Gelo Vivo',       desc:'Terminou top-3 sem rebuyar.',conquistado:geloVivoF},
+      {emoji:'💀',nome:'Ceifador',        desc:'Maior caçador de KOs do mês.',conquistado:ceifador},
+    ],
+    chama:[
+      {emoji:'🏹',nome:'Certeiro',           desc:'Venceu sem rebuyar.',conquistado:certeiro},
+      {emoji:'🛡️',nome:'Capitão',            desc:'6 meses sem faltar.',conquistado:capitao},
+      {emoji:'🃏',nome:'Pódio Constante',    desc:'Top-3 em 3 noites consecutivas.',conquistado:podioCons},
+      {emoji:'🏅',nome:'Colecionador',       desc:'10 medalhas no ano.',conquistado:colecionadorC},
+      {emoji:'☠️',nome:'Exterminador',       desc:'50 KOs acumulados no ano.',conquistado:exterminador},
+      {emoji:'🧊',nome:'Gelo Vivo',          desc:'Jogou um mês inteiro sem rebuyar.',conquistado:geloVivoC},
+      {emoji:'🐦‍🔥',nome:'Fênix',            desc:'Rebuyou 3x ou mais e ainda venceu.',conquistado:fenix},
+      {emoji:'🏦',nome:'Cofre',              desc:'Terminou com mais de 50.000 fichas.',conquistado:cofreC},
+      {emoji:'🏰',nome:'Fortaleza',          desc:'Nunca terminou em último num trimestre.',conquistado:fortalezaC},
+      {emoji:'💀',nome:'Ceifador Implacável',desc:'Liderou os KOs em 3 meses.',conquistado:ceifadorImp},
+    ],
+    inferno:[
+      {emoji:'🌋',nome:'Vulcão',          desc:'5 semanas, 5 pódios consecutivos.',conquistado:vulcao},
+      {emoji:'🏰',nome:'Fortaleza',       desc:'Nunca terminou em último no ano.',conquistado:fortalezaI},
+      {emoji:'🏅',nome:'Colecionador',    desc:'20 medalhas no ano.',conquistado:colecionadorI},
+      {emoji:'👑',nome:'Dinastia',        desc:'Campeão do ranking mensal por 3 meses.',conquistado:dinastia},
+      {emoji:'🦈',nome:'Tubarão Branco',  desc:'10+ KOs em uma única noite.',conquistado:tubarao},
+      {emoji:'⚡',nome:'Hat-trick',       desc:'Três noites, três vitórias.',conquistado:hatTrick},
+      {emoji:'🐉',nome:'Dragão',          desc:'Eliminou todos os jogadores numa noite.',conquistado:dragao},
+      {emoji:'🎖️',nome:'Grand Slam',      desc:'Conquistou noite, mês e trimestre.',conquistado:grandSlam},
+      {emoji:'🏆',nome:'Olimpo',          desc:'Campeão Anual do Poker do Plaza.',conquistado:olimpo},
+      {emoji:'🌌',nome:'Eterno',          desc:'Três anos. Três coroas.',conquistado:eterno},
+    ]
+  };
+};
 
 window.abrirPerfil = function(jogadorNome){
   var ledger = getLedger();
@@ -16575,17 +16740,19 @@ window.abrirPerfil = function(jogadorNome){
     var idx = jogs.indexOf(jogadorNome);
 
     var btnPrev = document.createElement('button');
-    btnPrev.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;' + (idx <= 0 ? 'opacity:0.3;pointer-events:none;' : '');
-    btnPrev.innerHTML = '← ' + (idx > 0 ? jogs[idx-1] : '');
+    var prevTarget = idx > 0 ? jogs[idx-1] : jogs[jogs.length-1];
+    btnPrev.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;';
+    btnPrev.innerHTML = '← ' + prevTarget;
     btnPrev.onclick = function(){
-      if(idx > 0){ window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(jogs[idx-1]); }, 80); }
+      window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(prevTarget); }, 80);
     };
 
     var btnNext = document.createElement('button');
-    btnNext.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;' + (idx >= jogs.length-1 ? 'opacity:0.3;pointer-events:none;' : '');
-    btnNext.innerHTML = (idx < jogs.length-1 ? jogs[idx+1] : '') + ' →';
+    var nextTarget = idx < jogs.length-1 ? jogs[idx+1] : jogs[0];
+    btnNext.style.cssText = 'background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:6px 14px;color:#9fb3d4;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;transition:all .15s;';
+    btnNext.innerHTML = nextTarget + ' →';
     btnNext.onclick = function(){
-      if(idx < jogs.length-1){ window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(jogs[idx+1]); }, 80); }
+      window.fecharPerfil(); setTimeout(function(){ window.abrirPerfil(nextTarget); }, 80);
     };
 
     var posLabel = document.createElement('div');
@@ -16637,7 +16804,8 @@ window.abrirPerfil = function(jogadorNome){
 
     
     
-    var totalMedalhas = playerRows.filter(function(r){ return +r.posicao<=3 && mesFechado(+r.mes); }).length;
+    // Medalhas: conta até a última semana lançada, independente do mês estar fechado
+    var totalMedalhas = playerRows.filter(function(r){ return +r.posicao>=1 && +r.posicao<=3; }).length;
     var colecionadorF = totalMedalhas >= 5;
 
     
@@ -16757,18 +16925,20 @@ window.abrirPerfil = function(jogadorNome){
 
     
     
-    var vulcao = maxConsec(wksSorted, function(wk){
+    var vulcao = _anoPorDezembro && maxConsec(wksSorted, function(wk){
       var r = playerRows.find(function(x){ return +x.wk===wk; });
       return r && +r.posicao<=3;
     }) >= 5;
 
+    // Ano fechado = dezembro (mes=12) fechado
+    var _anoPorDezembro = mesFechado(12);
+
     
     // Fortaleza Inferno: avalia progressivamente todas as semanas jogadas no ano
-    // Por semana, descobre quantos jogadores estavam na mesa e verifica se o jogador
-    // terminou em último. Se em alguma semana terminou em último, perde a relíquia.
+    // SÓ conta se o ano estiver fechado (dezembro fechado)
     var fortI = true;
     var _wksJogadasI = Array.from(new Set(playerRows.filter(function(r){ return +r.posicao>0; }).map(function(r){ return +r.wk; }))).filter(Boolean);
-    if(_wksJogadasI.length === 0){ fortI = false; }
+    if(_wksJogadasI.length === 0 || !_anoPorDezembro){ fortI = false; }
     _wksJogadasI.forEach(function(wk){
       var rowsWk = ledger.filter(function(r){ return +r.wk===wk && +r.posicao>0; });
       var nNessaWk = rowsWk.length;
@@ -16778,7 +16948,7 @@ window.abrirPerfil = function(jogadorNome){
     var fortalezaI = _wksJogadasI.length > 0 && fortI;
 
     
-    var colecionadorI = totalMedalhas >= 20;
+    var colecionadorI = _anoPorDezembro && totalMedalhas >= 20;
 
     
     var _dynastiaHOF = false; 
@@ -16790,14 +16960,14 @@ window.abrirPerfil = function(jogadorNome){
       var top = Object.entries(pts).sort(function(a,b){return b[1]-a[1];})[0];
       return top && top[0]===jogadorNome;
     });
-    var _dynastiaAtual = maxConsec(campMesSorted, function(x){ return x; }) >= 3;
+    var _dynastiaAtual = _anoPorDezembro && maxConsec(campMesSorted, function(x){ return x; }) >= 3;
     var dinastia = _dynastiaHOF || _dynastiaAtual;
 
     
-    var tubarao = playerRows.some(function(r){ return (+r.kos||0) >= 10; });
+    var tubarao = _anoPorDezembro && playerRows.some(function(r){ return (+r.kos||0) >= 10; });
 
     
-    var hatTrick = maxConsec(wksSorted, function(wk){
+    var hatTrick = _anoPorDezembro && maxConsec(wksSorted, function(wk){
       var r = playerRows.find(function(x){ return +x.wk===wk; });
       return r && +r.posicao===1;
     }) >= 3;
@@ -16806,25 +16976,27 @@ window.abrirPerfil = function(jogadorNome){
     
     
     var dragao = false;
-    wksSorted.forEach(function(wk){
-      var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
-      var nPresentes = wkAll.length;
-      if(nPresentes < 3) return;
-      var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
-      if(!meuRow) return;
-      if(+meuRow.posicao !== 1) return; 
-      
-      var todosEliminados = wkAll.every(function(r){
-        if(r.jogador === jogadorNome) return true; 
-        var fichas = +r.fichas_restantes || 0;
-        return fichas === 0;
+    if(_anoPorDezembro){
+      wksSorted.forEach(function(wk){
+        var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
+        var nPresentes = wkAll.length;
+        if(nPresentes < 3) return;
+        var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
+        if(!meuRow) return;
+        if(+meuRow.posicao !== 1) return; 
+        
+        var todosEliminados = wkAll.every(function(r){
+          if(r.jogador === jogadorNome) return true; 
+          var fichas = +r.fichas_restantes || 0;
+          return fichas === 0;
+        });
+        if(todosEliminados) dragao = true;
       });
-      if(todosEliminados) dragao = true;
-    });
+    }
 
     
     var grandSlam = false;
-    if(_engR){
+    if(_engR && _anoPorDezembro){
       trimestres.forEach(function(t){
         var triData = _engR.tri[t];
         
@@ -16853,9 +17025,9 @@ window.abrirPerfil = function(jogadorNome){
     }
 
     
-    
-    var _anoFechado = !!(_engR && _engR.ano && Object.values(_engR.ano).some(function(a){ return a && a.fechado; }));
-    var olimpo = _olimpoHOF; 
+    var _anoFechado = _anoPorDezembro;
+    // Olimpo: campeão anual — só conta anos anteriores (HOF) + ano atual se dezembro fechado
+    var olimpo = _olimpoHOF;
 
     
     
@@ -16904,15 +17076,24 @@ window.abrirPerfil = function(jogadorNome){
     };
 
     var NIVEL_INFO = {
-      faisca:  {label:'🔥 Faísca',  cor:'#ffd700', bg:'rgba(255,215,0,0.12)',   brd:'rgba(255,215,0,0.4)'},
-      chama:   {label:'🌋 Chama',   cor:'#f97316', bg:'rgba(249,115,22,0.12)',  brd:'rgba(249,115,22,0.4)'},
-      inferno: {label:'☀️ Inferno', cor:'#ef4444', bg:'rgba(239,68,68,0.12)',   brd:'rgba(239,68,68,0.4)'},
+      faisca:  {label:'💎 Raras',     cor:'#60a5fa', bg:'rgba(96,165,250,0.12)',   brd:'rgba(96,165,250,0.4)'},
+      chama:   {label:'🔶 Épicas',    cor:'#a855f7', bg:'rgba(168,85,247,0.12)',   brd:'rgba(168,85,247,0.4)'},
+      inferno: {label:'👑 Lendárias', cor:'#d4a017', bg:'rgba(212,160,23,0.12)',   brd:'rgba(212,160,23,0.4)'},
     };
     window._NIVEL_INFO_GLOBAL = NIVEL_INFO;
-    window._BRASOES_GLOBAL = BRASOES;
     window._NIVEL_INFO_GLOBAL = NIVEL_INFO;
+    window._BRASOES_GLOBAL = BRASOES;
+    window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
+    window._BRASOES_JOGADOR[jogadorNome] = BRASOES;
+    window._ULTIMO_PERFIL_JOGADOR = jogadorNome;
     
-    window.abrirTelaBrasoes = function(nivel){ window._abrirBrasoesComDados(nivel, window._BRASOES_GLOBAL, window._NIVEL_INFO_GLOBAL); };
+    window.abrirTelaBrasoes = function(nivel, _jogNome){
+      if(typeof window.abrirPerfilReliquias === 'function'){
+        window.abrirPerfilReliquias(_jogNome || jogadorNome, nivel);
+      } else {
+        abrirTelaBrasoes(nivel);
+      }
+    };
 
     
     // ── Nova seção de Relíquias — design luxuoso ──────────────────
@@ -16933,9 +17114,9 @@ window.abrirPerfil = function(jogadorNome){
       if(!el) return;
       el.innerHTML = '';
       el.style.opacity = '1';
-      if(cI > 0){ var s=document.createElement('span'); s.style.cssText='font-size:10px;background:rgba(239,68,68,0.18);border:1px solid rgba(239,68,68,0.4);border-radius:8px;padding:1px 5px;color:#ef4444;font-weight:800;'; s.textContent='☀️'+cI; el.appendChild(s); }
-      if(cC > 0){ var s2=document.createElement('span'); s2.style.cssText='font-size:10px;background:rgba(249,115,22,0.18);border:1px solid rgba(249,115,22,0.4);border-radius:8px;padding:1px 5px;color:#f97316;font-weight:800;'; s2.textContent='🌋'+cC; el.appendChild(s2); }
-      if(cF > 0){ var s3=document.createElement('span'); s3.style.cssText='font-size:10px;background:rgba(255,215,0,0.18);border:1px solid rgba(255,215,0,0.4);border-radius:8px;padding:1px 5px;color:#ffd700;font-weight:800;'; s3.textContent='🔥'+cF; el.appendChild(s3); }
+      if(cF > 0){ var s=document.createElement('span'); s.style.cssText='font-size:10px;background:rgba(96,165,250,0.18);border:1px solid rgba(96,165,250,0.4);border-radius:8px;padding:1px 5px;color:#60a5fa;font-weight:800;'; s.textContent='💎'+cF; el.appendChild(s); }
+      if(cC > 0){ var s2=document.createElement('span'); s2.style.cssText='font-size:10px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);border-radius:8px;padding:1px 5px;color:#a855f7;font-weight:800;'; s2.textContent='🔶'+cC; el.appendChild(s2); }
+      if(cI > 0){ var s3=document.createElement('span'); s3.style.cssText='font-size:10px;background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.4);border-radius:8px;padding:1px 5px;color:#d4a017;font-weight:800;'; s3.textContent='👑'+cI; el.appendChild(s3); }
     })();
 
     var reliqWrap = document.createElement('div');
@@ -16950,10 +17131,45 @@ window.abrirPerfil = function(jogadorNome){
     var reliqHero = document.createElement('div');
     reliqHero.style.cssText = 'padding:14px 16px 12px;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,0.05);';
     reliqHero.innerHTML = [
-      '<div style="width:40px;height:40px;border-radius:11px;background:linear-gradient(145deg,rgba(255,215,0,0.15),rgba(255,100,0,0.08));border:1px solid rgba(255,215,0,0.22);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏅</div>',
+      '<div style="width:44px;height:44px;flex-shrink:0;display:flex;align-items:center;justify-content:center;">',
+        '<svg width="44" height="44" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg">',
+          '<defs>',
+            '<linearGradient id="rh-bf" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0%" stop-color="#bae6fd"/><stop offset="45%" stop-color="#38bdf8"/><stop offset="100%" stop-color="#0c4a6e"/></linearGradient>',
+            '<linearGradient id="rh-bs" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#082f49"/><stop offset="100%" stop-color="#0369a1"/></linearGradient>',
+            '<linearGradient id="rh-pf" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0%" stop-color="#e9d5ff"/><stop offset="45%" stop-color="#c084fc"/><stop offset="100%" stop-color="#4c1d95"/></linearGradient>',
+            '<linearGradient id="rh-ps" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b0764"/><stop offset="100%" stop-color="#7e22ce"/></linearGradient>',
+            '<linearGradient id="rh-gf" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0%" stop-color="#fef9c3"/><stop offset="25%" stop-color="#fbbf24"/><stop offset="65%" stop-color="#d97706"/><stop offset="100%" stop-color="#78350f"/></linearGradient>',
+            '<linearGradient id="rh-gs" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#78350f"/><stop offset="100%" stop-color="#d97706"/></linearGradient>',
+            '<linearGradient id="rh-gb" x1=".5" y1="0" x2=".5" y2="1"><stop offset="0%" stop-color="#d97706"/><stop offset="100%" stop-color="#451a03"/></linearGradient>',
+          '</defs>',
+          '<circle cx="22" cy="22" r="21" fill="#0a0e1a"/>',
+          '<circle cx="22" cy="22" r="21" fill="none" stroke="#d4a017" stroke-width="0.8" opacity="0.35"/>',
+          /* Base azul */
+          '<polygon points="4,36 22,24 40,36" fill="url(#rh-bf)"/>',
+          '<polygon points="22,24 40,36 40,32 22,20" fill="url(#rh-bs)" opacity="0.7"/>',
+          '<polygon points="4,36 22,24 22,20 4,32" fill="#38bdf8" opacity="0.4"/>',
+          '<polyline points="4,32 22,20 40,32" fill="none" stroke="#bae6fd" stroke-width="0.8" opacity="0.5"/>',
+          /* Meio roxo */
+          '<polygon points="10,24 22,15 34,24" fill="url(#rh-pf)"/>',
+          '<polygon points="22,15 34,24 34,20 22,11" fill="url(#rh-ps)" opacity="0.7"/>',
+          '<polygon points="10,24 22,15 22,11 10,20" fill="#c084fc" opacity="0.4"/>',
+          '<polyline points="10,20 22,11 34,20" fill="none" stroke="#e9d5ff" stroke-width="0.8" opacity="0.5"/>',
+          /* Topo dourado */
+          '<polygon points="16,15 22,9 28,15" fill="url(#rh-gf)"/>',
+          '<polygon points="22,9 28,15 28,12 22,6" fill="url(#rh-gs)" opacity="0.7"/>',
+          '<polygon points="16,15 22,9 22,6 16,12" fill="#fbbf24" opacity="0.4"/>',
+          '<polyline points="16,12 22,6 28,12" fill="none" stroke="#fef9c3" stroke-width="0.8" opacity="0.55"/>',
+          /* Coroa no topo */
+          '<g transform="translate(22,4)">',
+            '<polygon points="-5,3 -5,-2 -3,1 0,-5 3,1 5,-2 5,3" fill="url(#rh-gf)"/>',
+            '<rect x="-5" y="2.5" width="10" height="2.5" rx="1" fill="url(#rh-gb)"/>',
+            '<circle cx="-2" cy="-3" r="0.8" fill="#fff" opacity="0.65"/>',
+          '</g>',
+        '</svg>',
+      '</div>',
       '<div>',
         '<div style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:2px;">Conquistas</div>',
-        '<div style="font-size:15px;font-weight:900;background:linear-gradient(90deg,#ffd700 0%,#f97316 55%,#ef4444 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;">Relíquias do Plaza</div>',
+        '<div style="font-size:15px;font-weight:900;background:linear-gradient(90deg,#60a5fa 0%,#a855f7 50%,#d4a017 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;">Relíquias do Plaza</div>',
         '<div style="font-size:10px;color:rgba(255,255,255,0.25);margin-top:1px;">Toque num nível para explorar</div>',
       '</div>',
     ].join('');
@@ -16964,9 +17180,9 @@ window.abrirPerfil = function(jogadorNome){
     tiersDiv.style.cssText = 'padding:10px 12px 12px;display:flex;flex-direction:column;gap:8px;';
 
     var tierDefs = [
-      { nivel:'faisca',  icon:'🔥', nome:'Faísca',  cor:'#ffd700', bg:'rgba(255,215,0,0.06)',  brd:'rgba(255,215,0,0.15)',  stripe:'linear-gradient(180deg,#ffd700,#aa8800)', count:cF },
-      { nivel:'chama',   icon:'🌋', nome:'Chama',   cor:'#f97316', bg:'rgba(249,115,22,0.06)', brd:'rgba(249,115,22,0.15)', stripe:'linear-gradient(180deg,#f97316,#aa4400)', count:cC },
-      { nivel:'inferno', icon:'☀️', nome:'Inferno', cor:'#ef4444', bg:'rgba(239,68,68,0.06)',  brd:'rgba(239,68,68,0.15)',  stripe:'linear-gradient(180deg,#ef4444,#990000)', count:cI },
+      { nivel:'faisca',  icon:'💎', nome:'Raras',     cor:'#60a5fa', bg:'rgba(96,165,250,0.06)',  brd:'rgba(96,165,250,0.15)',  stripe:'linear-gradient(180deg,#60a5fa,#1e40af)', count:cF },
+      { nivel:'chama',   icon:'🔶', nome:'Épicas',    cor:'#a855f7', bg:'rgba(168,85,247,0.06)',  brd:'rgba(168,85,247,0.15)',  stripe:'linear-gradient(180deg,#a855f7,#581c87)', count:cC },
+      { nivel:'inferno', icon:'👑', nome:'Lendárias', cor:'#d4a017', bg:'rgba(212,160,23,0.06)',  brd:'rgba(212,160,23,0.15)',  stripe:'linear-gradient(180deg,#d4a017,#78350f)', count:cI },
     ];
 
     tierDefs.forEach(function(t){
@@ -17090,62 +17306,153 @@ window.abrirPerfil = function(jogadorNome){
       
       var tela = document.createElement('div');
       tela.className = 'brasao-tela';
-      tela.style.cssText = 'position:fixed;top:0;left:0;right:0;bottom:0;z-index:999999;background:linear-gradient(145deg,#060d1a,#0d1629);display:flex;flex-direction:column;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:100vw;box-sizing:border-box;';
+      // Fix iOS body-lock: compensar o top negativo que o perfil aplica no body
+      var _bodyTop = parseInt(document.body.style.top || '0', 10) || 0;
+      var _iosOffset = (_bodyTop < 0) ? (-_bodyTop) : 0;
+      tela.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999999;'
+        +'background:linear-gradient(145deg,#060d1a,#0d1629);'
+        +'display:flex;flex-direction:column;width:100%;max-width:100vw;box-sizing:border-box;overflow:hidden;'
+        +'top:'+_iosOffset+'px;';
 
-      
+      // ── Header principal: avatar + nome + nível + fechar ──────────
       var telaHeader = document.createElement('div');
-      telaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:max(env(safe-area-inset-top, 20px), 20px) 16px 14px;padding-top:calc(max(env(safe-area-inset-top, 0px), 0px) + 20px);border-bottom:1px solid rgba(255,255,255,0.08);flex-shrink:0;gap:12px;';
+      telaHeader.style.cssText = 'flex-shrink:0;background:rgba(6,13,26,0.98);border-bottom:1px solid rgba(255,255,255,0.08);';
 
-      // Avatar + nome + título do nível
+      // Linha 1: avatar + info + fechar
+      var headerRow1 = document.createElement('div');
+      headerRow1.style.cssText = 'display:flex;align-items:center;gap:12px;padding:calc(env(safe-area-inset-top,0px) + 14px) 16px 10px;';
+
       var avatarFoto = getPhoto ? getPhoto(jogadorNome) : null;
-      var headerLeft = document.createElement('div');
-      headerLeft.style.cssText = 'display:flex;align-items:center;gap:12px;flex:1;min-width:0;';
-
-      // Avatar circular do jogador
       var avatarEl = document.createElement('div');
-      avatarEl.style.cssText = 'width:44px;height:44px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+info.cor+';box-shadow:0 0 8px '+info.cor+'66;';
+      avatarEl.style.cssText = 'width:42px;height:42px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+info.cor+';';
       if(avatarFoto){
         var avatarImg = document.createElement('img');
         avatarImg.src = avatarFoto;
         avatarImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
         avatarEl.appendChild(avatarImg);
       } else {
-        avatarEl.style.background = 'linear-gradient(135deg,#1e2e46,#0d1629)';
-        avatarEl.style.display = 'flex';
-        avatarEl.style.alignItems = 'center';
-        avatarEl.style.justifyContent = 'center';
-        avatarEl.style.fontSize = '22px';
+        avatarEl.style.cssText += 'background:linear-gradient(135deg,#1e2e46,#0d1629);display:flex;align-items:center;justify-content:center;font-size:20px;';
         avatarEl.textContent = '🃏';
       }
-      headerLeft.appendChild(avatarEl);
 
-      // Textos: nome do jogador + nível
       var headerTexts = document.createElement('div');
-      headerTexts.style.cssText = 'display:flex;flex-direction:column;gap:2px;min-width:0;';
+      headerTexts.style.cssText = 'flex:1;min-width:0;';
       var nomeDiv = document.createElement('div');
-      nomeDiv.style.cssText = 'font-size:15px;font-weight:900;color:#e6edf3;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+      nomeDiv.style.cssText = 'font-size:16px;font-weight:900;color:#e6edf3;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
       nomeDiv.textContent = jogadorNome;
       var nivelDiv = document.createElement('div');
-      nivelDiv.style.cssText = 'font-size:18px;font-weight:900;color:'+info.cor+';line-height:1.2;';
+      nivelDiv.style.cssText = 'font-size:12px;font-weight:800;color:'+info.cor+';margin-top:2px;letter-spacing:.3px;';
       nivelDiv.textContent = info.label;
-      var subDiv = document.createElement('div');
-      subDiv.style.cssText = 'font-size:11px;color:#6b82a0;margin-top:1px;';
-      subDiv.textContent = 'Toque numa relíquia para ver detalhes';
       headerTexts.appendChild(nomeDiv);
       headerTexts.appendChild(nivelDiv);
-      headerTexts.appendChild(subDiv);
-      headerLeft.appendChild(headerTexts);
-
-      telaHeader.appendChild(headerLeft);
 
       var btnFecharTela = document.createElement('button');
-      btnFecharTela.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:10px;width:36px;height:36px;color:#fca5a5;font-size:16px;font-weight:800;cursor:pointer;';
+      btnFecharTela.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.45);border-radius:10px;width:34px;height:34px;color:#fca5a5;font-size:15px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;';
       btnFecharTela.textContent = '✕';
       btnFecharTela.addEventListener('click', function(){ tela.remove(); });
-      telaHeader.appendChild(btnFecharTela);
+
+      headerRow1.appendChild(avatarEl);
+      headerRow1.appendChild(headerTexts);
+      headerRow1.appendChild(btnFecharTela);
+      telaHeader.appendChild(headerRow1);
+
+      // Linha 2: navegação entre jogadores ──────────────────────────
+      var ledgerAll = (typeof getLedger === 'function') ? getLedger() : [];
+      var jogsAll = Array.from(new Set(ledgerAll.map(function(r){ return r.jogador; })))
+                         .filter(Boolean)
+                         .sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+      var jogIdx = jogsAll.indexOf(jogadorNome);
+
+      var navRow = document.createElement('div');
+      navRow.style.cssText = 'display:flex;align-items:stretch;border-top:1px solid rgba(255,255,255,0.05);height:42px;';
+
+      function makeNavBtn(label, sublabel, enabled, onclick){
+        var btn = document.createElement('button');
+        btn.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;'
+          +'background:none;border:none;cursor:'+(enabled?'pointer':'default')+';'
+          +'opacity:'+(enabled?'1':'0.25')+';transition:background .15s;padding:0 12px;';
+        if(enabled){
+          btn.onmousedown = function(){ this.style.background='rgba(255,255,255,0.06)'; };
+          btn.onmouseup   = function(){ this.style.background=''; };
+          btn.ontouchstart= function(){ this.style.background='rgba(255,255,255,0.06)'; };
+          btn.ontouchend  = function(){ this.style.background=''; if(onclick) onclick(); };
+          btn.addEventListener('click', function(){ if(onclick) onclick(); });
+        }
+        var lbl = document.createElement('div');
+        lbl.style.cssText = 'font-size:11px;font-weight:900;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;';
+        lbl.textContent = label;
+        var sub = document.createElement('div');
+        sub.style.cssText = 'font-size:9px;color:rgba(255,255,255,0.3);font-weight:700;letter-spacing:.5px;text-transform:uppercase;';
+        sub.textContent = sublabel;
+        btn.appendChild(sub);
+        btn.appendChild(lbl);
+        return btn;
+      }
+
+      var prevJog = jogIdx > 0 ? jogsAll[jogIdx-1] : jogsAll[jogsAll.length-1];
+      var nextJog = jogIdx < jogsAll.length-1 ? jogsAll[jogIdx+1] : jogsAll[0];
+
+      var btnPrev = makeNavBtn(
+        '← '+prevJog,
+        jogIdx === 0 ? 'voltar ao fim' : 'anterior',
+        true,
+        function(){
+          tela.remove();
+          if(typeof window.abrirPerfil === 'function'){
+            window.fecharPerfil && window.fecharPerfil();
+            setTimeout(function(){
+              window.abrirPerfil(prevJog);
+              setTimeout(function(){ window.abrirTelaBrasoes(nivel); }, 320);
+            }, 80);
+          }
+        }
+      );
+
+      // Centro: indicador de posição + pontos do nível
+      var navCenter = document.createElement('div');
+      navCenter.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:0 10px;border-left:1px solid rgba(255,255,255,0.05);border-right:1px solid rgba(255,255,255,0.05);min-width:70px;';
+      var posLabel = document.createElement('div');
+      posLabel.style.cssText = 'font-size:10px;font-weight:900;color:rgba(255,255,255,0.4);letter-spacing:.5px;';
+      posLabel.textContent = (jogIdx+1)+' / '+jogsAll.length;
+      var dotsNav = document.createElement('div');
+      dotsNav.style.cssText = 'display:flex;gap:3px;align-items:center;';
+      jogsAll.forEach(function(j, i){
+        var d = document.createElement('div');
+        var active = (i === jogIdx);
+        d.style.cssText = active
+          ? 'width:14px;height:4px;border-radius:2px;background:'+info.cor+';transition:all .2s;'
+          : 'width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,0.15);';
+        dotsNav.appendChild(d);
+      });
+      navCenter.appendChild(posLabel);
+      navCenter.appendChild(dotsNav);
+
+      var btnNext = makeNavBtn(
+        nextJog+' →',
+        jogIdx === jogsAll.length-1 ? 'voltar ao início' : 'próximo',
+        true,
+        function(){
+          tela.remove();
+          if(typeof window.abrirPerfil === 'function'){
+            window.fecharPerfil && window.fecharPerfil();
+            setTimeout(function(){
+              window.abrirPerfil(nextJog);
+              setTimeout(function(){ window.abrirTelaBrasoes(nivel); }, 320);
+            }, 80);
+          }
+        }
+      );
+
+      navRow.appendChild(btnPrev);
+      navRow.appendChild(navCenter);
+      navRow.appendChild(btnNext);
+      telaHeader.appendChild(navRow);
       tela.appendChild(telaHeader);
 
-      
+      // Área de scroll — apenas o grid rola, o header fica fixo
+      var telaScroll = document.createElement('div');
+      telaScroll.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
+
       var grid = document.createElement('div');
       grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 10px 40px;box-sizing:border-box;overflow:visible;width:100%;';
 
@@ -17163,7 +17470,7 @@ window.abrirPerfil = function(jogadorNome){
         var item = document.createElement('div');
         
         var borderColor = b.conquistado
-          ? (nivel==='faisca' ? '#ffd700' : nivel==='chama' ? '#f97316' : '#ef4444')
+          ? (nivel==='faisca' ? '#60a5fa' : nivel==='chama' ? '#a855f7' : '#d4a017')
           : 'rgba(255,255,255,0.08)';
 
         item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;'
@@ -17276,13 +17583,259 @@ window.abrirPerfil = function(jogadorNome){
         grid.appendChild(item);
       });
 
-      tela.appendChild(grid);
+      telaScroll.appendChild(grid);
+      tela.appendChild(telaScroll);
       document.body.appendChild(tela);
     }
   })();
 
+  // ═══ FUNÇÃO GLOBAL: abre tela de relíquias para qualquer jogador sem passar pelo perfil ═══
+  window.abrirPerfilReliquias = function(jogNome, nivelInicial) {
+    document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
 
-  /* ── Banner Saldo Mês Atual ── */
+    var ledger = (typeof getLedger === 'function') ? getLedger() : [];
+    var jogsAll = Array.from(new Set(ledger.map(function(r){ return r.jogador; })))
+                       .filter(Boolean)
+                       .sort(function(a,b){ return a.localeCompare(b,'pt-BR'); });
+    var jogIdx = jogsAll.indexOf(jogNome);
+
+    // Tentar cache primeiro, depois calcular direto com função standalone
+    var BRASOES_JOG = (window._BRASOES_JOGADOR && window._BRASOES_JOGADOR[jogNome]) || null;
+    if(!BRASOES_JOG && window.calcularBrasoesJogador) {
+      BRASOES_JOG = window.calcularBrasoesJogador(jogNome);
+      if(BRASOES_JOG) {
+        window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
+        window._BRASOES_JOGADOR[jogNome] = BRASOES_JOG;
+      }
+    }
+    _abrirTelaComDados(jogNome, nivelInicial||'faisca', BRASOES_JOG, window._NIVEL_INFO_GLOBAL, jogsAll, jogIdx);
+  };
+
+  function _abrirTelaComDados(jogNome, nivelAtivo, BRASOES, NIVEL_INFO, jogsAll, jogIdx){
+    document.querySelectorAll('.brasao-tela').forEach(function(m){ m.remove(); });
+
+    var _bodyTop = parseInt(document.body.style.top || '0', 10) || 0;
+    var _iosOffset = (_bodyTop < 0) ? (-_bodyTop) : 0;
+
+    var tela = document.createElement('div');
+    tela.className = 'brasao-tela';
+    tela.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999999;'
+      +'background:linear-gradient(145deg,#060d1a,#0d1629);'
+      +'display:flex;flex-direction:column;width:100%;max-width:100vw;box-sizing:border-box;overflow:hidden;'
+      +'top:'+_iosOffset+'px;';
+
+    var infoAtivo = NIVEL_INFO[nivelAtivo];
+    var avatarFoto = (typeof getPhoto === 'function') ? getPhoto(jogNome) : null;
+
+    // ── Linha 1: avatar + nome + tabs de nível + fechar ──
+    var hdr1 = document.createElement('div');
+    hdr1.style.cssText = 'display:flex;align-items:center;gap:10px;padding:calc(env(safe-area-inset-top,0px) + 12px) 14px 10px;flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+    var avEl = document.createElement('div');
+    avEl.style.cssText = 'width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;border:2px solid '+infoAtivo.cor+';';
+    if(avatarFoto){
+      var avImg = document.createElement('img');
+      avImg.src = avatarFoto;
+      avImg.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
+      avEl.appendChild(avImg);
+    } else {
+      avEl.style.cssText += 'background:linear-gradient(135deg,#1e2e46,#0d1629);display:flex;align-items:center;justify-content:center;font-size:18px;';
+      avEl.textContent = '🃏';
+    }
+
+    var nomeEl = document.createElement('div');
+    nomeEl.style.cssText = 'font-size:15px;font-weight:900;color:#e6edf3;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+    nomeEl.textContent = jogNome;
+
+    var btnF = document.createElement('button');
+    btnF.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.45);border-radius:10px;width:32px;height:32px;color:#fca5a5;font-size:14px;font-weight:800;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;';
+    btnF.textContent = '✕';
+    btnF.onclick = function(){ tela.remove(); };
+
+    hdr1.appendChild(avEl);
+    hdr1.appendChild(nomeEl);
+    hdr1.appendChild(btnF);
+
+    // ── Linha 2: tabs dos 3 níveis ──
+    var tabsRow = document.createElement('div');
+    tabsRow.style.cssText = 'display:flex;align-items:stretch;border-top:1px solid rgba(255,255,255,0.05);border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+    ['faisca','chama','inferno'].forEach(function(niv){
+      var info = NIVEL_INFO[niv];
+      var cF = BRASOES[niv] ? BRASOES[niv].filter(function(b){ return b.conquistado; }).length : 0;
+      var isActive = (niv === nivelAtivo);
+      var tab = document.createElement('button');
+      tab.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;'
+        +'padding:8px 4px;background:none;border:none;cursor:pointer;'
+        +'border-bottom:2px solid '+(isActive ? info.cor : 'transparent')+';'
+        +'transition:all .15s;';
+
+      var tabLabel = document.createElement('div');
+      tabLabel.style.cssText = 'font-size:11px;font-weight:900;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.3)')+';letter-spacing:.3px;';
+      tabLabel.textContent = info.label;
+      var tabCount = document.createElement('div');
+      tabCount.style.cssText = 'font-size:9px;font-weight:700;color:'+(isActive ? info.cor : 'rgba(255,255,255,0.2)')+';';
+      tabCount.textContent = cF+'/10';
+      tab.appendChild(tabLabel);
+      tab.appendChild(tabCount);
+
+      tab.onclick = function(){
+        _abrirTelaComDados(jogNome, niv, BRASOES, NIVEL_INFO, jogsAll, jogIdx);
+      };
+      tabsRow.appendChild(tab);
+    });
+
+    // ── Linha 3: navegação entre jogadores ──
+    var navRow = document.createElement('div');
+    navRow.style.cssText = 'display:flex;align-items:stretch;border-bottom:1px solid rgba(255,255,255,0.04);height:40px;flex-shrink:0;background:rgba(6,13,26,0.98);';
+
+    var prevJog = jogIdx > 0 ? jogsAll[jogIdx-1] : jogsAll[jogsAll.length-1];
+    var nextJog = jogIdx < jogsAll.length-1 ? jogsAll[jogIdx+1] : jogsAll[0];
+
+    function makeNav(label, sub, fn){
+      var b = document.createElement('button');
+      b.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;background:none;border:none;cursor:pointer;transition:background .15s;padding:0 8px;';
+      b.onmousedown = function(){ this.style.background='rgba(255,255,255,0.05)'; };
+      b.onmouseup   = function(){ this.style.background=''; };
+      b.ontouchstart= function(){ this.style.background='rgba(255,255,255,0.05)'; };
+      b.ontouchend  = function(){ this.style.background=''; fn(); };
+      b.addEventListener('click', fn);
+      var la = document.createElement('div');
+      la.style.cssText = 'font-size:11px;font-weight:900;color:#e6edf3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:110px;';
+      la.textContent = label;
+      var su = document.createElement('div');
+      su.style.cssText = 'font-size:8px;color:rgba(255,255,255,0.25);font-weight:700;letter-spacing:.5px;text-transform:uppercase;';
+      su.textContent = sub;
+      b.appendChild(su); b.appendChild(la);
+      return b;
+    }
+
+    var dotsDiv = document.createElement('div');
+    dotsDiv.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:0 8px;border-left:1px solid rgba(255,255,255,0.04);border-right:1px solid rgba(255,255,255,0.04);min-width:60px;';
+    var posLbl = document.createElement('div');
+    posLbl.style.cssText = 'font-size:9px;font-weight:900;color:rgba(255,255,255,0.35);';
+    posLbl.textContent = (jogIdx+1)+' / '+jogsAll.length;
+    var dotsWrap = document.createElement('div');
+    dotsWrap.style.cssText = 'display:flex;gap:3px;align-items:center;';
+    jogsAll.forEach(function(j,i){
+      var d = document.createElement('div');
+      d.style.cssText = i===jogIdx
+        ? 'width:12px;height:3px;border-radius:2px;background:'+infoAtivo.cor+';'
+        : 'width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,0.15);';
+      dotsWrap.appendChild(d);
+    });
+    dotsDiv.appendChild(posLbl); dotsDiv.appendChild(dotsWrap);
+
+    navRow.appendChild(makeNav('← '+prevJog, jogIdx===0?'voltar ao fim':'anterior', function(){
+      _abrirTelaComDados(prevJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(prevJog));
+      // Se BRASOES de prevJog não disponível, vai via perfil
+    }));
+    navRow.appendChild(dotsDiv);
+    navRow.appendChild(makeNav(nextJog+' →', jogIdx===jogsAll.length-1?'voltar ao início':'próximo', function(){
+      _abrirTelaComDados(nextJog, nivelAtivo, null, NIVEL_INFO, jogsAll, jogsAll.indexOf(nextJog));
+    }));
+
+    // ── Grid de relíquias ──
+    var telaScroll2 = document.createElement('div');
+    telaScroll2.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
+    var grid2 = document.createElement('div');
+    grid2.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 10px 40px;box-sizing:border-box;width:100%;';
+
+    var svgKeys = {
+      faisca: ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
+      chama:  ['Certeiro','Capitao','Podio Constante','Colecionador C','Exterminador','Gelo Vivo C','Fenix','Cofre C','Fortaleza C','Ceifador Imp'],
+      inferno:['Vulcao','Fortaleza I','Colecionador I','Dinastia','Tubarao Branco','Hat-trick','Dragao','Grand Slam','Olimpo','Eterno']
+    };
+
+    // Se BRASOES é null, calcular agora com a função standalone
+    if(!BRASOES || !BRASOES[nivelAtivo]) {
+      BRASOES = window.calcularBrasoesJogador ? window.calcularBrasoesJogador(jogNome) : null;
+      if(BRASOES) {
+        window._BRASOES_JOGADOR = window._BRASOES_JOGADOR || {};
+        window._BRASOES_JOGADOR[jogNome] = BRASOES;
+      }
+    }
+
+    var brasoesTipo = (BRASOES && BRASOES[nivelAtivo]) ? BRASOES[nivelAtivo] : (function(){
+      var names = {faisca:['Explosivo','Colecionador','Soldado','Coleção Completa','Cofre','Caçador','Primeiro Ouro','Fortaleza','Gelo Vivo','Ceifador'],chama:['Certeiro','Capitão','Pódio Constante','Colecionador','Exterminador','Gelo Vivo','Fênix','Cofre','Fortaleza','Ceifador Implacável'],inferno:['Vulcão','Fortaleza','Colecionador','Dinastia','Tubarão Branco','Hat-trick','Dragão','Grand Slam','Olimpo','Eterno']};
+      return (names[nivelAtivo]||names.faisca).map(function(n){ return {emoji:'🏅',nome:n,desc:'',conquistado:false}; });
+    })();
+
+    brasoesTipo.forEach(function(b, idx){
+      b.svgArt = (window.BRASAO_SVGS && svgKeys[nivelAtivo] && window.BRASAO_SVGS[svgKeys[nivelAtivo][idx]]) || null;
+      var borderColor = b.conquistado ? infoAtivo.cor : 'rgba(255,255,255,0.08)';
+      var item = document.createElement('div');
+      item.style.cssText = 'display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;cursor:pointer;position:relative;overflow:visible;padding:4px 6px 10px;transition:transform .18s;text-align:center;width:100%;';
+      item.onmousedown = function(){ this.style.transform='scale(0.95)'; };
+      item.onmouseup   = function(){ this.style.transform=''; };
+      item.ontouchstart= function(){ this.style.transform='scale(0.95)'; };
+      item.ontouchend  = function(){ this.style.transform=''; };
+
+      var animClass = b.conquistado ? ('brasao-anim-'+nivelAtivo) : '';
+      var svgWrap = document.createElement('div');
+      svgWrap.style.cssText = 'width:140px;height:140px;position:relative;display:flex;align-items:center;justify-content:center;';
+      if(b.svgArt){
+        svgWrap.innerHTML = b.svgArt;
+      } else {
+        svgWrap.innerHTML = '<div style="width:120px;height:120px;border:2px solid '+borderColor+';border-radius:12px;background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;font-size:36px;">'+b.emoji+'</div>';
+      }
+      if(!b.conquistado){
+        var lck = document.createElement('div');
+        lck.style.cssText = 'position:absolute;bottom:4px;right:4px;font-size:18px;filter:drop-shadow(0 1px 3px rgba(0,0,0,0.8));';
+        lck.textContent = '🔒';
+        svgWrap.appendChild(lck);
+      }
+      if(animClass) svgWrap.querySelector('div,svg') && (svgWrap.firstElementChild.className += ' '+animClass);
+
+      var lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:12px;font-weight:800;color:'+(b.conquistado?infoAtivo.cor:'#4a6080')+';';
+      lbl.textContent = b.nome;
+
+      item.appendChild(svgWrap);
+      item.appendChild(lbl);
+
+      item.addEventListener('click', function(){
+        var overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:1000001;background:rgba(0,0,0,0.85);display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box;';
+        var card = document.createElement('div');
+        card.style.cssText = 'background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:20px;max-width:320px;width:100%;text-align:center;';
+        card.innerHTML = '<div style="font-size:40px;margin-bottom:10px;">'+(b.conquistado?'✅':'🔒')+'</div>'
+          +'<div style="display:inline-block;background:'+infoAtivo.bg+';border:1px solid '+infoAtivo.brd+';border-radius:6px;padding:2px 10px;font-size:10px;font-weight:700;color:'+infoAtivo.cor+';margin-bottom:12px;">'+infoAtivo.label+'</div>'
+          +'<div style="font-size:18px;font-weight:900;color:'+(b.conquistado?'#e6edf3':'#6b82a0')+';margin-bottom:8px;">'+b.nome+'</div>'
+          +'<div style="font-size:13px;color:#9fb3d4;line-height:1.6;margin-bottom:16px;">'+b.desc+'</div>'
+          +'<div style="font-size:12px;font-weight:700;padding:7px 16px;border-radius:8px;display:inline-block;'+(b.conquistado?'background:rgba(34,197,94,0.15);color:#22c55e;border:1px solid rgba(34,197,94,0.3);':'background:rgba(255,255,255,0.05);color:#4a6080;border:1px solid rgba(255,255,255,0.1);')+'">'+(b.conquistado?'✅ Conquistado!':'🔒 Bloqueado')+'</div>'
+          +'<button id="rel-fechar" style="display:block;width:100%;margin-top:12px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#9fb3d4;padding:9px;cursor:pointer;font-size:13px;font-weight:600;">Fechar</button>';
+        card.querySelector('#rel-fechar').onclick = function(){ overlay.remove(); };
+        overlay.addEventListener('click', function(e){ if(e.target===overlay) overlay.remove(); });
+        overlay.appendChild(card);
+        document.body.appendChild(overlay);
+      });
+
+      grid2.appendChild(item);
+    });
+
+    telaScroll2.appendChild(grid2);
+
+    tela.appendChild(hdr1);
+    tela.appendChild(tabsRow);
+    tela.appendChild(navRow);
+    tela.appendChild(telaScroll2);
+    document.body.appendChild(tela);
+
+    // Se BRASOES é null, precisamos carregar via perfil e reabrir
+    if(!BRASOES || !BRASOES[nivelAtivo]){
+      if(typeof window.abrirPerfil === 'function'){
+        var _pBack = document.getElementById('perfil-modal');
+        window.abrirPerfil(jogsAll[jogIdx]);
+        setTimeout(function(){
+          if(window._BRASOES_GLOBAL){
+            tela.remove();
+            _abrirTelaComDados(jogsAll[jogIdx], nivelAtivo, window._BRASOES_GLOBAL, NIVEL_INFO, jogsAll, jogIdx);
+          }
+        }, 300);
+      }
+    }
+  };
   (function(){
     var mesAtual = new Date().getMonth() + 1;
 
@@ -19877,7 +20430,7 @@ var TOUR_STEPS = [
     target: '#card-perfis',
     titleSel: '#tour-hdr-perfis',
     title: '👥 Perfis dos Jogadores',
-    desc: 'Fotos de todos os jogadores. Toque em qualquer um para abrir o perfil completo com estatísticas detalhadas, gráfico de evolução e histórico semana a semana. Dentro do perfil você também encontra os 🏅 Relíquias — conquistas desbloqueáveis em 3 níveis: Faísca, Chama e Inferno.',
+    desc: 'Fotos de todos os jogadores. Toque em qualquer um para abrir o perfil completo com estatísticas detalhadas, gráfico de evolução e histórico semana a semana. Dentro do perfil você também encontra os 🏅 Relíquias — conquistas desbloqueáveis em 3 níveis: Raras, Épicas e Lendárias.',
     pos: 'center',
     smallTarget: true
   },
