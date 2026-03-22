@@ -21601,22 +21601,7 @@ self.addEventListener('notificationclick',function(e){
     });
   };
 
-  // Botão flutuante de notificações — só aparece se não ativo
-  document.addEventListener('DOMContentLoaded',function(){
-    if(!('Notification' in window)) return;
-    if(Notification.permission==='granted') return; // já ativo, não incomodar
-    // Só mostrar sugestão uma vez por sessão
-    if(sessionStorage.getItem('notif_sugerido')) return;
-    sessionStorage.setItem('notif_sugerido','1');
-    setTimeout(function(){
-      var toast=document.createElement('div');
-      toast.style.cssText='position:fixed;bottom:calc(70px + env(safe-area-inset-bottom,0px));right:14px;z-index:9999;background:#0d1629;border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 24px rgba(0,0,0,0.5);transition:opacity .3s;';
-      toast.innerHTML='<span style="font-size:20px;">🔔</span><div><div style="font-size:12px;font-weight:800;color:#60a5fa;">Ativar notificações?</div><div style="font-size:10px;color:rgba(255,255,255,0.3);">Receba avisos do Plaza</div></div><span style="font-size:16px;color:rgba(255,255,255,0.3);">›</span>';
-      toast.addEventListener('click',function(){ toast.remove(); window.abrirPainelNotif(); });
-      document.body.appendChild(toast);
-      setTimeout(function(){ toast.style.opacity='0'; setTimeout(function(){if(toast.parentNode)toast.remove();},400); },6000);
-    },4000);
-  });
+  // Toast de notificações nativas removido — usando ntfy para notificações
 })();
 
 
@@ -22148,30 +22133,28 @@ self.addEventListener('notificationclick',function(e){
 
   // Enviar notificação para um jogador específico
   function ntfyEnviar(nome, titulo, corpo, emoji, prioridade) {
-    var url = NTFY_BASE + '/' + canal(nome);
+    var params = new URLSearchParams({
+      title: titulo || 'Poker do Plaza',
+      priority: prioridade || 'default',
+      tags: emoji || 'poker'
+    });
+    var url = NTFY_BASE + '/' + canal(nome) + '?' + params.toString();
     return fetch(url, {
       method: 'POST',
-      headers: {
-        'Title': titulo,
-        'Priority': prioridade || 'default',
-        'Tags': emoji || 'poker',
-        'Content-Type': 'text/plain; charset=utf-8'
-      },
       body: corpo
     }).then(function(r){ return r.ok; }).catch(function(){ return false; });
   }
 
   // Enviar para todos (canal geral)
   function ntfyGeral(titulo, corpo, emoji) {
-    var url = NTFY_BASE + '/' + CANAL_PREFIX + '-geral';
+    var params = new URLSearchParams({
+      title: titulo || 'Poker do Plaza',
+      priority: 'default',
+      tags: emoji || 'poker'
+    });
+    var url = NTFY_BASE + '/' + CANAL_PREFIX + '-geral?' + params.toString();
     return fetch(url, {
       method: 'POST',
-      headers: {
-        'Title': titulo,
-        'Priority': 'default',
-        'Tags': emoji || 'poker',
-        'Content-Type': 'text/plain; charset=utf-8'
-      },
       body: corpo
     }).then(function(r){ return r.ok; }).catch(function(){ return false; });
   }
