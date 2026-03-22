@@ -203,11 +203,11 @@ function escHTML(str){
 }
 
     *{box-sizing:border-box}
-    html { overflow-y: scroll; overflow-x: hidden; }
+    html { overflow-y: scroll; overflow-x: hidden; background:#060d1a; }
     body{
       margin:0;color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       -webkit-tap-highlight-color:transparent;touch-action:pan-y;
-      -webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
+      -webkit-overflow-scrolling:touch;overscroll-behavior-y:none;
       background:
         radial-gradient(1200px 600px at 20% -10%, #11182a 0%, #0b0f1a 40%, #0a0d16 100%),
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
@@ -2080,7 +2080,7 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
 .brasao-btn-chama   { animation: btn-chama-icon   2.0s ease-in-out infinite; }
 .brasao-btn-inferno { animation: btn-inferno-icon 2.2s ease-in-out infinite; }
 
-/* Desktop header visto no mobile: identico ao mobile-topbar */
+/* Desktop header visto no mobile: mesma linha, altura igual ao mobile */
 @media (max-width: 600px) {
   header {
     display: flex !important;
@@ -2088,70 +2088,67 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
     flex-wrap: nowrap !important;
     align-items: center !important;
     justify-content: space-between !important;
-    padding-top: max(env(safe-area-inset-top, 0px), 12px) !important;
-    padding-bottom: 12px !important;
-    padding-left: 16px !important;
-    padding-right: 16px !important;
-    gap: 0 !important;
-    min-height: calc(70px + env(safe-area-inset-top, 0px)) !important;
+    padding: max(env(safe-area-inset-top, 12px), 12px) 14px 10px !important;
+    min-height: calc(64px + env(safe-area-inset-top, 0px)) !important;
     box-sizing: border-box !important;
     width: 100% !important;
   }
-  /* Logo container: flex:1 ocupa o espaço, botões ficam à direita */
+  /* Logo container: flex-shrink 0, tamanho fixo */
   header > div:first-child {
     flex: 1 1 0 !important;
     min-width: 0 !important;
-    max-width: calc(100% - 180px) !important;
-    gap: 10px !important;
-    overflow: visible !important;
+    max-width: calc(100% - 168px) !important;
     display: flex !important;
     align-items: center !important;
+    gap: 8px !important;
+    overflow: visible !important;
   }
-  /* Logo glow: overflow:visible para não cortar o box-shadow */
   header > div:first-child > div:first-child {
-    width: 44px !important;
-    height: 44px !important;
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
     flex-shrink: 0 !important;
     overflow: visible !important;
-    border-radius: 50% !important;
+  }
+  header > div:first-child > div:first-child > div {
+    width: 40px !important;
+    height: 40px !important;
   }
   header > div:first-child > div:first-child img {
-    width: 44px !important;
-    height: 44px !important;
+    width: 40px !important;
+    height: 40px !important;
     border-radius: 50% !important;
-    display: block !important;
   }
-  /* Fontes idênticas ao mobile */
   header > div:first-child > div:last-child > div:first-child {
-    font-size: 16px !important;
+    font-size: 15px !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
   }
   header > div:first-child > div:last-child > div:last-child {
-    font-size: 11px !important;
-    letter-spacing: 0.8px !important;
+    font-size: 10px !important;
+    letter-spacing: 0.6px !important;
     white-space: nowrap !important;
   }
-  /* Botões: sempre à direita, mesma linha, flex:0 0 auto */
+  /* Botões: sempre à direita, nunca quebram linha */
   header > div:last-child {
     flex: 0 0 auto !important;
     flex-shrink: 0 !important;
     flex-wrap: nowrap !important;
     display: flex !important;
     align-items: center !important;
-    gap: 5px !important;
-    margin-left: 8px !important;
+    gap: 4px !important;
+    margin-left: 6px !important;
   }
   header > div:last-child button {
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
     padding: 0 !important;
   }
   header > div:last-child button svg {
-    width: 16px !important;
-    height: 16px !important;
+    width: 15px !important;
+    height: 15px !important;
   }
   header > div:last-child #view-mode-toggle {
     width: auto !important;
@@ -2161,12 +2158,12 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
   }
   header > div:last-child #view-mode-toggle #toggle-pill-mobile,
   header > div:last-child #view-mode-toggle #toggle-pill-desktop {
-    width: 30px !important;
-    height: 28px !important;
+    width: 26px !important;
+    height: 24px !important;
   }
   header > div:last-child #view-mode-toggle svg {
-    width: 18px !important;
-    height: 18px !important;
+    width: 16px !important;
+    height: 16px !important;
   }
 }
 
@@ -2457,8 +2454,8 @@ document.addEventListener('DOMContentLoaded', function(){
 });
 </script>
 
-<!-- Header desktop: estrutura idêntica ao mobile — logo+título à esquerda, botões à direita, nunca quebra linha -->
-<header style="display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:0;padding-top:18px;padding-bottom:14px;min-height:70px;">
+<!-- Header desktop: logo+título à esquerda, botões à direita, 1 linha -->
+<header style="display:flex;flex-direction:row;align-items:center;flex-wrap:nowrap;gap:0;padding:12px 16px;min-height:68px;box-sizing:border-box;">
 <!-- Logo + título (flex:1 para ocupar espaço restante, nunca empurra botões) -->
 <div style="display:flex;align-items:center;gap:12px;flex:1 1 0;min-width:0;">
  <!-- Wrapper externo: glow via box-shadow sem overflow:hidden -->
@@ -3432,15 +3429,14 @@ document.addEventListener('DOMContentLoaded', function(){
  <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Equity exacta — até 4 jogadores · Pre-flop · Flop · Turn · River</div>
  </div>
  </div>
- <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
+ <span id="equity-calc-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;">▼</span>
  </div>
  <div id="equity-calc-body" data-open="false" style="padding:0 16px 20px;display:none;">
 
  <div id="eq-players-wrap" style="display:flex;flex-direction:column;gap:8px;"></div>
- </div>
 
  <!-- Board -->
- <div style="margin-bottom:14px;">
+ <div style="margin-bottom:14px;margin-top:8px;">
  <div style="font-size:12px;font-weight:700;color:#8a9ab8;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">Board</div>
  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
  <div id="eq-board-cards" style="display:flex;gap:4px;flex-wrap:wrap;"></div>
@@ -3492,7 +3488,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <!-- ATAS DAS NOITES -->
 <!-- ══════ CARD 1: ATAS SEMANAIS ══════ -->
-<div class="nf-card card" id="card-atas" style="padding:0;">
+<div class="nf-card card" id="card-atas" style="padding:0;margin-top:16px;">
  <div class="nf-hdr" onclick="window.toggleCard('atas-body','atas-arrow')">
  <div class="nf-hdr-left">
  <div class="nf-icon">📝</div>
@@ -4247,11 +4243,18 @@ function tabNav(cardId){
   }
 
   var headerH = getHeaderHeight();
-  var y = el.getBoundingClientRect().top + window.pageYOffset - headerH;
+  var elRect = el.getBoundingClientRect();
+  var scrollEl = document.scrollingElement || document.documentElement;
+  var y = elRect.top + scrollEl.scrollTop - headerH;
   _tabScrolling = true;
   clearTimeout(_tabScrollTimer);
   _tabScrollTimer = setTimeout(function(){ _tabScrolling = false; }, 800);
-  window.scrollTo({ top: y, behavior: 'smooth' });
+  // Usar scrollEl.scrollTo se disponível, senão window.scrollTo
+  try {
+    scrollEl.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  } catch(e) {
+    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+  }
 }
 
 (function(){
@@ -4287,14 +4290,15 @@ function tabNav(cardId){
   });
 
   function onScroll(){
-    
     if(_tabScrolling) return;
-    var mid = window.pageYOffset + window.innerHeight * 0.4;
+    var scrollEl = document.scrollingElement || document.documentElement;
+    var scrollTop = scrollEl.scrollTop || window.pageYOffset || 0;
+    var mid = scrollTop + window.innerHeight * 0.4;
     var active = null;
     tabMap.forEach(function(t){
       var el = document.getElementById(t.id);
       if(!el) return;
-      var top = el.getBoundingClientRect().top + window.pageYOffset;
+      var top = el.getBoundingClientRect().top + scrollTop;
       if(top <= mid) active = t.tab;
     });
     if(active) setActive(active);
@@ -4322,10 +4326,14 @@ function tabNav(cardId){
   background:#0d1629;
   border:1px solid rgba(99,102,241,.3);
   border-radius:20px 20px 0 0;
-  padding:20px 18px 32px;
+  padding:20px 18px 0;
+  padding-bottom:calc(62px + env(safe-area-inset-bottom, 0px));
   width:100%;max-width:480px;
   box-shadow:0 -8px 40px rgba(0,0,0,.6);
   animation:feedbackSlideUp .25s ease;
+  max-height:calc(85vh - 54px);
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
 }
 @keyframes feedbackSlideUp {
   from { transform:translateY(100%); }
@@ -16315,7 +16323,7 @@ window.abrirPerfil = function(jogadorNome){
   var box = document.createElement('div');
   var isMobileView = window.innerWidth <= 640 || document.body.classList.contains('mobile-mode');
   box.style.cssText = isMobileView
-    ? 'background:linear-gradient(145deg,#0d1629,#111827);width:100%;height:100%;max-height:100%;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;overscroll-behavior:contain;box-shadow:none;border-radius:0;border:none;padding-top:env(safe-area-inset-top);box-sizing:border-box;'
+    ? 'background:linear-gradient(145deg,#0d1629,#111827);width:100%;height:100%;max-height:100%;overflow-y:scroll;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;box-shadow:none;border-radius:0;border:none;padding-top:env(safe-area-inset-top);padding-bottom:calc(60px + env(safe-area-inset-bottom, 0px));box-sizing:border-box;'
     : 'background:linear-gradient(145deg,#0d1629,#111827);border:1px solid rgba(255,255,255,0.12);border-radius:20px;max-width:560px;width:100%;max-height:90vh;overflow-y:auto;overscroll-behavior:contain;box-shadow:0 24px 60px rgba(0,0,0,0.8);';
   
   box.addEventListener('touchmove', function(e){ e.stopPropagation(); }, {passive:true});
@@ -19745,25 +19753,13 @@ function mostrarFimTour(){
   fim.addEventListener('click', function(e){ if(e.target===fim) fim.remove(); });
 }
 
-// ─── iniciarTour: abre o tour + lógica de expiração 1 mês ────────────────
+// ─── iniciarTour: abre o tour · expira 21/04/2026 ────────────────────────
 (function(){
-  var TOUR_LS_KEY = 'plaza_tour_v2'; // v2: chave nova, reseta quem tinha v1 bloqueado
-  var TOUR_DURATION_MS = 30 * 24 * 60 * 60 * 1000; // 30 dias
+  // Data de expiração hardcoded: 21/04/2026 00:00 horário de Brasília (UTC-3)
+  var EXPIRY_TS = new Date('2026-04-21T03:00:00Z').getTime(); // UTC equivalente
 
   function tourExpirado(){
-    try{
-      var ts = localStorage.getItem(TOUR_LS_KEY);
-      if(!ts) return false; // nunca foi iniciado = não expirado
-      return (Date.now() - parseInt(ts, 10)) > TOUR_DURATION_MS;
-    }catch(e){ return false; }
-  }
-
-  function registrarPrimeiroUso(){
-    try{
-      if(!localStorage.getItem(TOUR_LS_KEY)){
-        localStorage.setItem(TOUR_LS_KEY, String(Date.now()));
-      }
-    }catch(e){}
+    return Date.now() > EXPIRY_TS;
   }
 
   function esconderBotoesTour(){
@@ -19775,23 +19771,15 @@ function mostrarFimTour(){
     });
   }
 
-  function aplicarEstadoTour(){
-    if(tourExpirado()){
-      esconderBotoesTour();
-    }
-  }
-
   // Sobrescreve o stub antecipado com a implementação real
   window._tourReady = function(){ renderStep(0); };
   window.iniciarTour = function(){
     if(tourExpirado()){ esconderBotoesTour(); return; }
-    registrarPrimeiroUso(); // registra no primeiro uso real
     renderStep(0);
   };
 
   // Marcar os botões com data-tour-btn para facilitar esconder
   function marcarBotoes(){
-    // Botão "?" do header desktop e mobile-topbar
     document.querySelectorAll('button[title="Tour guiado"]').forEach(function(btn){
       btn.setAttribute('data-tour-btn', '1');
     });
@@ -19800,11 +19788,11 @@ function mostrarFimTour(){
   // Aplicar estado ao carregar
   if(document.readyState === 'complete'){
     marcarBotoes();
-    aplicarEstadoTour();
+    if(tourExpirado()) esconderBotoesTour();
   } else {
     window.addEventListener('load', function(){
       marcarBotoes();
-      aplicarEstadoTour();
+      if(tourExpirado()) esconderBotoesTour();
     });
   }
 })();
