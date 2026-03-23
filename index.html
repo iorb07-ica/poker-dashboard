@@ -16782,7 +16782,7 @@ window.calcularBrasoesJogador = function(jogadorNome) {
     if(mx>0&&(kos[jogadorNome]||0)===mx) mesesCampeaoKO++;
   });
   var ceifadorImp = mesesCampeaoKO>=3;
-  var vulcao = _anoPorDezembro&&maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)<=3; })>=5;
+  var vulcao = maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)>=1&&fv(r.posicao)<=3; })>=5;
   var fortI=true;
   var _wksI=Array.from(new Set(playerRows.filter(function(r){ return fv(r.posicao)>0; }).map(function(r){ return +r.wk; }))).filter(Boolean);
   if(_wksI.length===0||!_anoPorDezembro) fortI=false;
@@ -16800,7 +16800,7 @@ window.calcularBrasoesJogador = function(jogadorNome) {
   var _dynastiaAtual=_anoPorDezembro&&maxConsec(campMes,function(x){return x;})>=3;
   var dinastia=_dynastiaAtual;
   var tubarao=_anoPorDezembro&&playerRows.some(function(r){ return fv(r.kos)>=10; });
-  var hatTrick=_anoPorDezembro&&maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)===1; })>=3;
+  var hatTrick=maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)===1; })>=3;
   var dragao=false;
   if(_anoPorDezembro) wksSorted.forEach(function(wk){
     var wkAll=ledger.filter(function(r){ return +r.wk===wk&&!+r.faltou; });
@@ -16964,17 +16964,9 @@ window.abrirPerfil = function(jogadorNome){
     document.body.style.position = 'fixed';
     document.body.style.top = '-'+_bodyScrollY+'px';
     document.body.style.width = '100%';
-    // Fix iOS: quando body vira fixed, reforçar posição do tabbar via inline style
-    var _tb = document.getElementById('plaza-tabbar');
-    if(_tb){
-      _tb.style.position = 'fixed';
-      _tb.style.bottom = '0';
-      _tb.style.left = '0';
-      _tb.style.right = '0';
-      _tb.style.zIndex = '99996';
-      _tb.style.transform = 'translateZ(0)';
-      _tb.style.webkitTransform = 'translateZ(0)';
-    }
+    // NÃO aplicar inline style na tabbar — o CSS já garante position:fixed;bottom:0
+    // com padding-bottom:env(safe-area-inset-bottom). Forçar bottom:0 via JS
+    // causava a tabbar flutuar acima da safe area quando o body virava fixed.
   }
   modal._bodyScrollY = _bodyScrollY;
   modal._isIOS = _isIOS;
@@ -17191,9 +17183,9 @@ window.abrirPerfil = function(jogadorNome){
 
     
     
-    var vulcao = _anoPorDezembro && maxConsec(wksSorted, function(wk){
+    var vulcao = maxConsec(wksSorted, function(wk){
       var r = playerRows.find(function(x){ return +x.wk===wk; });
-      return r && +r.posicao<=3;
+      return r && +r.posicao>=1 && +r.posicao<=3;
     }) >= 5;
 
     // Ano fechado = dezembro (mes=12) fechado
@@ -17233,7 +17225,7 @@ window.abrirPerfil = function(jogadorNome){
     var tubarao = _anoPorDezembro && playerRows.some(function(r){ return (+r.kos||0) >= 10; });
 
     
-    var hatTrick = _anoPorDezembro && maxConsec(wksSorted, function(wk){
+    var hatTrick = maxConsec(wksSorted, function(wk){
       var r = playerRows.find(function(x){ return +x.wk===wk; });
       return r && +r.posicao===1;
     }) >= 3;
@@ -18539,17 +18531,7 @@ window.fecharPerfil = function(){
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.width = '';
-  /* Garantir que tabbar volta ao lugar certo após body:fixed do iOS */
-  var _tb = document.getElementById('plaza-tabbar');
-  if(_tb){
-    _tb.style.position = '';
-    _tb.style.bottom = '';
-    _tb.style.left = '';
-    _tb.style.right = '';
-    _tb.style.zIndex = '';
-    _tb.style.transform = '';
-    _tb.style.webkitTransform = '';
-  }
+  /* Tabbar: não precisamos resetar inline styles pois não os aplicamos mais no abrirPerfil */
   if(typeof window.androidFixScroll === 'function') window.androidFixScroll();
   if(scrollY) window.scrollTo(0, scrollY);
 };
