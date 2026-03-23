@@ -16992,19 +16992,27 @@ window.abrirPerfil = function(jogadorNome){
   var _bodyScrollY = window.scrollY || document.documentElement.scrollTop;
   var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
+  // Ocultar header/topbar para maximizar espaço da ficha do jogador
+  var _headerEl  = document.querySelector('header');
+  var _topbarEl  = document.getElementById('mobile-topbar');
+  var _prevHeaderDisplay = _headerEl  ? _headerEl.style.display  : null;
+  var _prevTopbarDisplay = _topbarEl  ? _topbarEl.style.display  : null;
+  if(_headerEl)  _headerEl.style.display  = 'none';
+  if(_topbarEl)  _topbarEl.style.display  = 'none';
+  modal._headerEl  = _headerEl;
+  modal._topbarEl  = _topbarEl;
+  modal._prevHeaderDisplay = _prevHeaderDisplay;
+  modal._prevTopbarDisplay = _prevTopbarDisplay;
+
   // Travar scroll de fundo SEM usar body.position:fixed
   // body:fixed desloca o viewport de referência de todos os position:fixed da página,
   // incluindo a tabbar — fazendo-a "subir" de posição.
   // Solução: overflow:hidden no body + bloquear touchmove no backdrop com preventDefault.
   document.body.style.overflow = 'hidden';
 
-  // Bloqueia scroll do fundo no backdrop (permite scroll dentro do box interno)
-  function _blockBodyScroll(e){
-    if(modal._innerBox && modal._innerBox.contains(e.target)) return;
-    e.preventDefault();
-  }
-  document.addEventListener('touchmove', _blockBodyScroll, {passive: false});
-  modal._blockBodyScroll = _blockBodyScroll;
+  // Bloquear scroll de fundo via CSS touch-action (sem JS preventDefault que bloqueia tudo)
+  // O modal já tem touch-action:pan-y no mobile; o box interno tem overflow-y:scroll
+  // O iOS respeita isso nativamente sem precisar de listeners
 
   modal._bodyScrollY = _bodyScrollY;
   modal._isIOS = _isIOS;
@@ -18563,12 +18571,11 @@ window.fecharPerfil = function(){
   var scrollY = m ? (m._bodyScrollY || 0) : 0;
   if(m) m.remove();
   if(ePerfilEvo){ try{ePerfilEvo.dispose();}catch(e){} ePerfilEvo=null; }
+  /* Restaurar header/topbar */
+  if(m && m._headerEl)  m._headerEl.style.display  = m._prevHeaderDisplay  !== null ? m._prevHeaderDisplay  : '';
+  if(m && m._topbarEl)  m._topbarEl.style.display  = m._prevTopbarDisplay  !== null ? m._prevTopbarDisplay  : '';
   /* Restaurar scroll do body */
   document.body.style.overflow = '';
-  /* Remover bloqueio de touchmove do backdrop */
-  if(m && m._blockBodyScroll){
-    document.removeEventListener('touchmove', m._blockBodyScroll, {passive: false});
-  }
   /* Tabbar: não tocamos em position/top/width — tabbar fica fixa onde sempre esteve */
   if(typeof window.androidFixScroll === 'function') window.androidFixScroll();
   if(scrollY) window.scrollTo(0, scrollY);
