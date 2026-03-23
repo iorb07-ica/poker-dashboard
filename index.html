@@ -3218,7 +3218,7 @@ body.mobile-mode #libwarn { display: none !important; }
  <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a4a2e,rgba(34,197,94,0.13));display:flex;align-items:center;justify-content:center;font-size:20px;border:1px solid rgba(34,197,94,0.25);">💰</div>
  <div>
  <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Saldo Financeiro Mensal</div>
- <div style="font-size:12px;color:#6b82a0;margin-top:2px;">O que cada jogador tem a receber ou pagar no fechamento do período</div>
+ <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Saldo financeiro a receber ou pagar no período</div>
  </div>
  </div>
  <div style="display:flex;align-items:center;gap:10px;">
@@ -4367,6 +4367,17 @@ body.mobile-mode #libwarn { display: none !important; }
 }
 
 .tab-item::before { display:none; }
+
+/* ── TABBAR ALWAYS FIXED — fix for profile modal overlap ── */
+#plaza-tabbar {
+  position: fixed !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 9990 !important;
+  transform: none !important;
+}
+
 </style>
 
 <nav id="plaza-tabbar" role="navigation" aria-label="Navegacao rapida">
@@ -5901,7 +5912,10 @@ function nfRefreshAdminUI(){
   }
   if(nfIsAdmin()) document.body.classList.add('admin-mode');
 }
-setInterval(nfRefreshAdminUI, 500);
+// Substituído por verificação pontual — não polui o event loop
+document.addEventListener('DOMContentLoaded', function(){ setTimeout(nfRefreshAdminUI, 300); });
+// Também disparar quando admin loga (via class mutation)
+(function(){ var _adminWatched=false; var _mo=new MutationObserver(function(){ nfRefreshAdminUI(); }); document.addEventListener('DOMContentLoaded',function(){ if(!_adminWatched&&document.body){_mo.observe(document.body,{attributeFilter:['class']});_adminWatched=true;} }); })();
 
 function nfWKs(){
   var wks = [];
@@ -12760,7 +12774,9 @@ window.PLAYER_PHOTOS["Pedro"]="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAA
   }
   ifr.addEventListener('load', function(){ setTimeout(fit, 60); setTimeout(fit, 300); });
   window.addEventListener('resize', fit);
-  setInterval(fit, 800);
+  // Trocar polling de 800ms por evento de resize
+window.addEventListener('resize', fit, { passive: true });
+setTimeout(fit, 500); // uma vez ao carregar
 })();
 </script><script>
 (function(){
@@ -15774,7 +15790,7 @@ window.addEventListener('load', function(){
         var kos      = r2(r.kos);
         var pos     = r.posicao;
         var faltou  = +r.faltou===1;
-        var data    = r.data_wk?r.data_wk.substring(5):'—';
+        var data    = r.data_wk?(function(d){var p=d.split('-');return p.length>=3?p[2]+'-'+p[1]:'—';})(r.data_wk):'—';
         var mes     = mesDaWK[wk];
 
         
@@ -17853,7 +17869,7 @@ window.abrirPerfil = function(jogadorNome){
     var nSemanas = wksMes.filter(function(r){ return fv(r.faltou)!==1; }).length;
 
     var banner = document.createElement('div');
-    banner.style.cssText = 'margin:10px 16px 4px;border-radius:14px;background:'+bgSF+';border:1px solid '+brdSF+';padding:12px 16px;';
+    banner.style.cssText = 'display:none;margin:10px 16px 4px;border-radius:14px;background:'+bgSF+';border:1px solid '+brdSF+';padding:12px 16px;';
     banner.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;">'
       + '<div>'
@@ -18048,7 +18064,7 @@ window.abrirPerfil = function(jogadorNome){
     var dealer = r          ? -fv(r.dealer)         : null;
     var antecip= r          ? fv(r.antecipacao_dealer): null;
     var saldo  = r          ? fv(r.saldo_semana_final): null;
-    var data   = r ? (r.data_wk||'').slice(5).replace('-','-') : '';
+    var data   = r ? (function(d){var p=d.split('-');return p.length>=3?p[2]+'-'+p[1]:'';})(r.data_wk||'') : '';
 
     // valores mensais (apenas na última WK do mês)
     var premKO = null, pgKO = null, premMes = null;
@@ -22219,9 +22235,15 @@ self.addEventListener('notificationclick',function(e){
     console.log('🏅 Relíquias novas:', novas);
     var promessas = novas.map(function(item) {
       var info = TIER_INFO[item.tier] || TIER_INFO.faisca;
-      var titulo = '🏅 ' + info.label + ' desbloqueada!';
-      var corpo = item.nome + ', você conquistou a relíquia "' + item.reliquia + '"!\n\nAbra o dashboard para ver sua conquista 👑';
-      // Disparar notificação individual
+      var emoji_tier = {faisca:'💎', chama:'🔶', inferno:'👑'}[item.tier] || '🏅';
+      var titulo = emoji_tier + ' Relíquia ' + (item.tier==='faisca'?'Rara':item.tier==='chama'?'Épica':'Lendária') + ' desbloqueada!';
+      var corpo = '🃏 Poker Series Plaza Mediterrâneo\n'
+        + '━━━━━━━━━━━━━━━\n'
+        + emoji_tier + ' ' + item.reliquia.toUpperCase() + '\n'
+        + '━━━━━━━━━━━━━━━\n'
+        + 'Parabéns, ' + item.nome + '!\n\n'
+        + 'Você conquistou uma relíquia ' + (item.tier==='faisca'?'Rara':item.tier==='chama'?'Épica':'Lendária') + '.\n\n'
+        + '📊 Abra o dashboard para ver sua conquista!';
       ntfyEnviar(item.nome, titulo, corpo, info.emoji, info.prioridade);
       // Também disparar a cerimônia visual se o dashboard estiver aberto
       if(typeof window.celebrarReliquia === 'function') {
@@ -22287,8 +22309,8 @@ self.addEventListener('notificationclick',function(e){
 
   window.ntfyTestar = function(nome) {
     ntfyEnviar(nome,
-      '🃏 Teste — Poker do Plaza',
-      'Olá ' + nome + '! Suas notificações estão funcionando. Você receberá alertas de relíquias desbloqueadas aqui 🏅',
+      '🃏 Poker Series Plaza Mediterrâneo',
+      'Olá, ' + nome + '! ✅\n\nSuas notificações estão configuradas e funcionando.\n\nVocê receberá aqui:\n🏅 Relíquias desbloqueadas\n🏆 Resultados das noites\n📅 Avisos de torneio',
       'white_check_mark', 'default'
     ).then(function(ok){
       alert(ok ? '✅ Enviado para ' + nome + '!' : '❌ Erro ao enviar. Verifique a conexão.');
@@ -22296,8 +22318,11 @@ self.addEventListener('notificationclick',function(e){
   };
 
   window.ntfyTestarGeral = function() {
-    ntfyGeral('🃏 Poker do Plaza — Teste', 'Notificações gerais funcionando! Você receberá resultados e avisos de torneio aqui.', 'white_check_mark')
-    .then(function(ok){ alert(ok ? '✅ Enviado no canal geral!' : '❌ Erro ao enviar.'); });
+    ntfyGeral(
+      '🃏 Poker Series Plaza Mediterrâneo',
+      '✅ Canal geral funcionando!\n\nVocê receberá aqui os resultados das noites e avisos de torneio.',
+      'white_check_mark'
+    ).then(function(ok){ alert(ok ? '✅ Enviado no canal geral!' : '❌ Erro ao enviar.'); });
   };
 
   window.ntfyEnviarResultado = function() {
@@ -22307,11 +22332,23 @@ self.addEventListener('notificationclick',function(e){
     var wkRows = ledger.filter(function(r){ return +r.wk===lastWK && !+r.faltou; });
     function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
     var sorted = wkRows.slice().sort(function(a,b){ return fv(a.posicao)-fv(b.posicao); });
+    var totalRebuys = wkRows.reduce(function(s,r){ return s+fv(r.rebuys); },0);
+    var totalKOs = wkRows.reduce(function(s,r){ return s+fv(r.kos); },0);
+    var pote = (wkRows.length + totalRebuys) * 25;
     var podio = sorted.slice(0,3).map(function(r,i){
-      return ['🥇','🥈','🥉'][i] + ' ' + r.jogador + ' (' + (r.kos||0) + ' KOs)';
+      var medal = ['🥇','🥈','🥉'][i];
+      var kos = fv(r.kos) > 0 ? ' · ' + fv(r.kos) + ' KOs' : '';
+      var rebuy = fv(r.rebuys) > 0 ? ' · ' + fv(r.rebuys) + ' rebuys' : '';
+      return medal + ' ' + r.jogador + kos + rebuy;
     }).join('\n');
-    var titulo = '🃏 Resultado WK' + lastWK + ' publicado!';
-    var corpo = 'Pódio da noite:\n' + podio + '\n\nAbra o dashboard para ver o ranking completo!';
+    var vencedor = sorted[0] ? sorted[0].jogador : '?';
+    var titulo = '🏆 WK' + String(lastWK).padStart(2,'0') + ' — ' + vencedor + ' venceu!';
+    var corpo = '🃏 Poker Series Plaza Mediterrâneo\n'
+      + '━━━━━━━━━━━━━━━\n'
+      + podio + '\n'
+      + '━━━━━━━━━━━━━━━\n'
+      + '👥 ' + wkRows.length + ' jogadores  💰 Pote R$' + pote.toFixed(0) + '  💥 ' + totalKOs + ' KOs\n\n'
+      + '📊 Veja o ranking completo no dashboard!';
     ntfyGeral(titulo, corpo, 'trophy').then(function(ok){
       alert(ok ? '✅ Resultado enviado para todos!' : '❌ Erro ao enviar.');
     });
@@ -22454,14 +22491,18 @@ self.addEventListener('notificationclick',function(e){
 
   // Observar quando admin autentica E quando download é feito
   // para mostrar o botão no momento certo
-  var _checkInterval = setInterval(function(){
+  // Verificar uma vez ao carregar + quando admin class muda
+  function _checkNtfyBtn(){
     if(typeof nfIsAdmin !== 'function') return;
     if(nfIsAdmin() && window._ntfyResultadoPendente) {
       mostrarBotaoNotif();
     } else if(!window._ntfyResultadoPendente) {
       removerBotaoNotif();
     }
-  }, 1000);
+  }
+  setTimeout(_checkNtfyBtn, 1500);
+  new MutationObserver(function(){ setTimeout(_checkNtfyBtn, 200); })
+    .observe(document.body||document.documentElement, {attributeFilter:['class']});
 
 })();
 
