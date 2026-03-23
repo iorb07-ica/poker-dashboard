@@ -103,6 +103,14 @@ function escHTML(str){
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style id="consolidated-css">
 
+/* Ocultar header e topbar quando perfil de jogador está aberto */
+body.perfil-open header,
+body.perfil-open #mobile-topbar {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+
     :root {
       --bg:#0f1115; --panel:#121723; --muted:#8a94a6; --text:#e6edf3; --accent:#66d9ef;
       --good:#34d399; --bad:#f87171; --card:#0b0e13; --chip:#1f2733; --gold:#FFDD00; --silver:#8E8E8E; --bronze:#CD7F32; --blue:#3B82F6;
@@ -16992,17 +17000,9 @@ window.abrirPerfil = function(jogadorNome){
   var _bodyScrollY = window.scrollY || document.documentElement.scrollTop;
   var _isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
-  // Ocultar header/topbar para maximizar espaço da ficha do jogador
-  var _headerEl  = document.querySelector('header');
-  var _topbarEl  = document.getElementById('mobile-topbar');
-  var _prevHeaderDisplay = _headerEl  ? _headerEl.style.display  : null;
-  var _prevTopbarDisplay = _topbarEl  ? _topbarEl.style.display  : null;
-  if(_headerEl)  _headerEl.style.display  = 'none';
-  if(_topbarEl)  _topbarEl.style.display  = 'none';
-  modal._headerEl  = _headerEl;
-  modal._topbarEl  = _topbarEl;
-  modal._prevHeaderDisplay = _prevHeaderDisplay;
-  modal._prevTopbarDisplay = _prevTopbarDisplay;
+  // Ocultar header/topbar via classe CSS (derrota o !important do enableMobileMode)
+  document.body.classList.add('perfil-open');
+  modal._perfilOpenAdded = true;
 
   // Travar scroll de fundo SEM usar body.position:fixed
   // body:fixed desloca o viewport de referência de todos os position:fixed da página,
@@ -18571,9 +18571,8 @@ window.fecharPerfil = function(){
   var scrollY = m ? (m._bodyScrollY || 0) : 0;
   if(m) m.remove();
   if(ePerfilEvo){ try{ePerfilEvo.dispose();}catch(e){} ePerfilEvo=null; }
-  /* Restaurar header/topbar */
-  if(m && m._headerEl)  m._headerEl.style.display  = m._prevHeaderDisplay  !== null ? m._prevHeaderDisplay  : '';
-  if(m && m._topbarEl)  m._topbarEl.style.display  = m._prevTopbarDisplay  !== null ? m._prevTopbarDisplay  : '';
+  /* Restaurar header/topbar removendo a classe */
+  document.body.classList.remove('perfil-open');
   /* Restaurar scroll do body */
   document.body.style.overflow = '';
   /* Tabbar: não tocamos em position/top/width — tabbar fica fixa onde sempre esteve */
