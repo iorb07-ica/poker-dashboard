@@ -4374,8 +4374,10 @@ body.mobile-mode #libwarn { display: none !important; }
   bottom: 0 !important;
   left: 0 !important;
   right: 0 !important;
-  z-index: 9990 !important;
-  transform: none !important;
+  z-index: 99996 !important;
+  transform: translateZ(0) !important;
+  -webkit-transform: translateZ(0) !important;
+  will-change: transform !important;
 }
 
 </style>
@@ -16939,6 +16941,17 @@ window.abrirPerfil = function(jogadorNome){
     document.body.style.position = 'fixed';
     document.body.style.top = '-'+_bodyScrollY+'px';
     document.body.style.width = '100%';
+    // Fix iOS: quando body vira fixed, reforçar posição do tabbar via inline style
+    var _tb = document.getElementById('plaza-tabbar');
+    if(_tb){
+      _tb.style.position = 'fixed';
+      _tb.style.bottom = '0';
+      _tb.style.left = '0';
+      _tb.style.right = '0';
+      _tb.style.zIndex = '99996';
+      _tb.style.transform = 'translateZ(0)';
+      _tb.style.webkitTransform = 'translateZ(0)';
+    }
   }
   modal._bodyScrollY = _bodyScrollY;
   modal._isIOS = _isIOS;
@@ -18503,6 +18516,17 @@ window.fecharPerfil = function(){
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.width = '';
+  /* Garantir que tabbar volta ao lugar certo após body:fixed do iOS */
+  var _tb = document.getElementById('plaza-tabbar');
+  if(_tb){
+    _tb.style.position = '';
+    _tb.style.bottom = '';
+    _tb.style.left = '';
+    _tb.style.right = '';
+    _tb.style.zIndex = '';
+    _tb.style.transform = '';
+    _tb.style.webkitTransform = '';
+  }
   if(typeof window.androidFixScroll === 'function') window.androidFixScroll();
   if(scrollY) window.scrollTo(0, scrollY);
 };
