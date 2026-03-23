@@ -16947,8 +16947,11 @@ window.abrirPerfil = function(jogadorNome){
   var modal = document.createElement('div');
   modal.id = 'perfil-modal';
   var _isMob = window.innerWidth <= 640 || document.body.classList.contains('mobile-mode');
-  // Modal para acima da tabbar para abas sempre visíveis
-  var _tabH = 'calc(54px + env(safe-area-inset-bottom, 0px))';
+  // Medir a altura real da tabbar no momento da abertura (evita divergência com env() em iOS)
+  var _tbElPre = document.getElementById('plaza-tabbar');
+  var _tbMeasured = _tbElPre ? Math.round(_tbElPre.getBoundingClientRect().height) : 54;
+  if(_tbMeasured < 48) _tbMeasured = 54; // fallback seguro
+  var _tabH = _tbMeasured + 'px';
   modal.style.cssText = _isMob
     ? 'position:fixed;top:0;left:0;right:0;bottom:'+_tabH+';z-index:9985;display:flex;align-items:stretch;justify-content:stretch;padding:0;background:rgba(0,0,0,0.97);touch-action:pan-y;'
     : 'position:fixed;top:0;left:0;right:0;bottom:'+_tabH+';z-index:9985;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);';
