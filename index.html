@@ -3672,9 +3672,171 @@ body.mobile-mode #libwarn { display: none !important; }
  </div>
  <div id="pontuacao-anual-body" data-open="true" style="padding:0 16px 16px;">
  <div id="chartEvolucao" style="height:520px;width:100%;"></div>
+ <div id="evo-chart-wrap" style="position:relative;width:100%;height:360px;display:none;">
+   <canvas id="evoCanvas"></canvas>
+ </div>
+ <div id="evo-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;padding:0 2px;"></div>
  </div>
  </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+ </div>
+ </div>
+</div>
+<script>
+(function(){
+  var COLORS = ['#ffd93d','#ff6b6b','#6bcb77','#4d96ff','#ff922b','#cc5de8','#20c997','#f06595','#74c0fc','#a9e34b'];
+  var _chart = null;
+
+  function buildEvo(){
+    var ledger = window.DATA && window.DATA.ledger;
+    if(!ledger || !ledger.length) return false;
+
+    var wks = Array.from(new Set(ledger.map(function(r){ return +r.wk; }).filter(Boolean))).sort(function(a,b){return a-b;});
+    var players = Array.from(new Set(ledger.map(function(r){ return r.jogador; }).filter(Boolean)));
+
+    // Calcular acumulado por jogador
+    var playerData = players.map(function(p){
+      var running = 0;
+      var vals = wks.map(function(w){
+        var add = ledger.filter(function(r){ return r.jogador===p && +r.wk===w && !+r.faltou; })
+                        .reduce(function(s,r){ return s+(+r.pontos_calc||0); }, 0);
+        running += add;
+        return running;
+      });
+      return {name:p, vals:vals, total:running};
+    }).sort(function(a,b){ return b.total-a.total; });
+
+    var labels = wks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); });
+
+    // Mostrar o wrapper do novo gráfico, ocultar ECharts
+    var oldEl = document.getElementById('chartEvolucao');
+    var newWrap = document.getElementById('evo-chart-wrap');
+    if(oldEl) oldEl.style.display = 'none';
+    if(newWrap) newWrap.style.display = 'block';
+
+    var canvas = document.getElementById('evoCanvas');
+    if(!canvas) return false;
+
+    if(_chart){ _chart.destroy(); _chart = null; }
+
+    _chart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: playerData.map(function(pd, i){
+          var color = COLORS[i % COLORS.length];
+          return {
+            label: pd.name,
+            data: pd.vals,
+            borderColor: color,
+            backgroundColor: color + '18',
+            borderWidth: 2.5,
+            fill: false,
+            tension: 0.35,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: color,
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2
+          };
+        })
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 900, easing: 'easeInOutQuart' },
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: 'rgba(8,14,28,0.96)',
+            borderColor: 'rgba(255,255,255,0.1)',
+            borderWidth: 1,
+            padding: 12,
+            titleColor: '#c7d8f0',
+            titleFont: { size: 12, weight: 'bold' },
+            bodyColor: '#e6edf3',
+            bodyFont: { size: 12 },
+            callbacks: {
+              label: function(ctx){
+                var medals = ['🏆','🥈','🥉'];
+                var prefix = medals[ctx.datasetIndex] || (ctx.datasetIndex+1)+'°';
+                return ' '+prefix+' '+ctx.dataset.label+': '+Math.round(ctx.raw).toLocaleString('pt-BR')+' pts';
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: { color: 'rgba(200,215,235,0.6)', font: { size: 10, weight: '600' } }
+          },
+          y: {
+            grid: { color: 'rgba(255,255,255,0.05)' },
+            ticks: {
+              color: 'rgba(200,215,235,0.5)',
+              font: { size: 10 },
+              callback: function(v){ return v >= 1000 ? (v/1000).toFixed(0)+'k' : v; }
+            }
+          }
+        }
+      }
+    });
+
+    // Legenda customizada
+    var legWrap = document.getElementById('evo-legend');
+    if(legWrap){
+      legWrap.innerHTML = playerData.map(function(pd,i){
+        var c = COLORS[i%COLORS.length];
+        return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:rgba(255,255,255,0.6);">'
+          +'<span style="width:10px;height:10px;border-radius:50%;background:'+c+';flex-shrink:0;"></span>'
+          +pd.name+'</span>';
+      }).join('');
+    }
+    return true;
+  }
+
+  function tryBuild(){
+    if(typeof Chart === 'undefined') return false;
+    return buildEvo();
+  }
+
+  // Tentar após dados carregados
+  function hook(){
+    var orig = window.afterDataLoaded;
+    if(orig && orig._evoPatch) return;
+    window.afterDataLoaded = function(){
+      if(typeof orig === 'function') orig.apply(this, arguments);
+      setTimeout(function(){ tryBuild(); }, 500);
+    };
+    window.afterDataLoaded._evoPatch = true;
+  }
+
+  // Tentar imediatamente e com delays
+  setTimeout(function(){ if(!tryBuild()) hook(); }, 800);
+  setTimeout(function(){ tryBuild(); }, 1500);
+  setTimeout(function(){ tryBuild(); }, 3000);
+
+  // Também expor para refresh externo
+  window.rebuildEvoChart = tryBuild;
+
+  // Re-rodar quando o refresh principal for chamado
+  var _origRefresh = window.refresh;
+  var _patched = false;
+  var _tryPatchRefresh = setInterval(function(){
+    if(typeof window.refresh === 'function' && !window.refresh._evoPatch){
+      var _r = window.refresh;
+      window.refresh = function(){
+        _r.apply(this, arguments);
+        setTimeout(tryBuild, 200);
+      };
+      window.refresh._evoPatch = true;
+      clearInterval(_tryPatchRefresh);
+    }
+  }, 300);
+})();
+</script>
 
 <!-- ====== CARD: Saldo Financeiro ====== -->
 <!-- ====== CARD: Calculadora "Quanto Preciso?" ====== -->
@@ -7346,18 +7508,24 @@ function libsReady(){ return window.echarts && window.XLSX; }
 function tryInitCharts(){
  if(!window.echarts){ showLibWarn(true); return false; }
  showLibWarn(false);
- if(!eRanking){
+ if(!eEvo){
  var _elRanking = document.getElementById('chartRanking');
  eRanking = _elRanking ? echarts.init(_elRanking) : null;
- eKOs = echarts.init(document.getElementById('chartKOs'));
- eEvo = echarts.init(document.getElementById('chartEvolucao'));
+ var _elKOs = document.getElementById('chartKOs');
+ eKOs = _elKOs ? echarts.init(_elKOs) : null;
+ var _elEvo = document.getElementById('chartEvolucao');
+ eEvo = _elEvo ? echarts.init(_elEvo) : null;
  window.eRanking = eRanking; window.eKOs = eKOs; window.eEvo = eEvo;
- const _elHeat = document.getElementById('chartHeatmap');
+ var _elHeat = document.getElementById('chartHeatmap');
  eHeat = _elHeat ? echarts.init(_elHeat) : null;
- eRadar = echarts.init(document.getElementById('chartRadar'));
- eAwards = echarts.init(document.getElementById('chartPlayerAwards'));
- const _elRisk = document.getElementById('chartRisk');
+ var _elRadar = document.getElementById('chartRadar');
+ eRadar = _elRadar ? echarts.init(_elRadar) : null;
+ var _elAwards = document.getElementById('chartPlayerAwards');
+ eAwards = _elAwards ? echarts.init(_elAwards) : null;
+ var _elRisk = document.getElementById('chartRisk');
  eRisk = _elRisk ? echarts.init(_elRisk) : null;
+ // Forçar resize após init para garantir dimensões corretas
+ setTimeout(function(){ try{ if(eEvo) eEvo.resize(); }catch(e){} }, 300);
  }
  return true;
 }
@@ -17428,23 +17596,37 @@ window.abrirPerfil = function(jogadorNome){
 
     var btnHelp = document.createElement('button');
     btnHelp.textContent = '?';
-    btnHelp.style.cssText = 'width:18px;height:18px;border-radius:50%;border:1px solid rgba(52,211,153,0.4);background:rgba(52,211,153,0.1);'
-      +'color:#6ee7b7;font-size:10px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;padding:0;font-family:inherit;';
+    btnHelp.style.cssText = 'width:18px;height:18px;border-radius:50%;border:1.5px solid rgba(52,211,153,0.55);background:rgba(52,211,153,0.13);color:#6ee7b7;font-size:11px;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;padding:0;font-family:inherit;margin-left:6px;';
 
-    // Botão Comparar
     var btnCmp = document.createElement('button');
-    btnCmp.textContent = '⚔️ Comparar';
-    btnCmp.style.cssText = 'font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.1);color:#c4b5fd;cursor:pointer;font-family:inherit;';
+    btnCmp.innerHTML = '⚔ <span style="font-size:9px;">Comparar</span>';
+    btnCmp.innerHTML = '<span style="font-size:14px;line-height:1;">⚔️</span><span style="font-size:11px;font-weight:800;letter-spacing:.3px;">Comparar</span>';
+    btnCmp.style.cssText = 'display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:8px;border:1.5px solid rgba(167,139,250,0.6);background:linear-gradient(135deg,rgba(124,58,237,0.4),rgba(167,139,250,0.2));color:#e9d5ff;cursor:pointer;font-family:inherit;white-space:nowrap;flex-shrink:0;box-shadow:0 2px 10px rgba(124,58,237,0.35),inset 0 1px 0 rgba(255,255,255,0.08);';
+
+    titleRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;width:100%;';
+
+    var leftSide = document.createElement('div');
+    leftSide.style.cssText = 'display:flex;align-items:center;flex-shrink:0;';
+    var titleSpan = document.createElement('span');
+    titleSpan.textContent = 'DNA do jogador';
+    titleSpan.style.cssText = 'font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);white-space:nowrap;';
+    leftSide.appendChild(titleSpan);
+    leftSide.appendChild(btnHelp);
 
     var rightSide = document.createElement('div');
-    rightSide.style.cssText = 'display:flex;align-items:center;gap:7px;';
-    if(tag) rightSide.innerHTML = '<span style="font-size:11px;color:#6ee7b7;font-style:italic;">'+tag+'</span>';
+    rightSide.style.cssText = 'flex-shrink:0;';
     rightSide.appendChild(btnCmp);
-    rightSide.appendChild(btnHelp);
 
-    titleRow.innerHTML = '<span style="font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);">DNA do jogador</span>';
+    titleRow.appendChild(leftSide);
     titleRow.appendChild(rightSide);
     wrap.appendChild(titleRow);
+
+    if(tag){
+      var tagLine = document.createElement('div');
+      tagLine.style.cssText = 'font-size:10px;color:#6ee7b7;font-style:italic;margin-bottom:8px;';
+      tagLine.textContent = tag;
+      wrap.appendChild(tagLine);
+    }
 
     var _desenharRadar = null;
 
@@ -17769,11 +17951,11 @@ window.abrirPerfil = function(jogadorNome){
 
     // ── Layout: radar esquerda | barras direita ───────────────────
     var bodyRow = document.createElement('div');
-    bodyRow.style.cssText = 'display:flex;gap:10px;align-items:center;';
+    bodyRow.style.cssText = 'display:flex;gap:8px;align-items:center;margin-top:2px;';
 
     // Lado esquerdo: radar
     var radarCanvas = document.createElement('canvas');
-    var radarSize = 148;
+    var radarSize = 138;
     var dpr = window.devicePixelRatio || 1;
     radarCanvas.width  = radarSize * dpr;
     radarCanvas.height = radarSize * dpr;
@@ -17782,7 +17964,7 @@ window.abrirPerfil = function(jogadorNome){
 
     // Lado direito: barras
     var barsCol = document.createElement('div');
-    barsCol.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;';
+    barsCol.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:7px;';
     var _vals = DIMS.map(function(d){ return d.v; });
     var _cols = DIMS.map(function(d){ return d.c; });
     var _labs = ['Agr.','Con.','Sob.','Eco.','Pre.','Per.'];
@@ -17790,10 +17972,10 @@ window.abrirPerfil = function(jogadorNome){
       var pct = Math.round(d.v*100);
       var row = document.createElement('div');
       row.style.cssText = 'display:flex;align-items:center;gap:6px;';
-      row.innerHTML = '<span style="font-size:10px;color:rgba(255,255,255,0.42);min-width:72px;flex-shrink:0;">'+d.label+'</span>'
-        +'<div style="flex:1;height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;min-width:0;">'
-        +'<div style="width:'+pct+'%;height:100%;background:'+d.c+';border-radius:3px;"></div></div>'
-        +'<span style="font-size:10px;font-weight:700;color:'+d.c+';min-width:20px;text-align:right;">'+pct+'</span>';
+      row.innerHTML = '<span style="font-size:11px;color:rgba(255,255,255,0.55);min-width:76px;flex-shrink:0;">'+d.label+'</span>'
+        +'<div style="flex:1;height:7px;background:rgba(255,255,255,0.07);border-radius:4px;overflow:hidden;min-width:0;">'
+        +'<div style="width:'+pct+'%;height:100%;background:'+d.c+';border-radius:4px;"></div></div>'
+        +'<span style="font-size:11px;font-weight:700;color:'+d.c+';min-width:22px;text-align:right;">'+pct+'</span>';
       barsCol.appendChild(row);
     });
     bodyRow.appendChild(barsCol);
