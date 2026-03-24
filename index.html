@@ -16660,7 +16660,7 @@ window.abrirPerfil = function(jogadorNome){
   ];
 
   var kpisGrid = document.createElement('div');
-  kpisGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 16px 8px;';
+  kpisGrid.style.cssText = 'display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:6px 16px 6px;';
   kpisData.forEach(function(k){
     var c = document.createElement('div');
     // Elegant gradient card centered
@@ -16929,7 +16929,7 @@ window.abrirPerfil = function(jogadorNome){
   // ── Painel DNA ─────────────────────────────────────────────────
   var dnaPanel = document.createElement('div');
   dnaPanel.id = 'perfil-dna-panel';
-  dnaPanel.style.cssText = 'padding:10px 16px 4px;';
+  dnaPanel.style.cssText = 'padding:8px 16px 2px;';
 
   (function(){
     var jogou = (window.DATA && window.DATA.ledger ? window.DATA.ledger : [])
@@ -16969,12 +16969,158 @@ window.abrirPerfil = function(jogadorNome){
       {label:'Performance',   v:per, c:'#a78bfa'},
     ];
     var wrap = document.createElement('div');
-    wrap.style.cssText = 'background:rgba(52,211,153,0.06);border:0.5px solid rgba(52,211,153,0.2);border-radius:12px;padding:12px 14px;';
+    wrap.style.cssText = 'background:rgba(52,211,153,0.06);border:0.5px solid rgba(52,211,153,0.2);border-radius:12px;padding:9px 12px;position:relative;';
     var titleRow = document.createElement('div');
     titleRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
-    titleRow.innerHTML = '<span style="font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);">DNA do jogador</span>'
-      +(tag?'<span style="font-size:11px;color:#6ee7b7;font-style:italic;">'+tag+'</span>':'');
+
+    var btnHelp = document.createElement('button');
+    btnHelp.textContent = '?';
+    btnHelp.style.cssText = 'width:18px;height:18px;border-radius:50%;border:1px solid rgba(52,211,153,0.4);background:rgba(52,211,153,0.1);'
+      +'color:#6ee7b7;font-size:10px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;padding:0;font-family:inherit;';
+
+    var rightSide = document.createElement('div');
+    rightSide.style.cssText = 'display:flex;align-items:center;gap:7px;';
+    if(tag) rightSide.innerHTML = '<span style="font-size:11px;color:#6ee7b7;font-style:italic;">'+tag+'</span>';
+    rightSide.appendChild(btnHelp);
+
+    titleRow.innerHTML = '<span style="font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);">DNA do jogador</span>';
+    titleRow.appendChild(rightSide);
     wrap.appendChild(titleRow);
+
+    // ── Tour das dimensões ────────────────────────────────────────
+    var DNA_TOUR = [
+      {
+        icon:'🔥', nome:'Agressividade', tag:'quantos adversários você elimina por noite',
+        formula:'min(100, KOs_totais ÷ (noites × 3,5) × 100)',
+        nota:'Teto: 3,5 KOs por noite = nota 100. null de KOs numa noite conta como 0 — o jogador estava lá.',
+        exemplos:[ {n:'Oscar',v:82,c:'#60a5fa'}, {n:'Magu',v:78,c:'#f59e0b'}, {n:'Heron',v:57,c:'#34d399'} ]
+      },
+      {
+        icon:'🎯', nome:'Consistência', tag:'o quanto suas posições variam de noite pra noite',
+        formula:'desvio = √( Σ(pos − média)² ÷ n )\nnota = max(0, 1 − desvio ÷ 5) × 100',
+        nota:'Desvio 0 = sempre no mesmo lugar = 100. Desvio ≥ 5 posições = completamente imprevisível = 0.',
+        exemplos:[ {n:'Israel',v:69,c:'#f87171'}, {n:'Pedro',v:63,c:'#f472b6'}, {n:'Magu',v:51,c:'#f59e0b'} ]
+      },
+      {
+        icon:'🏆', nome:'Sobrevivência', tag:'com que frequência você termina no pódio',
+        formula:'(noites_top3 ÷ noites_jogadas) × 100',
+        nota:'Simples: de cada noite que você jogou, quantas você terminou entre os 3 primeiros.',
+        exemplos:[ {n:'Magu',v:64,c:'#f59e0b'}, {n:'Israel',v:55,c:'#f87171'}, {n:'Oscar',v:57,c:'#60a5fa'} ]
+      },
+      {
+        icon:'💰', nome:'Economia', tag:'o quanto você gasta em rebuys por noite jogada',
+        formula:'max(0, 1 − rebuys ÷ (noites × 2,5)) × 100',
+        nota:'Teto de penalidade: 2,5 rebuys por noite = nota 0. null de rebuy numa noite = 0 rebuy, não ausência.',
+        exemplos:[ {n:'Oscar',v:94,c:'#60a5fa'}, {n:'Israel',v:60,c:'#f87171'}, {n:'Magu',v:20,c:'#f59e0b'} ]
+      },
+      {
+        icon:'📅', nome:'Presença', tag:'sua frequência de comparecimento na temporada',
+        formula:'(noites_jogadas ÷ total_de_semanas) × 100',
+        nota:'Quem não falta nunca tem 100. Cada semana que você perde reduz proporcionalmente.',
+        exemplos:[ {n:'Israel',v:100,c:'#f87171'}, {n:'Pedro',v:82,c:'#f472b6'}, {n:'Oscar',v:64,c:'#60a5fa'} ]
+      },
+      {
+        icon:'📈', nome:'Performance', tag:'sua pontuação média por noite jogada',
+        formula:'min(100, (média_pts ÷ 25.000) × 100)',
+        nota:'Teto de referência: 25.000 pts por noite. Calibrado abaixo do recorde (32.300, Magu WK7) para que boas noites já cheguem perto de 100.',
+        exemplos:[ {n:'Magu',v:73,c:'#f59e0b'}, {n:'Israel',v:72,c:'#f87171'}, {n:'Heron',v:66,c:'#34d399'} ]
+      },
+    ];
+
+    btnHelp.onclick = function(e){
+      e.stopPropagation();
+      var perfModal = document.getElementById('perfil-modal');
+      if(!perfModal) return;
+      var existing = perfModal.querySelector('.dna-tour-overlay');
+      if(existing){ existing.remove(); return; }
+
+      var cur = 0;
+
+      var overlay = document.createElement('div');
+      overlay.className = 'dna-tour-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;bottom:calc(54px + env(safe-area-inset-bottom,0px));background:rgba(4,8,20,0.97);z-index:10000;display:flex;flex-direction:column;';
+
+      function renderTour(){
+        var d = DNA_TOUR[cur];
+        overlay.innerHTML = '';
+
+        // header
+        var hdr = document.createElement('div');
+        hdr.style.cssText = 'padding:14px 18px 10px;display:flex;align-items:center;justify-content:space-between;border-bottom:0.5px solid rgba(255,255,255,0.06);flex-shrink:0;';
+        hdr.innerHTML = '<span style="font-size:9px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:rgba(52,211,153,0.5);">🧬 DNA — como funciona</span>';
+        var closeBtn = document.createElement('button');
+        closeBtn.textContent = '✕';
+        closeBtn.style.cssText = 'width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.45);font-size:13px;cursor:pointer;font-family:inherit;';
+        closeBtn.onclick = function(){ overlay.remove(); };
+        hdr.appendChild(closeBtn);
+        overlay.appendChild(hdr);
+
+        // body
+        var body = document.createElement('div');
+        body.style.cssText = 'flex:1;padding:22px 20px 14px;overflow-y:auto;';
+        body.innerHTML = '<div style="font-size:30px;margin-bottom:10px;">'+d.icon+'</div>'
+          +'<div style="font-size:20px;font-weight:700;color:#e2e8f0;margin-bottom:5px;">'+d.nome+'</div>'
+          +'<div style="font-size:12px;color:rgba(52,211,153,0.7);font-style:italic;margin-bottom:16px;">'+d.tag+'</div>'
+          +'<div style="background:rgba(255,255,255,0.04);border:0.5px solid rgba(255,255,255,0.08);border-radius:9px;padding:11px 13px;margin-bottom:12px;">'
+            +'<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.2);margin-bottom:6px;">fórmula</div>'
+            +'<div style="font-size:12px;color:#a5b4fc;font-family:monospace;line-height:1.7;white-space:pre-wrap;">'+d.formula+'</div>'
+          +'</div>'
+          +'<div style="background:rgba(52,211,153,0.05);border:0.5px solid rgba(52,211,153,0.15);border-radius:9px;padding:10px 13px;margin-bottom:12px;">'
+            +'<div style="font-size:9px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(52,211,153,0.4);margin-bottom:7px;">exemplos do Plaza</div>'
+            +d.exemplos.map(function(ex){
+              return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">'
+                +'<span style="font-size:12px;color:rgba(255,255,255,0.5);min-width:52px;">'+ex.n+'</span>'
+                +'<div style="flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;">'
+                +'<div style="width:'+ex.v+'%;height:100%;background:'+ex.c+';border-radius:3px;"></div></div>'
+                +'<span style="font-size:12px;font-weight:700;color:'+ex.c+';min-width:24px;text-align:right;">'+ex.v+'</span>'
+                +'</div>';
+            }).join('')
+          +'</div>'
+          +'<div style="font-size:10px;color:rgba(255,255,255,0.2);line-height:1.6;">'+d.nota+'</div>';
+        overlay.appendChild(body);
+
+        // footer nav
+        var foot = document.createElement('div');
+        foot.style.cssText = 'padding:12px 18px 14px;border-top:0.5px solid rgba(255,255,255,0.06);display:flex;align-items:center;gap:12px;flex-shrink:0;';
+
+        var btnPrev = document.createElement('button');
+        btnPrev.textContent = '←';
+        btnPrev.style.cssText = 'width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:15px;cursor:pointer;font-family:inherit;flex-shrink:0;';
+        btnPrev.style.opacity = cur===0?'0.3':'1';
+        btnPrev.onclick = function(){ if(cur>0){ cur--; renderTour(); } };
+
+        var dots = document.createElement('div');
+        dots.style.cssText = 'flex:1;display:flex;justify-content:center;gap:6px;';
+        DNA_TOUR.forEach(function(_,i){
+          var dot = document.createElement('div');
+          dot.style.cssText = 'width:7px;height:7px;border-radius:50%;transition:all .2s;background:'+(i===cur?'#34d399':'rgba(255,255,255,0.12)')+';'+(i===cur?'transform:scale(1.2);':'');
+          dots.appendChild(dot);
+        });
+
+        var btnNext = document.createElement('button');
+        btnNext.style.cssText = 'width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,0.05);border:0.5px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.5);font-size:15px;cursor:pointer;font-family:inherit;flex-shrink:0;';
+        btnNext.style.opacity = cur===DNA_TOUR.length-1?'0.3':'1';
+        if(cur===DNA_TOUR.length-1){
+          btnNext.textContent = '✓';
+          btnNext.style.background='rgba(52,211,153,0.15)';
+          btnNext.style.borderColor='rgba(52,211,153,0.4)';
+          btnNext.style.color='#6ee7b7';
+          btnNext.style.opacity='1';
+          btnNext.onclick = function(){ overlay.remove(); };
+        } else {
+          btnNext.textContent = '→';
+          btnNext.onclick = function(){ if(cur<DNA_TOUR.length-1){ cur++; renderTour(); } };
+        }
+
+        foot.appendChild(btnPrev);
+        foot.appendChild(dots);
+        foot.appendChild(btnNext);
+        overlay.appendChild(foot);
+      }
+
+      renderTour();
+      perfModal.appendChild(overlay);
+    };
 
     // ── Layout: radar esquerda | barras direita ───────────────────
     var bodyRow = document.createElement('div');
@@ -16983,9 +17129,10 @@ window.abrirPerfil = function(jogadorNome){
     // Lado esquerdo: radar
     var radarCanvas = document.createElement('canvas');
     var radarSize = 148;
-    radarCanvas.width  = radarSize;
-    radarCanvas.height = radarSize;
-    radarCanvas.style.cssText = 'flex-shrink:0;display:block;';
+    var dpr = window.devicePixelRatio || 1;
+    radarCanvas.width  = radarSize * dpr;
+    radarCanvas.height = radarSize * dpr;
+    radarCanvas.style.cssText = 'flex-shrink:0;display:block;width:'+radarSize+'px;height:'+radarSize+'px;';
     bodyRow.appendChild(radarCanvas);
 
     // Lado direito: barras
@@ -17010,6 +17157,7 @@ window.abrirPerfil = function(jogadorNome){
     // desenha radar após append
     setTimeout(function(){
       var ctx = radarCanvas.getContext('2d');
+      ctx.scale(dpr, dpr);
       var cx = radarSize/2, cy = radarSize/2;
       var r  = radarSize * 0.31;
       var N  = _vals.length;
@@ -17096,7 +17244,7 @@ window.abrirPerfil = function(jogadorNome){
 
   // Divisor visual entre painéis e estatísticas
   var divider = document.createElement('div');
-  divider.style.cssText = 'display:flex;align-items:center;gap:10px;padding:6px 16px 4px;';
+  divider.style.cssText = 'display:flex;align-items:center;gap:10px;padding:4px 16px 2px;';
   divider.innerHTML = '<div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>'
     +'<div style="font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.2);">Estatísticas da temporada</div>'
     +'<div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>';
@@ -21254,14 +21402,16 @@ self.addEventListener('notificationclick',function(e){
     html += '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:8px;">📊 Matriz Completa (linha eliminou coluna)</div>';
     html += '<div style="overflow-x:auto;">';
     html += '<table style="width:100%;border-collapse:collapse;font-size:11px;">';
+    var MTZ_SHORT = {'Israel':'Isr','Cristiano':'Cris','Heron':'Her','Rafa':'Raf','Magu':'Mag','Oscar':'Osc','Pedro':'Ped','Marcus':'Mar','Charles':'Cha','Filipe':'Fil','Ewe':'Ewe','Victor':'Vic'};
+    function mtzShort(n){ return MTZ_SHORT[n] || n.slice(0,4); }
     // Header
     html += '<tr><th style="padding:4px 6px;color:rgba(255,255,255,.3);text-align:left;font-size:10px;"></th>';
-    jogs.forEach(function(j){ html += '<th style="padding:4px 4px;color:rgba(255,255,255,.4);text-align:center;font-size:9px;font-weight:700;">'+j.slice(0,3)+'</th>'; });
+    jogs.forEach(function(j){ html += '<th style="padding:4px 4px;color:rgba(255,255,255,.4);text-align:center;font-size:9px;font-weight:700;">'+mtzShort(j)+'</th>'; });
     html += '</tr>';
     // Rows
     jogs.forEach(function(de){
       html += '<tr>';
-      html += '<td style="padding:4px 6px;color:#9fb3d4;font-weight:700;font-size:10px;white-space:nowrap;">'+de+'</td>';
+      html += '<td style="padding:4px 6px;color:#9fb3d4;font-weight:700;font-size:10px;white-space:nowrap;">'+mtzShort(de)+'</td>';
       jogs.forEach(function(para){
         var v = matrix[de][para]||0;
         var bg = de===para?'rgba(255,255,255,.03)': v>0?'rgba(239,68,68,'+(Math.min(v*0.15,0.4))+')':'transparent';
