@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin - Poker do Plaza</title>
+<style>
+:root{--bg:#060d1a;--bg2:#0d1629;--bg3:#111827;--bdr:rgba(255,255,255,.07);--blue:rgba(99,102,241,.3);--text:#e6edf3;--muted:#6b82a0;--acc:#6366f1;--b2:#3b82f6;--gold:#fbbf24;--green:#22c55e;--red:#ef4444;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:system-ui,sans-serif;font-size:14px;}
+#login{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.lc{background:var(--bg2);border:1px solid var(--blue);border-radius:18px;padding:36px 28px;width:100%;max-width:340px;text-align:center;}
+.lc h1{font-size:21px;font-weight:900;margin-bottom:4px;}
+.lc p{color:var(--muted);font-size:13px;margin-bottom:22px;}
+.lc input{width:100%;background:var(--bg);border:1px solid var(--blue);border-radius:10px;color:var(--text);padding:12px 14px;font-size:14px;outline:none;margin-bottom:5px;}
+.em{color:#f87171;font-size:12px;min-height:16px;margin-bottom:8px;}
+#app{display:none;}
+.tb{position:sticky;top:0;z-index:99;background:var(--bg2);border-bottom:1px solid var(--blue);padding:11px 18px;display:flex;align-items:center;gap:10px;}
+.tb h1{font-size:14px;font-weight:900;flex:1;}
+.wr{padding:14px;max-width:860px;margin:0 auto;}
+.cd{background:var(--bg2);border:1px solid var(--bdr);border-radius:11px;margin-bottom:12px;}
+.ch{display:flex;align-items:center;gap:8px;padding:11px 15px;border-bottom:1px solid var(--bdr);cursor:pointer;}
+.ch h2{font-size:13px;font-weight:800;flex:1;}
+.cb{padding:13px 15px;}
+.collapsed .cb{display:none;}
+.cv{font-size:11px;color:var(--muted);transition:transform .2s;}
+.collapsed .cv{transform:rotate(-90deg);}
+.bg{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;}
+.fd{margin-bottom:9px;}
+.fd label{display:block;font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.fd input,.fd select,.fd textarea{width:100%;background:var(--bg);border:1px solid rgba(255,255,255,.1);border-radius:7px;color:var(--text);padding:7px 9px;font-size:13px;outline:none;font-family:inherit;}
+.fd input:focus,.fd select:focus,.fd textarea:focus{border-color:var(--acc);}
+.rw{display:flex;gap:8px;flex-wrap:wrap;}
+.rw .fd{flex:1;min-width:80px;}
+.btn{padding:8px 15px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;}
+.btn:hover{opacity:.85;} .btn:disabled{opacity:.4;cursor:not-allowed;}
+.bp{background:linear-gradient(135deg,#1a3a6e,var(--b2));color:#fff;}
+.bg2{background:linear-gradient(135deg,#14532d,var(--green));color:#fff;}
+.bgold{background:linear-gradient(135deg,#78350f,var(--gold));color:#000;font-size:14px;padding:11px 20px;}
+.bgh{background:rgba(255,255,255,.04);border:1px solid var(--bdr);color:var(--muted);}
+.bdl{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);color:#fca5a5;}
+.bfw{width:100%;justify-content:center;}
+.wt{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.wt button{padding:4px 11px;border-radius:6px;border:1px solid var(--bdr);background:none;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;}
+.wt button.on{background:rgba(99,102,241,.2);border-color:var(--acc);color:#c7d2fe;}
+.pt{width:100%;border-collapse:collapse;}
+.pt th{font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;padding:5px 6px;border-bottom:1px solid var(--bdr);text-align:left;}
+.pt td{padding:3px 2px;border-bottom:1px solid rgba(255,255,255,.02);}
+.pt input,.pt select{width:100%;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:5px;color:var(--text);padding:5px 5px;font-size:12px;outline:none;}
+.pt input:focus,.pt select:focus{border-color:var(--acc);}
+.pn{font-size:12px;font-weight:700;padding:5px 6px;}
+.dm td{opacity:.35;}
+.hg{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:6px;}
+.hc{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:9px;}
+.hc .pn2{font-size:12px;font-weight:800;color:var(--gold);margin-bottom:5px;}
+.ml{display:flex;gap:4px;}
+.ml>div{flex:1;}
+.ml label{font-size:9px;color:var(--muted);display:block;margin-bottom:2px;}
+.ml input{width:100%;text-align:center;background:var(--bg3);border:1px solid rgba(255,255,255,.07);border-radius:4px;color:var(--text);padding:3px;font-size:12px;outline:none;}
+.ti{background:var(--bg);border:1px solid var(--bdr);border-radius:7px;padding:10px;margin-bottom:6px;position:relative;}
+.tid{position:absolute;top:7px;right:7px;background:none;border:none;color:#f87171;cursor:pointer;font-size:12px;}
+.dlb{position:sticky;bottom:0;background:var(--bg2);border-top:1px solid var(--blue);padding:11px 18px;display:flex;align-items:center;gap:10px;}
+.dlb .inf{flex:1;font-size:12px;color:var(--muted);}
+.dlb strong{color:var(--text);}
+.tz{position:fixed;top:16px;left:50%;transform:translateX(-50%);background:var(--bg3);border:1px solid var(--blue);border-radius:9px;padding:8px 15px;font-size:13px;font-weight:700;z-index:9999;opacity:0;transition:opacity .2s;pointer-events:none;white-space:nowrap;}
+.tz.on{opacity:1;}
+.uz{border:2px dashed var(--blue);border-radius:9px;padding:22px;text-align:center;cursor:pointer;margin-bottom:8px;}
+.uz:hover{border-color:var(--acc);}
+.fok{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.2);border-radius:7px;padding:9px 13px;display:flex;align-items:center;gap:7px;font-size:13px;margin-bottom:8px;}
+.fok .fn{font-weight:700;color:#4ade80;flex:1;}
+@media(max-width:580px){.wr{padding:8px;}.hg{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+
+<div id="login">
+  <div class="lc">
+    <div style="font-size:38px;margin-bottom:10px;">&#127183;</div>
+    <h1>Poker do Plaza</h1>
+    <p>Painel Administrativo</p>
+    <input type="password" id="pwd" placeholder="Senha..."/>
+    <div class="em" id="perr"></div>
+    <button class="btn bp bfw" onclick="doLogin()" style="padding:12px;">Entrar</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="tb">
+    <span style="font-size:17px;">&#127183;</span>
+    <h1>Poker do Plaza &mdash; Admin</h1>
+    <span id="fbadge" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(251,191,36,.12);color:#fcd34d;border:1px solid rgba(251,191,36,.2);">Sem arquivo</span>
+  </div>
+
+  <div class="wr">
+
+    <div class="cd" id="c0">
+      <div class="ch" onclick="tog('c0')"><span>&#128194;</span><h2>1. Carregar index.html</h2><span class="bg" id="b0" style="background:rgba(251,191,36,.15);color:#fcd34d;">Necessario</span><span class="cv">&#9660;</span></div>
+      <div class="cb">
+        <div class="uz" id="uz" onclick="document.getElementById('fi').click()" ondragover="event.preventDefault();this.style.borderColor='#6366f1'" ondragleave="this.style.borderColor=''" ondrop="hdrop(event)">
+          <div style="font-size:26px;">&#128196;</div>
+          <div style="font-weight:800;margin-top:6px;">Clique ou arraste o index.html</div>
+          <p style="color:var(--muted);font-size:12px;margin-top:3px;">Arquivo mais recente do dashboard</p>
+        </div>
+        <div id="fok" class="fok" style="display:none;"><span>&#9989;</span><span class="fn" id="fn">-</span><button class="btn bgh" style="padding:3px 9px;font-size:11px;" onclick="document.getElementById('fi').click()">Trocar</button></div>
+        <input type="file" id="fi" accept=".html" style="display:none" onchange="lfile(this)"/>
+      </div>
+    </div>
+
+    <div class="cd collapsed" id="c1">
+      <div class="ch" onclick="tog('c1')"><span>&#127183;</span><h2>2. Semanas</h2><span class="bg" id="b1" style="background:rgba(99,102,241,.15);color:#a5b4fc;">-</span><span class="cv">&#9660;</span></div>
+      <div class="cb">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:9px;">
+          <span style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;">Registradas:</span>
+          <button class="btn bgh" style="padding:3px 10px;font-size:11px;" onclick="novaNoite()">+ Nova</button>
+        </div>
+        <div class="wt" id="wt"></div>
+        <div id="nf" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;flex-wrap:wrap;gap:6px;">
+            <span id="nftit" style="font-size:13px;font-weight:900;color:var(--gold);">Nova Noite</span>
+            <button class="btn bdl" style="padding:4px 9px;font-size:11px;" id="bdelwk" onclick="delWK()" style="display:none;">&#128465; Apagar</button>
+          </div>
+          <div class="rw">
+            <div class="fd"><label>WK</label><input type="number" id="nwk" min="1" max="99"/></div>
+            <div class="fd"><label>Data</label><input type="date" id="ndata"/></div>
+            <div class="fd"><label>Mes</label><select id="nmes"><option value="1">Janeiro</option><option value="2">Fevereiro</option><option value="3">Marco</option><option value="4">Abril</option><option value="5">Maio</option><option value="6">Junho</option><option value="7">Julho</option><option value="8">Agosto</option><option value="9">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select></div>
+            <div class="fd"><label>Trimestre</label><select id="ntri"><option value="1">T1</option><option value="2">T2</option><option value="3">T3</option><option value="4">T4</option></select></div>
+            
+          </div>
+          <div style="overflow-x:auto;margin-bottom:9px;">
+            <table class="pt"><thead><tr><th>Jogador</th><th>Pos</th><th>Rebuys</th><th>KOs</th><th>Fichas</th><th>Dealer?</th><th>Faltou</th></tr></thead><tbody id="ptb"></tbody></table>
+          </div>
+          <div style="display:flex;gap:7px;flex-wrap:wrap;">
+            <button class="btn bp" onclick="salvarNoite()">&#128190; Salvar</button>
+            <button class="btn bgh" onclick="cancelN()">Cancelar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="cd collapsed" id="c2">
+      <div class="ch" onclick="tog('c2')"><span>&#127942;</span><h2>3. Hall da Fama</h2><span class="bg" style="background:rgba(251,191,36,.15);color:#fcd34d;">Historico</span><span class="cv">&#9660;</span></div>
+      <div class="cb">
+        <div class="hg" id="hg"></div>
+        <button class="btn bgh" style="margin-top:7px;font-size:11px;" onclick="addHof()">+ Jogador</button>
+      </div>
+    </div>
+
+    <div class="cd collapsed" id="c3">
+      <div class="ch" onclick="tog('c3')"><span>&#127894;</span><h2>4. Torneios Especiais</h2><span class="bg" style="background:rgba(168,85,247,.15);color:#d8b4fe;">Eventos</span><span class="cv">&#9660;</span></div>
+      <div class="cb">
+        <div id="tl"></div>
+        <button class="btn bgh" style="margin-top:5px;font-size:11px;" onclick="addTorn()">+ Torneio</button>
+      </div>
+    </div>
+
+    <div class="cd collapsed" id="c4">
+      <div class="ch" onclick="tog('c4')"><span>&#128221;</span><h2>5. Ata da Noite</h2><span class="bg" style="background:rgba(34,197,94,.12);color:#4ade80;">Cronica</span><span class="cv">&#9660;</span></div>
+      <div class="cb">
+        <div class="rw">
+          <div class="fd" style="flex:0 0 130px;"><label>Semana</label><select id="awk" onchange="loadAta()"></select></div>
+          <div class="fd" style="align-self:flex-end;"><button class="btn bdl" style="padding:5px 9px;font-size:11px;" onclick="delAta()">&#128465; Apagar</button></div>
+        </div>
+        <div class="fd"><label>Titulo</label><input id="at" placeholder="A noite que o poker virou roleta russa"/></div>
+        <div class="fd"><label>Subtitulo</label><input id="as" placeholder="Picante - Provocacoes a flor da pele"/></div>
+        <div class="fd"><label>Clima (0=glacial, 10=apocalipse)</label>
+          <div style="display:flex;gap:9px;align-items:center;">
+            <input type="range" id="ac" min="0" max="10" value="5" style="flex:1;accent-color:var(--acc);" oninput="cu()"/>
+            <span id="acl" style="font-size:11px;color:var(--gold);font-weight:700;min-width:170px;"></span>
+          </div>
+        </div>
+        <div class="fd"><label>Introducao</label><textarea id="ai" rows="3" placeholder="Descreva o clima da noite..."></textarea></div>
+        <div class="fd"><label>Mao da Noite - Titulo</label><input id="amt" placeholder="Q3 de paus"/></div>
+        <div class="fd"><label>Mao da Noite - Descricao</label><textarea id="amd" rows="2"></textarea></div>
+        <div class="rw">
+          <div class="fd"><label>Personagem - Jogador</label><select id="apj"><option value="">- Jogador -</option></select></div>
+          <div class="fd"><label>Personagem - Arquetipo</label>
+            <select id="apa">
+              <option value="">- Arquetipo -</option>
+              <option>O Dominante</option><option>O Blefador</option><option>O Glacial</option>
+              <option>O Tilted</option><option>O Palhaco</option><option>O Azarado</option>
+              <option>O Leao</option><option>O Raposo</option><option>O Fantasma</option>
+              <option>O Explosivo</option><option>O Certeiro</option><option>O Derretido</option>
+            </select>
+          </div>
+        </div>
+        <div class="fd"><label>Falas Iconicas (uma por linha: "frase" - Autor)</label>
+          <textarea id="af" rows="3" placeholder='"Isso nao e poker!" - Heron'></textarea>
+        </div>
+        <div class="fd">
+          <label>Destaques por Jogador</label>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;" id="ata-chips"></div>
+          <div id="ata-blocos" style="display:flex;flex-direction:column;gap:7px;"></div>
+        </div>
+        <button class="btn bg2" onclick="salvarAta()">&#9989; Salvar Ata</button>
+      </div>
+    </div>
+
+    <div style="height:65px;"></div>
+  </div>
+
+  <div class="dlb">
+    <div class="inf"><strong id="dlw">-</strong> semanas &middot; <strong id="dle">-</strong> entradas</div>
+    <button class="btn bgold" id="dlb" onclick="baixar()" disabled>&#11015; Baixar index.html</button>
+  </div>
+</div>
+
+<div class="tz" id="tz"></div>
+
+<script>
+var PW='poker2026';
+var PL=['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+var AC=['Glacial - Ninguem falava','Fria - Mesa reservada','Neutra - Noite tranquila','Aquecida - Tensao leve','Animada - Boa energia','Tensa - Discussoes','Quente - Drama na mesa','Picante - Provocacoes','Vulcanica - Caos total','Explosiva - Noite historica','APOCALIPSE - A mais louca da historia'];
+var _html=null,_led=[],_nfd={},_ewk=null;
+
+document.getElementById('pwd').onkeydown=function(e){if(e.key==='Enter')doLogin();};
+function doLogin(){
+  if(document.getElementById('pwd').value===PW){
+    document.getElementById('login').style.display='none';
+    document.getElementById('app').style.display='block';
+    init();
+  }else{document.getElementById('perr').textContent='Senha incorreta.';document.getElementById('pwd').value='';}
+}
+function init(){
+  try{_nfd=JSON.parse(localStorage.getItem('nf_data_plaza')||'{}')||{};}catch(e){_nfd={};}
+  if(!_nfd.atas)_nfd.atas={};if(!_nfd.hof)_nfd.hof={};if(!_nfd.torneios)_nfd.torneios=[];
+  buildHOF();buildTorn();buildAWK();cu();
+  var t=new Date();
+  document.getElementById('ndata').value=t.toISOString().split('T')[0];
+  document.getElementById('nmes').value=t.getMonth()+1;
+  document.getElementById('ntri').value=Math.ceil((t.getMonth()+1)/3);
+}
+function hdrop(e){e.preventDefault();var f=e.dataTransfer.files[0];if(f)pfile(f);}
+function lfile(i){var f=i.files[0];if(f)pfile(f);}
+function pfile(f){
+  var r=new FileReader();
+  r.onload=function(e){
+    _html=e.target.result;
+    var m=_html.match(/window\.DATA\.ledger\s*=\s*(\[[\s\S]*?\]);/);
+    if(m){try{_led=JSON.parse(m[1]);}catch(x){_led=[];}}
+    if(_led.length){var ps=Array.from(new Set(_led.map(function(r){return r.jogador;}))).filter(Boolean).sort();if(ps.length)PL=ps;}
+    // Always extract DEFAULT_HOF from the file (source of truth)
+    var hm=_html.match(/var DEFAULT_HOF\s*=\s*(\{[\s\S]*?\});/);if(hm){try{_nfd.hof=JSON.parse(hm[1]);}catch(x){}}
+    var nm=_html.match(/id="nf-admin-inject"[^>]*>try\{localStorage\.setItem\([^,]+,"([\s\S]*?)"\)/);
+    if(nm){try{var nd=JSON.parse(nm[1]);if(nd&&typeof nd==='object')_nfd=nd;}catch(x){}}
+    document.getElementById('uz').style.display='none';
+    document.getElementById('fok').style.display='flex';
+    document.getElementById('fn').textContent=f.name;
+    document.getElementById('b0').textContent='Carregado';
+    document.getElementById('b0').style.cssText='background:rgba(34,197,94,.15);color:#4ade80;';
+    document.getElementById('fbadge').textContent=f.name;
+    document.getElementById('fbadge').style.cssText='font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);';
+    document.getElementById('dlb').disabled=false;
+    buildWT();buildAWK();buildHOF();buildTorn();updC();
+    var pj=document.getElementById('apj');
+    pj.innerHTML='<option value="">- Jogador -</option>'+PL.map(function(p){return'<option>'+p+'</option>';}).join('');
+    toast('Arquivo carregado!');
+  };
+  r.readAsText(f);
+}
+function gwks(){return Array.from(new Set(_led.map(function(r){return+r.wk||0;}))).filter(Boolean).sort(function(a,b){return a-b;});}
+function buildWT(){
+  var wks=gwks(),el=document.getElementById('wt');
+  if(!wks.length){el.innerHTML='<span style="font-size:12px;color:var(--muted);">Nenhuma semana ainda.</span>';return;}
+  el.innerHTML=wks.map(function(w){return'<button onclick="editWK('+w+')">WK'+String(w).padStart(2,'0')+'</button>';}).join('');
+  document.getElementById('b1').textContent=wks.length+' semanas';
+}
+function novaNoite(){
+  _ewk=null;var wks=gwks();
+  document.getElementById('nwk').value=wks.length?Math.max.apply(null,wks)+1:1;
+  document.getElementById('nftit').textContent='Nova Noite';
+  document.getElementById('bdelwk').style.display='none';
+  buildPT(null);document.getElementById('nf').style.display='block';
+  document.querySelectorAll('#wt button').forEach(function(t){t.classList.remove('on');});
+}
+function editWK(wk){
+  _ewk=wk;var ent=_led.filter(function(r){return+r.wk===wk;}),f=ent[0]||{};
+  document.getElementById('nwk').value=wk;document.getElementById('ndata').value=f.data_wk||'';
+  document.getElementById('nmes').value=f.mes||1;document.getElementById('ntri').value=f.trimestre||1;
+  document.getElementById('nftit').textContent='Editando WK'+String(wk).padStart(2,'0');
+  document.getElementById('bdelwk').style.display='inline-flex';
+  buildPT(ent);document.getElementById('nf').style.display='block';
+  document.querySelectorAll('#wt button').forEach(function(t){t.classList.toggle('on',t.textContent==='WK'+String(wk).padStart(2,'0'));});
+}
+function cancelN(){document.getElementById('nf').style.display='none';_ewk=null;document.querySelectorAll('#wt button').forEach(function(t){t.classList.remove('on');});}
+function delWK(){
+  if(_ewk===null)return;if(!confirm('Apagar WK'+String(_ewk).padStart(2,'0')+'?'))return;
+  _led=_led.filter(function(r){return+r.wk!==_ewk;});_ewk=null;
+  document.getElementById('nf').style.display='none';buildWT();buildAWK();updC();toast('Semana removida!');
+}
+function buildPT(ent){
+  var tb=document.getElementById('ptb');tb.innerHTML='';
+  PL.forEach(function(p){
+    var e=ent?ent.find(function(x){return x.jogador===p;}):null,fl=e?!!e.faltou:false;var isDealer=e&&(e.antecipacao_dealer>0)?true:false;
+    var tr=document.createElement('tr');if(fl)tr.className='dm';tr.setAttribute('data-p',p);
+    tr.innerHTML='<td class="pn">'+p+'</td><td><select class="ep" onchange="sf(this)"><option value="">Faltou</option>'+[1,2,3,4,5,6,7,8,9].map(function(n){return'<option value="'+n+'"'+(e&&e.posicao==n?' selected':'')+'>'+n+'o</option>';}).join('')+'</select></td><td><input type="number" class="er" value="'+(e?e.rebuys:0)+'" min="0"/></td><td><input type="number" class="ek" value="'+(e?e.kos:0)+'" min="0"/></td><td><input type="number" class="ef2" value="'+(e?e.fichas_restantes:0)+'" min="0"/></td><td style="text-align:center;"><input type="checkbox" class="edl"'+(isDealer?' checked':'')+'/></td><td style="text-align:center;"><input type="checkbox" class="efl"'+(fl?' checked':'')+' onchange="sp(this)"/></td>';
+    tb.appendChild(tr);
+  });
+}
+function sf(s){var tr=s.closest('tr'),f=tr.querySelector('.efl');if(s.value){f.checked=false;tr.className='';}else{f.checked=true;tr.className='dm';}}
+function sp(c){var tr=c.closest('tr'),s=tr.querySelector('.ep');if(c.checked){s.value='';tr.className='dm';}else{tr.className='';}}
+function salvarNoite(){
+  var wk=parseInt(document.getElementById('nwk').value)||0,data=document.getElementById('ndata').value;
+  var mes=parseInt(document.getElementById('nmes').value)||1,tri=parseInt(document.getElementById('ntri').value)||1;
+  var ano=data?parseInt(data.split('-')[0]):2026;
+  if(!wk||!data){toast('Preencha WK e Data');return;}
+
+  // Constants (same as dashboard)
+  var BUYIN=25, FATOR_FICHAS=0.3, PTS_KO=100, PTS_REBUY=-1500, R_NOITE=3;
+  var DIST=[0.40,0.30,0.15,0.10,0.05];
+  var CUSTO_DEALER=200;
+  function ptsPosicao(pos){ return Math.max(4000, 20000-(pos-1)*2000); }
+
+  _led=_led.filter(function(r){return+r.wk!==wk;});
+  var rows=Array.from(document.querySelectorAll('#ptb tr'));
+  var nTotal=rows.length; // total players (including absent) for dealer split
+
+  // Build player data
+  var dados=rows.map(function(tr){
+    var p=tr.getAttribute('data-p'),pos=tr.querySelector('.ep').value;
+    var fl=tr.querySelector('.efl').checked||!pos;
+    var rb=parseInt(tr.querySelector('.er').value)||0;
+    var ko=parseInt(tr.querySelector('.ek').value)||0;
+    var fi=parseInt(tr.querySelector('.ef2').value)||0;
+    var dealerChk=tr.querySelector('.edl');
+    var isDealer=dealerChk?dealerChk.checked:false;
+    return{p:p,pos:pos?parseInt(pos):null,fl:fl,rb:rb,ko:ko,fi:fi,isDealer:isDealer};
+  });
+
+  var presentes=dados.filter(function(d){return!d.fl;});
+  var totalRebuys=presentes.reduce(function(s,d){return s+d.rb;},0);
+  var totalEntradas=presentes.length+totalRebuys;
+  var poteNoite=totalEntradas*R_NOITE;
+  var dealerShare=+(CUSTO_DEALER/nTotal).toFixed(2);
+
+  // Calculate points and prizes
+  var sorted=presentes.slice().sort(function(a,b){return(a.pos||99)-(b.pos||99);});
+  sorted.forEach(function(d,rank){
+    d.premioNoite=rank<DIST.length&&d.pos?+(poteNoite*DIST[rank]).toFixed(2):0;
+  });
+
+  dados.forEach(function(d){
+    if(d.fl) return;
+    var ptPos=d.pos?ptsPosicao(d.pos):0;
+    var ptFichas=d.fi*FATOR_FICHAS;
+    var ptKO=d.ko*PTS_KO;
+    var ptRebuy=d.rb*PTS_REBUY;
+    d.pontos=Math.round(ptPos+ptFichas+ptKO+ptRebuy);
+    d.valorFichas=+(d.fi*(15/5000)).toFixed(2);
+    d.antecipacao=d.isDealer?CUSTO_DEALER:0;
+    d.saldo=+(d.premioNoite+d.valorFichas-(1+d.rb)*BUYIN-dealerShare+d.antecipacao).toFixed(2);
+    d.ptPos=ptPos; d.ptFichas=ptFichas; d.ptKO=ptKO; d.ptRebuy=Math.abs(ptRebuy);
+  });
+
+  rows.forEach(function(tr){
+    var d=dados.find(function(x){return x.p===tr.getAttribute('data-p');});
+    if(!d) return;
+    if(d.fl){
+      _led.push({ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.p,buyin:0,posicao:null,rebuys:0,kos:0,fichas_restantes:0,valor_fichas:0,pontos_classificacao:0,penalidade_rebuy:0,pontos_fichas:0,pontos_calc:0,custo_buyin:0,custo_rebuys:0,premio_noite:0,dealer:dealerShare,antecipacao_dealer:0,saldo_semana_final:-dealerShare,faltou:1});
+    } else {
+      _led.push({ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.p,buyin:1,posicao:d.pos,rebuys:d.rb,kos:d.ko,fichas_restantes:d.fi,valor_fichas:d.valorFichas,pontos_classificacao:d.ptPos||0,penalidade_rebuy:d.ptRebuy||0,pontos_fichas:+(d.fi*FATOR_FICHAS).toFixed(2),pontos_calc:d.pontos,custo_buyin:BUYIN,custo_rebuys:d.rb*BUYIN,premio_noite:d.premioNoite||0,dealer:dealerShare,antecipacao_dealer:d.antecipacao,saldo_semana_final:d.saldo,faltou:0});
+    }
+  });
+  _ewk=wk;buildWT();buildAWK();updC();
+  document.getElementById('bdelwk').style.display='inline-flex';
+  document.getElementById('nftit').textContent='Editando WK'+String(wk).padStart(2,'0');
+  document.querySelectorAll('#wt button').forEach(function(t){t.classList.toggle('on',t.textContent==='WK'+String(wk).padStart(2,'0'));});
+  toast('WK'+wk+' salva com '+pres+' jogadores!');
+}
+function buildHOF(){
+  var hof=_nfd.hof||{};if(!Object.keys(hof).length)PL.forEach(function(p){hof[p]={ouro:0,prata:0,bronze:0};});
+  var g=document.getElementById('hg');g.innerHTML='';
+  Object.keys(hof).sort().forEach(function(n){
+    var d=hof[n],div=document.createElement('div');div.className='hc';div.setAttribute('data-hof',n);
+    div.innerHTML='<div class="pn2">'+n+'</div><div class="ml"><div><label>Ouro</label><input type="number" class="ho" min="0" value="'+(d.ouro||0)+'"/></div><div><label>Prata</label><input type="number" class="hp" min="0" value="'+(d.prata||0)+'"/></div><div><label>Bronze</label><input type="number" class="hb" min="0" value="'+(d.bronze||0)+'"/></div></div><button onclick="this.closest(\'.hc\').remove()" style="margin-top:5px;background:none;border:none;color:#f87171;cursor:pointer;font-size:11px;">Remover</button>';
+    g.appendChild(div);
+  });
+}
+function addHof(){var n=prompt('Nome:');if(!n)return;if(!_nfd.hof)_nfd.hof={};_nfd.hof[n]={ouro:0,prata:0,bronze:0};buildHOF();}
+function cHOF(){var h={};document.querySelectorAll('#hg .hc').forEach(function(d){var n=d.getAttribute('data-hof');h[n]={ouro:parseInt(d.querySelector('.ho').value)||0,prata:parseInt(d.querySelector('.hp').value)||0,bronze:parseInt(d.querySelector('.hb').value)||0};});return h;}
+function buildTorn(){
+  var l=document.getElementById('tl'),ts=_nfd.torneios||[];
+  if(!ts.length){l.innerHTML='<p style="color:var(--muted);font-size:12px;padding:6px 0;">Nenhum torneio.</p>';return;}
+  l.innerHTML='';
+  ts.forEach(function(t,i){
+    var d=document.createElement('div');d.className='ti';d.setAttribute('data-ti',i);
+    d.innerHTML='<button class="tid" onclick="rmT('+i+')">&#10005;</button><div class="rw"><div class="fd"><label>Nome</label><input class="tn" value="'+x(t.nome||'')+'"/></div><div class="fd"><label>Data</label><input type="date" class="td2" value="'+(t.data||'')+'"/></div></div><div class="rw"><div class="fd"><label>Vencedor</label><input class="tv" value="'+x(t.vencedor||'')+'"/></div><div class="fd"><label>Participantes (virgula)</label><input class="tp" value="'+x((t.participantes||[]).join(', '))+'"/></div></div><div class="fd"><label>Descricao</label><input class="tds" value="'+x(t.descricao||'')+'"/></div>';
+    l.appendChild(d);
+  });
+}
+function addTorn(){if(!_nfd.torneios)_nfd.torneios=[];_nfd.torneios.push({nome:'',data:'',vencedor:'',participantes:[],descricao:''});buildTorn();}
+function rmT(i){if(!_nfd.torneios)return;_nfd.torneios.splice(i,1);buildTorn();}
+function cTorn(){var r=[];document.querySelectorAll('#tl .ti').forEach(function(d){r.push({nome:d.querySelector('.tn').value.trim(),data:d.querySelector('.td2').value,vencedor:d.querySelector('.tv').value.trim(),participantes:d.querySelector('.tp').value.split(',').map(function(s){return s.trim();}).filter(Boolean),descricao:d.querySelector('.tds').value.trim()});});return r;}
+function cu(){var v=parseInt(document.getElementById('ac').value)||0;document.getElementById('acl').textContent=AC[Math.min(v,AC.length-1)];}
+function buildAWK(){
+  var sel=document.getElementById('awk'),wks=gwks();
+  if(!wks.length)for(var i=1;i<=20;i++)wks.push(i);
+  sel.innerHTML=wks.map(function(w){return'<option value="WK'+String(w).padStart(2,'0')+'">WK'+String(w).padStart(2,'0')+'</option>';}).join('');
+  if(wks.length)sel.value='WK'+String(wks[wks.length-1]).padStart(2,'0');
+  var pj=document.getElementById('apj');
+  pj.innerHTML='<option value="">- Jogador -</option>'+PL.map(function(p){return'<option>'+p+'</option>';}).join('');
+  buildAtaChips();
+  loadAta();
+}
+function buildAtaChips(){
+  var chips=document.getElementById('ata-chips');
+  if(!chips) return;
+  chips.innerHTML=PL.map(function(p){
+    return'<button class="ata-chip" data-p="'+p+'" onclick="toggleAtaChip(this)" style="padding:4px 12px;border-radius:999px;border:1px solid rgba(255,255,255,.1);background:none;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;">'+p+'</button>';
+  }).join('');
+}
+function toggleAtaChip(btn){
+  var p=btn.getAttribute('data-p');
+  var blocos=document.getElementById('ata-blocos');
+  var existing=blocos.querySelector('[data-pb="'+p+'"]');
+  if(existing){
+    existing.remove();
+    btn.style.background='none';btn.style.color='var(--muted)';btn.style.borderColor='rgba(255,255,255,.1)';
+  } else {
+    btn.style.background='rgba(99,102,241,.2)';btn.style.color='#c7d2fe';btn.style.borderColor='rgba(99,102,241,.5)';
+    var div=document.createElement('div');
+    div.setAttribute('data-pb',p);
+    div.style.cssText='background:rgba(255,255,255,.02);border:1px solid rgba(255,255,255,.06);border-radius:9px;padding:10px 12px;';
+    div.innerHTML='<div style="font-size:11px;font-weight:800;color:#a5b4fc;margin-bottom:5px;">'+p+'</div>'+
+      '<textarea placeholder="Escreva sobre '+p+' nessa noite..." rows="2" style="width:100%;background:var(--bg);border:1px solid rgba(99,102,241,.15);border-radius:7px;color:var(--text);padding:7px 9px;font-size:12px;resize:vertical;font-family:inherit;outline:none;"></textarea>';
+    blocos.appendChild(div);
+  }
+}
+function loadAta(){
+  var wk=document.getElementById('awk').value,d=(_nfd.atas&&_nfd.atas[wk])||{};
+  sv('at',d.titulo||'');sv('as',d.subtitulo||'');sv('ai',d.intro||'');sv('amt',d.maoTitulo||'');sv('amd',d.maoDesc||'');
+  document.getElementById('ac').value=d.clima!==undefined?d.clima:5;cu();
+  var pj=document.getElementById('apj');if(d.persJogador)pj.value=d.persJogador;
+  var pa=document.getElementById('apa');if(d.persArq)pa.value=d.persArq;
+  if(d.falas&&d.falas.length)sv('af',d.falas.map(function(f){return'"'+f.fala+'" - '+f.autor;}).join('\n'));else sv('af','');
+  // Restore jogadores highlights
+  var blocos=document.getElementById('ata-blocos');
+  var chips=document.querySelectorAll('.ata-chip');
+  if(blocos){
+    blocos.innerHTML='';
+    chips.forEach(function(btn){
+      btn.style.background='none';btn.style.color='var(--muted)';btn.style.borderColor='rgba(255,255,255,.1)';
+    });
+    if(d.jogadores){
+      Object.keys(d.jogadores).forEach(function(p){
+        var chip=document.querySelector('.ata-chip[data-p="'+p+'"]');
+        if(chip) toggleAtaChip(chip);
+        var bloco=blocos.querySelector('[data-pb="'+p+'"]');
+        if(bloco){var ta=bloco.querySelector('textarea');if(ta)ta.value=d.jogadores[p];}
+      });
+    }
+  }
+}
+function salvarAta(){
+  var wk=document.getElementById('awk').value;
+  var fl=gv('af').split('\n').filter(Boolean).map(function(l){var m=l.match(/^"?(.+?)"?\s*[-—]\s*(.+)$/);return m?{fala:m[1].trim(),autor:m[2].trim()}:{fala:l.trim(),autor:''};});
+  var jogs={};
+  document.querySelectorAll('#ata-blocos [data-pb]').forEach(function(d){
+    var p=d.getAttribute('data-pb');
+    var ta=d.querySelector('textarea');
+    if(ta&&ta.value.trim()) jogs[p]=ta.value.trim();
+  });
+  if(!_nfd.atas)_nfd.atas={};
+  _nfd.atas[wk]={titulo:gv('at'),subtitulo:gv('as'),clima:parseInt(document.getElementById('ac').value)||5,intro:gv('ai'),maoTitulo:gv('amt'),maoDesc:gv('amd'),persJogador:document.getElementById('apj').value,persArq:document.getElementById('apa').value,falas:fl,jogadores:jogs};
+  try{localStorage.setItem('nf_data_plaza',JSON.stringify(_nfd));}catch(e){}
+  toast('Ata da '+wk+' salva!');
+}
+function delAta(){var wk=document.getElementById('awk').value;if(!confirm('Apagar ata da '+wk+'?'))return;if(_nfd.atas)delete _nfd.atas[wk];loadAta();toast('Ata apagada.');}
+function baixar(){
+  if(!_html){toast('Carregue o index.html primeiro');return;}
+  var btn=document.getElementById('dlb');btn.disabled=true;btn.textContent='Gerando...';
+  try{
+    _nfd.hof=cHOF();_nfd.torneios=cTorn();
+    try{localStorage.setItem('nf_data_plaza',JSON.stringify(_nfd));}catch(e){}
+    var u=_html;
+    u=u.replace(/window\.DATA\.ledger\s*=\s*\[[\s\S]*?\];/,'window.DATA.ledger = '+JSON.stringify(_led)+';');
+    u=u.replace(/var DEFAULT_HOF\s*=\s*\{[\s\S]*?\};/,'var DEFAULT_HOF = '+JSON.stringify(_nfd.hof)+';');
+    var ns=JSON.stringify(_nfd);
+    var inj='<script id="nf-admin-inject">try{localStorage.setItem("nf_data_plaza",'+JSON.stringify(ns)+');}catch(e){}<\/script>';
+    u=u.replace(/<script id="nf-admin-inject">[\s\S]*?<\/script>/,'');
+    u=u.replace('</body>',inj+'\n</body>');
+    var b=new Blob([u],{type:'text/html'}),url=URL.createObjectURL(b),a=document.createElement('a');
+    a.href=url;a.download='index.html';a.click();
+    setTimeout(function(){URL.revokeObjectURL(url);},3000);
+    toast('index.html baixado!');
+  }catch(err){toast('Erro: '+err.message);console.error(err);}
+  btn.disabled=false;btn.textContent='Baixar index.html';
+}
+function updC(){var w=gwks();document.getElementById('dlw').textContent=w.length;document.getElementById('dle').textContent=_led.length;}
+function tog(id){document.getElementById(id).classList.toggle('collapsed');}
+function x(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sv(id,v){var e=document.getElementById(id);if(e)e.value=v;}
+function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
+function toast(m){var t=document.getElementById('tz');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},2500);}
+</script>
+</body>
+</html>
