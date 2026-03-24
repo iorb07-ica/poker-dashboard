@@ -352,6 +352,7 @@ function doLogin(){
   var h = sha256(val);
   if(h === HASH_1 || h === HASH_2){
     _authed = true;
+    try { localStorage.setItem('plaza_admin_authed', '1'); } catch(e){}
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('editor-screen').style.display = 'block';
     document.getElementById('status-bar').style.display = 'flex';
