@@ -3033,7 +3033,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <select id="mini-mes" style="flex-shrink:0;"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select>
 </div>
 <div class="mini-list" id="mini-mes-list"></div>
-<div class="mini-list" id="mt-mes-list" style="display:none;flex-direction:column;gap:5px;"></div>
+<div class="mini-list" id="mt-mes-list" style="display:none;flex-direction:column;gap:6px;"></div>
 <div style="display:flex;align-items:center;gap:10px;padding-top:6px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:4px;">
   <button id="mt-mes-play-btn" onclick="window.mtMesTogglePlay()" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
     <svg id="mt-mes-play-icon" viewBox="0 0 16 16" width="13" height="13" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
@@ -3058,7 +3058,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <select id="mini-tri" style="flex-shrink:0;"><option value="T1">Tri 1</option><option value="T2">Tri 2</option><option value="T3">Tri 3</option><option value="T4">Tri 4</option></select>
 </div>
 <div class="mini-list" id="mini-tri-list"></div>
-<div class="mini-list" id="mt-tri-list" style="display:none;flex-direction:column;gap:5px;"></div>
+<div class="mini-list" id="mt-tri-list" style="display:none;flex-direction:column;gap:6px;"></div>
 <div style="display:flex;align-items:center;gap:10px;padding-top:6px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:4px;">
   <button id="mt-tri-play-btn" onclick="window.mtTriTogglePlay()" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
     <svg id="mt-tri-play-icon" viewBox="0 0 16 16" width="13" height="13" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
@@ -3191,7 +3191,7 @@ body.mobile-mode #libwarn { display: none !important; }
  <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
  </div>
  <div id="ranking-anual-body" data-open="true" style="padding:0 16px 16px;">
- <div id="mt-ranking-area" style="display:flex;flex-direction:column;gap:5px;margin-bottom:0;margin-top:24px;"></div>
+ <div id="mt-ranking-area" style="display:flex;flex-direction:column;gap:6px;margin-bottom:0;margin-top:24px;"></div>
  <div style="display:flex;align-items:center;gap:10px;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:10px;">
    <button id="mt-play-btn" onclick="window.mtTogglePlay()" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
      <svg id="mt-play-icon" viewBox="0 0 16 16" width="15" height="15" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
@@ -3228,7 +3228,7 @@ body.mobile-mode #libwarn { display: none !important; }
   function avBorder(pos){
     return ['rgba(210,160,20,0.9)','rgba(170,185,200,0.8)','rgba(185,100,28,0.8)','rgba(70,130,210,0.5)'][Math.min(pos,3)];
   }
-  function getAvatarUrl(nome){ return 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+nome.toLowerCase()+'.jpg?raw=true'; }
+  function getAvatarUrl(nome){ return (window.photoFor && window.photoFor(nome)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+nome.toLowerCase()+'.jpg?raw=true'; }
 
   var rowEls={}, mtCurrentWK=11, mtPlaying=false, mtInterval=null;
 
@@ -3250,8 +3250,8 @@ body.mobile-mode #libwarn { display: none !important; }
     PLAYERS.forEach(function(p){
       var row = document.createElement('div');
       row.id = 'mt-prow-'+p;
-      row.style.cssText = 'display:flex;align-items:center;height:28px;gap:6px;';
-      var avHtml = '<div id="mt-av-'+p+'" style="width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;">';
+      row.style.cssText = 'display:flex;align-items:center;height:42px;gap:6px;';
+      var avHtml = '<div id="mt-av-'+p+'" style="width:39px;height:39px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-15px;">';
       var img = document.createElement('img');
       img.src = getAvatarUrl(p);
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
@@ -3259,7 +3259,7 @@ body.mobile-mode #libwarn { display: none !important; }
       row.innerHTML =
         '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+
         avHtml+'</div>'+
-        '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">'+
+        '<div style="flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;">'+
           '<div id="mt-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
           '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
           '<div id="mt-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>'+
@@ -3376,7 +3376,7 @@ body.mobile-mode #libwarn { display: none !important; }
   var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11]};
   var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
 
-  function getAvatarUrl(n){ return 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
+  function getAvatarUrl(n){ return (window.photoFor && window.photoFor(n)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
   var INITIALS={Israel:'Is',Magu:'Ma',Heron:'He',Charles:'Ch',Oscar:'Os',Pedro:'Pe',Cristiano:'Cr',Marcus:'Mr',Rafa:'Ra'};
 
   function barGrad(pos){
@@ -3399,10 +3399,10 @@ body.mobile-mode #libwarn { display: none !important; }
     PLAYERS.forEach(function(p){
       var row = document.createElement('div');
       row.id = prefix+'-prow-'+p;
-      row.style.cssText = 'display:flex;align-items:center;height:28px;gap:6px;';
+      row.style.cssText = 'display:flex;align-items:center;height:42px;gap:6px;';
       var av = document.createElement('div');
       av.id = prefix+'-av-'+p;
-      av.style.cssText = 'width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;';
+      av.style.cssText = 'width:39px;height:39px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-15px;';
       var img = document.createElement('img');
       img.src = getAvatarUrl(p);
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
@@ -3412,7 +3412,7 @@ body.mobile-mode #libwarn { display: none !important; }
         '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
       row.appendChild(av);
       var barOuter = document.createElement('div');
-      barOuter.style.cssText = 'flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;';
+      barOuter.style.cssText = 'flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;';
       barOuter.innerHTML =
         '<div id="'+prefix+'-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
         '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
@@ -8076,8 +8076,8 @@ function initMiniCombos(){
  sels.tri.innerHTML=''; [1,2,3,4].forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent='T'+t; sels.tri.appendChild(o); });
 
  sels.wk.onchange = ()=> (window.renderMini || renderMini)('semana', +sels.wk.value);
- sels.mes.onchange = ()=> (window.renderMini || renderMini)('mes', +sels.mes.value);
- sels.tri.onchange = ()=> (window.renderMini || renderMini)('trimestre', +sels.tri.value);
+ sels.mes.onchange = ()=>{ (window.renderMini || renderMini)('mes', +sels.mes.value); if(typeof window.mtMesSetMes==='function') window.mtMesSetMes(+sels.mes.value); };
+ sels.tri.onchange = ()=>{ (window.renderMini || renderMini)('trimestre', +sels.tri.value); if(typeof window.mtTriSetWK==='function'){ var _wm={1:4,2:8,3:11,4:16}; window.mtTriSetWK(_wm[+sels.tri.value]||11); } };
 
  
  if(wks.length){ sels.wk.value = wks[wks.length-1]; }
@@ -9739,7 +9739,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var posStyle = pos<=3
       ? 'font-size:'+(pos===1?'18':'17')+'px;width:22px;text-align:center;flex-shrink:0;line-height:1;'
       : 'font-size:12px;font-weight:800;color:rgba(255,255,255,0.55);width:22px;text-align:center;flex-shrink:0;';
-    var avUrl = 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+(name||'').toLowerCase()+'.jpg?raw=true';
+    var avUrl = (window.photoFor && window.photoFor(name||'')) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+(name||'').toLowerCase()+'.jpg?raw=true';
     var initials = (name||'?').slice(0,2);
     var borders = ['rgba(210,160,20,0.9)','rgba(170,185,200,0.8)','rgba(185,100,28,0.8)','rgba(70,130,210,0.5)'];
     var border = borders[Math.min(pos-1,3)];
@@ -9752,12 +9752,12 @@ document.addEventListener('DOMContentLoaded', function(){
     var bc = (barColors[Math.min(pos-1,3)]||barColors[3]).split(',');
     var bg = 'linear-gradient(90deg,'+bc[0]+' 0%,'+bc[1]+' 50%,'+bc[2]+' 100%)';
     var maskStyle = '-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);';
-    return '<div class="mini-item p'+pos+'" style="display:flex;align-items:center;height:28px;gap:6px;padding:0;background:none;border:none;">' +
+    return '<div class="mini-item p'+pos+'" style="display:flex;align-items:center;height:42px;gap:6px;padding:0;background:none;border:none;">' +
              '<div style="'+posStyle+'">'+badge+'</div>' +
-             '<div style="width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid '+border+';display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;">' +
+             '<div style="width:39px;height:39px;border-radius:50%;background:#1e3a5f;border:2px solid '+border+';display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-15px;">' +
                '<img src="'+avUrl+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\''+initials+'\'">' +
              '</div>' +
-             '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">' +
+             '<div style="flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;">' +
                '<div class="fill bar-fill" data-target="'+pct+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;'+maskStyle+'background:'+bg+';transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>' +
                '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+(name||'')+'</div>' +
                '<div style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;">'+window.fmt(Math.round(+pontos||0))+' pts</div>' +
@@ -9858,8 +9858,22 @@ document.addEventListener('DOMContentLoaded', function(){
 
     
     sels.wk.onchange  = function(){ state.wk  = sels.wk.value;  window.renderMini('semana',    +sels.wk.value); };
-    if(sels.mes) sels.mes.onchange = function(){ state.mes = sels.mes.value; window.renderMini('mes',       +sels.mes.value); };
-    if(sels.tri) sels.tri.onchange = function(){ state.tri = sels.tri.value; window.renderMini('trimestre', +sels.tri.value); };
+    if(sels.mes) sels.mes.onchange = function(){
+      state.mes = sels.mes.value;
+      window.renderMini('mes', +sels.mes.value);
+      if(typeof window.mtMesSetMes === 'function') window.mtMesSetMes(+sels.mes.value);
+    };
+    if(sels.tri) sels.tri.onchange = function(){
+      state.tri = sels.tri.value;
+      window.renderMini('trimestre', +sels.tri.value);
+      if(typeof window.mtTriSetWK === 'function'){
+        var wksMes = {1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11],4:[13,14,15,16]};
+        var triVal = +sels.tri.value;
+        var wks = wksMes[triVal]||[];
+        var lastWk = wks[wks.length-1]||11;
+        window.mtTriSetWK(lastWk);
+      }
+    };
 
     
   };
