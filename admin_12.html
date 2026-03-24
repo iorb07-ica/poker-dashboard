@@ -784,7 +784,7 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Title': '🧪 Teste — Poker do Plaza',
+        'Title': 'Teste - Poker do Plaza',
         'Tags': 'test',
         'Priority': 'high'
       },
@@ -803,7 +803,7 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
       var canal = canalEl ? canalEl.value.trim() : ntfyCanal(nome);
       return fetch(server + '/' + canal, {
         method: 'POST',
-        headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Title': '🧪 Teste — Poker do Plaza', 'Tags': 'test' },
+        headers: { 'Content-Type': 'text/plain; charset=utf-8', 'Title': 'Teste - Poker do Plaza', 'Tags': 'test' },
         body: 'Olá ' + nome + '! Teste de notificação do Poker do Plaza. 🃏'
       }).then(function(r){ return { nome: nome, ok: r.ok }; })
         .catch(function(){ return { nome: nome, ok: false }; });
