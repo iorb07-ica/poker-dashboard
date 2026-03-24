@@ -4111,16 +4111,7 @@ body.mobile-mode #libwarn { display: none !important; }
 </div>
 </div><!-- fim torneios-hof-wrapper -->
 
-<!-- ═══ CARD: ÍNDICE DE ESTILO DE JOGO ═══ -->
-<div id="card-estilo" style="margin-top:16px;width:100%;box-sizing:border-box;">
-  <div class="card" style="padding:0;overflow:hidden;">
-    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);">
-      <div class="card-title">Índice de Estilo</div>
-      <div style="font-size:18px;font-weight:900;color:#e6edf3;">Perfil dos Jogadores</div>
-    </div>
-    <div id="estilo-grid" style="padding:12px 14px 14px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;"></div>
-  </div>
-</div>
+
 
 <!-- ═══ CARD: MODO DUELO ═══ -->
 <div id="card-duelo" style="margin-top:16px;width:100%;box-sizing:border-box;display:none;">
@@ -4218,53 +4209,46 @@ body.mobile-mode #libwarn { display: none !important; }
 <!-- ═══ CARD: ROADMAP ═══ -->
 <div id="card-roadmap" style="margin-top:16px;width:100%;box-sizing:border-box;">
   <div class="card" style="padding:0;overflow:hidden;">
-    <div style="padding:14px 16px 10px;border-bottom:1px solid rgba(255,255,255,0.05);">
-      <div class="card-title">Próximas versões</div>
-      <div style="font-size:18px;font-weight:900;color:#e6edf3;">Roadmap 2026</div>
+    <div onclick="window.toggleCard('roadmap-body','roadmap-arrow')" style="padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);">
+      <div>
+        <div class="card-title">Próximas versões</div>
+        <div style="font-size:18px;font-weight:900;color:#e6edf3;">Roadmap 2026</div>
+      </div>
+      <span id="roadmap-arrow" style="font-size:13px;color:rgba(255,255,255,0.3);transition:transform .25s;">▼</span>
     </div>
-    <div style="padding:14px;">
+    <div id="roadmap-body" style="display:none;padding:14px;">
 
-      <div style="border:1px solid rgba(212,160,23,0.3);background:rgba(212,160,23,0.06);border-radius:12px;padding:14px;margin-bottom:10px;">
+      <!-- Implementado: Notificações -->
+      <div style="border:1px solid rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);border-radius:12px;padding:14px;margin-bottom:10px;">
         <div style="display:flex;align-items:flex-start;gap:10px;">
           <div style="font-size:22px;flex-shrink:0;">🔔</div>
           <div style="flex:1;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#d4a017;">Notificações Push individuais (ntfy)</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(212,160,23,0.2);color:#d4a017;border-radius:6px;padding:2px 8px;">PRIORIDADE ALTA</span>
+              <div style="font-size:13px;font-weight:900;color:#34d399;">Notificações Push individuais (ntfy)</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(52,211,153,0.15);color:#34d399;border-radius:6px;padding:2px 8px;">✅ IMPLEMENTADO</span>
             </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Cada jogador recebe push no celular ao desbloquear uma relíquia. Canal individual por jogador via ntfy.sh (gratuito, sem servidor). Detecção automática ao registrar nova semana.</div>
-            <div style="font-size:10px;color:rgba(255,255,255,0.3);line-height:1.5;margin-bottom:8px;background:rgba(255,255,255,0.03);padding:8px;border-radius:8px;">
-              ✅ <strong style="color:rgba(255,255,255,0.5);">Código pronto</strong> — lógica de snapshot, detecção de relíquias novas, envio por canal individual, canal geral para resultados<br>
-              ⏳ <strong style="color:rgba(255,255,255,0.5);">Para ativar</strong> — cada jogador instala o app ntfy e se inscreve no canal com seu nome
-            </div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📱 ntfy.sh</span>
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">💰 R$0</span>
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">⏱ ~10 min setup</span>
-            </div>
-            <button onclick="ntfyAbrirPainelAdmin()" style="width:100%;padding:10px;background:linear-gradient(135deg,rgba(212,160,23,0.2),rgba(212,160,23,0.1));border:1px solid rgba(212,160,23,0.4);border-radius:10px;color:#d4a017;font-size:13px;font-weight:800;cursor:pointer;">🔔 Abrir painel de notificações</button>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Cada jogador recebe push no celular ao desbloquear uma relíquia. Canal individual por jogador via ntfy.sh (gratuito, sem servidor).</div>
+            <button onclick="ntfyAbrirPainelAdmin()" style="width:100%;padding:10px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:10px;color:#34d399;font-size:13px;font-weight:800;cursor:pointer;">🔔 Abrir painel de notificações</button>
           </div>
         </div>
       </div>
 
-      <div style="border:1px solid rgba(236,72,153,0.2);background:rgba(236,72,153,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+      <!-- Implementado: Modo Duelo -->
+      <div style="border:1px solid rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);border-radius:12px;padding:14px;margin-bottom:10px;">
         <div style="display:flex;align-items:flex-start;gap:10px;">
           <div style="font-size:22px;flex-shrink:0;">⚔️</div>
           <div style="flex:1;">
             <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#ec4899;">Modo Duelo — Head-to-Head</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(236,72,153,0.12);color:#ec4899;border-radius:6px;padding:2px 8px;">STAND BY</span>
+              <div style="font-size:13px;font-weight:900;color:#34d399;">Modo Duelo — Head-to-Head</div>
+              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(52,211,153,0.15);color:#34d399;border-radius:6px;padding:2px 8px;">✅ IMPLEMENTADO</span>
             </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Comparador head-to-head entre dois jogadores: vitórias, pódios, KOs, pontos, streak, ROI, rebuys e faltas. Placar final com vencedor do duelo.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">✅ Código pronto</span>
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">🔧 Só reativar</span>
-            </div>
+            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;">Comparador head-to-head entre dois jogadores: vitórias, pódios, KOs, pontos, streak, ROI, rebuys e faltas.</div>
           </div>
         </div>
       </div>
 
-      <div style="border:1px solid rgba(96,165,250,0.2);background:rgba(96,165,250,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
+      <!-- Backlog: Crônica -->
+      <div style="border:1px solid rgba(96,165,250,0.2);background:rgba(96,165,250,0.04);border-radius:12px;padding:14px;">
         <div style="display:flex;align-items:flex-start;gap:10px;">
           <div style="font-size:22px;flex-shrink:0;">📰</div>
           <div style="flex:1;">
@@ -4276,54 +4260,6 @@ body.mobile-mode #libwarn { display: none !important; }
             <div style="display:flex;gap:6px;flex-wrap:wrap;">
               <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">🤖 IA generativa</span>
               <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">💬 WhatsApp-ready</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="border:1px solid rgba(239,68,68,0.2);background:rgba(239,68,68,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">🔥</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#ef4444;">Streak de presença</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(239,68,68,0.12);color:#ef4444;border-radius:6px;padding:2px 8px;">BACKLOG</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Contador de semanas consecutivas sem faltar no perfil, com animação de fogo. Relíquias para streaks de 4, 8 e 12 semanas. Queima ao faltar.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="border:1px solid rgba(34,197,94,0.2);background:rgba(34,197,94,0.04);border-radius:12px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">💸</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#22c55e;">ROI por jogador no perfil</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(34,197,94,0.12);color:#22c55e;border-radius:6px;padding:2px 8px;">BACKLOG</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Total investido, total ganho e ROI em % no perfil de cada jogador. Todos os dados já estão no ledger.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="border:1px solid rgba(168,85,247,0.2);background:rgba(168,85,247,0.04);border-radius:12px;padding:14px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">🗓️</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#a855f7;">Calendário visual da temporada</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(168,85,247,0.12);color:#a855f7;border-radius:6px;padding:2px 8px;">BACKLOG</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Grade do ano inteiro com avatar do vencedor de cada semana. Semanas épicas em destaque dourado. Click em qualquer semana abre a ata daquela noite.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">📊 Dados já existem</span>
             </div>
           </div>
         </div>
@@ -4559,7 +4495,6 @@ function tabNav(cardId){
     { tab:'saldo',    id:'card-saldo-financeiro' },
     { tab:'atas',     id:'card-atas' },
     { tab:'duelo',    id:'card-duelo' },
-    { tab:'estilo',   id:'card-estilo' },
     { tab:'voz',      id:'card-voz' },
     { tab:'roadmap',  id:'card-roadmap' },
   ];
