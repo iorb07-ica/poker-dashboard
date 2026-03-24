@@ -20942,7 +20942,15 @@ self.addEventListener('notificationclick',function(e){
     var el = document.getElementById('rivalidades-content');
     if(!el) return;
     var eliData = (window.DATA && window.DATA.eliminacoes) ? window.DATA.eliminacoes : {};
-    var jogs = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    // Extrair jogadores dinamicamente dos dados (inclui Ezra e qualquer convidado)
+    var jogsSet = {};
+    Object.keys(eliData).forEach(function(wk){
+      (eliData[wk]||[]).forEach(function(e){
+        if(e.de) jogsSet[e.de] = true;
+        if(e.para) jogsSet[e.para] = true;
+      });
+    });
+    var jogs = Object.keys(jogsSet).sort();
     var eliArr = [];
     Object.keys(eliData).forEach(function(wk){
       (eliData[wk]||[]).forEach(function(e){ eliArr.push({wk:+wk, de:e.de, para:e.para}); });
