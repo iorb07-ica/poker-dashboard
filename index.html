@@ -548,10 +548,10 @@ body.mobile-mode #pontuacao-anual-arrow {
 
 .row.mini-ranks {
   display:grid;
-  grid-template-columns: 1.22fr 1.22fr 1.22fr 0.78fr 0.78fr 0.78fr;
-  gap:10px; align-items:stretch;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap:12px; align-items:start;
 }
-.row.mini-ranks .card.mini-card { grid-column:span 1; padding-top:2px !important; padding-bottom:0 !important; }
+.row.mini-ranks .card.mini-card { grid-column:span 1; padding-top:12px !important; padding-bottom:12px !important; }
 .row.mini-ranks .card.mini-card .mini-header {
   display:flex !important; align-items:center !important; justify-content:space-between !important;
   gap:8px !important; padding-top:0 !important; min-height:54px !important; overflow:visible !important;
@@ -566,7 +566,7 @@ body.mobile-mode #pontuacao-anual-arrow {
 }
 .row.mini-ranks .card.mini-card .mini-list {
   display:flex !important; flex-direction:column !important; gap:2px !important;
-  margin-top:8px !important; margin-bottom:10mm !important;
+  margin-top:48px !important; margin-bottom:10mm !important;
   max-height:none !important; overflow:visible !important;
 }
 .row.mini-ranks .card.mini-card .mini-list > * { margin:2px 0 !important; }
@@ -2175,6 +2175,11 @@ body.mobile-mode .mini-card { animation: none !important; opacity: 1 !important;
   .controls { margin-top: 0 !important; padding-top: 0 !important; }
 }
 
+#mini-mes-list { display: none !important; }
+#mini-tri-list { display: none !important; }
+#mt-mes-list   { display: flex !important; flex-direction: column !important; gap: 5px !important; }
+#mt-tri-list   { display: flex !important; flex-direction: column !important; gap: 5px !important; }
+
 </style>
 
 <!--
@@ -3028,7 +3033,19 @@ body.mobile-mode #libwarn { display: none !important; }
 <select id="mini-mes" style="flex-shrink:0;"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select>
 </div>
 <div class="mini-list" id="mini-mes-list"></div>
-<div class="mini-prizes" id="mini-mes-prizes"></div><div class="mini-rule" id="mini-mes-rule"></div></div>
+<div class="mini-list" id="mt-mes-list" style="display:none;flex-direction:column;gap:5px;"></div>
+<div style="display:flex;align-items:center;gap:10px;padding-top:6px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:4px;">
+  <button id="mt-mes-play-btn" onclick="window.mtMesTogglePlay()" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
+    <svg id="mt-mes-play-icon" viewBox="0 0 16 16" width="13" height="13" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
+  </button>
+  <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+    <input type="range" min="1" max="3" value="3" step="1" id="mt-mes-slider" oninput="window.mtMesSetMes(+this.value)" style="width:100%;accent-color:#a78bfa;">
+    <div style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"><span>Jan</span><span>Fev</span><span>Mar</span></div>
+  </div>
+  <div id="mt-mes-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">Mar</div>
+</div>
+<div style="margin-top:18px;padding-bottom:4px;"><div class="mini-prizes" id="mini-mes-prizes"></div><div class="mini-rule" id="mini-mes-rule"></div></div>
+</div>
 <div class="card mini-card tri">
 <div class="mini-header">
 <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
@@ -3041,7 +3058,19 @@ body.mobile-mode #libwarn { display: none !important; }
 <select id="mini-tri" style="flex-shrink:0;"><option value="T1">Tri 1</option><option value="T2">Tri 2</option><option value="T3">Tri 3</option><option value="T4">Tri 4</option></select>
 </div>
 <div class="mini-list" id="mini-tri-list"></div>
-<div class="mini-prizes" id="mini-tri-prizes"></div><div class="mini-rule" id="mini-tri-rule"></div></div>
+<div class="mini-list" id="mt-tri-list" style="display:none;flex-direction:column;gap:5px;"></div>
+<div style="display:flex;align-items:center;gap:10px;padding-top:6px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:4px;">
+  <button id="mt-tri-play-btn" onclick="window.mtTriTogglePlay()" style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
+    <svg id="mt-tri-play-icon" viewBox="0 0 16 16" width="13" height="13" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
+  </button>
+  <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
+    <input type="range" min="1" max="11" value="11" step="1" id="mt-tri-slider" oninput="window.mtTriSetWK(+this.value)" style="width:100%;accent-color:#a78bfa;">
+    <div style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"><span>WK1</span><span>WK3</span><span>WK5</span><span>WK7</span><span>WK9</span><span>WK11</span></div>
+  </div>
+  <div id="mt-tri-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 11</div>
+</div>
+<div style="margin-top:18px;padding-bottom:4px;"><div class="mini-prizes" id="mini-tri-prizes"></div><div class="mini-rule" id="mini-tri-rule"></div></div>
+</div>
 
 <template id="svg-gold"><svg aria-hidden="true" class="medal g" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradG)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradG"><stop offset="0%" stop-color="#fff1a6"></stop><stop offset="60%" stop-color="#f4c842"></stop><stop offset="100%" stop-color="#caa12a"></stop></radialgradient></defs></svg></template>
 <template id="svg-silver"><svg aria-hidden="true" class="medal s" viewbox="0 0 24 24"><circle cx="12" cy="12" fill="url(#gradS)" r="8"></circle><defs><radialgradient cx="30%" cy="30%" id="gradS"><stop offset="0%" stop-color="#ffffff"></stop><stop offset="60%" stop-color="#cfd8dc"></stop><stop offset="100%" stop-color="#9ea7aa"></stop></radialgradient></defs></svg></template>
@@ -3162,9 +3191,7 @@ body.mobile-mode #libwarn { display: none !important; }
  <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
  </div>
  <div id="ranking-anual-body" data-open="true" style="padding:0 16px 16px;">
- <div id="mt-ranking-area" style="display:flex;flex-direction:column;gap:5px;margin-bottom:0;"></div>
- <div id="mt-prizes" style="margin-top:8px;padding-top:6px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35;"></div>
- <div id="mt-rule" style="margin-top:3px;color:#9fb3d4;font-size:11px;opacity:.9;"></div>
+ <div id="mt-ranking-area" style="display:flex;flex-direction:column;gap:5px;margin-bottom:0;margin-top:24px;"></div>
  <div style="display:flex;align-items:center;gap:10px;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:10px;">
    <button id="mt-play-btn" onclick="window.mtTogglePlay()" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
      <svg id="mt-play-icon" viewBox="0 0 16 16" width="15" height="15" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
@@ -3176,6 +3203,10 @@ body.mobile-mode #libwarn { display: none !important; }
      </div>
    </div>
    <div id="mt-wk-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 11</div>
+ </div>
+ <div style="margin-top:20px;">
+   <div id="mt-prizes" style="padding-top:8px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35;"></div>
+   <div id="mt-rule" style="margin-top:3px;color:#9fb3d4;font-size:11px;opacity:.9;"></div>
  </div>
  </div>
  </div>
@@ -3230,7 +3261,7 @@ body.mobile-mode #libwarn { display: none !important; }
         avHtml+'</div>'+
         '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">'+
           '<div id="mt-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
-          '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
+          '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
           '<div id="mt-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>'+
         '</div>';
       area.appendChild(row);
@@ -3333,6 +3364,264 @@ body.mobile-mode #libwarn { display: none !important; }
   window.afterDataLoaded = function(){
     if(typeof _origADL==='function') _origADL.apply(this, arguments);
     setTimeout(mtInit, 600);
+  };
+})();
+</script>
+
+<script>
+(function(){
+  var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+  var PERC=[0.40,0.30,0.15,0.10,0.05];
+  var MES_NOMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11]};
+  var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
+
+  function getAvatarUrl(n){ return 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
+  var INITIALS={Israel:'Is',Magu:'Ma',Heron:'He',Charles:'Ch',Oscar:'Os',Pedro:'Pe',Cristiano:'Cr',Marcus:'Mr',Rafa:'Ra'};
+
+  function barGrad(pos){
+    if(pos===0) return '#c89010,#f0c830,#906800';
+    if(pos===1) return '#788898,#c0ccd8,#485868';
+    if(pos===2) return '#a85818,#d88030,#784010';
+    return '#204898,#5090d8,#0c2060';
+  }
+  function avBorder(pos){
+    return ['rgba(210,160,20,0.9)','rgba(170,185,200,0.8)','rgba(185,100,28,0.8)','rgba(70,130,210,0.5)'][Math.min(pos,3)];
+  }
+
+  function buildRows(containerId, prefix){
+    var list = document.getElementById(containerId);
+    if(!list) return;
+    list.innerHTML = '';
+    list.style.display = 'flex';
+    list.style.flexDirection = 'column';
+    list.style.gap = '5px';
+    PLAYERS.forEach(function(p){
+      var row = document.createElement('div');
+      row.id = prefix+'-prow-'+p;
+      row.style.cssText = 'display:flex;align-items:center;height:28px;gap:6px;';
+      var av = document.createElement('div');
+      av.id = prefix+'-av-'+p;
+      av.style.cssText = 'width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;';
+      var img = document.createElement('img');
+      img.src = getAvatarUrl(p);
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
+      av.appendChild(img);
+      row.innerHTML =
+        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
+      row.appendChild(av);
+      var barOuter = document.createElement('div');
+      barOuter.style.cssText = 'flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;';
+      barOuter.innerHTML =
+        '<div id="'+prefix+'-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
+        '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
+        '<div id="'+prefix+'-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>';
+      row.appendChild(barOuter);
+      list.appendChild(row);
+    });
+  }
+
+  function renderRows(prefix, ranking, pot, animate){
+    var maxPts = Math.max(ranking[0]?ranking[0].pts:1, 1);
+    ranking.forEach(function(r, idx){
+      var pct = r.pts>0 ? Math.max(Math.round((r.pts/maxPts)*100), 25) : 0;
+      var fill = document.getElementById(prefix+'-fill-'+r.name);
+      var ptsEl = document.getElementById(prefix+'-pts-'+r.name);
+      var posEl = document.getElementById(prefix+'-pos-'+r.name);
+      var avEl  = document.getElementById(prefix+'-av-'+r.name);
+      var row   = document.getElementById(prefix+'-prow-'+r.name);
+      var c = barGrad(idx).split(',');
+      if(fill){
+        fill.style.background = 'linear-gradient(90deg,'+c[0]+' 0%,'+c[1]+' 50%,'+c[2]+' 100%)';
+        fill.style.transition = 'width 1.4s cubic-bezier(.22,1,.36,1)';
+        if(animate){ fill.style.width = pct+'%'; }
+        else {
+          fill.style.transition = 'none'; fill.style.width = '0%';
+          (function(f,p,d){ setTimeout(function(){ f.style.transition='width 1.4s cubic-bezier(.22,1,.36,1)'; f.style.width=p+'%'; }, d); })(fill, pct, idx*80);
+        }
+      }
+      if(ptsEl) ptsEl.textContent = r.pts>0 ? Math.round(r.pts).toLocaleString('pt-BR')+' pts' : '';
+      if(posEl){
+        if(idx===0){posEl.style.fontSize='18px';posEl.textContent='🏆';}
+        else if(idx===1){posEl.style.fontSize='17px';posEl.textContent='🥈';}
+        else if(idx===2){posEl.style.fontSize='17px';posEl.textContent='🥉';}
+        else{posEl.style.fontSize='13px';posEl.style.fontWeight='800';posEl.style.color='rgba(255,255,255,0.65)';posEl.textContent=(idx+1)+'.';}
+      }
+      if(row) row.style.order = idx;
+      if(avEl) avEl.style.borderColor = avBorder(idx);
+    });
+  }
+
+  function getRankingUpToWK(wkMax){
+    var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
+    var pts = {};
+    PLAYERS.forEach(function(p){ pts[p]=0; });
+    ledger.filter(function(r){ return +r.wk<=wkMax && !+r.faltou; }).forEach(function(r){
+      if(pts[r.jogador]!==undefined) pts[r.jogador] += (+r.pontos_calc||0);
+    });
+    return PLAYERS.map(function(p){ return {name:p, pts:pts[p]}; }).sort(function(a,b){ return b.pts-a.pts; });
+  }
+
+  function getRankingMes(mes, wkMax){
+    var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
+    var wksMes = MES_WKS[mes]||[];
+    var wksAte = wksMes.filter(function(w){ return w<=wkMax; });
+    var pts = {};
+    PLAYERS.forEach(function(p){ pts[p]=0; });
+    ledger.filter(function(r){ return wksAte.indexOf(+r.wk)>=0 && !+r.faltou; }).forEach(function(r){
+      if(pts[r.jogador]!==undefined) pts[r.jogador] += (+r.pontos_calc||0);
+    });
+    return PLAYERS.map(function(p){ return {name:p, pts:pts[p]}; }).sort(function(a,b){ return b.pts-a.pts; });
+  }
+
+  function getPotMes(mes, wkMax){
+    var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
+    var wksMes = (MES_WKS[mes]||[]).filter(function(w){ return w<=wkMax; });
+    var entradas = 0;
+    ledger.filter(function(r){ return wksMes.indexOf(+r.wk)>=0 && !+r.faltou; }).forEach(function(r){
+      entradas += (+r.buyin||0)+(+r.rebuys||0);
+    });
+    return (entradas + (EXTRAS_MES[mes]||0)) * R_MES;
+  }
+
+  function getPotTri(wkMax){
+    var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
+    var entradas = 0;
+    ledger.filter(function(r){ return +r.wk<=wkMax && !+r.faltou; }).forEach(function(r){
+      entradas += (+r.buyin||0)+(+r.rebuys||0);
+    });
+    return (entradas + (EXTRAS_TRI[1]||0)) * R_TRI;
+  }
+
+  function updatePrizes(prizesId, ruleId, ranking, pot){
+    var prizesEl = document.getElementById(prizesId);
+    var ruleEl   = document.getElementById(ruleId);
+    if(prizesEl){
+      prizesEl.innerHTML = ranking.slice(0,5).map(function(r,i){
+        var v = (pot*PERC[i]).toFixed(2).replace('.',',');
+        return '<span style="color:#9fb3d4">'+(i+1)+'º</span> '+r.name+' - <b style="color:#fff;font-weight:800;">R$ '+v+'</b>';
+      }).join('<span style="color:rgba(255,255,255,0.25)"> • </span>');
+    }
+    if(ruleEl) ruleEl.textContent = 'Distribuição de premiação do pote '+(prizesId.indexOf('mes')>=0?'mensal':'trimestral')+': 1º (40%) — 2º (30%) — 3º (15%) — 4º (10%) — 5º (5%)';
+  }
+
+  // ── MÊS ────────────────────────────────────────────────────────────
+  var mtMesCur = 3, mtMesPlaying = false, mtMesInterval = null;
+  var MES_MAX_WK = {1:4, 2:8, 3:11};
+
+  window.mtMesSetMes = function(mes){
+    mtMesCur = mes;
+    var pill = document.getElementById('mt-mes-pill');
+    var slider = document.getElementById('mt-mes-slider');
+    if(pill) pill.textContent = MES_NOMES[mes-1];
+    if(slider) slider.value = mes;
+    var ranking = getRankingMes(mes, MES_MAX_WK[mes]||11);
+    var pot = getPotMes(mes, MES_MAX_WK[mes]||11);
+    renderRows('mt-mes', ranking, pot, true);
+    updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+  };
+
+  window.mtMesTogglePlay = function(){
+    mtMesPlaying = !mtMesPlaying;
+    var icon = document.getElementById('mt-mes-play-icon');
+    if(mtMesPlaying){
+      if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
+      var mes = mtMesCur >= 3 ? 0 : mtMesCur;
+      mtMesInterval = setInterval(function(){
+        mes++;
+        window.mtMesSetMes(mes);
+        if(mes>=3){ clearInterval(mtMesInterval); mtMesPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+      }, 1000);
+    } else {
+      clearInterval(mtMesInterval);
+      if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';
+    }
+  };
+
+  // ── TRIMESTRE ──────────────────────────────────────────────────────
+  var mtTriCur = 11, mtTriPlaying = false, mtTriInterval = null;
+
+  window.mtTriSetWK = function(wk){
+    mtTriCur = wk;
+    var pill = document.getElementById('mt-tri-pill');
+    var slider = document.getElementById('mt-tri-slider');
+    if(pill) pill.textContent = 'WK '+wk;
+    if(slider) slider.value = wk;
+    var ranking = getRankingUpToWK(wk);
+    var pot = getPotTri(wk);
+    renderRows('mt-tri', ranking, pot, true);
+    updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
+  };
+
+  window.mtTriTogglePlay = function(){
+    mtTriPlaying = !mtTriPlaying;
+    var icon = document.getElementById('mt-tri-play-icon');
+    if(mtTriPlaying){
+      if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
+      var wk = mtTriCur >= 11 ? 0 : mtTriCur;
+      mtTriInterval = setInterval(function(){
+        wk++;
+        window.mtTriSetWK(wk);
+        if(wk>=11){ clearInterval(mtTriInterval); mtTriPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+      }, 900);
+    } else {
+      clearInterval(mtTriInterval);
+      if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';
+    }
+  };
+
+  function showMtList(prefix){
+    var orig = document.getElementById('mini-'+prefix.replace('mt-','')+'-list');
+    var mtl  = document.getElementById(prefix+'-list');
+    if(orig) orig.style.display = 'none';
+    if(mtl)  mtl.style.display  = 'flex';
+  }
+
+  // Interceptar renderMini global para garantir que mini-mes-list e mini-tri-list
+  // fiquem sempre ocultos após qualquer chamada do sistema original
+  function patchRenderMini(){
+    var orig = window.renderMini;
+    if(!orig || orig._mtPatched) return;
+    window.renderMini = function(per, val){
+      orig.apply(this, arguments);
+      if(per === 'mes'){
+        var ml = document.getElementById('mini-mes-list');
+        if(ml) ml.style.display = 'none';
+      }
+      if(per === 'trimestre'){
+        var tl = document.getElementById('mini-tri-list');
+        if(tl) tl.style.display = 'none';
+      }
+    };
+    window.renderMini._mtPatched = true;
+  }
+
+  function mtMesTriInit(){
+    patchRenderMini();
+    buildRows('mt-mes-list', 'mt-mes');
+    buildRows('mt-tri-list', 'mt-tri');
+    showMtList('mt-mes');
+    showMtList('mt-tri');
+    // Renderizar estado atual
+    var rMes = getRankingMes(3, 11);
+    renderRows('mt-mes', rMes, getPotMes(3,11), false);
+    updatePrizes('mini-mes-prizes','mini-mes-rule', rMes, getPotMes(3,11));
+    var rTri = getRankingUpToWK(11);
+    renderRows('mt-tri', rTri, getPotTri(11), false);
+    updatePrizes('mini-tri-prizes','mini-tri-rule', rTri, getPotTri(11));
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(mtMesTriInit, 900); });
+  } else {
+    setTimeout(mtMesTriInit, 900);
+  }
+
+  var _origADL2 = window.afterDataLoaded;
+  window.afterDataLoaded = function(){
+    if(typeof _origADL2==='function') _origADL2.apply(this, arguments);
+    setTimeout(function(){ patchRenderMini(); mtMesTriInit(); }, 700);
   };
 })();
 </script>
@@ -7058,7 +7347,8 @@ function tryInitCharts(){
  if(!window.echarts){ showLibWarn(true); return false; }
  showLibWarn(false);
  if(!eRanking){
- eRanking = echarts.init(document.getElementById('chartRanking'));
+ var _elRanking = document.getElementById('chartRanking');
+ eRanking = _elRanking ? echarts.init(_elRanking) : null;
  eKOs = echarts.init(document.getElementById('chartKOs'));
  eEvo = echarts.init(document.getElementById('chartEvolucao'));
  window.eRanking = eRanking; window.eKOs = eKOs; window.eEvo = eEvo;
@@ -9469,7 +9759,7 @@ document.addEventListener('DOMContentLoaded', function(){
              '</div>' +
              '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">' +
                '<div class="fill bar-fill" data-target="'+pct+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;'+maskStyle+'background:'+bg+';transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>' +
-               '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+(name||'')+'</div>' +
+               '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+(name||'')+'</div>' +
                '<div style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;">'+window.fmt(Math.round(+pontos||0))+' pts</div>' +
              '</div>' +
            '</div>';
@@ -13823,12 +14113,12 @@ window.addEventListener('load', function(){
         '.row.mini-ranks .card.mini-card .mini-header { display: flex !important; align-items: center !important; justify-content: space-between !important; min-height: auto !important; padding-top: 0 !important; gap: 8px !important; margin-bottom: 10px !important; }',
         '.row.mini-ranks .card.mini-card .card-title { font-size: 13px !important; white-space: nowrap !important; }',
         '.row.mini-ranks .card.mini-card .mini-header select { width: auto !important; max-width: 46% !important; font-size: 12px !important; padding: 4px 8px !important; min-height: unset !important; flex: 0 0 auto !important; border-radius: 8px !important; }',
-        '.row.mini-ranks .card.mini-card .mini-header { margin-bottom: 12px !important; gap: 10px !important; }',
+        '.row.mini-ranks .card.mini-card .mini-header { margin-bottom: 0px !important; gap: 10px !important; }',
         '.row.mini-ranks .card.mini-card .card-title { font-size: 14px !important; }',
         '.mini-item { padding: 5px 8px !important; margin-bottom: 3px !important; }',
         '.mini-item .name { font-size: 13px !important; }',
         '.mini-item .value, .mini-item .pts { font-size: 13px !important; }',
-        '.row.mini-ranks .card.mini-card .mini-list { margin-top: 6px !important; }',
+        '.row.mini-ranks .card.mini-card .mini-list { margin-top: 48px !important; }',
         '.mini-item { padding: 5px 8px !important; border-radius: 8px !important; margin-bottom: 3px !important; }',
         '.mini-item .pos { font-size: 16px !important; width: 26px !important; }',
         '.mini-item .name { font-size: 13px !important; }',
@@ -15234,7 +15524,7 @@ window.addEventListener('load', function(){
 
     
     html += '<thead><tr>';
-    html += '<th style="width:'+labelW+'px;padding:0;border-spacing:0;"></th>';
+    html += '<th style="width:'+labelW+'px;padding:0;border-spacing:0;position:sticky;left:0;z-index:3;background:#0d1629;"></th>';
     wks.forEach(function(wk){
       html += '<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:9px;font-weight:600;padding:0 0 2px 0;white-space:nowrap;">WK'+String(wk).padStart(2,'0')+'</th>';
     });
@@ -15243,7 +15533,7 @@ window.addEventListener('load', function(){
     jogs.forEach(function(jog){
       html += '<tr>';
       var displayName = (isMobile && jog.length > 6) ? jog.slice(0,6) : jog;
-      html += '<td style="width:'+labelW+'px;color:#e6edf3;font-size:'+labelFont+'px;font-weight:700;text-align:right;padding-right:6px;vertical-align:middle;white-space:nowrap;border:none;">'+displayName+'</td>';
+      html += '<td style="width:'+labelW+'px;color:#e6edf3;font-size:'+labelFont+'px;font-weight:700;text-align:right;padding-right:6px;vertical-align:middle;white-space:nowrap;border:none;position:sticky;left:0;z-index:2;background:#0d1629;">'+displayName+'</td>';
 
       wks.forEach(function(wk){
         var r=idx2[jog]?idx2[jog][wk]:null;
@@ -17127,14 +17417,206 @@ window.abrirPerfil = function(jogadorNome){
     btnHelp.style.cssText = 'width:18px;height:18px;border-radius:50%;border:1px solid rgba(52,211,153,0.4);background:rgba(52,211,153,0.1);'
       +'color:#6ee7b7;font-size:10px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;line-height:1;padding:0;font-family:inherit;';
 
+    // Botão Comparar
+    var btnCmp = document.createElement('button');
+    btnCmp.textContent = '⚔️ Comparar';
+    btnCmp.style.cssText = 'font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;border:1px solid rgba(167,139,250,0.3);background:rgba(167,139,250,0.1);color:#c4b5fd;cursor:pointer;font-family:inherit;';
+
     var rightSide = document.createElement('div');
     rightSide.style.cssText = 'display:flex;align-items:center;gap:7px;';
     if(tag) rightSide.innerHTML = '<span style="font-size:11px;color:#6ee7b7;font-style:italic;">'+tag+'</span>';
+    rightSide.appendChild(btnCmp);
     rightSide.appendChild(btnHelp);
 
     titleRow.innerHTML = '<span style="font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);">DNA do jogador</span>';
     titleRow.appendChild(rightSide);
     wrap.appendChild(titleRow);
+
+    var _desenharRadar = null;
+
+    // ── Função que abre o modal comparador ───────────────────────
+    btnCmp.onclick = function(){
+      var TODOS = ['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+      var OUTROS = TODOS.filter(function(n){ return n!==jogadorNome; });
+      var CA='#a78bfa', CB='#f59e0b';
+      var TAGS2={Israel:'O estrategista',Magu:'O assassino',Heron:'O predador caro',Charles:'O late bloomer',Oscar:'O sniper econômico',Pedro:'O resiliente',Cristiano:'O veterano resistente',Marcus:'O irregular',Rafa:'O reserva explosivo'};
+      var KO_TETO=3.5,REB_TETO=2.5,PTS_TETO=25000;
+
+      function calcDNA(nome){
+        var ledger2=(window.DATA&&window.DATA.ledger)?window.DATA.ledger:[];
+        var jogou=ledger2.filter(function(r){return r.jogador===nome&&!+r.faltou;});
+        var total=ledger2.filter(function(r){return r.jogador===nome;});
+        var n=jogou.length,ntot=total.length;
+        if(!n) return [0,0,0,0,0,0];
+        var kos=jogou.reduce(function(s,r){return s+(+r.kos||0);},0);
+        var rebs=jogou.reduce(function(s,r){return s+(+r.rebuys||0);},0);
+        var pos=jogou.map(function(r){return r.posicao;}).filter(function(v){return v>0;});
+        var np=pos.length,mean=np?pos.reduce(function(a,b){return a+b;},0)/np:0;
+        var dp=np?Math.sqrt(pos.reduce(function(s,p){return s+Math.pow(p-mean,2);},0)/np):5;
+        var top3=jogou.filter(function(r){return r.posicao&&r.posicao<=3;}).length;
+        var avg=jogou.reduce(function(s,r){return s+(+r.pontos_calc||0);},0)/n;
+        return [
+          Math.min(1,kos/(n*KO_TETO)),
+          Math.max(0,1-dp/5),
+          top3/n,
+          Math.max(0,1-rebs/(n*REB_TETO)),
+          n/ntot,
+          Math.min(1,avg/PTS_TETO)
+        ];
+      }
+
+      var DLABELS=['Agressividade','Consistência','Sobrevivência','Economia','Presença','Performance'];
+      var dnaA=calcDNA(jogadorNome);
+
+      // Criar overlay
+      var overlay=document.createElement('div');
+      overlay.style.cssText='position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);z-index:9999;display:flex;align-items:center;justify-content:center;padding:16px;';
+
+      var modal=document.createElement('div');
+      modal.style.cssText='background:#07101f;border:1.5px solid rgba(167,139,250,0.25);border-radius:18px;width:100%;max-width:380px;max-height:90vh;overflow-y:auto;padding:18px;position:relative;';
+
+      // Header modal
+      var mhdr=document.createElement('div');
+      mhdr.style.cssText='display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;';
+      mhdr.innerHTML='<div style="font-size:15px;font-weight:900;color:#e6edf3;">⚔️ Comparador de DNA</div>';
+      var btnClose2=document.createElement('button');
+      btnClose2.textContent='✕';
+      btnClose2.style.cssText='width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.5);font-size:14px;cursor:pointer;font-family:inherit;';
+      btnClose2.onclick=function(){document.body.removeChild(overlay);};
+      mhdr.appendChild(btnClose2);
+      modal.appendChild(mhdr);
+
+      // Seletores
+      var selRow=document.createElement('div');
+      selRow.style.cssText='display:flex;align-items:center;gap:10px;margin-bottom:16px;';
+      selRow.innerHTML=
+        '<div style="flex:1"><div style="font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;">Jogador A</div>'+
+        '<select id="cmp-selA" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e6edf3;font-size:12px;padding:6px 8px;outline:none;">'+
+        TODOS.map(function(n){return'<option value="'+n+'"'+(n===jogadorNome?' selected':'')+'>'+n+'</option>';}).join('')+
+        '</select></div>'+
+        '<div style="color:rgba(255,255,255,0.3);font-size:14px;padding-top:16px;">vs</div>'+
+        '<div style="flex:1"><div style="font-size:9px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:4px;">Jogador B</div>'+
+        '<select id="cmp-selB" style="width:100%;background:#0d1629;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#e6edf3;font-size:12px;padding:6px 8px;outline:none;">'+
+        OUTROS.map(function(n){return'<option value="'+n+'">'+n+'</option>';}).join('')+
+        '</select></div>';
+      modal.appendChild(selRow);
+
+      // Canvas radar
+      var cmpCanvas=document.createElement('canvas');
+      var cmpSize=220;
+      var dpr2=window.devicePixelRatio||1;
+      cmpCanvas.width=cmpSize*dpr2; cmpCanvas.height=cmpSize*dpr2;
+      cmpCanvas.style.cssText='width:'+cmpSize+'px;height:'+cmpSize+'px;display:block;margin:0 auto 16px;';
+      modal.appendChild(cmpCanvas);
+
+      // Grid dimensões
+      var dimsGrid=document.createElement('div');
+      dimsGrid.id='cmp-dims-grid';
+      dimsGrid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;';
+      modal.appendChild(dimsGrid);
+
+      // Análise
+      var insightBox=document.createElement('div');
+      insightBox.id='cmp-insight';
+      insightBox.style.cssText='background:rgba(167,139,250,0.06);border:0.5px solid rgba(167,139,250,0.2);border-radius:10px;padding:10px 12px;';
+      modal.appendChild(insightBox);
+
+      overlay.appendChild(modal);
+      overlay.onclick=function(e){if(e.target===overlay) document.body.removeChild(overlay);};
+      document.body.appendChild(overlay);
+
+      function drawCmpRadar(vA,vB,nA,nB){
+        var ctx2=cmpCanvas.getContext('2d');
+        ctx2.setTransform(dpr2,0,0,dpr2,0,0);
+        var cx2=cmpSize/2,cy2=cmpSize/2+8,r2=cmpSize*0.30,N2=6;
+        ctx2.clearRect(0,0,cmpSize,cmpSize);
+        // anéis
+        for(var ring=1;ring<=4;ring++){
+          ctx2.beginPath();
+          for(var i=0;i<N2;i++){var a=(i/N2)*Math.PI*2-Math.PI/2,rr=r2*(ring/4);i===0?ctx2.moveTo(cx2+Math.cos(a)*rr,cy2+Math.sin(a)*rr):ctx2.lineTo(cx2+Math.cos(a)*rr,cy2+Math.sin(a)*rr);}
+          ctx2.closePath(); ctx2.strokeStyle='rgba(255,255,255,0.07)'; ctx2.lineWidth=0.5; ctx2.stroke();
+          if(ring===4){ctx2.fillStyle='rgba(255,255,255,0.02)';ctx2.fill();}
+        }
+        // eixos + labels
+        for(var i=0;i<N2;i++){
+          var a=(i/N2)*Math.PI*2-Math.PI/2;
+          ctx2.beginPath(); ctx2.moveTo(cx2,cy2); ctx2.lineTo(cx2+Math.cos(a)*r2,cy2+Math.sin(a)*r2);
+          ctx2.strokeStyle='rgba(255,255,255,0.07)'; ctx2.lineWidth=0.5; ctx2.stroke();
+          var lx=cx2+Math.cos(a)*(r2+14),ly=cy2+Math.sin(a)*(r2+14);
+          ctx2.fillStyle='rgba(255,255,255,0.4)'; ctx2.font='bold 8px system-ui'; ctx2.textAlign='center'; ctx2.textBaseline='middle';
+          ctx2.fillText(DLABELS[i].slice(0,3).toUpperCase(),lx,ly);
+        }
+        function poly(vals,fill,stroke){
+          ctx2.beginPath();
+          vals.forEach(function(v,i){var a=(i/N2)*Math.PI*2-Math.PI/2;i===0?ctx2.moveTo(cx2+Math.cos(a)*r2*v,cy2+Math.sin(a)*r2*v):ctx2.lineTo(cx2+Math.cos(a)*r2*v,cy2+Math.sin(a)*r2*v);});
+          ctx2.closePath(); ctx2.fillStyle=fill; ctx2.fill(); ctx2.strokeStyle=stroke; ctx2.lineWidth=2; ctx2.stroke();
+          vals.forEach(function(v,i){var a=(i/N2)*Math.PI*2-Math.PI/2;ctx2.beginPath();ctx2.arc(cx2+Math.cos(a)*r2*v,cy2+Math.sin(a)*r2*v,3,0,Math.PI*2);ctx2.fillStyle=stroke;ctx2.fill();});
+        }
+        poly(vB,'rgba(245,158,11,0.20)',CB);
+        poly(vA,'rgba(167,139,250,0.20)',CA);
+        // legenda
+        [[nA,CA],[nB,CB]].forEach(function(item,i){
+          var lx=16+i*(cmpSize/2),ly=14;
+          ctx2.beginPath();ctx2.arc(lx,ly,4,0,Math.PI*2);ctx2.fillStyle=item[1];ctx2.fill();
+          ctx2.fillStyle='rgba(255,255,255,0.7)';ctx2.font='bold 10px system-ui';ctx2.textAlign='left';ctx2.textBaseline='middle';
+          ctx2.fillText(item[0],lx+8,ly);
+        });
+      }
+
+      function renderDimsGrid(vA,vB,nA,nB){
+        dimsGrid.innerHTML=DLABELS.map(function(d,i){
+          var va=vA[i]||0,vb=vB[i]||0,winner=va>vb?'A':vb>va?'B':'';
+          return '<div style="background:rgba(255,255,255,0.03);border-radius:8px;padding:7px 9px;">'+
+            '<div style="font-size:9px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:5px;">'+d+'</div>'+
+            '<div style="display:flex;align-items:center;gap:4px;margin-bottom:3px;">'+
+              '<div style="font-size:9px;color:'+CA+';width:14px;text-align:right;flex-shrink:0;">A</div>'+
+              '<div style="flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:'+CA+';width:'+Math.round(va*100)+'%;transition:width .6s;"></div></div>'+
+              '<div style="font-size:9px;font-weight:700;color:'+CA+';width:24px;text-align:right;">'+Math.round(va*100)+'</div>'+
+              (winner==='A'?'<div style="font-size:8px;color:'+CA+';font-weight:800;">▲</div>':'<div style="width:10px;"></div>')+
+            '</div>'+
+            '<div style="display:flex;align-items:center;gap:4px;">'+
+              '<div style="font-size:9px;color:'+CB+';width:14px;text-align:right;flex-shrink:0;">B</div>'+
+              '<div style="flex:1;height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;"><div style="height:100%;border-radius:3px;background:'+CB+';width:'+Math.round(vb*100)+'%;transition:width .6s;"></div></div>'+
+              '<div style="font-size:9px;font-weight:700;color:'+CB+';width:24px;text-align:right;">'+Math.round(vb*100)+'</div>'+
+              (winner==='B'?'<div style="font-size:8px;color:'+CB+';font-weight:800;">▲</div>':'<div style="width:10px;"></div>')+
+            '</div>'+
+          '</div>';
+        }).join('');
+      }
+
+      function renderInsight(vA,vB,nA,nB){
+        var wA=0,wB=0;
+        DLABELS.forEach(function(d,i){if(vA[i]>vB[i])wA++;else if(vB[i]>vA[i])wB++;});
+        var diffs=DLABELS.map(function(d,i){return{d:d,diff:Math.abs(vA[i]-vB[i]),aHead:vA[i]>vB[i]};}).sort(function(x,y){return y.diff-x.diff;});
+        var big=diffs[0];
+        var overall=wA>wB?nA:wB>wA?nB:'Empate';
+        var oColor=overall===nA?CA:overall===nB?CB:'#9fb3d4';
+        insightBox.innerHTML=
+          '<div style="font-size:9px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(167,139,250,0.7);margin-bottom:6px;">📊 Análise</div>'+
+          '<div style="font-size:11px;color:#c8d8f0;line-height:1.5;margin-bottom:3px;">Vantagem geral: <b style="color:'+oColor+'">'+overall+'</b> ('+wA+'×'+wB+' dimensões)</div>'+
+          '<div style="font-size:11px;color:#c8d8f0;line-height:1.5;margin-bottom:3px;">Maior diferença: <b>'+big.d+'</b> — '+(big.aHead?nA:nB)+' supera '+(big.aHead?nB:nA)+' em <b>'+Math.round(big.diff*100)+'pts</b></div>'+
+          '<div style="margin-top:5px;font-size:10px;color:rgba(255,255,255,0.35);font-style:italic;">"'+TAGS2[nA]+'" vs "'+TAGS2[nB]+'"</div>';
+      }
+
+      function updateCmp(){
+        var selA=document.getElementById('cmp-selA');
+        var selB=document.getElementById('cmp-selB');
+        if(!selA||!selB) return;
+        var nA=selA.value, nB=selB.value;
+        var vA=calcDNA(nA), vB=calcDNA(nB);
+        drawCmpRadar(vA,vB,nA,nB);
+        renderDimsGrid(vA,vB,nA,nB);
+        renderInsight(vA,vB,nA,nB);
+      }
+
+      setTimeout(function(){
+        updateCmp();
+        var sA=document.getElementById('cmp-selA');
+        var sB=document.getElementById('cmp-selB');
+        if(sA) sA.onchange=updateCmp;
+        if(sB) sB.onchange=updateCmp;
+      }, 50);
+    };
 
     // ── Tour das dimensões ────────────────────────────────────────
     var DNA_TOUR = [
@@ -17341,8 +17823,7 @@ window.abrirPerfil = function(jogadorNome){
       // pontos coloridos
       for(var i=0;i<N;i++){
         var a=(i/N)*Math.PI*2-Math.PI/2, v=_vals[i];
-        var px=cx+Math.cos(a)*r*v, py=cy+Math.sin(a)*r*v;
-        ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2);
+        ctx.beginPath(); ctx.arc(cx+Math.cos(a)*r*v, cy+Math.sin(a)*r*v, 3, 0, Math.PI*2);
         ctx.fillStyle=_cols[i]; ctx.fill();
       }
       // labels
@@ -19348,22 +19829,22 @@ document.addEventListener('click', function(e){
       var mRank = mediaRankMap[p.nome];
       var mRankTxt = mRank===1?'1º':mRank===2?'2º':mRank===3?'3º':(mRank+'º');
       html += '<div style="flex:1;min-width:0;">'
-        +'<div style="font-size:14px;font-weight:800;color:#e6edf3;margin-bottom:2px;">'+Math.round(p.pts).toLocaleString('pt-BR')+' pts</div>'
-        +'<div style="font-size:11px;color:#9fb3d4;">Média: <b style="color:'+pc.accent+';">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</b></div>'
-        +'<div style="font-size:11px;color:#6b82a0;margin-top:1px;"><span style="color:#a78bfa;font-weight:600;">'+mRankTxt+' em média</span> ('+p.jogos+' jogos)</div>'
+        +'<div style="font-size:16px;font-weight:800;color:#e6edf3;margin-bottom:2px;">'+Math.round(p.pts).toLocaleString('pt-BR')+' pts</div>'
+        +'<div style="font-size:13px;color:#9fb3d4;">Média: <b style="color:'+pc.accent+';">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</b></div>'
+        +'<div style="font-size:13px;color:#6b82a0;margin-top:1px;"><span style="color:#a78bfa;font-weight:600;">'+mRankTxt+' em média</span> ('+p.jogos+' jogos)</div>'
         +'</div>';
 
       
       html += '<div style="text-align:right;flex-shrink:0;">';
       if(isLeader){
-        html += '<div style="font-size:13px;color:#ffd700;font-weight:800;">👑 Líder</div>';
-        html += '<div style="font-size:11px;color:#6b82a0;margin-top:2px;">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</div>';
+        html += '<div style="font-size:15px;color:#ffd700;font-weight:800;">👑 Líder</div>';
+        html += '<div style="font-size:13px;color:#6b82a0;margin-top:2px;">'+Math.round(p.media).toLocaleString('pt-BR')+' pts/jogo</div>';
       } else {
         if(ptsAcima > 0){
-          html += '<div style="font-size:12px;color:'+pc.accent+';font-weight:700;">⬆️ Faltam<br>'+ptsAcima.toLocaleString('pt-BR')+' pts</div>';
+          html += '<div style="font-size:14px;color:'+pc.accent+';font-weight:700;">⬆️ Faltam<br>'+ptsAcima.toLocaleString('pt-BR')+' pts</div>';
         }
         if(ptsLider > 0 && ptsLider !== ptsAcima){
-          html += '<div style="font-size:11px;color:#60a5fa;margin-top:3px;text-align:right;">🏁 <b>'+ptsLider.toLocaleString('pt-BR')+' pts</b><br><span style="font-size:10px;opacity:.75;">p/ líder</span></div>';
+          html += '<div style="font-size:13px;color:#60a5fa;margin-top:3px;text-align:right;">🏁 <b>'+ptsLider.toLocaleString('pt-BR')+' pts</b><br><span style="font-size:11px;opacity:.75;">p/ líder</span></div>';
         }
       }
       html += '</div>';
