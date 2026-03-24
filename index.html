@@ -210,7 +210,7 @@ body.perfil-open #mobile-topbar {
   to   { transform: scaleX(1); }
 }
 .fade-ready .mini-item .bar-fill {
-  animation: barFill 0.6s cubic-bezier(0.34,1.2,0.64,1) both;
+  animation: barFill 1.4s cubic-bezier(0.22,1,0.36,1) both;
   transform-origin: left;
 }
 
@@ -556,26 +556,11 @@ body.mobile-mode #pontuacao-anual-arrow {
   display:flex !important; align-items:center !important; justify-content:space-between !important;
   gap:8px !important; padding-top:0 !important; min-height:54px !important; overflow:visible !important;
 }
-.row.mini-ranks .card.mini-card .card-title {
-  font-size:calc(1em - 0.5px) !important; text-transform:uppercase !important;
-  font-weight:500 !important; letter-spacing:0.3px !important;
-  margin:0.3mm 0 0 !important; padding-left:8px !important;
-  line-height:1.12; white-space:nowrap;
-}
 .row.mini-ranks .card.mini-card .mini-header select {
   display:inline-block !important; visibility:visible !important; opacity:1 !important;
-  width:42% !important; max-width:42% !important; font-size:12px !important;
-  padding:3px 6px !important; min-height:unset !important;
-  flex:0 0 42% !important; box-sizing:border-box !important;
-  white-space:nowrap !important; margin-top:0 !important;
-  position:relative; z-index:2;
-}
-.row.mini-ranks .card.mini-card.tri .mini-header { align-items:center !important; }
-.row.mini-ranks .card.mini-card.tri .mini-header select {
-  display:inline-block !important; visibility:visible !important; opacity:1 !important;
-  width:42% !important; max-width:42% !important; font-size:12px !important;
-  padding:3px 6px !important; min-height:unset !important;
-  flex:0 0 42% !important; box-sizing:border-box !important;
+  width:auto !important; max-width:52px !important; font-size:11px !important;
+  padding:3px 4px !important; min-height:unset !important;
+  flex:0 0 auto !important; box-sizing:border-box !important;
   white-space:nowrap !important; margin-top:0 !important;
   position:relative; z-index:2;
 }
@@ -3020,22 +3005,40 @@ body.mobile-mode #libwarn { display: none !important; }
 <div class="row mini-ranks">
 <div class="card mini-card">
 <div class="mini-header">
-<span class="card-title" style="margin:0">Ranking da Semana</span>
-<select id="mini-wk"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11" selected="selected">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52">WK52</option></select>
+<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+<div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a2a4a,rgba(59,130,246,0.25));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🗓️</div>
+<div style="min-width:0;">
+<div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking da Semana</div>
+<div style="font-size:11px;color:#6b82a0;margin-top:1px;white-space:nowrap;">Pontuação acumulada na semana</div>
+</div>
+</div>
+<select id="mini-wk" style="flex-shrink:0;"><option value="WK01">WK01</option><option value="WK02">WK02</option><option value="WK03">WK03</option><option value="WK04">WK04</option><option value="WK05">WK05</option><option value="WK06">WK06</option><option value="WK07">WK07</option><option value="WK08">WK08</option><option value="WK09">WK09</option><option value="WK10">WK10</option><option value="WK11" selected="selected">WK11</option><option value="WK12">WK12</option><option value="WK13">WK13</option><option value="WK14">WK14</option><option value="WK15">WK15</option><option value="WK16">WK16</option><option value="WK17">WK17</option><option value="WK18">WK18</option><option value="WK19">WK19</option><option value="WK20">WK20</option><option value="WK21">WK21</option><option value="WK22">WK22</option><option value="WK23">WK23</option><option value="WK24">WK24</option><option value="WK25">WK25</option><option value="WK26">WK26</option><option value="WK27">WK27</option><option value="WK28">WK28</option><option value="WK29">WK29</option><option value="WK30">WK30</option><option value="WK31">WK31</option><option value="WK32">WK32</option><option value="WK33">WK33</option><option value="WK34">WK34</option><option value="WK35">WK35</option><option value="WK36">WK36</option><option value="WK37">WK37</option><option value="WK38">WK38</option><option value="WK39">WK39</option><option value="WK40">WK40</option><option value="WK41">WK41</option><option value="WK42">WK42</option><option value="WK43">WK43</option><option value="WK44">WK44</option><option value="WK45">WK45</option><option value="WK46">WK46</option><option value="WK47">WK47</option><option value="WK48">WK48</option><option value="WK49">WK49</option><option value="WK50">WK50</option><option value="WK51">WK51</option><option value="WK52">WK52</option></select>
 </div>
 <div class="mini-list" id="mini-wk-list"></div>
 <div class="mini-prizes" id="mini-wk-prizes"></div><div class="mini-rule" id="mini-wk-rule"></div></div>
 <div class="card mini-card">
 <div class="mini-header">
-<span class="card-title" style="margin:0">Ranking do Mês</span>
-<select id="mini-mes"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select>
+<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+<div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a2a3a,rgba(167,139,250,0.25));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📅</div>
+<div style="min-width:0;">
+<div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Mês</div>
+<div style="font-size:11px;color:#6b82a0;margin-top:1px;white-space:nowrap;">Pontuação acumulada no mês</div>
+</div>
+</div>
+<select id="mini-mes" style="flex-shrink:0;"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select>
 </div>
 <div class="mini-list" id="mini-mes-list"></div>
 <div class="mini-prizes" id="mini-mes-prizes"></div><div class="mini-rule" id="mini-mes-rule"></div></div>
 <div class="card mini-card tri">
 <div class="mini-header">
-<span class="card-title" style="margin:0">Ranking do Trimestre</span>
-<select id="mini-tri"><option value="T1">Tri 1</option><option value="T2">Tri 2</option><option value="T3">Tri 3</option><option value="T4">Tri 4</option></select>
+<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+<div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a2a1a,rgba(34,197,94,0.2));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏅</div>
+<div style="min-width:0;">
+<div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Trimestre</div>
+<div style="font-size:11px;color:#6b82a0;margin-top:1px;white-space:nowrap;">Pontuação acumulada no trimestre</div>
+</div>
+</div>
+<select id="mini-tri" style="flex-shrink:0;"><option value="T1">Tri 1</option><option value="T2">Tri 2</option><option value="T3">Tri 3</option><option value="T4">Tri 4</option></select>
 </div>
 <div class="mini-list" id="mini-tri-list"></div>
 <div class="mini-prizes" id="mini-tri-prizes"></div><div class="mini-rule" id="mini-tri-rule"></div></div>
@@ -3150,19 +3153,189 @@ body.mobile-mode #libwarn { display: none !important; }
  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
  id="tour-hdr-ranking-anual" onclick="window.toggleCard('ranking-anual-body','ranking-anual-arrow')">
  <div style="display:flex;align-items:center;gap:12px;">
- <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a2a4a,rgba(59,130,246,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🥇</div>
+ <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#1a1040,rgba(167,139,250,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">🏆</div>
  <div>
  <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Ranking Anual</div>
- <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Classificação geral por pontuação acumulada no ano</div>
+ <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Máquina do Tempo — evolução semana a semana</div>
  </div>
  </div>
  <span id="ranking-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
  </div>
  <div id="ranking-anual-body" data-open="true" style="padding:0 16px 16px;">
- <div id="chartRanking" style="height:420px;width:100%;"></div>
+ <div id="mt-ranking-area" style="display:flex;flex-direction:column;gap:5px;margin-bottom:0;"></div>
+ <div id="mt-prizes" style="margin-top:8px;padding-top:6px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35;"></div>
+ <div id="mt-rule" style="margin-top:3px;color:#9fb3d4;font-size:11px;opacity:.9;"></div>
+ <div style="display:flex;align-items:center;gap:10px;padding-top:10px;border-top:0.5px solid rgba(255,255,255,0.06);margin-top:10px;">
+   <button id="mt-play-btn" onclick="window.mtTogglePlay()" style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#a78bfa);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;box-shadow:0 2px 8px rgba(124,58,237,0.5);">
+     <svg id="mt-play-icon" viewBox="0 0 16 16" width="15" height="15" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
+   </button>
+   <div style="flex:1;display:flex;flex-direction:column;gap:4px;">
+     <input type="range" min="1" max="11" value="11" step="1" id="mt-slider" oninput="window.mtSetWK(+this.value)" style="width:100%;accent-color:#a78bfa;">
+     <div style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;">
+       <span>WK1</span><span>WK3</span><span>WK5</span><span>WK7</span><span>WK9</span><span>WK11</span>
+     </div>
+   </div>
+   <div id="mt-wk-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 11</div>
+ </div>
  </div>
  </div>
 </div>
+
+<script>
+(function(){
+  var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+  var INITIALS={Israel:'Is',Magu:'Ma',Heron:'He',Charles:'Ch',Oscar:'Os',Pedro:'Pe',Cristiano:'Cr',Marcus:'Mr',Rafa:'Ra'};
+  var PERC=[0.40,0.30,0.15,0.10,0.05];
+  var POTE={1:28,2:48,3:70,4:110,5:146,6:190,7:234,8:264,9:300,10:340,11:376};
+
+  function barGrad(pos){
+    if(pos===0) return '#c89010,#f0c830,#906800';
+    if(pos===1) return '#788898,#c0ccd8,#485868';
+    if(pos===2) return '#a85818,#d88030,#784010';
+    return '#204898,#5090d8,#0c2060';
+  }
+  function avBorder(pos){
+    return ['rgba(210,160,20,0.9)','rgba(170,185,200,0.8)','rgba(185,100,28,0.8)','rgba(70,130,210,0.5)'][Math.min(pos,3)];
+  }
+  function getAvatarUrl(nome){ return 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+nome.toLowerCase()+'.jpg?raw=true'; }
+
+  var rowEls={}, mtCurrentWK=11, mtPlaying=false, mtInterval=null;
+
+  function mtCumAt(p, wk){
+    var ledger = (typeof getLedger==='function') ? getLedger() : (window.DATA && window.DATA.ledger ? window.DATA.ledger : []);
+    return ledger.filter(function(r){ return r.jogador===p && !+r.faltou && +r.wk<=wk; })
+                 .reduce(function(s,r){ return s+(+r.pontos_calc||0); }, 0);
+  }
+
+  function mtGetRanking(wk){
+    return PLAYERS.map(function(p){ return {name:p, pts:mtCumAt(p,wk)}; })
+                  .sort(function(a,b){ return b.pts-a.pts; });
+  }
+
+  function mtBuildRows(){
+    var area = document.getElementById('mt-ranking-area');
+    if(!area) return;
+    area.innerHTML=''; rowEls={};
+    PLAYERS.forEach(function(p){
+      var row = document.createElement('div');
+      row.id = 'mt-prow-'+p;
+      row.style.cssText = 'display:flex;align-items:center;height:28px;gap:6px;';
+      var avHtml = '<div id="mt-av-'+p+'" style="width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;">';
+      var img = document.createElement('img');
+      img.src = getAvatarUrl(p);
+      img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
+      img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
+      row.innerHTML =
+        '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+
+        avHtml+'</div>'+
+        '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">'+
+          '<div id="mt-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
+          '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
+          '<div id="mt-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>'+
+        '</div>';
+      area.appendChild(row);
+      var avEl = document.getElementById('mt-av-'+p);
+      if(avEl){ avEl.innerHTML=''; avEl.appendChild(img); }
+      rowEls[p]=row;
+    });
+  }
+
+  function mtRender(wk, animate){
+    var ranking = mtGetRanking(wk);
+    var maxPts = Math.max(ranking[0].pts, 1);
+    var pot = POTE[wk] || 0;
+    var pill = document.getElementById('mt-wk-pill');
+    if(pill) pill.textContent = 'WK '+wk;
+    var slider = document.getElementById('mt-slider');
+    if(slider) slider.value = wk;
+
+    ranking.forEach(function(r, idx){
+      var pct = r.pts>0 ? Math.max(Math.round((r.pts/maxPts)*100), 25) : 0;
+      var fill = document.getElementById('mt-fill-'+r.name);
+      var ptsEl = document.getElementById('mt-pts-'+r.name);
+      var posEl = document.getElementById('mt-pos-'+r.name);
+      var avEl  = document.getElementById('mt-av-'+r.name);
+      var c = barGrad(idx).split(',');
+
+      if(fill){
+        fill.style.background = 'linear-gradient(90deg,'+c[0]+' 0%,'+c[1]+' 50%,'+c[2]+' 100%)';
+        if(animate){
+          fill.style.transition = 'width 1.4s cubic-bezier(.22,1,.36,1)';
+          fill.style.width = pct+'%';
+        } else {
+          fill.style.transition = 'none';
+          fill.style.width = '0%';
+          (function(f,p,delay){ setTimeout(function(){
+            f.style.transition = 'width 1.4s cubic-bezier(.22,1,.36,1)';
+            f.style.width = p+'%';
+          }, delay); })(fill, pct, idx * 80);
+        }
+      }
+      if(ptsEl) ptsEl.textContent = r.pts>0 ? Math.round(r.pts).toLocaleString('pt-BR')+' pts' : '';
+      if(posEl){
+        if(idx===0){ posEl.style.fontSize='20px'; posEl.textContent='🏆'; }
+        else if(idx===1){ posEl.style.fontSize='19px'; posEl.textContent='🥈'; }
+        else if(idx===2){ posEl.style.fontSize='19px'; posEl.textContent='🥉'; }
+        else{ posEl.style.fontSize='13px'; posEl.style.fontWeight='800'; posEl.style.color='rgba(255,255,255,0.65)'; posEl.textContent=(idx+1)+'.'; }
+      }
+      if(rowEls[r.name]) rowEls[r.name].style.order = idx;
+      if(avEl) avEl.style.borderColor = avBorder(idx);
+    });
+
+    var prizes = document.getElementById('mt-prizes');
+    var rule   = document.getElementById('mt-rule');
+    if(prizes){
+      prizes.innerHTML = ranking.slice(0,5).map(function(r,i){
+        var v = (pot*PERC[i]).toFixed(2).replace('.',',');
+        return '<span style="color:#9fb3d4">'+(i+1)+'º</span> '+r.name+' - <b style="color:#fff;font-weight:800;">R$ '+v+'</b>';
+      }).join('<span style="color:rgba(255,255,255,0.25)"> • </span>');
+    }
+    if(rule) rule.textContent = 'Distribuição de premiação do pote anual: 1º (40%) — 2º (30%) — 3º (15%) — 4º (10%) — 5º (5%)';
+  }
+
+  window.mtSetWK = function(wk){
+    mtCurrentWK = wk;
+    mtRender(wk, true);
+  };
+
+  window.mtTogglePlay = function(){
+    mtPlaying = !mtPlaying;
+    var icon = document.getElementById('mt-play-icon');
+    var btn  = document.getElementById('mt-play-btn');
+    if(mtPlaying){
+      if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
+      var wk = mtCurrentWK >= 11 ? 0 : mtCurrentWK;
+      mtInterval = setInterval(function(){
+        wk++;
+        window.mtSetWK(wk);
+        if(wk>=11){ clearInterval(mtInterval); mtPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+      }, 900);
+    } else {
+      clearInterval(mtInterval);
+      if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';
+    }
+  };
+
+  function mtInit(){
+    mtBuildRows();
+    mtRender(11, false);
+  }
+
+  // Inicializar após dados carregados
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(mtInit, 800); });
+  } else {
+    setTimeout(mtInit, 800);
+  }
+
+  // Re-inicializar se dados recarregados
+  var _origADL = window.afterDataLoaded;
+  window.afterDataLoaded = function(){
+    if(typeof _origADL==='function') _origADL.apply(this, arguments);
+    setTimeout(mtInit, 600);
+  };
+})();
+</script>
 
 <!-- ====== CARD: Ranking KOs ====== -->
 <div id="card-ranking-kos" style="margin-top:16px;width:100%;box-sizing:border-box;">
@@ -9272,13 +9445,32 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function miniRowHTML(pos, name, pontos, max){
     var pct = Math.max(0, Math.min(100, Math.round((+pontos||0)/max*100)));
-    var badge = pos===1?'🥇': pos===2?'🥈': pos===3?'🥉': pos+'.';
-    return '<div class="mini-item p'+pos+'">' +
-             '<div class="pos">'+badge+'</div>' +
-             '<div class="name">'+(name||'—')+'</div>' +
-             '<div class="bar">' +
-               '<div class="fill" data-target="'+pct+'"></div>' +
-               '<div class="value">'+window.fmt(Math.round(+pontos||0))+' pts</div>' +
+    var badge = pos===1?'🏆': pos===2?'🥈': pos===3?'🥉': pos+'.';
+    var posStyle = pos<=3
+      ? 'font-size:'+(pos===1?'18':'17')+'px;width:22px;text-align:center;flex-shrink:0;line-height:1;'
+      : 'font-size:12px;font-weight:800;color:rgba(255,255,255,0.55);width:22px;text-align:center;flex-shrink:0;';
+    var avUrl = 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+(name||'').toLowerCase()+'.jpg?raw=true';
+    var initials = (name||'?').slice(0,2);
+    var borders = ['rgba(210,160,20,0.9)','rgba(170,185,200,0.8)','rgba(185,100,28,0.8)','rgba(70,130,210,0.5)'];
+    var border = borders[Math.min(pos-1,3)];
+    var barColors = [
+      '#c89010,#f0c830,#906800',
+      '#788898,#c0ccd8,#485868',
+      '#a85818,#d88030,#784010',
+      '#204898,#5090d8,#0c2060'
+    ];
+    var bc = (barColors[Math.min(pos-1,3)]||barColors[3]).split(',');
+    var bg = 'linear-gradient(90deg,'+bc[0]+' 0%,'+bc[1]+' 50%,'+bc[2]+' 100%)';
+    var maskStyle = '-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);';
+    return '<div class="mini-item p'+pos+'" style="display:flex;align-items:center;height:28px;gap:6px;padding:0;background:none;border:none;">' +
+             '<div style="'+posStyle+'">'+badge+'</div>' +
+             '<div style="width:26px;height:26px;border-radius:50%;background:#1e3a5f;border:2px solid '+border+';display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:#e6edf3;overflow:hidden;flex-shrink:0;z-index:3;margin-right:-11px;">' +
+               '<img src="'+avUrl+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.parentNode.innerHTML=\''+initials+'\'">' +
+             '</div>' +
+             '<div style="flex:1;height:26px;background:rgba(255,255,255,0.03);border-radius:4px;position:relative;overflow:hidden;">' +
+               '<div class="fill bar-fill" data-target="'+pct+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;'+maskStyle+'background:'+bg+';transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>' +
+               '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:13px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+(name||'')+'</div>' +
+               '<div style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;">'+window.fmt(Math.round(+pontos||0))+' pts</div>' +
              '</div>' +
            '</div>';
   }
@@ -9309,10 +9501,15 @@ document.addEventListener('DOMContentLoaded', function(){
 
     
     requestAnimationFrame(function(){
-      Array.from(target.querySelectorAll('.fill')).forEach(function(f){
+      Array.from(target.querySelectorAll('.fill')).forEach(function(f, i){
         var pct = +f.getAttribute('data-target') || 0;
+        f.style.transition = 'none';
         f.style.width = '0%';
-        requestAnimationFrame(function(){ f.style.width = pct + '%'; });
+        var delay = i * 80; // 80ms entre cada barra — efeito cascata
+        setTimeout(function(){
+          f.style.transition = 'width 1.4s cubic-bezier(.22,1,.36,1)';
+          f.style.width = pct + '%';
+        }, delay);
       });
     });
   };
