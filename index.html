@@ -15703,21 +15703,43 @@ window.abrirPerfil = function(jogadorNome){
     avatarEl.textContent = jogadorNome[0];
   }
 
-  var _corFin = saldo_total>=0?'#22c55e':'#ef4444';
-  var _corEfet = saldo_efetivo>=0?'#22c55e':'#ef4444';
-  var avatarInfo = document.createElement('div');
-  avatarInfo.style.cssText = 'flex:1;min-width:0;';
-  avatarInfo.innerHTML = '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;">'
-    +'<span style="font-size:20px;font-weight:900;color:#e6edf3;">'+jogadorNome+'</span>'
-    +'</div>'
-    +'<div style="font-size:13px;color:#9fb3d4;margin-top:2px;">'+medalRank+' no ranking anual &nbsp;·&nbsp; '+jogos+' jogos</div>'
-    +'<div style="font-size:12px;color:#f59e0b;margin-top:1px;">'+faltas+' falta'+(faltas!==1?'s':'')+(faltas>0?' ⚠️':'')+'</div>';
-
-  
+  // ── Botão fechar — canto superior direito absoluto ─────────────
   var btnClose = document.createElement('button');
   btnClose.textContent = '✕';
-  btnClose.style.cssText = 'background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.5);border-radius:10px;width:38px;height:38px;color:#fca5a5;font-size:18px;font-weight:800;cursor:pointer;flex-shrink:0;transition:all .15s;';
+  btnClose.style.cssText = 'position:absolute;top:12px;right:12px;background:rgba(239,68,68,0.18);border:2px solid rgba(239,68,68,0.45);border-radius:10px;width:34px;height:34px;color:#fca5a5;font-size:16px;font-weight:800;cursor:pointer;z-index:2;transition:all .15s;';
   btnClose.onclick = window.fecharPerfil;
+  header.style.position = 'relative';
+
+  // ── Botões DNA / Relíquias ─────────────────────────────────────
+  var btnDNA = document.createElement('button');
+  btnDNA.id = 'perfil-btn-dna';
+  btnDNA.innerHTML = '🧬&nbsp;<span style="font-size:12px;font-weight:700;letter-spacing:.2px;">DNA</span>';
+  btnDNA.style.cssText = 'display:flex;align-items:center;gap:5px;padding:7px 16px;border-radius:10px;'
+    +'border:1.5px solid rgba(52,211,153,0.6);background:rgba(52,211,153,0.13);'
+    +'color:#6ee7b7;font-size:14px;cursor:pointer;font-family:inherit;white-space:nowrap;'
+    +'box-shadow:0 0 10px rgba(52,211,153,0.15);flex:1;justify-content:center;';
+
+  var btnREL = document.createElement('button');
+  btnREL.id = 'perfil-btn-rel';
+  btnREL.innerHTML = '🏅&nbsp;<span style="font-size:12px;font-weight:700;letter-spacing:.2px;">Relíquias</span>';
+  btnREL.style.cssText = 'display:flex;align-items:center;gap:5px;padding:7px 16px;border-radius:10px;'
+    +'border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);'
+    +'color:rgba(255,255,255,0.45);font-size:14px;cursor:pointer;font-family:inherit;white-space:nowrap;'
+    +'flex:1;justify-content:center;';
+
+  // Coluna direita: nome + info + botões
+  var avatarInfo = document.createElement('div');
+  avatarInfo.style.cssText = 'flex:1;min-width:0;padding-right:40px;';
+
+  avatarInfo.innerHTML = '<div style="font-size:19px;font-weight:900;color:#e6edf3;line-height:1.1;">'+jogadorNome+'</div>'
+    +'<div style="font-size:12px;color:#9fb3d4;margin-top:3px;">'+medalRank+' no ranking anual &nbsp;·&nbsp; '+jogos+' jogos</div>'
+    +(faltas>0?'<div style="font-size:11px;color:#f59e0b;margin-top:2px;">'+faltas+' falta'+(faltas!==1?'s':'')+'  ⚠️</div>':'');
+
+  var toggleRow = document.createElement('div');
+  toggleRow.style.cssText = 'display:flex;gap:8px;margin-top:10px;';
+  toggleRow.appendChild(btnDNA);
+  toggleRow.appendChild(btnREL);
+  avatarInfo.appendChild(toggleRow);
 
   avatarWrap.appendChild(avatarEl);
   avatarWrap.appendChild(avatarInfo);
@@ -16756,8 +16778,30 @@ window.abrirPerfil = function(jogadorNome){
   var tabelaWrap = document.createElement('div');
   tabelaWrap.style.cssText = 'padding:0 16px 20px;';
 
-  var html = '<div style="font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;text-align:center;">Resultado por semana</div>';
-  html += '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x;">';
+  var tabelaAberta = false;
+  var tabelaId = 'ptbl-body-'+Date.now();
+
+  var tabelaHeader = document.createElement('div');
+  tabelaHeader.style.cssText = 'display:flex;align-items:center;justify-content:space-between;'
+    +'padding:10px 0 8px;cursor:pointer;user-select:none;border-top:1px solid rgba(255,255,255,0.06);margin-top:4px;';
+  tabelaHeader.innerHTML = '<span style="font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">Resultado por semana</span>'
+    +'<span id="ptbl-arrow-'+tabelaId+'" style="font-size:13px;color:#6b82a0;transition:transform .25s;">▼</span>';
+
+  var tabelaBody = document.createElement('div');
+  tabelaBody.id = tabelaId;
+  tabelaBody.style.cssText = 'display:none;';
+
+  tabelaHeader.onclick = function(){
+    tabelaAberta = !tabelaAberta;
+    tabelaBody.style.display = tabelaAberta ? '' : 'none';
+    var arr = document.getElementById('ptbl-arrow-'+tabelaId);
+    if(arr) arr.style.transform = tabelaAberta ? 'rotate(180deg)' : '';
+  };
+
+  tabelaWrap.appendChild(tabelaHeader);
+  tabelaWrap.appendChild(tabelaBody);
+
+  var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;touch-action:pan-x;">';
   html += '<table class="ptbl">';
   html += '<thead><tr>';
   html += '<th style="text-align:left">Semana</th>';
@@ -16880,14 +16924,177 @@ window.abrirPerfil = function(jogadorNome){
     html += '<div class="ptbl-nota">⚠ Antecipações ao dealer (incluídas na coluna Antecip. acima)</div>';
   }
   html += '</div>';
-  tabelaWrap.innerHTML = html;
+  tabelaBody.innerHTML = html;
+
+  // ── Painel DNA ─────────────────────────────────────────────────
+  var dnaPanel = document.createElement('div');
+  dnaPanel.id = 'perfil-dna-panel';
+  dnaPanel.style.cssText = 'padding:10px 16px 4px;';
+
+  (function(){
+    var jogou = (window.DATA && window.DATA.ledger ? window.DATA.ledger : [])
+      .filter(function(r){ return r.jogador===jogadorNome && +r.faltou===0; });
+    var total = (window.DATA && window.DATA.ledger ? window.DATA.ledger : [])
+      .filter(function(r){ return r.jogador===jogadorNome; });
+    var n = jogou.length, ntot = total.length;
+    if(!n){ return; }
+    var KO_TETO=3.5, REB_TETO=2.5, PTS_TETO=25000;
+    var totalKOs  = jogou.reduce(function(s,r){ return s+(r.kos||0); },0);
+    var totalRebs = jogou.reduce(function(s,r){ return s+(r.rebuys||0); },0);
+    var positions = jogou.map(function(r){ return r.posicao; }).filter(function(v){ return v>0; });
+    var np = positions.length;
+    var meanP = np ? positions.reduce(function(a,b){return a+b;},0)/np : 0;
+    var dp    = np ? Math.sqrt(positions.reduce(function(s,p){ return s+Math.pow(p-meanP,2); },0)/np) : 5;
+    var top3  = jogou.filter(function(r){ return r.posicao && r.posicao<=3; }).length;
+    var avgPts= jogou.reduce(function(s,r){ return s+(r.pontos_calc||0); },0)/n;
+    var agr = Math.min(1, totalKOs/(n*KO_TETO));
+    var con = Math.max(0, 1-dp/5);
+    var sob = top3/n;
+    var eco = Math.max(0, 1-totalRebs/(n*REB_TETO));
+    var pre = n/ntot;
+    var per = Math.min(1, avgPts/PTS_TETO);
+    var TAGS = {
+      Charles:'O late bloomer', Cristiano:'O veterano resistente',
+      Heron:'O predador caro', Israel:'O estrategista',
+      Magu:'O assassino', Marcus:'O irregular',
+      Oscar:'O sniper econômico', Pedro:'O resiliente', Rafa:'O reserva explosivo'
+    };
+    var tag = TAGS[jogadorNome] || '';
+    var DIMS = [
+      {label:'Agressividade', v:agr, c:'#f59e0b'},
+      {label:'Consistência',  v:con, c:'#34d399'},
+      {label:'Sobrevivência', v:sob, c:'#34d399'},
+      {label:'Economia',      v:eco, c: eco<0.35?'#f87171':'#60a5fa'},
+      {label:'Presença',      v:pre, c:'#34d399'},
+      {label:'Performance',   v:per, c:'#a78bfa'},
+    ];
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'background:rgba(52,211,153,0.06);border:0.5px solid rgba(52,211,153,0.2);border-radius:12px;padding:12px 14px;';
+    var titleRow = document.createElement('div');
+    titleRow.style.cssText = 'display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;';
+    titleRow.innerHTML = '<span style="font-size:10px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:rgba(52,211,153,0.7);">DNA do jogador</span>'
+      +(tag?'<span style="font-size:11px;color:#6ee7b7;font-style:italic;">'+tag+'</span>':'');
+    wrap.appendChild(titleRow);
+
+    // ── Layout: radar esquerda | barras direita ───────────────────
+    var bodyRow = document.createElement('div');
+    bodyRow.style.cssText = 'display:flex;gap:10px;align-items:center;';
+
+    // Lado esquerdo: radar
+    var radarCanvas = document.createElement('canvas');
+    var radarSize = 148;
+    radarCanvas.width  = radarSize;
+    radarCanvas.height = radarSize;
+    radarCanvas.style.cssText = 'flex-shrink:0;display:block;';
+    bodyRow.appendChild(radarCanvas);
+
+    // Lado direito: barras
+    var barsCol = document.createElement('div');
+    barsCol.style.cssText = 'flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;';
+    var _vals = DIMS.map(function(d){ return d.v; });
+    var _cols = DIMS.map(function(d){ return d.c; });
+    var _labs = ['Agr.','Con.','Sob.','Eco.','Pre.','Per.'];
+    DIMS.forEach(function(d){
+      var pct = Math.round(d.v*100);
+      var row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;';
+      row.innerHTML = '<span style="font-size:10px;color:rgba(255,255,255,0.42);min-width:72px;flex-shrink:0;">'+d.label+'</span>'
+        +'<div style="flex:1;height:5px;background:rgba(255,255,255,0.07);border-radius:3px;overflow:hidden;min-width:0;">'
+        +'<div style="width:'+pct+'%;height:100%;background:'+d.c+';border-radius:3px;"></div></div>'
+        +'<span style="font-size:10px;font-weight:700;color:'+d.c+';min-width:20px;text-align:right;">'+pct+'</span>';
+      barsCol.appendChild(row);
+    });
+    bodyRow.appendChild(barsCol);
+    wrap.appendChild(bodyRow);
+
+    // desenha radar após append
+    setTimeout(function(){
+      var ctx = radarCanvas.getContext('2d');
+      var cx = radarSize/2, cy = radarSize/2;
+      var r  = radarSize * 0.31;
+      var N  = _vals.length;
+      ctx.clearRect(0,0,radarSize,radarSize);
+      // anéis
+      for(var ring=1;ring<=4;ring++){
+        ctx.beginPath();
+        for(var i=0;i<N;i++){
+          var a=(i/N)*Math.PI*2-Math.PI/2, rr=r*(ring/4);
+          i===0?ctx.moveTo(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr):ctx.lineTo(cx+Math.cos(a)*rr,cy+Math.sin(a)*rr);
+        }
+        ctx.closePath();
+        ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=0.5; ctx.stroke();
+        if(ring===4){ ctx.fillStyle='rgba(255,255,255,0.02)'; ctx.fill(); }
+      }
+      // eixos
+      for(var i=0;i<N;i++){
+        var a=(i/N)*Math.PI*2-Math.PI/2;
+        ctx.beginPath(); ctx.moveTo(cx,cy);
+        ctx.lineTo(cx+Math.cos(a)*r, cy+Math.sin(a)*r);
+        ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=0.5; ctx.stroke();
+      }
+      // polígono
+      ctx.beginPath();
+      for(var i=0;i<N;i++){
+        var a=(i/N)*Math.PI*2-Math.PI/2, v=_vals[i];
+        i===0?ctx.moveTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v):ctx.lineTo(cx+Math.cos(a)*r*v,cy+Math.sin(a)*r*v);
+      }
+      ctx.closePath();
+      ctx.fillStyle='rgba(167,139,250,0.18)'; ctx.fill();
+      ctx.strokeStyle='#a78bfa'; ctx.lineWidth=2; ctx.stroke();
+      // pontos coloridos
+      for(var i=0;i<N;i++){
+        var a=(i/N)*Math.PI*2-Math.PI/2, v=_vals[i];
+        var px=cx+Math.cos(a)*r*v, py=cy+Math.sin(a)*r*v;
+        ctx.beginPath(); ctx.arc(px,py,3,0,Math.PI*2);
+        ctx.fillStyle=_cols[i]; ctx.fill();
+      }
+      // labels
+      ctx.textAlign='center'; ctx.textBaseline='middle';
+      ctx.font='bold 9px system-ui,sans-serif';
+      for(var i=0;i<N;i++){
+        var a=(i/N)*Math.PI*2-Math.PI/2;
+        var lx=cx+Math.cos(a)*(r+13), ly=cy+Math.sin(a)*(r+13);
+        ctx.fillStyle='rgba(167,139,250,0.65)';
+        ctx.fillText(_labs[i], lx, ly);
+      }
+    }, 0);
+    dnaPanel.appendChild(wrap);
+  })();
+
+  // ── Toggle logic ────────────────────────────────────────────────
+  function _perfilSetModo(modo){
+    var pd = box.querySelector('#perfil-dna-panel');
+    var pr = box.querySelector('#perfil-rel-panel');
+    var bd = box.querySelector('#perfil-btn-dna');
+    var br = box.querySelector('#perfil-btn-rel');
+    if(!pd||!pr||!bd||!br) return;
+    var baseBtn = 'display:flex;align-items:center;gap:5px;padding:7px 16px;border-radius:10px;font-size:14px;cursor:pointer;font-family:inherit;white-space:nowrap;flex:1;justify-content:center;';
+    if(modo==='dna'){
+      pd.style.display=''; pr.style.display='none';
+      bd.style.cssText = baseBtn+'border:1.5px solid rgba(52,211,153,0.6);background:rgba(52,211,153,0.13);color:#6ee7b7;box-shadow:0 0 10px rgba(52,211,153,0.15);';
+      br.style.cssText = baseBtn+'border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.45);';
+    } else {
+      pd.style.display='none'; pr.style.display='';
+      bd.style.cssText = baseBtn+'border:1.5px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.45);';
+      br.style.cssText = baseBtn+'border:1.5px solid rgba(245,158,11,0.6);background:rgba(245,158,11,0.13);color:#fcd34d;box-shadow:0 0 10px rgba(245,158,11,0.15);';
+    }
+  }
+  btnDNA.onclick = function(){ _perfilSetModo('dna'); };
+  btnREL.onclick = function(){ _perfilSetModo('rel'); };
 
   /* Montar */
   box.appendChild(header);
   if(box._bannerMes) box.appendChild(box._bannerMes);
-  if(box._badgeWrapData) box.appendChild(box._badgeWrapData);
 
-  // Divisor visual entre relíquias e estatísticas
+  box.appendChild(dnaPanel);
+
+  var relPanel = document.createElement('div');
+  relPanel.id = 'perfil-rel-panel';
+  relPanel.style.display = 'none';
+  if(box._badgeWrapData) relPanel.appendChild(box._badgeWrapData);
+  box.appendChild(relPanel);
+
+  // Divisor visual entre painéis e estatísticas
   var divider = document.createElement('div');
   divider.style.cssText = 'display:flex;align-items:center;gap:10px;padding:6px 16px 4px;';
   divider.innerHTML = '<div style="flex:1;height:1px;background:rgba(255,255,255,0.06);"></div>'
