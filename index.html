@@ -7143,7 +7143,7 @@ function readXLSX(f){
 }
 
 function saveHTMLWithData(){
- const html = document.documentElement.outerHTML.replace(/window\\.DATA\\s*=\\s*[^;]+;/, 'window.DATA = '+JSON.stringify({ledger: RAW, podios: PODIOS, mensal: MENSAL, trimestre: TRIMESTRE, anual: ANUAL})+';');
+ const html = document.documentElement.outerHTML.replace(/window\\.DATA\\s*=\\s*[^;]+;/, 'window.DATA = '+JSON.stringify({ledger: RAW, podios: PODIOS, mensal: MENSAL, trimestre: TRIMESTRE, anual: ANUAL, eliminacoes: (window.DATA&&window.DATA.eliminacoes)||{}})+';');
  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
  const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='poker_dashboard_embutido_v4_7.html'; a.click();
 }
@@ -13349,7 +13349,9 @@ window.ghCarregarDados = function(){
         }
       } catch(e){}
 
+      var _eliBackup = (window.DATA && window.DATA.eliminacoes) || {};
       window.DATA = dados;
+      if(!window.DATA.eliminacoes) window.DATA.eliminacoes = _eliBackup;
       window.DATA.ledger = ledgerFinal;
       window.RAW  = ledgerFinal;
       try{ MENSAL    = dados.mensal    || []; }catch(e){}
