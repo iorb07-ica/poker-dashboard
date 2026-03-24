@@ -19086,6 +19086,8 @@ window.addEventListener('load', function(){ setTimeout(addSeasonBtn, 1000); });
 
 var ADMIN_HASH = 'c2c17fc98c6b90e3d488ffdf36781064657fd7653ae09efd148be7799d55b10f'; 
 var _adminAuthed = false;
+// Restaurar auth do localStorage imediatamente
+try { if(localStorage.getItem('plaza_admin_authed')==='1'){ _adminAuthed=true; window._adminAuthed=true; } } catch(e){}
 
 var DEFAULT_HOF = {"Israel":{"ouro":5,"prata":2,"bronze":0},"Magu":{"ouro":2,"prata":4,"bronze":1},"Marcus":{"ouro":1,"prata":1,"bronze":0},"Cristiano":{"ouro":0,"prata":1,"bronze":0},"Pedro":{"ouro":0,"prata":0,"bronze":2},"Rafa":{"ouro":0,"prata":0,"bronze":3},"Filipe":{"ouro":0,"prata":0,"bronze":1},"Oscar":{"ouro":0,"prata":0,"bronze":1}};
 
@@ -19418,10 +19420,29 @@ window.confirmarDeletarWK = function(){
 };
 
 window.abrirEdicaoAdmin=function(tipo){
-  pedirSenha(function(){
+  // Verificar localStorage primeiro
+  try { if(localStorage.getItem('plaza_admin_authed')==='1'){ _adminAuthed=true; window._adminAuthed=true; } } catch(e){}
+  if(_adminAuthed){
     if(tipo==='hof') abrirEditorHOF();
     else abrirEditorTorneios();
-  });
+    return;
+  }
+  // Login via prompt nativo — leve, sem modal pesado
+  var senha = prompt('🔐 Senha admin:');
+  if(!senha) return;
+  var syncFn = window._sha256sync || function(){ return ''; };
+  var h = syncFn(senha);
+  var H1='93a26d959d695df096175980e844a65b362130d4737e1e5ee1e82cc66976c2ea';
+  var H2='c2c17fc98c6b90e3d488ffdf36781064657fd7653ae09efd148be7799d55b10f';
+  if(h===H1||h===H2){
+    _adminAuthed=true; window._adminAuthed=true;
+    document.body.classList.add('admin-mode');
+    try{localStorage.setItem('plaza_admin_authed','1');}catch(e){}
+    if(tipo==='hof') abrirEditorHOF();
+    else abrirEditorTorneios();
+  } else {
+    alert('Senha incorreta.');
+  }
 };
 
 })();
