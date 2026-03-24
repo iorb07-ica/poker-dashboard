@@ -21350,31 +21350,46 @@ self.addEventListener('notificationclick',function(e){
     }
 
     // Matriz completa
-    html += '<div style="padding:0 2px;">';
-    html += '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:8px;">📊 Matriz Completa (linha eliminou coluna)</div>';
-    function mtzColLabel(n){ return n==='Cristiano'?'Cris':n.slice(0,3); }
-    var colW = (100/(jogs.length+2.5)).toFixed(2);
-    var nameW = (colW*2.5).toFixed(2);
-    html += '<table style="width:100%;border-collapse:collapse;table-layout:fixed;">';
+    html += '<div style="padding:0;">';
+    html += '<div style="font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:#c8d8f0;margin-bottom:8px;">📊 Matriz Completa (linha eliminou coluna)</div>';
+    function mtzColLabel(n){ return n==='Cristiano'?'Cri':n.slice(0,3); }
+    var nJ = jogs.length;
+    var nameW = 17;
+    var colW = (83/nJ).toFixed(2);
+
+    // Calcular o máximo de KOs na matriz para escalonar cores
+    var maxV = 1;
+    jogs.forEach(function(a){ jogs.forEach(function(b){ if(a!==b && matrix[a] && matrix[a][b] > maxV) maxV = matrix[a][b]; }); });
+
+    html += '<table style="width:100%;border-collapse:collapse;table-layout:fixed;font-size:0;">';
     html += '<colgroup><col style="width:'+nameW+'%;">';
     jogs.forEach(function(){ html += '<col style="width:'+colW+'%;">'; });
     html += '</colgroup>';
-    // Header
-    html += '<tr><th style="padding:2px 0;"></th>';
+    // Header colunas — mesma cor das linhas
+    html += '<tr><th style="padding:0;"></th>';
     jogs.forEach(function(j){
-      html += '<th style="padding:2px 0;color:rgba(255,255,255,.45);text-align:center;font-size:8px;font-weight:700;overflow:hidden;">'+mtzColLabel(j)+'</th>';
+      html += '<th style="padding:1px 0;color:#c8d8f0;text-align:center;font-size:8.5px;font-weight:800;overflow:hidden;white-space:nowrap;">'+mtzColLabel(j)+'</th>';
     });
     html += '</tr>';
     // Rows
     jogs.forEach(function(de){
       var rowLabel = de==='Cristiano'?'Cris':de;
       html += '<tr>';
-      html += '<td style="padding:3px 2px 3px 0;color:#9fb3d4;font-weight:700;font-size:8.5px;overflow:hidden;text-overflow:ellipsis;">'+rowLabel+'</td>';
+      html += '<td style="padding:2px 2px 2px 0;color:#c8d8f0;font-weight:700;font-size:8.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:0;">'+rowLabel+'</td>';
       jogs.forEach(function(para){
         var v = matrix[de][para]||0;
-        var bg = de===para?'rgba(255,255,255,.03)': v>0?'rgba(239,68,68,'+(Math.min(v*0.15,0.4))+')':'transparent';
-        var col = de===para?'rgba(255,255,255,.1)': v>0?'#fca5a5':'rgba(255,255,255,.15)';
-        html += '<td style="padding:3px 0;text-align:center;background:'+bg+';border-radius:3px;color:'+col+';font-weight:'+(v>0?'800':'400')+';font-size:9.5px;">'+( de===para?'—': v||'·')+'</td>';
+        var bg, col;
+        if(de===para){
+          bg='rgba(255,255,255,.08)'; col='rgba(255,255,255,.2)';
+        } else if(v>0){
+          // Escalonar: baixo=0.2, alto=0.6
+          var intensity = 0.20 + (v/maxV)*0.40;
+          bg = 'rgba(239,68,68,'+intensity.toFixed(2)+')';
+          col = v >= maxV*0.7 ? '#ffffff' : '#fca5a5';
+        } else {
+          bg='transparent'; col='rgba(255,255,255,.25)';
+        }
+        html += '<td style="padding:2px 0;text-align:center;background:'+bg+';border-radius:2px;color:'+col+';font-weight:'+(v>0?'800':'400')+';font-size:9px;">'+( de===para?'—': v||'·')+'</td>';
       });
       html += '</tr>';
     });
