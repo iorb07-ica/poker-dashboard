@@ -546,7 +546,8 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Title': titulo,
+        'Title': titulo.replace(/[^\x00-\x7F]/g, ''),
+        'X-Title': titulo,
         'Tags': emoji || 'medal',
         'Priority': 'high'
       },
@@ -565,7 +566,8 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
       method: 'POST',
       headers: {
         'Content-Type': 'text/plain; charset=utf-8',
-        'Title': titulo,
+        'Title': titulo.replace(/[^\x00-\x7F]/g, ''),
+        'X-Title': titulo,
         'Tags': emoji || 'poker',
         'Priority': 'default'
       },
