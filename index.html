@@ -3665,37 +3665,30 @@ body.mobile-mode #libwarn { display: none !important; }
  <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#0d2a1a,rgba(34,197,94,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">📈</div>
  <div>
  <div style="font-size:16px;font-weight:800;color:#e6edf3;letter-spacing:.1px;">Gráfico de Pontuação Anual</div>
- <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados</div>
+ <div style="font-size:12px;color:#6b82a0;margin-top:2px;">Evolução de pontos acumulados semana a semana</div>
  </div>
  </div>
  <span id="pontuacao-anual-arrow" style="color:#4a6080;font-size:18px;transition:transform .25s;transform:rotate(180deg);">▼</span>
  </div>
  <div id="pontuacao-anual-body" data-open="true" style="padding:0 16px 16px;">
- <div id="chartEvolucao" style="height:520px;width:100%;"></div>
- <div id="evo-chart-wrap" style="position:relative;width:100%;height:360px;display:none;">
-   <canvas id="evoCanvas"></canvas>
- </div>
- <div id="evo-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;padding:0 2px;"></div>
- </div>
- </div>
-</div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+   <div id="chartEvolucao" style="width:100%;height:420px;min-height:320px;"></div>
+   <div id="evo-legend" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;padding:0 2px;"></div>
  </div>
  </div>
 </div>
 <script>
 (function(){
-  var COLORS = ['#ffd93d','#ff6b6b','#6bcb77','#4d96ff','#ff922b','#cc5de8','#20c997','#f06595','#74c0fc','#a9e34b'];
+  var COLORS = ['#ffd93d','#ff6b6b','#6bcb77','#4d96ff','#ff922b','#cc5de8','#20c997','#f06595','#74c0fc'];
   var _chart = null;
 
   function buildEvo(){
+    if(!window.echarts) return false;
     var ledger = window.DATA && window.DATA.ledger;
     if(!ledger || !ledger.length) return false;
 
     var wks = Array.from(new Set(ledger.map(function(r){ return +r.wk; }).filter(Boolean))).sort(function(a,b){return a-b;});
     var players = Array.from(new Set(ledger.map(function(r){ return r.jogador; }).filter(Boolean)));
 
-    // Calcular acumulado por jogador
     var playerData = players.map(function(p){
       var running = 0;
       var vals = wks.map(function(w){
@@ -3709,121 +3702,112 @@ body.mobile-mode #libwarn { display: none !important; }
 
     var labels = wks.map(function(w){ return 'WK'+String(w).padStart(2,'0'); });
 
-    // Mostrar o wrapper do novo gráfico, ocultar ECharts
-    var oldEl = document.getElementById('chartEvolucao');
-    var newWrap = document.getElementById('evo-chart-wrap');
-    if(oldEl) oldEl.style.display = 'none';
-    if(newWrap) newWrap.style.display = 'block';
+    var el = document.getElementById('chartEvolucao');
+    if(!el) return false;
 
-    var canvas = document.getElementById('evoCanvas');
-    if(!canvas) return false;
+    if(_chart){ _chart.dispose(); _chart = null; }
+    _chart = echarts.init(el, null, {renderer:'canvas'});
 
-    if(_chart){ _chart.destroy(); _chart = null; }
-
-    _chart = new Chart(canvas, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: playerData.map(function(pd, i){
-          var color = COLORS[i % COLORS.length];
-          return {
-            label: pd.name,
-            data: pd.vals,
-            borderColor: color,
-            backgroundColor: color + '18',
-            borderWidth: 2.5,
-            fill: false,
-            tension: 0.35,
-            pointRadius: 0,
-            pointHoverRadius: 5,
-            pointHoverBackgroundColor: color,
-            pointHoverBorderColor: '#fff',
-            pointHoverBorderWidth: 2
-          };
-        })
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        animation: { duration: 900, easing: 'easeInOutQuart' },
-        interaction: { mode: 'index', intersect: false },
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            backgroundColor: 'rgba(8,14,28,0.96)',
-            borderColor: 'rgba(255,255,255,0.1)',
-            borderWidth: 1,
-            padding: 12,
-            titleColor: '#c7d8f0',
-            titleFont: { size: 12, weight: 'bold' },
-            bodyColor: '#e6edf3',
-            bodyFont: { size: 12 },
-            callbacks: {
-              label: function(ctx){
-                var medals = ['🏆','🥈','🥉'];
-                var prefix = medals[ctx.datasetIndex] || (ctx.datasetIndex+1)+'°';
-                return ' '+prefix+' '+ctx.dataset.label+': '+Math.round(ctx.raw).toLocaleString('pt-BR')+' pts';
-              }
-            }
-          }
-        },
-        scales: {
-          x: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: { color: 'rgba(200,215,235,0.6)', font: { size: 10, weight: '600' } }
-          },
-          y: {
-            grid: { color: 'rgba(255,255,255,0.05)' },
-            ticks: {
-              color: 'rgba(200,215,235,0.5)',
-              font: { size: 10 },
-              callback: function(v){ return v >= 1000 ? (v/1000).toFixed(0)+'k' : v; }
-            }
+    var series = playerData.map(function(pd, i){
+      var color = COLORS[i % COLORS.length];
+      return {
+        name: pd.name,
+        type: 'line',
+        data: pd.vals,
+        smooth: 0.4,
+        symbol: 'circle',
+        symbolSize: 0,
+        emphasis: { focus:'series', scale:true },
+        lineStyle: { color:color, width: i===0 ? 3 : 2, opacity: i===0 ? 1 : 0.75 },
+        itemStyle: { color:color },
+        areaStyle: {
+          color: {
+            type:'linear', x:0, y:0, x2:0, y2:1,
+            colorStops:[
+              { offset:0, color: color + (i===0 ? '55' : '28') },
+              { offset:1, color: color + '00' }
+            ]
           }
         }
-      }
+      };
     });
 
-    // Legenda customizada
+    _chart.setOption({
+      backgroundColor:'transparent',
+      animation: true,
+      animationDuration: 1000,
+      animationEasing: 'cubicOut',
+      grid: { top:20, right:12, bottom:48, left:52, containLabel:false },
+      tooltip: {
+        trigger:'axis',
+        axisPointer:{ type:'line', lineStyle:{ color:'rgba(255,255,255,0.1)', width:1 } },
+        backgroundColor:'rgba(8,14,28,0.96)',
+        borderColor:'rgba(255,255,255,0.08)',
+        borderWidth:1,
+        padding:12,
+        textStyle:{ color:'#e6edf3', fontSize:12 },
+        formatter: function(params){
+          var medals = ['🏆','🥈','🥉'];
+          var sorted = params.slice().sort(function(a,b){ return b.value-a.value; });
+          var html = '<div style="font-size:11px;font-weight:700;color:#9fb3d4;margin-bottom:6px;">'+params[0].axisValueLabel+'</div>';
+          sorted.forEach(function(p, idx){
+            var dot = '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:'+p.color+';margin-right:6px;flex-shrink:0;"></span>';
+            html += '<div style="display:flex;align-items:center;gap:4px;margin-top:3px;">'+dot+'<span style="color:rgba(255,255,255,0.7);flex:1;">'+p.seriesName+'</span><span style="font-weight:700;color:#fff;margin-left:8px;">'+Math.round(p.value).toLocaleString('pt-BR')+'</span></div>';
+          });
+          return html;
+        }
+      },
+      xAxis: {
+        type:'category',
+        data: labels,
+        axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.08)' } },
+        axisTick:{ show:false },
+        axisLabel:{ color:'rgba(200,215,235,0.5)', fontSize:10, fontWeight:600 },
+        splitLine:{ show:false }
+      },
+      yAxis: {
+        type:'value',
+        axisLine:{ show:false },
+        axisTick:{ show:false },
+        axisLabel:{
+          color:'rgba(200,215,235,0.4)', fontSize:10,
+          formatter: function(v){ return v>=1000?(v/1000).toFixed(0)+'k':v; }
+        },
+        splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.04)', type:'dashed' } }
+      },
+      series: series
+    });
+
     var legWrap = document.getElementById('evo-legend');
     if(legWrap){
       legWrap.innerHTML = playerData.map(function(pd,i){
         var c = COLORS[i%COLORS.length];
-        return '<span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;color:rgba(255,255,255,0.6);">'
-          +'<span style="width:10px;height:10px;border-radius:50%;background:'+c+';flex-shrink:0;"></span>'
+        return '<span style="display:inline-flex;align-items:center;gap:5px;font-size:10px;color:rgba(255,255,255,0.6);background:rgba(255,255,255,0.04);border-radius:6px;padding:3px 8px;">'
+          +'<span style="width:10px;height:2px;border-radius:2px;background:'+c+';flex-shrink:0;display:inline-block;"></span>'
           +pd.name+'</span>';
       }).join('');
+    }
+
+    if(!_chart._resizeListenerAdded){
+      window.addEventListener('resize', function(){ if(_chart) _chart.resize(); });
+      _chart._resizeListenerAdded = true;
     }
     return true;
   }
 
   function tryBuild(){
-    if(typeof Chart === 'undefined') return false;
+    if(!window.echarts) return false;
+    var ledger = window.DATA && window.DATA.ledger;
+    if(!ledger || !ledger.length) return false;
     return buildEvo();
   }
 
-  // Tentar após dados carregados
-  function hook(){
-    var orig = window.afterDataLoaded;
-    if(orig && orig._evoPatch) return;
-    window.afterDataLoaded = function(){
-      if(typeof orig === 'function') orig.apply(this, arguments);
-      setTimeout(function(){ tryBuild(); }, 500);
-    };
-    window.afterDataLoaded._evoPatch = true;
-  }
-
-  // Tentar imediatamente e com delays
-  setTimeout(function(){ if(!tryBuild()) hook(); }, 800);
+  setTimeout(function(){ tryBuild(); }, 600);
   setTimeout(function(){ tryBuild(); }, 1500);
-  setTimeout(function(){ tryBuild(); }, 3000);
+  setTimeout(function(){ tryBuild(); }, 3500);
 
-  // Também expor para refresh externo
   window.rebuildEvoChart = tryBuild;
 
-  // Re-rodar quando o refresh principal for chamado
-  var _origRefresh = window.refresh;
-  var _patched = false;
   var _tryPatchRefresh = setInterval(function(){
     if(typeof window.refresh === 'function' && !window.refresh._evoPatch){
       var _r = window.refresh;
