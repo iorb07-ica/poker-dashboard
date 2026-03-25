@@ -536,12 +536,10 @@ html, body { overflow-x: hidden !important; max-width: 100vw !important; }
 #card-ranking-anual { margin-top: 4px !important; }
 
 body.mobile-mode #ranking-anual-body,
-body.mobile-mode #ranking-kos-body,
 body.mobile-mode #pontuacao-anual-body {
   display: block !important;
 }
 body.mobile-mode #ranking-anual-arrow,
-body.mobile-mode #ranking-kos-arrow,
 body.mobile-mode #pontuacao-anual-arrow {
   transform: rotate(180deg);
 }
@@ -636,7 +634,7 @@ body.mobile-mode #pontuacao-anual-arrow {
 .kpis .kpi-media { grid-column:6/7; }
 
 .grid-charts .chart.kos-small { height:340px !important; align-self:start !important; }
-#chartKOs { height:calc(100% - 56px) !important; margin-top:8px !important; margin-bottom:12px !important; min-height:310px; }
+#chartKOs { margin-top:8px; margin-bottom:12px; }
 
 #card-medalhas-periodo { margin-bottom:-16px; }
 #card-ranking-anual { margin-top:4px !important; }
@@ -865,7 +863,7 @@ body.mobile-mode #list-4-9.populated { display: flex !important; flex-direction:
   .grid-charts .chart.ranking-span { min-height: 380px !important; }
   #chartRanking { height: 360px !important; min-height: 360px !important; }
   .grid-charts .chart.kos-small { min-height: 280px !important; }
-  #chartKOs { height: 260px !important; min-height: 260px !important; }
+  #chartKOs { }
   .grid-charts .chart.evo-span { min-height: 360px !important; }
   #chartEvolucao { height: 340px !important; min-height: 340px !important; }
   #chartPersonas { height: 280px !important; min-height: 280px !important; }
@@ -2420,6 +2418,70 @@ function setLoadingProgress(pct, msg){
 </head>
 <body>
 <script>
+// ── KOs early boot ──────────────────────────────────────────────────────────
+window._koMesFiltro = window._koMesFiltro || 'todos';
+
+window.renderKOsArena = function(){
+  var ledger = (window.DATA && window.DATA.ledger && window.DATA.ledger.length)
+    ? window.DATA.ledger : (window.RAW || []);
+  if(!ledger.length) return;
+  var mesFiltro = window._koMesFiltro || 'todos';
+  var koRows = (mesFiltro !== 'todos')
+    ? ledger.filter(function(r){ return +r.mes === +mesFiltro; })
+    : ledger;
+  var byPlayer = {};
+  koRows.forEach(function(r){ if(r.jogador) byPlayer[r.jogador] = (byPlayer[r.jogador]||0) + (+r.kos||0); });
+  var sorted = Object.keys(byPlayer)
+    .map(function(j){ return {jogador:j, kos:byPlayer[j]}; })
+    .filter(function(d){ return d.kos > 0; })
+    .sort(function(a,b){ return b.kos - a.kos; });
+  var arena = document.getElementById('ko-arena');
+  if(!arena) return;
+  if(!sorted.length){
+    arena.innerHTML = '<div style="padding:16px;color:#6b82a0;text-align:center;">Sem KOs no período</div>';
+    return;
+  }
+  var total = sorted.reduce(function(s,d){ return s+d.kos; }, 0);
+  var maxKO = sorted[0].kos;
+  var CORES = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#8b5cf6','#ec4899','#06b6d4','#84cc16'];
+  var MEDALS = ['💀','⚔️','🗡️','🔪','🏹','💣','🪃','🎯','🔫'];
+  var mesLabel = (mesFiltro !== 'todos')
+    ? ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'][+mesFiltro]
+    : 'Todos os meses';
+  var podiumHtml = '';
+
+  var html = podiumHtml;
+  html += '<div style="display:flex;align-items:center;justify-content:space-between;padding:0 12px 8px;">'
+    +'<div style="font-size:11px;color:#6b82a0;font-weight:700;text-transform:uppercase;letter-spacing:.5px;">💀 '+total+' KOs — '+mesLabel+'</div>'
+    +'<div style="font-size:11px;color:#6b82a0;">Líder: <b style="color:#ef4444;">'+sorted[0].jogador+'</b> ('+sorted[0].kos+')</div>'
+    +'</div>';
+  sorted.forEach(function(d,i){
+    var isLider = i === 0;
+    var cor = isLider ? '#f59e0b' : CORES[i%CORES.length];
+    var pct = ((d.kos/maxKO)*100).toFixed(1);
+    var pctTotal = ((d.kos/total)*100).toFixed(0);
+    var bg  = isLider ? 'rgba(245,158,11,0.10)' : 'rgba(255,255,255,0.03)';
+    var bd  = isLider ? 'rgba(245,158,11,0.35)' : 'rgba(255,255,255,0.06)';
+    var glow = isLider ? 'box-shadow:0 0 10px rgba(245,158,11,0.5);' : '';
+    html += '<div style="display:grid;grid-template-columns:28px 1fr auto auto;align-items:center;gap:8px;padding:'+(isLider?'10px':'8px')+' 12px;margin:3px 0;border-radius:10px;background:'+bg+';border:1px solid '+bd+';'+glow+'">'
+      +'<span style="font-size:'+(isLider?'22px':'16px')+';text-align:center;">'+(MEDALS[i]||'💀')+'</span>'
+      +'<div><div style="font-size:'+(isLider?'15px':'13px')+';font-weight:'+(isLider?'900':'700')+';color:'+(isLider?'#fef3c7':'#e6edf3')+';">'+d.jogador+'</div>'
+      +'<div style="height:'+(isLider?'6px':'5px')+';border-radius:3px;background:rgba(255,255,255,0.08);margin-top:4px;">'
+      +'<div style="height:'+(isLider?'6px':'5px')+';border-radius:3px;background:'+cor+';width:'+pct+'%;'+(isLider?'box-shadow:0 0 8px rgba(245,158,11,0.7);':'')+';"></div></div></div>'
+      +'<span style="font-size:'+(isLider?'20px':'16px')+';font-weight:900;color:'+cor+';">'+d.kos+'</span>'
+      +'<span style="font-size:11px;color:'+(isLider?'#f59e0b':'#6b82a0')+';font-weight:'+(isLider?'700':'400')+';">'+pctTotal+'%</span></div>';
+  });
+  arena.innerHTML = html;
+};
+
+window.setKOMes = function(mes){
+  window._koMesFiltro = (mes==='todos') ? 'todos' : +mes;
+  window.renderKOsArena();
+  if(typeof refresh === 'function') refresh();
+};
+// ────────────────────────────────────────────────────────────────────────────
+</script>
+<script>
 
 (function(){
   var isAndroid = /Android/i.test(navigator.userAgent);
@@ -2541,12 +2603,28 @@ document.addEventListener('DOMContentLoaded', function(){
         try{
           var el=document.getElementById(_elId);
           if(!el) return;
-          var inst = window.echarts && window.echarts.getInstanceByDom(el);
-          if(inst && !inst.isDisposed()){
-            inst.resize();
+          if(bodyId==='ranking-kos-body'){
+            if(window.renderKOsArena) window.renderKOsArena();
+            // Also init ECharts pie (best-effort, won't block arena)
+            setTimeout(function(){
+              var el2 = document.getElementById('chartKOs');
+              if(!el2 || !window.echarts) return;
+              try{
+                var old2 = window.echarts.getInstanceByDom(el2);
+                if(old2) old2.dispose();
+              }catch(e){}
+              el2.innerHTML = '';
+              try{ eKOs = window.echarts.init(el2); window.eKOs = eKOs; }catch(e){ return; }
+              if(typeof refresh==='function') refresh();
+              setTimeout(function(){ try{ if(window.eKOs && !window.eKOs.isDisposed()) window.eKOs.resize(); }catch(e){} }, 200);
+            }, 80);
           } else {
-            
-            if(window.refresh) window.refresh();
+            var inst = window.echarts && window.echarts.getInstanceByDom(el);
+            if(inst && !inst.isDisposed()){
+              inst.resize();
+            } else {
+              if(window.refresh) window.refresh();
+            }
           }
         }catch(e){}
       },200);
@@ -3039,10 +3117,10 @@ body.mobile-mode #libwarn { display: none !important; }
     <svg id="mt-mes-play-icon" viewBox="0 0 16 16" width="13" height="13" fill="#fff"><polygon points="4,2 14,8 4,14"/></svg>
   </button>
   <div style="flex:1;display:flex;flex-direction:column;gap:3px;">
-    <input type="range" min="1" max="3" value="3" step="1" id="mt-mes-slider" oninput="window.mtMesSetMes(+this.value)" style="width:100%;accent-color:#a78bfa;">
-    <div style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"><span>Jan</span><span>Fev</span><span>Mar</span></div>
+    <input type="range" min="1" max="4" value="4" step="1" id="mt-mes-slider" oninput="window.mtMesSetWK(+this.value)" style="width:100%;accent-color:#a78bfa;">
+    <div id="mt-mes-slider-labels" style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"></div>
   </div>
-  <div id="mt-mes-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">Mar</div>
+  <div id="mt-mes-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 11</div>
 </div>
 <div style="margin-top:18px;padding-bottom:4px;"><div class="mini-prizes" id="mini-mes-prizes"></div><div class="mini-rule" id="mini-mes-rule"></div></div>
 </div>
@@ -3510,14 +3588,41 @@ body.mobile-mode #libwarn { display: none !important; }
   var mtMesCur = 3, mtMesPlaying = false, mtMesInterval = null;
   var MES_MAX_WK = {1:4, 2:8, 3:11};
 
+  var mtMesCurWK = 11;
+
+  function mtMesUpdateSliderLabels(mes){
+    var labelsDiv = document.getElementById('mt-mes-slider-labels');
+    var slider = document.getElementById('mt-mes-slider');
+    if(!labelsDiv || !slider) return;
+    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11]};
+    var wks = wkMap[mes] || [1,2,3,4];
+    slider.min = wks[0];
+    slider.max = wks[wks.length-1];
+    labelsDiv.innerHTML = wks.map(function(w){ return '<span>WK'+w+'</span>'; }).join('');
+  }
+
+  window.mtMesSetWK = function(wk){
+    mtMesCurWK = wk;
+    var pill = document.getElementById('mt-mes-pill');
+    if(pill) pill.textContent = 'WK ' + wk;
+    var ranking = getRankingMes(mtMesCur, wk);
+    var pot = getPotMes(mtMesCur, wk);
+    renderRows('mt-mes', ranking, pot, true);
+    updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+  };
+
   window.mtMesSetMes = function(mes){
     mtMesCur = mes;
-    var pill = document.getElementById('mt-mes-pill');
+    var wkMap = {1:4, 2:8, 3:11};
+    var maxWk = wkMap[mes] || 11;
+    mtMesCurWK = maxWk;
     var slider = document.getElementById('mt-mes-slider');
-    if(pill) pill.textContent = MES_NOMES[mes-1];
-    if(slider) slider.value = mes;
-    var ranking = getRankingMes(mes, MES_MAX_WK[mes]||11);
-    var pot = getPotMes(mes, MES_MAX_WK[mes]||11);
+    if(slider) slider.value = maxWk;
+    mtMesUpdateSliderLabels(mes);
+    var pill = document.getElementById('mt-mes-pill');
+    if(pill) pill.textContent = 'WK ' + maxWk;
+    var ranking = getRankingMes(mes, maxWk);
+    var pot = getPotMes(mes, maxWk);
     renderRows('mt-mes', ranking, pot, true);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
   };
@@ -3527,12 +3632,19 @@ body.mobile-mode #libwarn { display: none !important; }
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var mes = mtMesCur >= 3 ? 0 : mtMesCur;
+      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11]};
+      var allWks = (wkMap[mtMesCur]||[1,2,3,4,5,6,7,8,9,10,11]);
+      var maxWk = allWks[allWks.length-1];
+      var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
+      var curWkIdx = allWks.indexOf(startWk);
+      if(curWkIdx < 0) curWkIdx = -1;
       mtMesInterval = setInterval(function(){
-        mes++;
-        window.mtMesSetMes(mes);
-        if(mes>=3){ clearInterval(mtMesInterval); mtMesPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
-      }, 1000);
+        curWkIdx++;
+        if(curWkIdx >= allWks.length){ clearInterval(mtMesInterval); mtMesPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; return; }
+        window.mtMesSetWK(allWks[curWkIdx]);
+        var slider = document.getElementById('mt-mes-slider');
+        if(slider) slider.value = allWks[curWkIdx];
+      }, 900);
     } else {
       clearInterval(mtMesInterval);
       if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';
@@ -3630,7 +3742,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <div id="card-ranking-kos" style="margin-top:16px;width:100%;box-sizing:border-box;">
  <div class="card" style="padding:0;">
  <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px 14px;cursor:pointer;user-select:none;"
- id="tour-hdr-ranking-kos" onclick="window.toggleCard('ranking-kos-body','ranking-kos-arrow')">
+ id="tour-hdr-ranking-kos" onclick="window.toggleCard('ranking-kos-body','ranking-kos-arrow'); setTimeout(function(){ if(document.getElementById('ranking-kos-body').getAttribute('data-open')!=='false' && window.forceKOsRender) window.forceKOsRender(); },250);">
  <div style="display:flex;align-items:center;gap:12px;">
  <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2a0d0d,rgba(239,68,68,0.25));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">💀</div>
  <div>
@@ -3650,8 +3762,27 @@ body.mobile-mode #libwarn { display: none !important; }
  </div>
  </div>
  <div id="ranking-kos-body" data-open="true" style="padding:0 16px 16px;">
- <div id="chartKOs" style="height:380px;width:100%;display:none;"></div>
+ <div id="chartKOs" style="width:100%;display:none;"></div>
  <div id="ko-arena" style="width:100%;padding:4px 0 8px;"></div>
+<script>
+(function(){
+  var _attempts = 0;
+  function tryRender(){
+    _attempts++;
+    var ledger = (window.DATA && window.DATA.ledger && window.DATA.ledger.length)
+      ? window.DATA.ledger : (window.RAW && window.RAW.length ? window.RAW : null);
+    if(window.renderKOsArena && ledger){
+      window.renderKOsArena();
+    } else if(_attempts < 50){
+      setTimeout(tryRender, 100);
+    }
+  }
+  // Try immediately (sync data should be ready), then retry
+  tryRender();
+  setTimeout(tryRender, 500);
+  setTimeout(tryRender, 1500);
+})();
+</script>
  </div>
  </div>
 </div>
@@ -7495,11 +7626,9 @@ function tryInitCharts(){
  if(!eEvo){
  var _elRanking = document.getElementById('chartRanking');
  eRanking = _elRanking ? echarts.init(_elRanking) : null;
- var _elKOs = document.getElementById('chartKOs');
- eKOs = _elKOs ? echarts.init(_elKOs) : null;
  var _elEvo = document.getElementById('chartEvolucao');
  eEvo = _elEvo ? echarts.init(_elEvo) : null;
- window.eRanking = eRanking; window.eKOs = eKOs; window.eEvo = eEvo;
+ window.eRanking = eRanking; window.eEvo = eEvo;
  var _elHeat = document.getElementById('chartHeatmap');
  eHeat = _elHeat ? echarts.init(_elHeat) : null;
  var _elRadar = document.getElementById('chartRadar');
@@ -7508,10 +7637,9 @@ function tryInitCharts(){
  eAwards = _elAwards ? echarts.init(_elAwards) : null;
  var _elRisk = document.getElementById('chartRisk');
  eRisk = _elRisk ? echarts.init(_elRisk) : null;
- // Forçar resize após init para garantir dimensões corretas
  setTimeout(function(){ try{ if(eEvo) eEvo.resize(); }catch(e){} }, 300);
  }
- return true;
+  return true;
 }
 document.addEventListener('DOMContentLoaded', ()=>{
  let i=0; const id=setInterval(()=>{ i++; if(tryInitCharts()||i>20) clearInterval(id); }, 300);
@@ -7654,6 +7782,8 @@ function readXLSX_HEAT(f){
 
  tryInitCharts();
  refresh();
+ setTimeout(function(){ if(window.renderKOsArena) window.renderKOsArena(); }, 100);
+setTimeout(function(){ if(window.renderKOsArena) window.renderKOsArena(); }, 1000);
 
  // Se veio de um pull-to-refresh, forçar seleção da semana mais atual
  try{
@@ -8228,7 +8358,7 @@ function initMiniCombos(){
  sels.tri.innerHTML=''; [1,2,3,4].forEach(t=>{ const o=document.createElement('option'); o.value=t; o.textContent='T'+t; sels.tri.appendChild(o); });
 
  sels.wk.onchange = ()=> (window.renderMini || renderMini)('semana', +sels.wk.value);
- sels.mes.onchange = ()=>{ (window.renderMini || renderMini)('mes', +sels.mes.value); if(typeof window.mtMesSetMes==='function') window.mtMesSetMes(+sels.mes.value); };
+ sels.mes.onchange = ()=>{ (window.renderMini || renderMini)('mes', +sels.mes.value); if(typeof window.mtMesSetMes==='function') window.mtMesSetMes(+sels.mes.value); if(typeof mtMesUpdateSliderLabels==='function') mtMesUpdateSliderLabels(+sels.mes.value); };
  sels.tri.onchange = ()=>{ (window.renderMini || renderMini)('trimestre', +sels.tri.value); if(typeof window.mtTriSetWK==='function'){ var _wm={1:4,2:8,3:11,4:16}; window.mtTriSetWK(_wm[+sels.tri.value]||11); } };
 
  
@@ -8558,11 +8688,24 @@ function refresh(){
 ;
 
  
- if(typeof window._koMesFiltro === 'undefined') window._koMesFiltro = 'todos';
- window.setKOMes = function(mes){
- window._koMesFiltro = (mes==='todos') ? 'todos' : +mes;
- if(typeof refresh==='function') refresh();
+ // renderKOsArena defined early in <body>
+
+ // setKOMes defined early in <body>
+
+ window.forceKOsRender = function(){
+ var el = document.getElementById('chartKOs');
+ if(!el || !window.echarts) return;
+ var inst = window.echarts.getInstanceByDom(el);
+ if(!inst || (inst.isDisposed && inst.isDisposed())){
+ try{ inst = window.echarts.init(el); eKOs = inst; window.eKOs = inst; }catch(e){ return; }
+ } else {
+ eKOs = inst; window.eKOs = inst;
+ }
+ inst.resize();
+ if(typeof refresh==='function') setTimeout(refresh, 50);
  };
+
+
 
  (function renderKOs(){
  
@@ -8589,7 +8732,8 @@ function refresh(){
  grads[marcIdx] = new ec.graphic.RadialGradient(0.5,0.5,0.9,[{offset:0,color:'#D1C4E9'},{offset:1,color:'#7B1FA2'}]);
  }
  const seriesData = data.map((d,i)=> ({...d, itemStyle:{ color: grads[i], borderColor:'rgba(255,255,255,0.25)', borderWidth:1 }}));
- if(eKOs) (function(){
+ var _eKOs = (window.eKOs && !window.eKOs.isDisposed && !window.eKOs.isDisposed()) ? window.eKOs : eKOs;
+ if(_eKOs) (function(){
  
  var KO_PALETTE = [
  ['#ff6b6b','#c0392b'], 
@@ -8648,7 +8792,7 @@ function refresh(){
  };
  });
 
- eKOs.setOption({
+ _eKOs.setOption({
  backgroundColor: 'transparent',
  animationDuration: 900,
  animationEasing: 'cubicInOut',
@@ -9279,6 +9423,7 @@ animation: false,
  try{ if (typeof window.renderPersonasCard === 'function') window.renderPersonasCard(rows); }catch(e){ console.warn('renderPersonasCard', e); }
  window.eRanking=eRanking; window.eKOs=eKOs; window.eEvo=eEvo;
  setTimeout(function(){ try{window.eRanking=eRanking;window.eKOs=eKOs;window.eEvo=eEvo;['eRanking','eKOs','eEvo'].forEach(function(n){try{if(window[n])window[n].resize();}catch(e){}});}catch(e){} },200);
+ if(window.renderKOsArena) window.renderKOsArena();
 }
 
 (function(){
@@ -10013,7 +10158,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(sels.mes) sels.mes.onchange = function(){
       state.mes = sels.mes.value;
       window.renderMini('mes', +sels.mes.value);
-      if(typeof window.mtMesSetMes === 'function') window.mtMesSetMes(+sels.mes.value);
+      if(typeof window.mtMesSetMes === 'function'){ if(typeof mtMesUpdateSliderLabels==='function') mtMesUpdateSliderLabels(+sels.mes.value); window.mtMesSetMes(+sels.mes.value); }
     };
     if(sels.tri) sels.tri.onchange = function(){
       state.tri = sels.tri.value;
@@ -14358,7 +14503,7 @@ window.addEventListener('load', function(){
 
         
         '.grid-charts .chart.kos-small { min-height: 300px !important; }',
-        '#chartKOs { height: 280px !important; min-height: 280px !important; }',
+        '#chartKOs { }',
 
         
         '.grid-charts .chart.evo-span { min-height: 380px !important; }',
@@ -15348,6 +15493,7 @@ window.addEventListener('load', function(){
     if(selSF){ var mesAtual = new Date().getMonth()+1; selSF.value = mesAtual; }
     var selKO = document.getElementById('ko-mes-select');
     if(selKO){ selKO.value = new Date().getMonth()+1; window._koMesFiltro = new Date().getMonth()+1; }
+    if(window.renderKOsArena) window.renderKOsArena();
     setTimeout(window.renderSaldoFin,1000);
   });
 
@@ -15859,13 +16005,10 @@ window.addEventListener('load', function(){
     st.id = 'ptr-style';
     st.textContent = '@keyframes ptr-spin{to{transform:rotate(360deg)}}'
       + '@keyframes ptr-ring{from{stroke-dashoffset:88}to{stroke-dashoffset:0}}'
-      + '@keyframes brasao-pulse-faisca{0%,100%{filter:drop-shadow(0 0 4px #60a5fa) drop-shadow(0 0 10px #1d4ed8)}50%{filter:drop-shadow(0 0 14px #60a5fa) drop-shadow(0 0 30px #3b82f6)}}'
-      + '@keyframes brasao-pulse-chama{0%,100%{filter:drop-shadow(0 0 4px #a855f7) drop-shadow(0 0 10px #6d28d9)}50%{filter:drop-shadow(0 0 14px #a855f7) drop-shadow(0 0 30px #9333ea)}}'
-      + '@keyframes brasao-pulse-inferno{0%,100%{filter:drop-shadow(0 0 4px #d4a017) drop-shadow(0 0 10px #92400e)}50%{filter:drop-shadow(0 0 14px #d4a017) drop-shadow(0 0 32px #fbbf24)}}'
       + '@keyframes brasao-float{0%,100%{transform:translateY(0px)}50%{transform:translateY(-5px)}}'
-      + '.brasao-anim-faisca{animation:brasao-pulse-faisca 2.8s ease-in-out infinite,brasao-float 4s ease-in-out infinite!important}'
-      + '.brasao-anim-chama{animation:brasao-pulse-chama 2.6s ease-in-out infinite,brasao-float 4.2s ease-in-out infinite .4s!important}'
-      + '.brasao-anim-inferno{animation:brasao-pulse-inferno 2.4s ease-in-out infinite,brasao-float 3.8s ease-in-out infinite .8s!important}'
+      + '.brasao-anim-faisca{animation:brasao-float 4s ease-in-out infinite!important}'
+      + '.brasao-anim-chama{animation:brasao-float 4.2s ease-in-out infinite .4s!important}'
+      + '.brasao-anim-inferno{animation:brasao-float 3.8s ease-in-out infinite .8s!important}'
       + '.brasao-fire-wrap{position:relative;display:flex;align-items:center;justify-content:center}'
       + '.brasao-svg-inner{position:relative;z-index:1}';
     document.head.appendChild(st);
