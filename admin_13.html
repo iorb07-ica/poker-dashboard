@@ -407,14 +407,17 @@ function salvarNoite(){
   });
 
   dados.forEach(function(d){
-    if(d.fl) return;
+    d.antecipacao=d.isDealer?CUSTO_DEALER:0;
+    if(d.fl){
+      d.saldo=+(d.antecipacao-dealerShare).toFixed(2);
+      return;
+    }
     var ptPos=d.pos?ptsPosicao(d.pos):0;
     var ptFichas=d.fi*FATOR_FICHAS;
     var ptKO=d.ko*PTS_KO;
     var ptRebuy=d.rb*PTS_REBUY;
     d.pontos=Math.round(ptPos+ptFichas+ptKO+ptRebuy);
     d.valorFichas=+(d.fi*(15/5000)).toFixed(2);
-    d.antecipacao=d.isDealer?CUSTO_DEALER:0;
     d.saldo=+(d.premioNoite+d.valorFichas-(1+d.rb)*BUYIN-dealerShare+d.antecipacao).toFixed(2);
     d.ptPos=ptPos; d.ptFichas=ptFichas; d.ptKO=ptKO; d.ptRebuy=Math.abs(ptRebuy);
   });
@@ -423,7 +426,7 @@ function salvarNoite(){
     var d=dados.find(function(x){return x.p===tr.getAttribute('data-p');});
     if(!d) return;
     if(d.fl){
-      _led.push({ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.p,buyin:0,posicao:null,rebuys:0,kos:0,fichas_restantes:0,valor_fichas:0,pontos_classificacao:0,penalidade_rebuy:0,pontos_fichas:0,pontos_calc:0,custo_buyin:0,custo_rebuys:0,premio_noite:0,dealer:dealerShare,antecipacao_dealer:0,saldo_semana_final:-dealerShare,faltou:1});
+      _led.push({ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.p,buyin:0,posicao:null,rebuys:0,kos:0,fichas_restantes:0,valor_fichas:0,pontos_classificacao:0,penalidade_rebuy:0,pontos_fichas:0,pontos_calc:0,custo_buyin:0,custo_rebuys:0,premio_noite:0,dealer:dealerShare,antecipacao_dealer:d.antecipacao||0,saldo_semana_final:d.saldo,faltou:1});
     } else {
       _led.push({ano:ano,trimestre:tri,mes:mes,data_wk:data,wk:wk,jogador:d.p,buyin:1,posicao:d.pos,rebuys:d.rb,kos:d.ko,fichas_restantes:d.fi,valor_fichas:d.valorFichas,pontos_classificacao:d.ptPos||0,penalidade_rebuy:d.ptRebuy||0,pontos_fichas:+(d.fi*FATOR_FICHAS).toFixed(2),pontos_calc:d.pontos,custo_buyin:BUYIN,custo_rebuys:d.rb*BUYIN,premio_noite:d.premioNoite||0,dealer:dealerShare,antecipacao_dealer:d.antecipacao,saldo_semana_final:d.saldo,faltou:0});
     }
