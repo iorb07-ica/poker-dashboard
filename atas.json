@@ -7,13 +7,8 @@
     "maoTitulo": "Q3 de paus",
     "maoDesc": "Um call de 1700 fichas de Magu com Q3 de paus, que representava 25% de seu stack. O cara não trinca no flop e leva um pote monstro? Roleta russa pura!🃏",
     "persJogador": "Magu",
-    "persArq": "👑 O Dominante",
-    "falas": [
-      {
-        "fala": "\"Isso não é poker, isso é roleta russa!\"",
-        "autor": "Magulets, 18 de março de 2026"
-      }
-    ],
+    "persArq": "",
+    "falas": [],
     "jogadores": {
       "Charles": "Deu um verdadeiro show! Dominou grande parte da noite. Potes estratégicos. Soube administrar suas fichas e cravou seu primeiro ouro do ano. E sem rebuy! Relíquias pra conta! Nosso baguette chegou!",
       "Cristiano": "Foi personagem da finaleira. Com uma linda quadra de reis e uma trincada. As duas mãos lhe renderam sobrevida no fim do torneio, pegando 6k de fichas do Grey.",
@@ -24,6 +19,41 @@
       "Marcus": "Faltou para tomar chimarrão em Porto, neah? Ahâ! E nem deixou a Foca com o Rafilds! Pisada, mano!",
       "Oscar": "Papito, mais uma vez, sem rebuy. Impressionante a eficiência do homi. Mas só até o fim dos rebuys. Dessa vez, foi o último da noite, eliminado pelo Grey Galináceo.",
       "Pedro": "Pedroca, que passou a noite toda sofrendo, viu a vitória lhe sorrir. Na última mão, aquela que é sempre maluca, acerta um top pair de Q. O portuga estava com a mão no primeiro ouro do ano até o turn. Eis que bate um 2 no river e trinca nosso Crisera da massa. Cris leva o pote principal e Pedroca, com o pote secundário, fica apenas em 3º. Um pódio amargo para o portuga."
+    }
+  },
+  "WK12": {
+    "titulo": "A Noite em que Pedro Virou Ceifador",
+    "subtitulo": "Vulcânica — 6 KOs, 5 rebuys do Heron e dois ausentes no front",
+    "clima": 8,
+    "intro": "Marcus e Rafa mandaram mensagem antes do jogo — um com compromisso, outro com desculpa que ninguém acreditou. A cadeira de Marcus ficou vazia mas o envelope com a antecipação do dealer não. A noite começou com 7 na mesa e terminou com Pedro de pé, ganhando a noite na última mão, contando ficha com aquele sorriso de quem sabe que não vai pagar a conta no bar.",
+    "maoTitulo": "Quadra de J do Charles. Estava prestes a ir embora e voltou com força!",
+    "maoDesc": "Teve também a quadra do Papito mas a quadra de J do Charlito baguette ganhou mais protagonismo. Prestes a ir pra cozinha francesa, Charlito sobreviveu e com estilo. Viu seu J na mão se juntar aos outros três valetes no board.",
+    "persJogador": "",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Eu tô bem, só preciso de mais fichas.",
+        "autor": "Heron"
+      },
+      {
+        "fala": "Deixa eu terminar de contar antes de comemorar.",
+        "autor": "Pedro"
+      },
+      {
+        "fala": "\"\"Ei, Ed, VTNC\" Heron umas 4x.",
+        "autor": "\" -"
+      }
+    ],
+    "jogadores": {
+      "Pedro": "1º lugar, 6 KOs, zero rebuys. Não veio jogar poker, veio trabalhar. Enquanto todo mundo tentava entender o que estava acontecendo, Pedro já estava na 4ª eliminação. E detalhe, fez 4 KOs no Heron na mesma noite. Heron vai sonhar com as caravelas do portuga por 5 semanas seguidas.",
+      "Cristiano": "Morreu uma vez, voltou melhorado. Terminou em 2º com as mãos limpas de KO — ganhou na paciência enquanto todo mundo sangrava ao redor. Estava mortinho, ressuscitou no 3º dia... e quase levou a noite não fosse Pedroca devolver a afronta da semana passada. Mas terminou lindamente com o vice. Apesar de não dar atenção devida ao incrível dashboard, o escrivão mandou lembranças rs",
+      "Israel": "3º lugar sem fazer barulho, sem rebuy, eliminando Papito pela 2ª semana seguida em último. Passou a noite inteira debaixo do radar — ninguém percebeu que ele estava lá até aparecer no pódio. E levou o trimestre e assumiu a liderança. O trono é novamente de Grey!",
+      "Magu": "4º lugar, 2 KOs. Participou do massacre como coadjuvante — eliminou dois, chegou no dinheiro. Mais uma bela semana com 10k de fichas e pontos importantes pro campeonato. Um dos meses mais espetaculares da carreira do coronga.",
+      "Charles": "5º com 2 rebuys e zero fichas. Lutou mais que todos, saiu do bolso duas vezes. Pagou pra competir — pelo menos competiu. A linda quadra de J jamais será esquecida. Um espetáculo! Destaque também no rango francês, preparado com esmero. Um primor!",
+      "Heron": "5 rebuys. Cinco!!! A noite dele foi uma tragédia em cinco atos. No 5º rebuy a mesa parou de se importar e começou só a observar, quase com carinho. O Ed ficou até envergonhado com tantos elogios. O bruxo não teve dó nem misericórdia do rockeiro avaiano. O ponto alto da noite foi a playlist. Essa sim deu show!",
+      "Oscar": "7º, e mais um último lugar. Existe uma teoria de que o Oscar ganha mais quando ninguém presta atenção nele. Esta noite não foi a noite. Precisa dar mais atenção ao dashboard se quiser ter mais sorte na próxima semana. #ficadica ;)",
+      "Marcus": "Não estava, mas pagou o dealer em antecipação. Isso já coloca ele acima de alguns que estavam presentes.",
+      "Rafa": "Ausente. A última vez que alguém viu o Rafa foi numa mesa de WK anterior. Pesquisas continuam."
     }
   }
 }
