@@ -14323,46 +14323,43 @@ window.ghCarregarDados = function(){
       
       var ledgerFinal = dados.ledger || [];
       try {
-        
-        
+        var embeddedRaw = (window.DATA && Array.isArray(window.DATA.ledger)) ? window.DATA.ledger : [];
         var backupRaw = window._localStorageRaw || null;
         if(!backupRaw){
           var backup = localStorage.getItem('plaza_raw_backup');
           if(backup) backupRaw = JSON.parse(backup);
         }
-        if(backupRaw && Array.isArray(backupRaw) && backupRaw.length > 0){
-          var maxWkGH     = Math.max.apply(null, ledgerFinal.map(function(r){ return +r.wk||0; }));
-          var maxWkLocal  = Math.max.apply(null, backupRaw.map(function(r){ return +r.wk||0; }));
-          console.log('[Merge] GitHub WK'+maxWkGH+' | localStorage WK'+maxWkLocal);
-          if(maxWkLocal > maxWkGH || (maxWkLocal === maxWkGH && backupRaw.length > ledgerFinal.length)){
-            console.log('[Merge] Usando localStorage — dados mais recentes (WK'+maxWkLocal+')');
-            ledgerFinal = backupRaw;
-            
-          } else {
-            
-            console.log('[Merge] GitHub está atualizado — limpando backup local');
+
+        function wkMax(arr){
+          return (Array.isArray(arr) && arr.length)
+            ? Math.max.apply(null, arr.map(function(r){ return +r.wk||0; }).filter(Boolean))
+            : 0;
+        }
+
+        var fontes = [
+          { nome:'GitHub', data: ledgerFinal },
+          { nome:'HTML embutido', data: embeddedRaw },
+          { nome:'localStorage', data: backupRaw }
+        ].filter(function(f){ return Array.isArray(f.data) && f.data.length > 0; });
+
+        if(fontes.length){
+          fontes.sort(function(a,b){
+            var wkDiff = wkMax(b.data) - wkMax(a.data);
+            if(wkDiff) return wkDiff;
+            return b.data.length - a.data.length;
+          });
+          ledgerFinal = fontes[0].data;
+          console.log('[Merge] Fonte escolhida:', fontes[0].nome, '| WK'+wkMax(fontes[0].data), '| registros:', fontes[0].data.length);
+
+          var maxEscolhido = wkMax(ledgerFinal);
+          var maxLocal = wkMax(backupRaw);
+          if(maxLocal && maxLocal <= maxEscolhido){
             localStorage.removeItem('plaza_raw_backup');
             localStorage.removeItem('plaza_raw_backup_ts');
             window._localStorageRaw = null;
           }
         }
       } catch(e){ console.warn('[Merge] erro:', e); }
-
-      
-      try {
-        var _backupFinal = localStorage.getItem('plaza_raw_backup');
-        if(_backupFinal){
-          var _backupData = JSON.parse(_backupFinal);
-          if(Array.isArray(_backupData) && _backupData.length > 0){
-            var _maxWkGH    = Math.max.apply(null, ledgerFinal.map(function(r){ return +r.wk||0; }));
-            var _maxWkLocal = Math.max.apply(null, _backupData.map(function(r){ return +r.wk||0; }));
-            if(_maxWkLocal > _maxWkGH){
-              console.log('[Load] Backup local tem WK'+_maxWkLocal+' > GitHub WK'+_maxWkGH+' — preservando backup');
-              ledgerFinal = _backupData;
-            }
-          }
-        }
-      } catch(e){}
 
       var _eliBackup = (window.DATA && window.DATA.eliminacoes) || {};
       window.DATA = dados;
