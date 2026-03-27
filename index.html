@@ -4339,7 +4339,7 @@ body.mobile-mode #libwarn { display: none !important; }
  </div>
 
  <!-- Corpo -->
- <div id="prem-tip-body" data-open="true" style="padding:0 16px 16px;">
+ <div id="prem-tip-body" data-open="true" style="padding:0 8px 16px;">
  <div id="chartPremios" style="height:360px;width:100%;min-height:200px;transition:height 0.3s;"></div>
  </div>
 
@@ -14396,14 +14396,30 @@ window.ghCarregarDados = function(){
       } catch(e){ console.warn('[Merge] erro:', e); }
 
       var _eliBackup = (window.DATA && window.DATA.eliminacoes) || {};
+      // Preservar mensal/trimestre/anual se o JSON vier com menos dados
+      var _mensalBackup    = (window.DATA && window.DATA.mensal)    || [];
+      var _trimestreBackup = (window.DATA && window.DATA.trimestre) || [];
+      var _anualBackup     = (window.DATA && window.DATA.anual)     || [];
       window.DATA = dados;
       if(!window.DATA.eliminacoes) window.DATA.eliminacoes = _eliBackup;
       window.DATA.ledger = ledgerFinal;
       window.RAW  = ledgerFinal;
-      try{ MENSAL    = dados.mensal    || []; }catch(e){}
-      try{ TRIMESTRE = dados.trimestre || []; }catch(e){}
-      try{ ANUAL     = dados.anual     || []; }catch(e){}
-      try{ PODIOS    = dados.podios    || []; }catch(e){}
+      try{
+        var _jMensal = dados.mensal || [];
+        MENSAL = (_jMensal.length >= _mensalBackup.length) ? _jMensal : _mensalBackup;
+        window.DATA.mensal = MENSAL;
+      }catch(e){}
+      try{
+        var _jTri = dados.trimestre || [];
+        TRIMESTRE = (_jTri.length >= _trimestreBackup.length) ? _jTri : _trimestreBackup;
+        window.DATA.trimestre = TRIMESTRE;
+      }catch(e){}
+      try{
+        var _jAnual = dados.anual || [];
+        ANUAL = (_jAnual.length >= _anualBackup.length) ? _jAnual : _anualBackup;
+        window.DATA.anual = ANUAL;
+      }catch(e){}
+      try{ PODIOS = dados.podios || []; }catch(e){}
       afterDataLoaded();
       try{
         var years = Array.from(new Set((RAW||[]).map(function(r){return Number(r.ano);}).filter(Boolean))).sort(function(a,b){return b-a;});
@@ -15919,42 +15935,68 @@ window.addEventListener('load', function(){
       dados[jog] = {premMes:premMes, koGanho:koGanho, premTri:premTri, premAno:premAno};
     });
 
-    // Ordenar por total decrescente
+    // Ordenar do MENOR para o MAIOR (igual ao anexo 2)
     jogs = jogs.slice().sort(function(a,b){
       function tot(j){ var d=dados[j]; return d.premMes+d.koGanho+d.premTri+d.premAno; }
-      return tot(b)-tot(a);
+      return tot(a)-tot(b);
     });
 
-    if(ePremios){ try{ ePremios.dispose(); }catch(e){} ePremios=null; }
+    var maxTotal = 0;
+    jogs.forEach(function(j){
+      var d = dados[j];
+      var t = d.premMes+d.koGanho+d.premTri+d.premAno;
+      if(t > maxTotal) maxTotal = t;
+    });
 
-    var medalhas = ['🥇','🥈','🥉'];
+    if(typeof ePremios !== 'undefined' && ePremios){
+      try{ ePremios.dispose(); }catch(e){} ePremios = null;
+    }
 
-    // Construir cards
-    var cards = '';
-    jogs.forEach(function(jog, i){
+    var tipos = [
+      {key:'premMes', nome:'Mês', cor:'#22c55e'},
+      {key:'koGanho', nome:'KO',  cor:'#f59e0b'},
+    ];
+    if(mostraTri) tipos.push({key:'premTri', nome:'Tri', cor:'#a78bfa'});
+    if(mostraAno) tipos.push({key:'premAno', nome:'Ano', cor:'#06b6d4'});
+
+    var linhas = '';
+    jogs.forEach(function(jog){
       var d = dados[jog];
-      var total = d.premMes + d.koGanho + d.premTri + d.premAno;
+      var total = tipos.reduce(function(s,t){ return s+(d[t.key]||0); }, 0);
 
-      var chips = '';
-      if(d.premMes>0) chips += '<span style="font-size:11px;padding:2px 7px;border-radius:99px;background:rgba(34,197,94,0.15);color:#22c55e;white-space:nowrap;">Mês R$'+Math.round(d.premMes)+'</span>';
-      if(d.koGanho>0) chips += '<span style="font-size:11px;padding:2px 7px;border-radius:99px;background:rgba(245,158,11,0.15);color:#f59e0b;white-space:nowrap;">KO R$'+Math.round(d.koGanho)+'</span>';
-      if(d.premTri>0) chips += '<span style="font-size:11px;padding:2px 7px;border-radius:99px;background:rgba(167,139,250,0.15);color:#a78bfa;white-space:nowrap;">Tri R$'+Math.round(d.premTri)+'</span>';
-      if(d.premAno>0) chips += '<span style="font-size:11px;padding:2px 7px;border-radius:99px;background:rgba(6,182,212,0.15);color:#06b6d4;white-space:nowrap;">Ano R$'+Math.round(d.premAno)+'</span>';
+      // Segmentos com label DENTRO da barra
+      var segs = '';
+      tipos.forEach(function(t){
+        var val = d[t.key]||0;
+        if(val <= 0) return;
+        var pct = (val / maxTotal * 100).toFixed(1);
+        var label = '+R$'+Math.round(val);
+        segs += '<div style="height:100%;width:'+pct+'%;background:'+t.cor
+              + ';flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;">'
+              + '<span style="font-size:11px;font-weight:700;color:#fff;white-space:nowrap;padding:0 4px;">'+label+'</span>'
+              + '</div>';
+      });
 
-      var medalha = (i < 3 && total > 0) ? medalhas[i] : '';
-      var bgCard = total > 0 ? 'rgba(255,255,255,0.04)' : 'rgba(255,255,255,0.02)';
-      var corTotal = total > 0 ? '#e6edf3' : '#3a4a5a';
-
-      cards += '<div style="background:'+bgCard+';border-radius:10px;padding:12px 14px;min-width:0;">'
-        + '<div style="font-size:13px;font-weight:700;color:#9fb3d4;margin-bottom:6px;">'+medalha+' '+jog+'</div>'
-        + '<div style="font-size:22px;font-weight:800;color:'+corTotal+';margin-bottom:8px;">'+(total>0?'R$'+Math.round(total):'—')+'</div>'
-        + (chips ? '<div style="display:flex;flex-wrap:wrap;gap:4px;">'+chips+'</div>' : '')
+      var totalStr = total > 0 ? 'R$'+Math.round(total) : '';
+      linhas += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:5px;">'
+        + '<div style="width:56px;min-width:56px;text-align:right;font-size:12px;font-weight:700;color:#9fb3d4;">'+jog+'</div>'
+        + '<div style="flex:1;min-width:0;height:26px;border-radius:4px;background:rgba(255,255,255,0.05);overflow:hidden;display:flex;">'
+        + segs
+        + '</div>'
+        + '<div style="width:54px;min-width:54px;text-align:left;font-size:12px;font-weight:800;color:#e6edf3;">'+totalStr+'</div>'
         + '</div>';
     });
 
+    var leg = '<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;padding-left:66px;">';
+    tipos.forEach(function(t){
+      leg += '<span style="display:flex;align-items:center;gap:4px;font-size:11px;color:#9fb3d4;">'
+           + '<span style="width:8px;height:8px;border-radius:2px;background:'+t.cor+';display:inline-block;"></span>'
+           + t.nome+'</span>';
+    });
+    leg += '</div>';
+
     el.style.height = 'auto';
-    el.innerHTML = '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;padding:8px 0;">'
-      + cards + '</div>';
+    el.innerHTML = '<div style="padding:8px 0 8px;">'+linhas+leg+'</div>';
   }
 
     var _t=setInterval(function(){
