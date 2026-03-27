@@ -3300,7 +3300,21 @@ body.mobile-mode #libwarn { display: none !important; }
   var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
   var INITIALS={Israel:'Is',Magu:'Ma',Heron:'He',Charles:'Ch',Oscar:'Os',Pedro:'Pe',Cristiano:'Cr',Marcus:'Mr',Rafa:'Ra'};
   var PERC=[0.40,0.30,0.15,0.10,0.05];
-  var POTE={1:30,2:30,3:33,4:60,5:54,6:66,7:66,8:45,9:54,10:60,11:54,12:45};
+  // Calcular POTE acumulado dinamicamente: soma de (buyin+rebuys)*R$2 até cada WK
+  var R_ANO_MT = 2;
+  var WK_MAX_ANO = 50; // total de semanas no ano
+  var POTE = (function(){
+    var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+    var wks = Array.from(new Set(raw.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
+    var p = {}, acum = 0;
+    wks.forEach(function(wk){
+      var ent = raw.filter(function(r){ return +r.wk===wk; })
+                   .reduce(function(s,r){ return s+(+r.buyin||0)+(+r.rebuys||0); }, 0);
+      acum = Math.round((acum + ent * R_ANO_MT) * 100) / 100;
+      p[wk] = acum;
+    });
+    return p;
+  })();
 
   function barGrad(pos){
     if(pos===0) return '#c89010,#f0c830,#906800';
@@ -3313,7 +3327,13 @@ body.mobile-mode #libwarn { display: none !important; }
   }
   function getAvatarUrl(nome){ return (window.photoFor && window.photoFor(nome)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+nome.toLowerCase()+'.jpg?raw=true'; }
 
-  var rowEls={}, mtCurrentWK=12
+  var rowEls={};
+  var _mtWKs = (function(){
+    var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+    return Array.from(new Set(raw.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
+  })();
+  var _mtMaxWK = _mtWKs.length ? Math.max.apply(null, _mtWKs) : 12;
+  var mtCurrentWK = _mtMaxWK
 
 
   function mtCumAt(p, wk){
@@ -3358,7 +3378,7 @@ body.mobile-mode #libwarn { display: none !important; }
   function mtRender(wk, animate){
     var ranking = mtGetRanking(wk);
     var maxPts = Math.max(ranking[0].pts, 1);
-    var pot = POTE[wk] || 0;
+    var pot = (window._POTE_ANO && window._POTE_ANO[wk]) || POTE[wk] || 0;
     var pill = document.getElementById('mt-wk-pill');
     if(pill) pill.textContent = 'WK '+wk;
     var slider = document.getElementById('mt-slider');
@@ -3421,7 +3441,7 @@ body.mobile-mode #libwarn { display: none !important; }
     var icon = document.getElementById('mt-play-icon');
     if(mtPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wk = mtCurrentWK >= 12 ? 0 : mtCurrentWK;
+      var wk = mtCurrentWK >= _mtMaxWK ? 0 : mtCurrentWK;
       mtInterval = setInterval(function(){
         wk++;
         window.mtSetWK(wk);
@@ -19365,7 +19385,26 @@ var _t4=setInterval(function(){
     window.refresh=function(){_o.apply(this,arguments);try{buildAll();}catch(e){};};}
 },200);
 
-window.addEventListener('load',function(){setTimeout(buildAll,1400);});
+window.addEventListener('load',function(){
+  // Ajustar slider max com WKs reais do ledger
+  setTimeout(function(){
+    var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+    var wks = Array.from(new Set(raw.map(function(r){ return +r.wk; }))).filter(Boolean).sort(function(a,b){return a-b;});
+    var maxWK = wks.length ? Math.max.apply(null, wks) : 12;
+    var sl = document.getElementById('mt-slider');
+    if(sl){ sl.max = maxWK; sl.value = maxWK; }
+    // Recalcular POTE acumulado
+    var acum = 0, p = {};
+    wks.forEach(function(wk){
+      var ent = raw.filter(function(r){ return +r.wk===wk; })
+                   .reduce(function(s,r){ return s+(+r.buyin||0)+(+r.rebuys||0); }, 0);
+      acum = Math.round((acum + ent * 2) * 100) / 100;
+      p[wk] = acum;
+    });
+    window._POTE_ANO = p;
+  }, 300);
+  setTimeout(buildAll,1400);
+});
 window.addEventListener('resize',function(){
   if(ePrevisao) ePrevisao.resize();
   if(eMomento)  eMomento.resize();
@@ -22812,6 +22851,23 @@ self.addEventListener('notificationclick',function(e){
   window.toggleCard = function(bodyId, arrowId){
     if(origToggle) origToggle(bodyId, arrowId);
     if(bodyId === 'rivalidades-body') setTimeout(renderRivalidades, 50);
+    // Ao abrir atas manualmente, selecionar sempre a WK mais recente
+    if(bodyId === 'atas-body'){
+      setTimeout(function(){
+        var sel = document.getElementById('ata-wk-sel');
+        if(!sel || !sel.options.length) return;
+        var maxN = -1, maxI = 0;
+        for(var i=0; i<sel.options.length; i++){
+          var n = parseInt(sel.options[i].value.replace('WK',''), 10);
+          if(n > maxN){ maxN = n; maxI = i; }
+        }
+        if(sel.selectedIndex !== maxI){
+          sel.selectedIndex = maxI;
+          window._ataWKAtual = sel.value;
+          if(typeof ataCarregar === 'function') ataCarregar();
+        }
+      }, 50);
+    }
   };
 
   // Render inicial após carregamento
