@@ -1058,11 +1058,30 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
   // ── Expor função para envio manual de resultado geral ─────────────────
   window.ntfyEnviarResultado = function(wk, vencedor, totalJogadores) {
-    return window.ntfyEnviarGeral(
-      '🏆 Resultado WK' + wk + ' publicado!',
-      vencedor + ' venceu com ' + totalJogadores + ' jogadores. Veja o ranking atualizado!',
-      'trophy'
-    );
+    // Envia para cada jogador individualmente (canal próprio de cada um)
+    var titulo = '🏆 Resultado WK' + wk + ' publicado!';
+    var corpo  = vencedor + ' venceu com ' + totalJogadores + ' jogadores. Veja o ranking atualizado!';
+    var jogs   = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+    var cfg    = ntfyGetConfig();
+    var server = cfg.server || NTFY_BASE;
+    var promessas = jogs.map(function(nome){
+      var canal = ntfyCanal(nome);
+      return fetch(server + '/' + canal, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain; charset=utf-8',
+          'X-Title': titulo,
+          'Tags': 'trophy',
+          'Priority': 'default'
+        },
+        body: corpo
+      }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+    });
+    // Também envia pro canal geral (se configurado)
+    promessas.push(window.ntfyEnviarGeral(titulo, corpo, 'trophy'));
+    return Promise.all(promessas).then(function(results){
+      return results.some(function(r){ return r; });
+    });
   };
 
   // ── Botão flutuante de acesso rápido ─────────────────────────────────
