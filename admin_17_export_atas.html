@@ -764,7 +764,7 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
   // ── Persistência da config no localStorage ───────────────────────────
   function ntfyGetConfig() {
-    try { return JSON.parse(localStorage.getItem('ntfy_config_plaza')||'{}'); } catch(e){ return {}; }
+    try { var cfg = JSON.parse(localStorage.getItem('ntfy_config_plaza')||'{}'); if(cfg.ativo===undefined) cfg.ativo=true; return cfg; } catch(e){ return {ativo:true}; }
   }
   function ntfySaveConfig(cfg) {
     try { localStorage.setItem('ntfy_config_plaza', JSON.stringify(cfg)); } catch(e){}
@@ -800,7 +800,6 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
   // ── Enviar para o canal geral do grupo ───────────────────────────────
   window.ntfyEnviarGeral = function(titulo, corpo, emoji) {
     var cfg = ntfyGetConfig();
-    if(!cfg.ativo) return Promise.resolve(false);
     var canal = (cfg.canalGeral) || (NTFY_PREFIX + '-geral');
     var server = cfg.server || NTFY_BASE;
     return fetch(server + '/' + canal, {
