@@ -5439,7 +5439,13 @@ function tabNav(cardId){
     setTimeout(function(){
       var sel = document.getElementById('ata-wk-sel');
       if(sel && sel.options.length){
-        sel.selectedIndex = sel.options.length - 1;
+        // Selecionar WK de número maior
+        var _maxN = -1, _maxI = 0;
+        for(var _i=0; _i<sel.options.length; _i++){
+          var _n = parseInt(sel.options[_i].value.replace('WK',''), 10);
+          if(_n > _maxN){ _maxN = _n; _maxI = _i; }
+        }
+        sel.selectedIndex = _maxI;
         _ataWKAtual = sel.value;
         ataCarregar();
       }
@@ -6959,8 +6965,15 @@ function ataInit(){
   var wks = nfWKs();
   sel.innerHTML = wks.map(function(w){ return '<option value="'+w+'">'+w+'</option>'; }).join('');
   
-  sel.selectedIndex = wks.length - 1;
-  _ataWKAtual = wks[wks.length - 1] || '';
+  // Selecionar sempre a WK de número maior
+  var maxWkIdx = 0;
+  var maxWkNum = -1;
+  wks.forEach(function(w, i){
+    var n = parseInt(w.replace('WK',''), 10);
+    if(n > maxWkNum){ maxWkNum = n; maxWkIdx = i; }
+  });
+  sel.selectedIndex = maxWkIdx;
+  _ataWKAtual = wks[maxWkIdx] || '';
 
   
   sel.addEventListener('change', function(){
@@ -8182,10 +8195,13 @@ function buildPlayerChips(players){
  var reliqDiv = document.createElement('div');
  reliqDiv.setAttribute('data-reliq-player', p);
  reliqDiv.style.cssText = 'display:flex;gap:3px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:16px;';
- // Preencher assim que os dados estiverem disponíveis
- setTimeout(function(){
+ // Preencher relíquias — tenta até ter os dados calculados
+ (function tentarPreencher(tentativa){
    var counts = window._reliqCounts && window._reliqCounts[p];
-   if(!counts) return;
+   if(!counts){
+     if(tentativa < 20) setTimeout(function(){ tentarPreencher(tentativa+1); }, 300);
+     return;
+   }
    reliqDiv.innerHTML = '';
    var total = counts.faisca + counts.chama + counts.inferno;
    if(total === 0){ reliqDiv.style.opacity='0'; return; }
@@ -8210,7 +8226,7 @@ function buildPlayerChips(players){
      s3.textContent = '👑' + counts.inferno;
      reliqDiv.appendChild(s3);
    }
- }, 1200);
+ })(0);
  card.appendChild(reliqDiv);
 
  grid.appendChild(card);
@@ -8279,7 +8295,7 @@ function afterDataLoaded(){
  (window.initMiniCombos || initMiniCombos)();
  initChampCombos();
  // Calcular relíquias de todos os jogadores em background
- setTimeout(calcularTodasReliquias, 800);
+ calcularTodasReliquias(); setTimeout(calcularTodasReliquias, 800);
 }
 
 // ─── Cálculo compacto de relíquias para todos os jogadores ──────────────
@@ -8288,6 +8304,48 @@ function calcularTodasReliquias(){
     var ledger = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
     if(!ledger.length) return;
     var jogs = Array.from(new Set(ledger.map(function(r){ return r.jogador; }))).filter(Boolean);
+    // Se calcularBrasoesJogador disponível, usar ele (mesmo cálculo do perfil)
+    if(window.calcularBrasoesJogador){
+      var counts = {};
+      jogs.forEach(function(jog){
+        var b = window.calcularBrasoesJogador(jog);
+        if(!b) return;
+        counts[jog] = {
+          faisca:  b.faisca  ? b.faisca.filter(function(r){ return r.conquistado; }).length : 0,
+          chama:   b.chama   ? b.chama.filter(function(r){ return r.conquistado; }).length  : 0,
+          inferno: b.inferno ? b.inferno.filter(function(r){ return r.conquistado; }).length: 0,
+        };
+      });
+      window._reliqCounts = counts;
+      document.querySelectorAll('[data-reliq-player]').forEach(function(el){
+        var pName = el.getAttribute('data-reliq-player');
+        var c = counts[pName];
+        if(!c) return;
+        var total = c.faisca + c.chama + c.inferno;
+        el.innerHTML = '';
+        if(total === 0){ el.style.opacity='0'; return; }
+        el.style.opacity = '1';
+        if(c.faisca > 0){
+          var s = document.createElement('span');
+          s.title = c.faisca + ' Raras';
+          s.style.cssText = 'font-size:10px;background:rgba(96,165,250,0.18);border:1px solid rgba(96,165,250,0.4);border-radius:8px;padding:1px 5px;color:#60a5fa;font-weight:800;';
+          s.textContent = '💎'+c.faisca; el.appendChild(s);
+        }
+        if(c.chama > 0){
+          var s2 = document.createElement('span');
+          s2.title = c.chama + ' Épicas';
+          s2.style.cssText = 'font-size:10px;background:rgba(168,85,247,0.18);border:1px solid rgba(168,85,247,0.4);border-radius:8px;padding:1px 5px;color:#a855f7;font-weight:800;';
+          s2.textContent = '🔶'+c.chama; el.appendChild(s2);
+        }
+        if(c.inferno > 0){
+          var s3 = document.createElement('span');
+          s3.title = c.inferno + ' Lendárias';
+          s3.style.cssText = 'font-size:10px;background:rgba(212,160,23,0.18);border:1px solid rgba(212,160,23,0.4);border-radius:8px;padding:1px 5px;color:#d4a017;font-weight:800;';
+          s3.textContent = '👑'+c.inferno; el.appendChild(s3);
+        }
+      });
+      return;
+    }
     var counts = {};
     var engR = window.PREMIO_ENGINE ? window.PREMIO_ENGINE.get(ledger) : null;
     function fv(v){ return isNaN(+v)||v===null||v===''?0:+v; }
