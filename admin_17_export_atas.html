@@ -772,9 +772,12 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
   // Canal de um jogador: prefixo-nome (ex: poker-plaza-2026-israel)
   function ntfyCanal(nome) {
+    // Tentar ler do input DOM (mais atualizado)
+    var inputEl = document.querySelector('.ntfy-canal-inp[data-player="'+nome+'"]');
+    if(inputEl && inputEl.value.trim()) return inputEl.value.trim();
+    // Ler do localStorage - cfg['canal_Nome'] é onde a UI salva
     var cfg = ntfyGetConfig();
-    var canais = cfg.canais || {};
-    return canais[nome] || (NTFY_PREFIX + '-' + nome.toLowerCase());
+    return cfg['canal_'+nome] || (cfg.canais && cfg.canais[nome]) || (NTFY_PREFIX + '-' + nome.toLowerCase());
   }
 
   // ── Enviar notificação para um jogador ───────────────────────────────
@@ -1142,20 +1145,42 @@ function ntfySalvarCanal(inp){
 }
 
 function ntfyEnviarManual(){
+  // Tentar usar _led se carregado; senão pedir WK e vencedor manualmente
   var wks = Array.from(new Set(_led.map(function(r){return+r.wk||0;}))).filter(Boolean).sort(function(a,b){return a-b;});
-  if(!wks.length){ toast('Sem semanas registradas'); return; }
-  var lastWK = wks[wks.length-1];
-  var wkRows = _led.filter(function(r){return+r.wk===lastWK&&!+r.faltou;});
-  var venc = wkRows.sort(function(a,b){return(a.posicao||99)-(b.posicao||99);})[0];
-  var vencNome = venc ? venc.jogador : '?';
-  var total = wkRows.length;
-  if(!confirm('Enviar resultado da WK'+lastWK+' ('+vencNome+' venceu)?')) return;
-  window.ntfyEnviarResultado(lastWK, vencNome, total).then(function(){
-    document.getElementById('ntfy-status').textContent = '✅ Resultado WK'+lastWK+' enviado!';
-    setTimeout(function(){ document.getElementById('ntfy-status').textContent=''; }, 4000);
+  
+  var lastWK, vencNome, total;
+  
+  if(wks.length){
+    lastWK = wks[wks.length-1];
+    var wkRows = _led.filter(function(r){return+r.wk===lastWK&&!+r.faltou;});
+    var venc = wkRows.slice().sort(function(a,b){return(+a.posicao||99)-(+b.posicao||99);})[0];
+    vencNome = venc ? venc.jogador : '?';
+    total = wkRows.length;
+  } else {
+    // Sem index carregado: pedir os dados manualmente
+    var wkInput = prompt('Número da semana (ex: 12):');
+    if(!wkInput) return;
+    lastWK = parseInt(wkInput, 10);
+    if(isNaN(lastWK)){ toast('WK inválida'); return; }
+    vencNome = prompt('Nome do vencedor:');
+    if(!vencNome) return;
+    var totalInput = prompt('Quantos jogadores participaram?');
+    total = parseInt(totalInput, 10) || 7;
+  }
+  
+  if(!confirm('Enviar resultado da WK'+lastWK+' ('+vencNome+' venceu) para todos os jogadores?')) return;
+  
+  var statusEl = document.getElementById('ntfy-status');
+  statusEl.textContent = '⏳ Enviando...';
+  statusEl.style.color = '#fcd34d';
+  
+  window.ntfyEnviarResultado(lastWK, vencNome, total).then(function(ok){
+    statusEl.style.color = '#4ade80';
+    statusEl.textContent = ok ? '✅ Resultado WK'+lastWK+' enviado para todos!' : '⚠️ Enviado, mas alguns canais falharam.';
+    setTimeout(function(){ statusEl.textContent=''; }, 5000);
   }).catch(function(e){
-    document.getElementById('ntfy-status').textContent = '❌ Erro: '+e.message;
-    document.getElementById('ntfy-status').style.color = '#f87171';
+    statusEl.textContent = '❌ Erro: '+(e.message||'falha no envio');
+    statusEl.style.color = '#f87171';
   });
 }
 
