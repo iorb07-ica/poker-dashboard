@@ -1061,29 +1061,50 @@ function gv(id){var e=document.getElementById(id);return e?e.value.trim():'';}
 
   // ── Expor função para envio manual de resultado geral ─────────────────
   window.ntfyEnviarResultado = function(wk, vencedor, totalJogadores) {
-    // Envia para cada jogador individualmente (canal próprio de cada um)
-    var titulo = '🏆 Resultado WK' + wk + ' publicado!';
-    var corpo  = vencedor + ' venceu com ' + totalJogadores + ' jogadores. Veja o ranking atualizado!';
-    var jogs   = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
-    var cfg    = ntfyGetConfig();
-    var server = cfg.server || NTFY_BASE;
-    var promessas = jogs.map(function(nome){
-      var canal = ntfyCanal(nome);
+    var tituloEmoji = '🏆 Resultado WK' + wk + ' publicado!';
+    var tituloASCII = 'Resultado WK' + wk + ' publicado!';
+    var corpo = vencedor + ' venceu com ' + totalJogadores + ' jogadores. Veja o ranking atualizado!';
+    var server = (document.getElementById('ntfy-server') && document.getElementById('ntfy-server').value.trim()) || NTFY_BASE;
+
+    // Usar exatamente os mesmos headers que o Testar (que funciona)
+    function enviarPara(canal){
       return fetch(server + '/' + canal, {
         method: 'POST',
         headers: {
           'Content-Type': 'text/plain; charset=utf-8',
-          'X-Title': titulo,
+          'Title': tituloASCII,
           'Tags': 'trophy',
-          'Priority': 'default'
+          'Priority': 'high'
         },
         body: corpo
-      }).then(function(r){ return r.ok; }).catch(function(){ return false; });
+      }).then(function(r){ return {canal: canal, ok: r.ok, status: r.status}; })
+        .catch(function(e){ return {canal: canal, ok: false, error: e.message}; });
+    }
+
+    // Garantir que os inputs existem (ntfyBuildCanais cria eles)
+    if(document.querySelectorAll('.ntfy-canal-inp').length === 0){
+      ntfyBuildCanais();
+    }
+
+    // Pegar canais direto dos inputs da tela (igual ao Testar)
+    var promessas = [];
+    document.querySelectorAll('.ntfy-canal-inp').forEach(function(inp){
+      var canal = inp.value.trim();
+      if(canal) promessas.push(enviarPara(canal));
     });
-    // Também envia pro canal geral (se configurado)
-    promessas.push(window.ntfyEnviarGeral(titulo, corpo, 'trophy'));
+
+    // Fallback absoluto
+    if(promessas.length === 0){
+      ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'].forEach(function(nome){
+        promessas.push(enviarPara(ntfyCanal(nome)));
+      });
+    }
+
     return Promise.all(promessas).then(function(results){
-      return results.some(function(r){ return r; });
+      var falhas = results.filter(function(r){ return !r.ok; });
+      console.log('[ntfy] Resultados:', results);
+      if(falhas.length > 0) console.warn('[ntfy] Falhas:', falhas);
+      return results.some(function(r){ return r.ok; });
     });
   };
 
