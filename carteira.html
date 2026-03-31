@@ -2496,7 +2496,7 @@ function buscarTwelveDataTicker(ticker, erros){
       };
     })
     .catch(function(e){
-      if(erros) erros.push('TwelveData ['+ticker+'] – '+e.message);
+      if(erros) erros.push('TwelveData ['+ticker+'] - '+e.message);
     });
 }
 
@@ -2540,7 +2540,7 @@ function buscarFmpTicker(ticker, erros){
           if(!parseFmpResponse(d) && erros) erros.push(ticker+' — não encontrado no FMP');
         })
         .catch(function(e){
-          if(erros) erros.push('FMP ['+ticker+'] – '+e.message);
+          if(erros) erros.push('FMP ['+ticker+'] - '+e.message);
         });
     });
 }
