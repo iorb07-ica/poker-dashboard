@@ -55,5 +55,40 @@
       "Marcus": "Não estava, mas pagou o dealer em antecipação. Isso já coloca ele acima de alguns que estavam presentes.",
       "Rafa": "Ausente. A última vez que alguém viu o Rafa foi numa mesa de WK anterior. Pesquisas continuam."
     }
+  },
+  "WK13": {
+    "titulo": "Pedroca é bicampeão, Heron deu a louca com 6 rebuys e as fichas misteriosas",
+    "subtitulo": "",
+    "clima": 7,
+    "intro": "Nove jogadores, casa cheia... Marcolino volta com suas nádegas bronzeadas do Nordeste. Heron promete vingança. Recebemos amendoins de Crisera para ficar de pau duro... patagônias rolando e bolacha bauducco para Pedroca.\nE o portuga liderou de ponta a ponta. Uma vitória incontestável, a segunda seguida. Heron foi destaque. Bateu o loko e o homi bateu todos os recordes negativos. 6 rebuys e último lugar na noite. Foram 5000 pts negativos e mais 200 na conta do Ed.",
+    "maoTitulo": "A trinca de 10 no river da última mão",
+    "maoDesc": "A noite se desenhava para uma vitória tranquila de Pedroca, de ponta a ponta. Mas as últimas mãos todo mundo sabe: é treta na certa. Papito, que mais uma vez não fez rebuy (impressionante), estava mortinho há 30 min antes do fim do jogo. Arrancou e foi para a última mão da noite com chances de levar a noite. Ed, com sua bruxaria que lhe é peculiar disse que iriam 3 all ins nessa última mão. E adivinhem? O cara cravou mais uma. No último river, uma trinca tira a primeira vitória do Papito. Crisera arranca e fecha a noite em 2º. Pedroca segura o ouro e emplaca o bicampeonato. Mas o mistério da noite foi para as fichas. Sumiram e reapareceram. Parecia show do David Copperfield. Mais uma noite histórica no Poker do Plaza.",
+    "persJogador": "Pedro",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Vai tomar no cu",
+        "autor": "Heron (após pagamento do dealer)"
+      },
+      {
+        "fala": "Olha no grupo",
+        "autor": "Papito"
+      },
+      {
+        "fala": "All in",
+        "autor": "Charles kkkkk"
+      }
+    ],
+    "jogadores": {
+      "Rafa": "Noite sólida. Quieto como um sniper. Um bronze com gosto amargo pela última mão da noite mas um pódio importante e 23.000 fichas importantes para a pontuação anual.",
+      "Heron": "Uma tragédia. O homem conseguiu ter uma noite pior que a anterior. Bateu a saudade do Lulu Santos, Renato Russo e Cazuza juntos, só pode. No fim, foram 6 rebuys, um último lugar e mais 200 pro Ed. Que noite avaiana!",
+      "Cristiano": "Se redimiu e ainda ficou em 2º lugar na última mão. Tá na briga. Obrigado pelos amendoins, Crisera! Deixou todo mundo duro... e no final, quem enrabou o Marcolino foi você!",
+      "Israel": "Começou mal mas terminou com importantes pontos para a disputa anual. Magulets, seu concorrente direto foi mal, o que permitiu abrir mais 6 mil pts na liderança anual. O Par de 8 deixou Magulets pendurado... Pedroca, terminou o serviço com seu JJ.",
+      "Magu": "Teve uma noite difícil. Não vinha nada. Aí o fatídico AK quase lhe mandou embora... no fim, acabou ruindo para um JJ do Pedroca, que estava iluminado. 2 semanas sem pódio e Magu já está com saudade das medalhas.",
+      "Marcus": "Voltou com seu bumbum bronzeado. Contando das façanhas de jogar seu óculos na piscina no primeiro uso. Troféu revelação pro sem tara kkkkk. A galera tava com saudades das suas conversas sempre interessantes durante a noite.",
+      "Oscar": "OOOO papito... mais uma noite que fica no QUASE. A vitória parecia que chegaria de modo especial na última mão. Estava levando seu primeiro ouro no turn. E aquele 10 mudou tudo e te tirou o dourado pela 3x. Um 4º lugar digno. E mais uma noite sem rebuy! Ninguém mata o papito.",
+      "Charles": "Jogou com habeas corpus. Sem pagar a banca, conseguiu o perdão presidencial e começou a noite. Foi bem, mas sucumbiu e caiu em 8º. As brincadeiras francesas sempre são boas. Mas eu não levaria o Neymar pra Copa kkkkk",
+      "Pedro": "O grande destaque. Que homem, esse portuga. Um bicampeonato digno. Com louros! Três estrelas. Dominou a mesa do começo ao fim. Fez chover KOs, nada de rebuy! Um verdadeiro serial killer. Mas o biscoito foi decisivo para mais um ouro!"
+    }
   }
 }
