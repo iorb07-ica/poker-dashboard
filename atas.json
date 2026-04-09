@@ -90,5 +90,52 @@
       "Charles": "Jogou com habeas corpus. Sem pagar a banca, conseguiu o perdão presidencial e começou a noite. Foi bem, mas sucumbiu e caiu em 8º. As brincadeiras francesas sempre são boas. Mas eu não levaria o Neymar pra Copa kkkkk",
       "Pedro": "O grande destaque. Que homem, esse portuga. Um bicampeonato digno. Com louros! Três estrelas. Dominou a mesa do começo ao fim. Fez chover KOs, nada de rebuy! Um verdadeiro serial killer. Mas o biscoito foi decisivo para mais um ouro!"
     }
+  },
+  "WK14": {
+    "titulo": "\"Huuummm... Pokerzão\". - Não, dominó! O ouro inédito de Papito e os 5 rebuys de Magulets",
+    "subtitulo": "",
+    "clima": 8,
+    "intro": "E a noite começa com Luizinho cotovelo, chegando para reencontrar seu namorado de academia. Eis que ele manda uma bola quicando na área, pedindo pra ser chutada. Huuuummm... Pokerzao? Grey, com sua patada atômica, manda: Não, dominó! Pronto... Os PhD foram todo na direção da grosseria. O menino, nesse momento, tá fazendo terapia no Itacorubi e seu cotovelo teve inflamação mais grave, certeza!\n\nE começa a noite com uma profecia: Ed Bruxo já tinha mandado antes do começo da noite: Magu seria quem faria mais rebuys na noite. O cara não falha uma! Foram CINCO rebuys! 100 mil fichas no pano e viradas de jogo em especial no fim da noite.\nPedroca não levava nada até 10 min antes do fim do 1º tempo. Levou duas ou três mãos e foi pro 2º tempo com mais de 30 mil fichas. Segundo tempo começou quente.... e Grey encontrou a mão perfeita para se fuder! Acertou top pair de J e com broca para a sequencia, aumentou para 2000 fichas e recebeu um all in instantâneo de Crisera. Pensou, gastou todos os seus time banks e acabou dando call pq ficaria com 3000 fichas pra trás com blinds em 500. Viu sequência no flop e deu adeus à disputa pela primeira vez em último. Um amargo 8º lugar.\nMas a noite ainda reservava muitas surpresas... Magulets, com 5 rebuys sonhava em tirar alguma diferença ou, pelo menos, reduzir seu prejuízo de 7500 negativos. Chegou e ir para mais de 20 mil fichas e estava definitivamente na disputa.\n\nO clima era de equilíbrio total faltando poucos minutos para o fim. Magulets, Heron, Cris, Papito e Pedroca estavam firmes e fortes. Pedroca estava querendo o seu hat-trick, sua tão difícil relíquia lendária; papito queria sua primeira vitória, depois de bater na trave por 3x; Heron queria se recuperar da semana passada trágica e Crisera queria encostar nos líderes e colecionar mais uma vitória.\n\nE, claro, a última mão sempre reserva surpresas. All in triplo... Papito volta all in, Heron paga... Pedroca pensa... se foldar, perde a vitória da noite que estava dominada a noite toda. Além de perder a noite, perde a tão sonhada relíquia lendária do hat-trick. Quando será que teria nova chance? Seria bem difícil vencer 3 seguidas. Era sua chance de ir pra história. Pensa... pensa... e dá call com K7... Heron mostra A 10 e Papito KJ (salvo engano). Heron leva o pote principal, Papito o secundário e finalmente leva seu primeiro ouro do ano. Pedroca termina em 4º, Heron conquista um suado bronze. Crisera, que assistiu a última mão de camarote, ficou tranquilão com o vice e importantes 36.200 fichas na conta e muitos pontos que vão jogar ele pra cima. E papito.... Ahhh Papito... mais uma noite incrível sem rebuy.... 7 KOs e o PRIMEIRO OURO!",
+    "maoTitulo": "A última e derradeira mão da noite! Valendo o Ouro ou o Hat-trick!",
+    "maoDesc": "A locuragi da última mão - Ouro histórico do Papito com quase 50 mil fichas, Crisera em 2º e Heron em 3º",
+    "persJogador": "Oscar",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Hummm, Pokerzão?",
+        "autor": "Luizinho Cotovelo"
+      },
+      {
+        "fala": "Não, dominó!",
+        "autor": "Grey Grosseiro Lagunense"
+      },
+      {
+        "fala": "Matemática básica",
+        "autor": "Oscar, Papito"
+      },
+      {
+        "fala": "Tem sempre a última mão",
+        "autor": "Pedroca Português"
+      },
+      {
+        "fala": "Foste bem grosseiro",
+        "autor": "Magulets 5 ribas"
+      },
+      {
+        "fala": "Magu será o jogador que vai fazer mais rebuys",
+        "autor": "Ed, o Bruxo!"
+      }
+    ],
+    "jogadores": {
+      "Charles": "Teve uma noite difícil... Resistiu, acumulou fichas ao longo da noite, mas sucumbiu com um AJ para AA. Difícil quando se acha um pardais na frente! Teve um 6º lugar digno!",
+      "Cristiano": "Tava mortinho... começou a virar destaque depois de eliminar o líder do ano com sequência no flop. Foi perdendo fichas e chegou a 6 mil fichas... mas foi pra cima... e voou! Terminou bem demais com 36 mil fichas e com mais um vice!",
+      "Heron": "Após um começo difícil com mais 3 rebuys, reagiu bem. Chegou no fim do jogo com chances. Na última mão venceu e triplicou. Terminou com mais de 14 mil fichas e um importante bronze. Tendo seus adversários do ano ido mal, já tirou uma bela diferença na disputa anual.",
+      "Israel": "Teve uma noite pífia. Foi pro 2º tempo bem, seu rebuys... mas nao aguentou e encontrou uma sequência no flop. Mesmo acertando o top pair, não conseguiu foldar e teve seu pior desempenho do ano. Apenas 6.000 pts. Mas teve sorte que, ainda, por incrível que pareça, aumentou distância do vice-líder, que fez 5 rebuys. Aumentou em 1500 pts a diferença. O terceiro do ano ficou em 4º sem fichas... a fiasqueira acabou ficando boa no final.",
+      "Magu": "Teve seu pior número de rebuys da história. Foram incríveis 5 rebuys. Depois de uma sequência espetacular com 3 vitórias seguidas e vários pódios, começou a desacelerar e, mais uma vez, fez apenas 4.500 pts com seu 5º lugar com 5 rebuys. A média caiu bastante e ele já vê mais 2 adversários chegando no cangote.",
+      "Marcus": "Tá bronzeando seu bumbum em algum lugar do mundo. Vendendo garrafa pet e máquina de suco! O homi do Seal não para!",
+      "Oscar": "Teve sua sonhada primeira vitória. O ouro veio e QUASE com mais uma relíquia dificílima de se conseguir: 50.000 fichas. QUASE! Mas foi histórico. Sem rebuys, mais uma vez, 7 KOs. Uma verdadeira besta enjaulada!",
+      "Pedro": "Suou no começo e foi pro segundo tempo voando: mais de 30 mil fichas! Dominou grande parte da noite mas, sucumbiu na última mão! Mas tirou uma bela diferença na disputa anual com seu 4º lugar. O portuga tá com créditos!",
+      "Rafa": "Veio mudo e saiu calado... nosso harry potter chegou a ter alguns bons lampejos na noite mas peidou e caiu"
+    }
   }
 }
