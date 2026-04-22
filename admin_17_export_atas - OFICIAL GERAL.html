@@ -732,9 +732,9 @@ function baixar(){
       +'})();';
     u=u.replace(/<script id="nf-seed-data">[\s\S]*?<\/script>/,'');
     if(/var NF_DATA = \(function\(\)\{[\s\S]*?\}\)\(\);/.test(u)){
-      u=u.replace(/var NF_DATA = \(function\(\)\{[\s\S]*?\}\)\(\);/, seedScript+'\n'+nfInit);
+      u=u.replace(/var NF_DATA = \(function\(\)\{[\s\S]*?\}\)\(\);/, seedScript+'\n<script>'+nfInit+'<\/script>');
     } else if(u.indexOf('if(!NF_DATA.atas)')>=0){
-      u=u.replace('if(!NF_DATA.atas)', seedScript+'\n'+nfInit+'\nif(!NF_DATA.atas)');
+      u=u.replace('if(!NF_DATA.atas)', seedScript+'\n<script>\n'+nfInit+'\nif(!NF_DATA.atas)');
     } else {
       u=u.replace('</body>', seedScript+'\n<script>'+nfInit+'<\/script>\n</body>');
     }
