@@ -7727,7 +7727,8 @@ function midiaAbrirLB(url){
     midiaInit();
     nfRefreshAdminUI();
     
-    setTimeout(ataCarregarDoGitHub, 1500);
+    setTimeout(ataCarregarDoGitHub, 500);
+    setTimeout(ataCarregarDoGitHub, 2000); // retry
     setTimeout(ataVerificarBadge, 2000);
   }
 
@@ -7739,12 +7740,15 @@ function midiaAbrirLB(url){
 
   function waitForRAW(tentativas){
     tentativas = tentativas || 0;
+    // Aceitar ledger embutido se RAW ainda não chegou do GitHub
+    if(!window.RAW && window.DATA && window.DATA.ledger && window.DATA.ledger.length){
+      window.RAW = window.DATA.ledger;
+    }
     if(window.RAW && window.RAW.length > 0){
       initComRAW();
     } else if(tentativas < 20){ 
       setTimeout(function(){ waitForRAW(tentativas+1); }, 250);
     } else {
-      
       initComRAW();
     }
   }
