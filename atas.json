@@ -140,29 +140,72 @@
   },
   "WK15": {
     "titulo": "",
-    "subtitulo": "Uma vitória improvável de Pedroca e a pior noite da história de Grey Galináceo em 8 anos",
+    "subtitulo": "",
     "clima": 9,
-    "intro": "Que noite, Sras e Srs. Noite para entrar para história. E por algumas razões. Pedroca, que partiu para o 2º tempo com apenas 1500 fichas, sagrou-se campeão numa virada impressionante, poucas vistas na história. E Grey, teve sua pior noite em 8 anos jogados. Foram incríveis 5 rebuys e última colocação. Com isso perde a liderança e ainda e o 2º lugar, embolando ainda mais a disputa anual. Heron meteu 4 ribas para manter a média e Magulets tem mais uma bela noite, conquistando importantes 37 mil fichas e mais uma prata para sua galeria de medalhas!",
-    "maoTitulo": "",
-    "maoDesc": "FULL HOUSE de Pedroca contra trinca de Damas de Magulets",
+    "intro": "Mais uma noite que o português vence, de forma alucinante!!! Eliminando jogadores que tinham ficha pra caralho! Rafilds tá até agora zonzo com aquele call de AJ contra o AK do Pedroca. Quase 25 mil fichas no ALL IN. Que doidera! E o bacalhau assume a liderança pela primeira vez no ano! Que arrancada! E com 2 semanas jogadas a menos! Ninguém segura o Cristiano Ronaldo, o jogador tranquilao, sniper! Magulets, depois de semanas fortes fica em último com 2 rebuys. Grey continua fazendo muitos rebuys e termina com uma pífia 6º posição com 3 ribas. Heron, o recordista, adiciona mais 4 rebuys na conta. Que noite alucinante. Papito, que estava se despedindo para sua viagem, tinha mais de 40 mil fichas. Dominava a mesa por completo. Terminou em 3º com 11 mil fichas. Pedroca foi matador. Com muita ficha depois de algumas mãos especiais, foi pra 20 mil e depois explodiu e foi para mais de 50 mil fichas, desbloqueando a relíquia Cofre, que é foda pra caralho! Mais de 50 mil fichas na noite não é pra qualquer um! Quem vai parar o portuga?",
+    "maoTitulo": "AK do portuga contra AJ do Rafa!",
+    "maoDesc": "Estamos falando de quase 50 mil fichas no pano! Dois monstros foram. Bate A no Flop. Portuga vai pra cima e Rafa dá insta ALL IN. Pedro paga na hora sem pensar (doidera?). Com A 10 no board, Rafa poderia ter feito 2 pares... Pedroca não quis saber e foi pra cima e levou tudo!",
     "persJogador": "Pedro",
-    "persArq": "O Raposo",
+    "persArq": "O Leao",
     "falas": [
       {
-        "fala": "O homem está voando no ano em seu melhor ano da história. Liderando em média de pontos antes mesmo do começo da WK15, o Pedroca, comedor de travesseiro de cintra conquistou uma das suas vitórias mais épicas. Partindo para o segundo tempo com apenas 1500 fichas, sua última posição era questão de tempo. O homem me vez com 10 10 e dobra suas fichas e respira... Os astros queriam a vitória do homem. Subindo, subindo o homem foi pra finaleira e conquistou um pote incrível fazendo fulla no river de Áses com damas contra trinca de damas de Magulets. Foi pras cabeças. Os paparazzis que acompanhavam a partida contaram que Pedro ganhou essa mão usando um limite de crédito que ninguém sabia que existia. Dizem que é uma bandeira nova, que só foi lançada em Portugal. Mandou 9000 fichas de raise mas só tinha 8000. Teve um bom professor! Que noite histórica pro portuga. Com duas semanas a menos, entrou definitivamente pela briga da liderança do ano e vai buscar seu primeiro título.",
-        "autor": ""
+        "fala": "To com mais de 40 mil fichas",
+        "autor": "Papito, instantes antes de tomar umas fatiadas violentas e cair para 11 mil fichas."
+      },
+      {
+        "fala": "Pow Ed, ve se ajuda!",
+        "autor": "Grey após perder mais uma com JJ"
+      },
+      {
+        "fala": "TNC, Ed",
+        "autor": "Heron (mantra semanal)"
       }
     ],
     "jogadores": {
-      "Charles": "Charlito fez uma belíssima noite e conquistou mais um pódio na conta. Mais de 12 mil fichas e sem rebuy mais uma vez! Monstro!",
-      "Cristiano": "Cris ficou em 6º e acumulou mais um KO na conta! Ainda tá na briga pelo mês!",
-      "Heron": "Foram 4 rebuys e um 7º colocado. Pelo menos não fez 5 e não ficou em último que nem o Grey. Ta no jogo! E ainda não precisou fazer o pix pro Ed!",
-      "Israel": "Teve sua pior noite da história. Incríveis 5 rebuys (talvez apenas 2ª ou 3ª vez que isso acontece em 8 anos e ainda um último lugar. Longe do seu brilho e dos seus 5 campeonatos da história. Uma noite irreconhecível para a história. Mas até os campeões tem noites ruins! Vida que segue!",
-      "Magu": "Uma belíssima noite!!! Com 5 KOs e um 2º lugar e com o líder do ano até então tendo sua pior semana, aproveitou e assumiu a pole position e acelerou! Não fosse pelo Full House de Áses talvez tivesse vencido a noite. Mas uma noite espetacular do coronga!",
-      "Marcus": "Marcolino passou sem tara e provavelmente nem vai ler a ata! Homem com pinto mole é isso aí!",
-      "Oscar": "Papito ficou em 8º mas sem rebuy! Mais uma noite com apenas o cheque da entrada!",
-      "Pedro": "Que noite desse português! Quem segura o fã do Cristiano Ronaldo?",
-      "Rafa": "Rafilds segue melhorando e teve mais uma bela noite! Nosso harry potter do Baia Sul!"
+      "Charles": "O homem ta que tá! Ninguém segura o croissant. Uma baita de uma noite. Auge foi eliminar com sequência no river o pentacampeão do Plaza com JJ. O homem tava com estrela. E aquele AK contra 5 e 6 do Papito no final também foi histórico! Mais de 40 mil fichas! MONSTRO!",
+      "Cristiano": "Não teve uma boa noite e fechou em 8º. Vai ter que remar para disputar o mês na última de abril.",
+      "Heron": "Mais 4 rebuys na conta mas pelo menos um 5º lugar. Heron luta para brigar nas cabeças de novo. Mas fecha abril com ausência e vai assistir o fechamento do mês tomando cachaça de caju.",
+      "Israel": "Semanas péssimas para o Grey Galináceo. Apenas um 6º lugar com 3 rebuys. As cartas não estão sorrindo para o penta do plaza. Deu uma boa desacelerada mas promete engrenar e arrepiar no fechamento de abril (se o Ed colaborar rs)",
+      "Magu": "Terminou a noite em último (9º) com 2 rebuys e vê Pedroca assumindo a liderança com mais de 50 mil fichas. Noite foi péssima pro Mr. Magu. Mas na última quarta de abril prometeu se superar!",
+      "Marcus": "O homem do TANG jogou animado. Falou 12 palavras a noite toda e tomou suas 2 cervejinhas. Nosso presidente do QG e atual campeão disse que vai começar a jogar com tara.",
+      "Oscar": "Uma noite que se desenhava lindamente, com mais de 40 mil fichas ruiu. Em algumas poucas mãos perdeu 80% do seu stack e terminou com 11k em 3º. Um bronze amargo perto do que estava.",
+      "Pedro": "Que homem! Já liderava em média de pontos do ano e agora lidera em pontos absolutos. O baralho tá sorrindo pro homem. Ganha com AK contra AJ, ganha com 7 e 2... se o homem jogar amarelinha e truco vai vencer também!",
+      "Rafa": "Tava voando... domindo a noite. Quase 30 mil fichas. Mas sumiu... parece que foi no banheiro depois de perder com AJ pro AK do Pedroca e não voltou mais!"
+    }
+  },
+  "WK16": {
+    "titulo": "Pedroca é LÍDER do Poker do Plaza 2026!",
+    "subtitulo": "A ascensão impressionante do portuga!",
+    "clima": 5,
+    "intro": "Mais uma noite que o português vence, de forma alucinante!!! Eliminando jogadores que tinham ficha pra caralho! Rafilds tá até agora zonzo com aquele call de AJ contra o AK do Pedroca. Quase 25 mil fichas no ALL IN. Que doidera! E o bacalhau assume a liderança pela primeira vez no ano! Que arrancada! E com 2 semanas jogadas a menos! Ninguém segura o Cristiano Ronaldo, o jogador tranquilao, sniper! Magulets, depois de semanas fortes fica em último com 2 rebuys. Grey continua fazendo muitos rebuys e termina com uma pífia 6º posição com 3 ribas. Heron, o recordista, adiciona mais 4 rebuys na conta. Que noite alucinante. Papito, que estava se despedindo para sua viagem, tinha mais de 40 mil fichas. Dominava a mesa por completo. Terminou em 3º com 11 mil fichas. Pedroca foi matador. Com muita ficha depois de algumas mãos especiais, foi pra 20 mil e depois explodiu e foi para mais de 50 mil fichas, desbloqueando a relíquia Cofre, que é foda pra caralho! Mais de 50 mil fichas na noite não é pra qualquer um! Quem vai parar o portuga?",
+    "maoTitulo": "AK do portuga contra AJ do Rafa!",
+    "maoDesc": "Estamos falando de quase 50 mil fichas no pano! Dois monstros foram. Bate A no Flop. Portuga vai pra cima e Rafa dá insta ALL IN. Pedro paga na hora sem pensar (doidera?). Com A 10 no board, Rafa poderia ter feito 2 pares... Pedroca não quis saber e foi pra cima e levou tudo!",
+    "persJogador": "",
+    "persArq": "O Leao",
+    "falas": [
+      {
+        "fala": "To com mais de 40 mil fichas",
+        "autor": "Papito, instantes antes de tomar umas fatiadas violentas e cair para 11 mil fichas."
+      },
+      {
+        "fala": "Pow Ed, ve se ajuda!",
+        "autor": "Grey após perder mais uma com JJ"
+      },
+      {
+        "fala": "TNC, Ed",
+        "autor": "Heron (mantra semanal)"
+      }
+    ],
+    "jogadores": {
+      "Charles": "O homem ta que tá! Ninguém segura o croissant. Uma baita de uma noite. Auge foi eliminar com sequência no river o pentacampeão do Plaza com JJ. O homem tava com estrela. E aquele AK contra 5 e 6 do Papito no final também foi histórico! Mais de 40 mil fichas! MONSTRO!",
+      "Cristiano": "Não teve uma boa noite e fechou em 8º. Vai ter que remar para disputar o mês na última de abril.",
+      "Heron": "Mais 4 rebuys na conta mas pelo menos um 5º lugar. Heron luta para brigar nas cabeças de novo. Mas fecha abril com ausência e vai assistir o fechamento do mês tomando cachaça de caju.",
+      "Israel": "Semanas péssimas para o Grey Galináceo. Apenas um 6º lugar com 3 rebuys. As cartas não estão sorrindo para o penta do plaza. Deu uma boa desacelerada mas promete engrenar e arrepiar no fechamento de abril (se o Ed colaborar rs)",
+      "Magu": "Terminou a noite em último (9º) com 2 rebuys e vê Pedroca assumindo a liderança com mais de 50 mil fichas. Noite foi péssima pro Mr. Magu. Mas na última quarta de abril prometeu se superar!",
+      "Marcus": "O homem do TANG jogou animado. Falou 12 palavras a noite toda e tomou suas 2 cervejinhas. Nosso presidente do QG e atual campeão disse que vai começar a jogar com tara.",
+      "Oscar": "Uma noite que se desenhava lindamente, com mais de 40 mil fichas ruiu. Em algumas poucas mãos perdeu 80% do seu stack e terminou com 11k em 3º. Um bronze amargo perto do que estava.",
+      "Pedro": "Que homem! Já liderava em média de pontos do ano e agora lidera em pontos absolutos. O baralho tá sorrindo pro homem. Ganha com AK contra AJ, ganha com 7 e 2... se o homem jogar amarelinha e truco vai vencer também!",
+      "Rafa": "Tava voando... domindo a noite. Quase 30 mil fichas. Mas sumiu... parece que foi no banheiro depois de perder com AJ pro AK do Pedroca e não voltou mais!"
     }
   }
 }
