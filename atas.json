@@ -207,5 +207,32 @@
       "Pedro": "Que homem! Já liderava em média de pontos do ano e agora lidera em pontos absolutos. O baralho tá sorrindo pro homem. Ganha com AK contra AJ, ganha com 7 e 2... se o homem jogar amarelinha e truco vai vencer também!",
       "Rafa": "Tava voando... domindo a noite. Quase 30 mil fichas. Mas sumiu... parece que foi no banheiro depois de perder com AJ pro AK do Pedroca e não voltou mais!"
     }
+  },
+  "WK17": {
+    "titulo": "",
+    "subtitulo": "",
+    "clima": 4,
+    "intro": "O que falar nesse começo de narrativa da WK17? O mais do mesmo? Siiiim... PQP, Pedroca! MAIS UMA VITÓRIA DO PORTUGUÊS VOADOR! Quem segura o homi? O cara treinou, fez pacto com os deuses do Texas hold'em? Que homem! Além de conquistar sua 5ª vitória em 6 semanas, um recorde na história do Poker do Plaza, o cara igualou Magu e conquistou a tão difícil relíquia épica do HAT-TRICK, 3 ouros em 3 semanas consecutivas. O homem dominou a mesa do começo ao fim, fez nada mais, nada menos, que 7 KOs, conquistou o mês, seu primeiro título de campeão de KO do mês (com 23 KOs, RECORDE também) e abriu 50 mil pontos de diferença para Grey, que sobe uma posição e agora é vice-líder! Estudiosos da NASA estão desembarcando em Floripa nas próximas semanas para estudar esse fenômeno.\n\nMagulets também é destaque na noite. Mas negativo. Com 4 rebuys e novamente em último colocado (dessa vez em 7º), Magulets vê Grey tomar sua posição e agora cai para 3º no ano. Fez apenas 2000 pontos na semana. Grey tem noite suada com 1 rebuy. O penta foi tentando se recuperar depois de muitas semanas negativas... No meio do último blind, com poucas fichas, dá call de 2100 em Cris para defender seu big blind. Completa com mais 1400 fichas. Sua mão: A e 8 de espadas. Cris tem AA. Flop abre duas cartas de espadas. Cris volta all in. Grey nao tem outro caminho senão dar call e chamar um flush. Já no, turn (depois de Grey pedir para Ed bater seu flush no turn para não sofrer) ela já veio. Flush lindo e dobrada que praticamente elimina Cris. Pedro, na sequência, finaliza o serviço e faz mais um KO.",
+    "maoTitulo": "STRAIGHT FLUSH de Grey - 10 e 8 e paus!",
+    "maoDesc": "Num lindo e raríssimo Straight Flush de 7 de paus a valete de paus, Grey faz a segunda maior mão do poker. Ela ocorre em pouquíssimos momentos durante um ano. Com 10 e 8 de paus, Grey vê completar seu straight flush no river, batendo 7 de paus. Cris ainda completaria seu flush de Ás com o river. Mas não foi suficiente!",
+    "persJogador": "Pedro",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Não tem como não ser o destaque da noite. O homem trinca com 7 no flop contra A e J no flop formando 2 pares para Marcolino. O homi ganha dominó, truco, canastra, tudo na mesma noite. Se jogar par ou ímpar com Pedroca, pedir ímpar e der 3, ele ganha. Não tem como ganhar do bacalhau lusitano. Monstro!",
+        "autor": ""
+      }
+    ],
+    "jogadores": {
+      "Charles": "Mais uma belíssima noite do nosso francês lindo! Com quitutes para saciar a pança dessa raça faminta, fez importantes pontos no ano e fecha em 4º na noite. O homem tá forte na disputa!",
+      "Cristiano": "Depois de sucumbir com par de Áses na finaleira da noite, completa a noite em 6º. Mas, com a ausência de Heron, se consolida em 4º do ano e faz uma das suas melhores temporadas da carreira.",
+      "Heron": "Está no nordeste tomando cachaça de caju e lendo seu incrível livro de \"Como blefar e vencer portugueses no Poker\"",
+      "Israel": "Fez uma ÉPICA mão com straight flush e venceu um par de áses no final com um lindo flush. Termina em 2º depois de longas semanas de azar. O jogo começa a sorrir novamente para Grey.",
+      "Magu": "Teve mais uma noite catastrófica. Com 4 rebuys, fica em último novamente e vê o líder vencer mais uma noite e abrir uma gigante diferença... e vê seu tradicional algoz Grey ficar em 2º e assumir a vice-liderança do ano. Magulets agora é 3º no ano.",
+      "Marcus": "Tomou 4 paints deliciosos, calibrou o motor com várias IPAs e conquista mais uma medalha no ano. O atual campeão do Poker do Plaza fez mais um belíssimo jogo. Destaque para sua trinca de 10 contra par de áses do Pedroca, numa rara mão que o português perdeu na noite.",
+      "Oscar": "Está gastando doletas nos EUA. Durou 1 hora 100 doletas. Mas segue estudando e aprendendo técnicas para não fazer feio no Brasil.",
+      "Pedro": "Sem comentários. Muitos confetes já entregues para o português nessa ata. Agora deu! Vai trepar com a patroa e para de ter sorte no poker!",
+      "Rafa": "Terminou com fichas. 2100 e em 5º é um resultado justo. Apenas 1 rebuy segue remando no ano! Bom demais ver Rafilds conosco!"
+    }
   }
 }
