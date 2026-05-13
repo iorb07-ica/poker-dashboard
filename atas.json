@@ -234,5 +234,27 @@
       "Pedro": "Sem comentários. Muitos confetes já entregues para o português nessa ata. Agora deu! Vai trepar com a patroa e para de ter sorte no poker!",
       "Rafa": "Terminou com fichas. 2100 e em 5º é um resultado justo. Apenas 1 rebuy segue remando no ano! Bom demais ver Rafilds conosco!"
     }
+  },
+  "WK18": {
+    "titulo": "",
+    "subtitulo": "",
+    "clima": 4,
+    "intro": "E bora para a WK18! Pedroca decidiu dar uma pausa para abastecer e trocar o óleo! Estava ganhando demais e resolveu dar uma chance para os brasileiros e franceses. E a semana não poderia ser pior para o portuga rs... Enquanto trocava o óleo no pitstop, Pedroca viu seus principais adversários se aproximarem da liderança. Greeeeey... depois de muito tempo volta a vencer. OoOoOoOo O campeão voltoooouuuu! OooOOOoo... A torcida vai ao delírio. Grey teve uma noite extremamente desafiadora... mais 2 rebuys (tá difícil passar uma semana sem recompra). Foi pro segundo tempo caindo pelas tabelas. Sem AA, KK, QQ, JJ, 10/10... noite pra lá de desafiadora... aos poucos foi se segurando... e, numa bela mão final, com AQ contra A10 de Heron, dobrou e foi pra liderança, faltando poucos minutos pro final.... Mas foi tenso... flush draw de Heron no turn ameaçou...\nRafilds fez 4 rebuys mas teve uma baita recuperação e chegou em 2º. Importantes 27 mil fichas e segue subindo no ranking. Magulets, depois de semanas ruins, volta a subir no pódio, chegando em 3º. Curioso que apenas 3 jogadores foram responsáveis pelos 10 rebuys: Rafa 4, Marcus 4, Grey 2.",
+    "maoTitulo": "AQ de Grey contra A10 de Heron",
+    "maoDesc": "A mão que definiu o campeão. Mais de 20 mil fichas no pano. Raise para 2100 de Grey com AQ, call de Heron. Bate A no board. Grey vai pra cima e beta 4200. Heron dá insta call... bate outra de espadas e Heron fica flush draw em espadas. Grey dá all in, Heron paga. Nao bate espadas e Grey puxa todas as fichas.",
+    "persJogador": "Israel",
+    "persArq": "O Certeiro",
+    "falas": [],
+    "jogadores": {
+      "Israel": "Finalmente volta a vencer. Apenas sua 3ª vitória. Mas já dá uma animada. E a diferença para o líder, que era superior a 50 mil fichas agora cai para 22 mil. Pedroca dando chances... tão deixando a gente sonhar, hein? rs",
+      "Charles": "Esse é monstro! Mais uma noite sem rebuys e um honesto 5º lugar. Mas o auge foi o banquete que ele trouxe. Foi um verdadeiro show gastronômico. Obrigado, baguette. Vc dá show sempre!",
+      "Marcus": "Marcolino viu o suco acabar e saiu em último. Faltou aquele pau duro, aquele tesão tradicional.",
+      "Rafa": "Com 4 rebuys, Rafa foi pra cima e conquistou um baita resultado. 2º lugar e 200 conto, em cash, pro Ed. Rafilds vem aí... quem segura???",
+      "Heron": "Flertou com a vitória mas não bateu o flush. Fez mais uma bela noite e conquistou um importante 4º lugar sem rebuy! Ta vivo na parada!",
+      "Pedro": "Estava trocando o óleo, só acompanhando no whats. O monstro sagrado descansou depois de semanas gloriosas. Que homem! O portuga vem aí para abrir mais a diferença. Mas a turma não vai deixar assim fácil.",
+      "Cristiano": "Cris começou bem com 3 KOs.... teve mais uma noite sem rebuys mas completou a noite em 6º. Também ta vivo na disputa!",
+      "Magu": "Magulets fez uma bela noite, em especial na finaleira. Teve dificuldades para se sustentar e, nos últimos 30 minutos subiu. Ganhou uma importante mão com K7 do Heron e foi pra cima. Terminou com belas 20 mil fichas e conquistou mais um bronze!",
+      "Oscar": "Papito de viagem ficou fora e retorna descansado nessa semana!"
+    }
   }
 }
