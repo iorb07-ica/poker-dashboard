@@ -283,5 +283,40 @@
       "Rafa": "Chegou, jogou, saiu cedo. Um rebuy e nono lugar. Rafa é presença garantida, o resultado vem nas próximas. A noite não colaborou, mas Rafa esteve na mesa. Na próxima semana a história muda. Ou não. Pelo menos teve pipoca. Será que Rafa pipocou? rs",
       "Heron": "Campeão que quase morreu de susto. 4 KOs, pilha enorme, e nas últimas mãos deu um trabalhão pra todo mundo. Mas segurou. Ganhou feio e bonito ao mesmo tempo. O homem que acumulou, sofreu, tremeu... e levantou o troféu mesmo assim. Isso se chama caráter.  4 eliminações, 1 rebuy e um título que foi decidido nas últimas cartas. Heron não ganhou fácil, ganhou de verdade. Avaí respira e faz côsa!"
     }
+  },
+  "WK20": {
+    "titulo": "",
+    "subtitulo": "",
+    "clima": 10,
+    "intro": "Tem noite de poker, e tem A Noite. A WK20 foi A Noite.\nA história, na verdade, começou antes das cartas. Marcolino, Rafa e Israel decidiram que o aquecimento ideal para uma noite de poker não era estudar ranges nem revisar pot odds. era chopp. E não foi um chopp diplomático, de cortesia. Os três chegaram ao Plaza Mediterrâneo alegres, soltos, com aquele sorriso largo de quem está convencido de que vai dominar a mesa. Spoiler: dois deles foram eliminados, e o terceiro virou campeão graças a uma profecia. O chopp deu palpite, mas não deu garantia.\nA mesa estava cheia: nove cadeiras ocupadas, 18 entradas, 90 mil fichas em jogo e zero espaço para covardia. E foi aí que o feltro do Plaza virou tabuleiro de Ouija. Porque a WK20 não foi uma noite de poker comum: foi uma sessão espírita com baralho. Teve profecia anunciada em alto e bom som logo na largada. Teve carta cantada no escuro e a carta obedeceu. Teve quadra passando o trator por cima de um full house indefeso. E teve a proeza estatística mais cruel da temporada: um par de Áses que conseguiu chegar em terceiro lugar dentro da própria mão.\nHeron, fiel ao seu papel de herói trágico, pagou três rebuys tentando provar que poker é jogo de habilidade e levantou da mesa convencido do contrário, repetindo seu já clássico bordão \"isso não é poker!\". O Grey Galináceo (Israel) voou alto demais com o chopp na asa e foi abatido em pleno ar. Magu fez de tudo um pouco: previu o futuro, destruiu full houses e ainda jogou a última mão de olhos fechados. E Pedro... bem, Pedro talvez devesse estar jogando na Mega-Sena, não no poker.\nNo fim das contas, 14 caveiras trocaram de mãos, 90 mil fichas mudaram de dono, e os nove sobreviventes foram dormir com a mesma desconfiança: tinha um vidente infiltrado na mesa, e o resultado já estava escrito antes mesmo da primeira carta cair. Não foi sorte. Foi roleta russa, só que com baralho, chopp e profecia.",
+    "maoTitulo": "A profecia do 3 e do 8",
+    "maoDesc": "Última mão da noite. Magu, fiel ao caos, resolve jogar no escuro — sem nem olhar as cartas. Antes do dealer revelar qualquer coisa, Pedro decreta com a calma de quem já leu o final do livro: \"vai vir um 3 e um 8\". Vira a primeira carta: 3. A mesa congela. Vira a segunda: 8. Silêncio sepulcral seguido de gritaria geral. Não foi sorte, foi vidência pura. Pedro tava na mesa errada, devia estar na Mega-Sena.",
+    "persJogador": "Pedro",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Isso nao e poker!",
+        "autor": "Heron"
+      },
+      {
+        "fala": "Vai virar um 3 e um 8",
+        "autor": "Pedro"
+      },
+      {
+        "fala": "Pode anotar aí: hoje quem ganha é o Marcus",
+        "autor": "Magu"
+      }
+    ],
+    "jogadores": {
+      "Marcus": "Campeão da noite, mas divide o troféu com o departamento de profecias. Magu cravou lá no começo que o Marcus levantaria a taça, e o universo apenas cumpriu ordens. Ele só teve o trabalho de aparecer.",
+      "Rafa": "Vice de respeito, fechou com 28.725 fichas e ainda mandou o Oscar pra geladeira no caminho. Faltou só uma profecia a favor dele pra subir mais um degrau.",
+      "Cristiano": "Pódio merecido e ainda foi o carrasco do Grey Galináceo: A10 contra o A9 do Israel, na medida exata pra despachar o frango pra casa.",
+      "Pedro": "O ORÁCULO da WK20. Cantou no escuro que viria 3 e 8,e veio 3 e 8. 4º lugar, zero rebuy e poderes sobrenaturais comprovados em mesa, na frente de testemunhas.",
+      "Magu": "Profeta, carrasco e cara de pau na mesma noite. Previu o campeão, cravou QUADRA em cima do full house do Heron, fez 4 KOs e ainda jogou a última mão no escuro. A única coisa que ele não previu foi o próprio 5º lugar.",
+      "Heron": "O herói trágico da noite. Três rebuys, um full house atropelado por quadra e eliminado um número de vezes que ofende a estatística. \"Isso não é poker!\" e, sinceramente, depois dessa noite, talvez ele tenha razão.",
+      "Oscar": "Noite discreta no meio do furacão: um KO, despachou o Heron (quem mais?) e caiu em 7º. Passou quase despercebido entre tanta bruxaria.",
+      "Israel": "GREY GALINÁCEO abatido em pleno voo. Foi de A9 de copas, esbarrou no A10 do Cris e virou estatística no 8º lugar. O frango cinza voou baixo demais dessa vez.",
+      "Charles": "Detentor do feito mais cruel da noite: tinha par de Áses na mão (AA!) e ainda assim terminou em TERCEIRO lugar naquela mão. Lanterna da noite no geral, mas dono absoluto da história mais dolorida da WK20."
+    }
   }
 }
