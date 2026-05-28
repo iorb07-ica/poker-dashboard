@@ -318,5 +318,40 @@
       "Israel": "GREY GALINÁCEO abatido em pleno voo. Foi de A9 de copas, esbarrou no A10 do Cris e virou estatística no 8º lugar. O frango cinza voou baixo demais dessa vez.",
       "Charles": "Detentor do feito mais cruel da noite: tinha par de Áses na mão (AA!) e ainda assim terminou em TERCEIRO lugar naquela mão. Lanterna da noite no geral, mas dono absoluto da história mais dolorida da WK20."
     }
+  },
+  "WK21": {
+    "titulo": "5-7 que virou trinca e virou coroa",
+    "subtitulo": "",
+    "clima": 6,
+    "intro": "Segunda coroa: Marcolino não precisa de cartas boas pra ser rei\n\nÉpica - A lenda do 5 e 7 que dobrou o trono\n\nA WK20 já tinha sido absurda. Profecia, carta cantada no escuro, quadra esmagando full house. A turma chegou na WK21 achando que era impossível superar aquilo. Estava errada.\nA noite de 27 de maio entrou pro calendário do Plaza Mediterrâneo como uma das mais dramáticas da temporada. Casa cheia de novo — nove cadeiras, 19 entradas, 95 mil fichas e um nível de tensão que começou alto e foi subindo até explodir na última mão. Spoiler: a última mão foi de cinema.\nHeron, que na semana passada já tinha sido o herói trágico com três rebuys e um full house atropelado, resolveu testar a sorte de novo — entrou duas vezes, acumulou 5 KOs pelo caminho e protagonizou o momento mais tenso da noite ao aceitar o duelo final. Rafa foi o grande mártir da noite: saiu três vezes, foi eliminado por três pessoas diferentes, e ainda assim voltou pra mesa sorrindo (ou tentando). Oscar, o Papito, entrou no 5º lugar depois de um começo prometedor — foi ele quem puxou a última mão, sem saber que estava abrindo a caixa de Pandora.\nIsrael, o Grey Galináceo, terminou em 3º de forma silenciosa e digna — bem diferente da semana passada, quando foi abatido em pleno voo com A9 de copas. Magu fechou em 2º, mais uma vez fazendo 3 KOs e mantendo a posição de eterno finalista que parece destinado ao vice.\nE então chegou a última mão. Papito abre para 3.500. Grey dobra a carta. Magu dobra a carta. Marcolino vai all-in — 15 mil fichas jogadas no feltro sem cerimônia. Heron olha as fichas. Pensa. Pensa mais um pouco. O silêncio na mesa é físico. Pensa de novo. E chama.\n45 mil fichas no pano. Três jogadores. As cartas viram: Marcus mostra 5 e 7 offsuit. Heron, corajoso até o fim, mostra 9 e 2 offsuit. Papito, que pelo menos tinha dignidade, abre um 10 e 9 offsuit. O board cooperou com o único dos três que menos merecia — e entregou trinca de 5 pra Marcolino. A mesa entrou em colapso.\nSegundo título consecutivo. Com 5 e 7. Off. Suit. A lenda está formada.",
+    "maoTitulo": "5-7 que virou trinca e virou coroa",
+    "maoDesc": "Última mão da WK21. Papito (Oscar) abre para 3.500. Grey (Israel) dobra sem pensar duas vezes. Magu, sábio, também passa. Marcolino (Marcus) empurra tudo — all-in de aproximadamente 15 mil fichas, cara de pau total.\nHeron entra em modo meditação profunda. Pensa. Pensa mais. A mesa inteira segura a respiração. Pensa de novo. E chama. 45 mil fichas no centro da mesa, três jogadores, três mãos lamentáveis: Marcus com 5♣7♦, Heron com 9♠2♣, Oscar com T♠9♦.\nO board entregou a trinca de 5. Marcolino levantou, a mesa desabou, Heron ficou sem palavras e o Plaza Mediterrâneo registrou o segundo título consecutivo do mesmo campeão — com uma das piores mãos vencedoras da história do grupo. Bruxaria pura.",
+    "persJogador": "Marcus",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Tô pagando",
+        "autor": "Heron (após 3 minutos de silêncio e 45k no pano)."
+      },
+      {
+        "fala": "5 e 7... ele ganhou com 5 e 7!",
+        "autor": "A mesa inteira"
+      },
+      {
+        "fala": "\"Aeeeee, porra\" Marcus",
+        "autor": ""
+      }
+    ],
+    "jogadores": {
+      "Marcus": "Campeão pela segunda semana consecutiva, com 4 KOs e 44.225 fichas na mesa. Ganhou a final com 5 e 7 offsuit. Neste ponto, o grupo precisa aceitar que Marcolino não joga poker: ele faz o poker obedecer (e o Ed que está abastecido de suco de laranja novamente).",
+      "Magu": "Vice de novo, 3 KOs, zerinho de rebuys e uma frieza cirúrgica de foldar na última mão. Estava certo. Só que quem estava errado ganhou. É a vida do Magu.",
+      "Israel": "Grey Galináceo ressurgido das cinzas: 3º lugar, sem rebuy, 1 KO no Heron logo no começo. Semana de redenção depois do abate da WK20 com A9 de copas. O frango cinza cresceu as penas. E foi campeão de maio com sobras!",
+      "Heron": "4º lugar, 5 KOs pelo caminho, 2 rebuys e protagonista do momento mais tenso da noite. Chamou o all-in com 9 e 2 offsuit, ficou em silêncio por 3 minutos antes, e ainda assim perdeu pra trinca de 5. A coragem foi imensa. O resultado, cruel.",
+      "Oscar": "Papito abriu a última mão com 10 e 9 offsuit achando que tava dominando a situação. Acabou de intermediário numa briga entre o 5-7 e o 9-2. Ficou em 5º, mas sua abertura de 3.500 ativou toda a sequência épica, sem querer, foi o produtor do espetáculo.",
+      "Pedro": "Saiu em 7º, 1 rebuy e zero KOs. Semana mais quieta depois da profecia histórica da WK20. O oráculo descansou, mas a fama permanece. Ainda é líder do ano mas já vê o galo na sua direção, batendo asas e cantando alto! Có-có-có-ri-CÓÓó  ÓÓoóóÓÓó!!!!",
+      "Cristiano": "Dois rebuys e eliminado três vezes por pessoas diferentes: Marcus, Heron e Magu. Quando três jogadores top precisam se revezar pra te tirar da mesa, você está claramente incomodando. Galera ficou indignada que não ganhou limões da fazenda.",
+      "Charles": "8º lugar, zero rebuy, zero KO. Noite fantasma. Chegou atrasado mas trouxe guloseimas pra galera. Sentou, saiu. Mas pelo menos não pagou caro pela experiência.",
+      "Rafa": "O mártir oficial da WK21. Três rebuys, eliminado por Marcus, Heron e Magu em noites diferentes dentro da mesma noite. 9º lugar no fim, mas com a persistência de quem nunca desiste. Respeito na derrota. Pelo menos tomou um belo chopp na Mercadoteca."
+    }
   }
 }
