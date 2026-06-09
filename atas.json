@@ -353,5 +353,40 @@
       "Charles": "8º lugar, zero rebuy, zero KO. Noite fantasma. Chegou atrasado mas trouxe guloseimas pra galera. Sentou, saiu. Mas pelo menos não pagou caro pela experiência.",
       "Rafa": "O mártir oficial da WK21. Três rebuys, eliminado por Marcus, Heron e Magu em noites diferentes dentro da mesma noite. 9º lugar no fim, mas com a persistência de quem nunca desiste. Respeito na derrota. Pelo menos tomou um belo chopp na Mercadoteca."
     }
+  },
+  "WK22": {
+    "titulo": "Heron ressurge das cinzas e coroa a vingança",
+    "subtitulo": "Dramática - Quem dominava caiu, quem sobrevivia venceu",
+    "clima": 4,
+    "intro": "Tem noites em que o poker é justo. A WK22 não foi uma dessas.\nO Plaza Mediterrâneo recebeu oito guerreiros na noite de 03 de junho, Cris, o agricultor do limão galego mandou um atestado de ausência e deixou a cadeira vazia. O que em retrospecto pode ter sido a decisão mais inteligente da semana. Eram 17 entradas, 85 mil fichas e um roteiro que ninguém poderia ter escrito: o cara que dominou a noite do começo ao fim saiu em 7º lugar. O cara que sobreviveu duas vezes do all-in levantou a taça. E Marcolino ganhou a última mão de novo, como se o universo tivesse combinado com ele antes do jogo.\nMagu foi o protagonista cruel da própria tragédia. Desde as primeiras mãos, estava acima de todos: fichas, postura, leituras. Era a noite dele, todo mundo sabia, ele sabia, as cartas sabiam. Fez 4 KOs logo no começo, dominou o jogo por horas e construiu uma pilha que parecia intocável. E então chegou o momento fatal: all-in contra o Heron. Magu esperava, tentou o blefe perfeito. Heron, sem nada de especial na mão, apenas AK, sem par, sem draw, chamou. Com frieza de estátua. O board não ajudou Magu. O senhor da noite foi despachado para casa em 7º lugar, assistindo de fora o torneio que era dele.\nIsrael, o Grey Galináceo, não foi elegante, foi sobrevivente. Dois rebuys no bolso, encurralado, foi de all-in com AQ quando Magu veio com 55 tentando mandar ele pra casa e tirar diferença de pontos do ano. O Ás bateu na mesa. O par de cincos chora no vestiário. Grey dobra e respira. Não ganhou a noite, mas terminou em 4º com a dignidade de quem não desistiu.\nE no final, como roteiro obriga, Marcolino apareceu. Zero KO na noite toda, quietinho, acumulando sem fazer barulho e então ganhou a última mão daquele jeito caótico e inevitável que já virou marca registrada. Subiu para 2º lugar e deixou a mesa questionando se ele tem alguma relação sobrenatural com as cartas finais. Heron, com 4 KOs, 1 rebuy e sangue frio de quem paga AK sem par em all-in, fechou o ciclo e levantou a taça que nas últimas semanas parecia reservada pra outros.\nA vingança do herói trágico estava completa.",
+    "maoTitulo": "K sem par, call sem medo, noite sem Magu",
+    "maoDesc": "Magu dominava. Fichas empilhadas, leituras afiadas, 4 KOs no currículo da noite. Chega a hora do all-in — ele empurra com confiança, esperando o fold ou o confronto que imaginava vencer. Heron olha as cartas: AK, sem par formado, sem nada garantido. Pensa. E chama.\nEra o blefe de Magu contra a coragem fria de Heron. O board não entregou o par pro AK, mas também não salvou Magu. O senhor absoluto da noite, que parecia destinado ao título, foi eliminado em 7º, com zero fichas e uma lição cruel: no poker, dominar 90% da noite não vale nada se o último 10% te trair. Heron não jogou bonito. Jogou certo.",
+    "persJogador": "Heron",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Eu tava dominando essa mesa inteira!",
+        "autor": "Magu"
+      },
+      {
+        "fala": "Call.",
+        "autor": "Heron (seco, com AK, sem par, sem hesitar)"
+      },
+      {
+        "fala": "Como assim ele ganhou a última mão de novo?!",
+        "autor": "A mesa inteira olhando pro Marcus"
+      }
+    ],
+    "jogadores": {
+      "Heron": "Campeão da WK22 com 4 KOs e autoridade total no final. Pagou o all-in do Magu com AK sem par e não piscou. Depois de semanas sendo o herói trágico. três rebuys aqui, full house atropelado ali, chegou a vez da coroa. O vingador está coroado.",
+      "Marcus": "Marcolino zero KO, zero estresse, zero drama. Só apareceu na última mão, ganhou como sempre, subiu pro 2º lugar e foi embora com cara de quem sabe de algo que os outros não sabem. A última mão é território dele. Ponto final.",
+      "Pedro": "3º lugar sólido, 1 rebuy administrado e 1 KO no caminho. Semana consistente, sem virar manchete, mas com resultado pra orgulhar. O oráculo da WK20 agora prova que também sabe jogar além de prever.",
+      "Israel": "Grey Galináceo com duas vidas gastas mas 4º lugar no bolso. Foi de all-in com AQ, Magu veio com 55 pra enterrar e o Ás disse não. Sobreviveu, dobrou, resistiu. Não foi bonito, mas foi eficiente. O frango cinza tem mais pena do que parece. Abriu mais distância para Magu, que está em 3º, mas ainda busca tirar diferença pro líder que abriu um cadin a mais.",
+      "Charles": "5º lugar com 2 rebuys e zero KOs. Noite de resistência sem brilho, mas sem entrega fácil também. Segurou posição quando podia e saiu antes do final sem grandes histórias pra contar. NYN campeão esse ano hein?",
+      "Oscar": "Papito fez 2 KOs com 1 rebuy e terminou em 6º com apenas 400 míseras fichas sobrando na pilha. Saiu raspando, literalmente. Chegou perto do top 5 e ficou pelo caminho numa das apostas mais apertadas da noite. Numa bad beat, perdeu com seu AJ para um KJ do Marcolino. Cruel... muito cruel!",
+      "Magu": "O maior mistério da WK22. Dominou a noite do começo ao fim, fez 4 KOs, construiu a maior pilha da mesa e saiu em 7º depois de um blefe que encontrou um call histórico. Zero rebuys e zero consolação. A noite era dele e ele deixou escapar num único momento. Isso vai doer por alguns dias. Depois da pancada, até comprou passagem para algum lugar distante... 2024 ainda não saiu da sua memória.",
+      "Rafa": "8º lugar, 2 rebuys e dealer da noite. Saiu cedo mas garantiu que as cartas fossem bem embaralhadas pra todo mundo. Às vezes o papel mais importante é manter o jogo rodando. E ele deu a primeira mão... Heron perdeu para 2 dealers. Mas foi campeão no final.",
+      "Cristiano": "Faltou. Não viu nada. Não perdeu nada. Ou perdeu tudo, dependendo do ponto de vista. Na dúvida, semana que vem aparece. Mas sem limões."
+    }
   }
 }
