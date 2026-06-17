@@ -388,5 +388,44 @@
       "Rafa": "8º lugar, 2 rebuys e dealer da noite. Saiu cedo mas garantiu que as cartas fossem bem embaralhadas pra todo mundo. Às vezes o papel mais importante é manter o jogo rodando. E ele deu a primeira mão... Heron perdeu para 2 dealers. Mas foi campeão no final.",
       "Cristiano": "Faltou. Não viu nada. Não perdeu nada. Ou perdeu tudo, dependendo do ponto de vista. Na dúvida, semana que vem aparece. Mas sem limões."
     }
+  },
+  "WK23": {
+    "titulo": "Magu intocável: 6 caveiras, zero rebuy e um flush que partiu a noite ao meio",
+    "subtitulo": "Dominante - A noite em que o mestre finalmente não desperdiçou a obra",
+    "clima": 9,
+    "intro": "Havia duas histórias acontecendo ao mesmo tempo na noite de 10 de junho no Plaza Mediterrâneo. Na primeira, Rafa era o dono da noite — pilha crescendo, 4 KOs no bolso, postura de quem já escolheu onde vai colocar o troféu. Na segunda, Magu estava quieto, cirúrgico, acumulando sem fazer barulho. Por horas, as duas histórias correram em paralelo. E então chegou o momento em que elas se encontraram — e apenas uma sobreviveu.\nA mão foi absurda. Rafa, confiante como nunca, havia construído uma sequência no river. Mão fechada, boa, vencedora em qualquer outra circunstância. Só que Magu tinha o flush de Ás. E não só tinha — foi all-in com ele. Rafa pagou. O board revelou o que a mesa já suspeitava: Magu não estava jogando poker naquela noite, estava executando um plano. Rafa foi fatiado, saiu 3º, e Magu assumiu a liderança com tanta distância que o jogo virou passeio. 48.500 fichas no fim. Zero rebuys durante toda a noite. 6 KOs — empatado com Oscar pelo topo da lista. Campeão absoluto, sem discussão.\nMas enquanto Magu construía a obra-prima, o resto da mesa estava em colapso criativo. Heron — o vingador da WK22, o herói que pagou AK sem par e venceu — apareceu na WK23 disposto a provar que era possível dar 5 rebuys numa única noite. E conseguiu. Cinco vezes voltou. Cinco vezes foi embora. Terminou em 8º com 1 KO e uma conta no bar que provavelmente foi maior que o prêmio. Marcolino, o eterno rei da última mão, dessa vez não chegou lá — 4 rebuys, 0 KOs, 9º lugar. O universo equilibrou o karma das últimas semanas de magia.\nOscar foi o grande coadjuvante: 6 KOs, 2 rebuys e 2º lugar com 28.550 fichas — uma noite que em qualquer outra semana teria sido lendária. Só que Magu estava lá. Israel fez 2 KOs com 1 rebuy e terminou em 7º — o Grey Galináceo tentou voar, mas a altitude foi limitada. Pedro segurou 4º com 2 rebuys e consistência de quem joga longo. Charles silencioso no 5º, Cristiano discreto no 6º.\nAo final, 9 presentes, 29 entradas, 125 mil fichas em campo e um único nome que importava: Magu. Zero rebuy. Seis eliminações. Campeão. A noite dele, desde o primeiro até o último chip.",
+    "maoTitulo": "Flush de Copas do Magu contra Sequência no River de Rafilds",
+    "maoDesc": "Rafa dominava. Pilha grande, leituras afiadas, sequência fechada no river — mão boa, mão forte, mão de campeão. Só que Magu olhou as cartas e viu o flush de Ás sorrindo pra ele. Não hesitou: all-in. Rafa, que tinha tudo para ganhar aquela mão em qualquer outra noite da história do grupo, pagou. E o que era pra ser a consolidação do título de Rafa virou o passaporte do Magu pra liderança absoluta. De lá até o fim, ninguém chegou perto. A sequência morreu pro flush, Rafa saiu em 3º, e Magu foi embora com o troféu que a mesa toda sabia que era dele desde aquele momento.",
+    "persJogador": "Magu",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Tenho sequência, como ele tem flush?!",
+        "autor": "Rafa"
+      },
+      {
+        "fala": "All in.",
+        "autor": "Magu (seco, com o flush de Ás, sem cerimônia)"
+      },
+      {
+        "fala": "Cinco rebuys... CINCO!",
+        "autor": "A mesa inteira olhando pro Heron"
+      },
+      {
+        "fala": "Hoje não foi minha noite de última mão",
+        "autor": "Marcus, saindo em 9º com 4 rebuys"
+      }
+    ],
+    "jogadores": {
+      "Magu": "A noite perfeita. Zero rebuy, 6 KOs, 48.500 fichas e o título que a mesa inteira reconhecia como inevitável desde o flush de Ás. Nas semanas anteriores, Magu dominava e tropeçava no final. Na WK23, não deixou brecha nenhuma. Predador do começo ao fim.",
+      "Oscar": "Papito foi monstruoso: 6 KOs e 2º lugar com 28.550 fichas. Em qualquer outra semana, seria o campeão indiscutível e o personagem da noite. Só que Magu estava lá. Azar da coincidência, não da performance.",
+      "Rafa": "Dominou por horas, fez 4 KOs, construiu uma sequência linda no river — e encontrou o flush de Ás do Magu. Saiu em 3º depois de protagonizar a mão mais brutal da noite. Não tem erro a corrigir: teve a noite, perdeu pra uma carta melhor. É poker.",
+      "Pedro": "4º lugar sólido com 2 rebuys administrados e postura de maratonista. Não foi protagonista, mas chegou mais longe que a maioria. Consistência silenciosa que vai se pagar no acumulado.",
+      "Charles": "5º lugar, zero rebuy, 1 KO. Noite econômica e eficiente. Não gastou, não brilhou, mas também não afundou. Charles no modo reserva — presente, mas sem revelar as cartas da manga.",
+      "Cristiano": "6º lugar, zero rebuy, zero KO. A noite mais discreta do Cris em semanas: entrou, jogou, saiu antes da metade. Oscar foi quem o despachou. Semana que vem, o revanço.",
+      "Israel": "Grey Galináceo em modo sobrevivência: 1 rebuy, 2 KOs e 7º lugar. Fez barulho nas eliminações mas não chegou longe o suficiente. O frango cinza ainda está calibrando a altitude certa.",
+      "Heron": "Cinco. Rebuys. CINCO. O campeão da WK22 voltou pra mesa WK23 aparentemente disposto a testar os limites do próprio sistema de rebuys. 1 KO de consolo, 8º lugar no fim e uma conta que vai fazer pensar duas vezes antes de dar call na próxima. A vingança da WK22 custou caro essa semana.",
+      "Marcus": "Marcolino, o rei das últimas mãos, o profeta das cartas fracas, o lendário 5-e-7-offsuit — dessa vez não chegou lá. Quatro rebuys, zero KOs, 9º lugar. O dealer da noite foi o último a ser eliminado, e foi eliminado cedo. O universo cobrou o karma das semanas mágicas. Semana que vem, a lenda volta."
+    }
   }
 }
