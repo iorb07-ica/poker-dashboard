@@ -16480,8 +16480,14 @@ window.addEventListener('load', function(){
       ? (cellSz >= 32 ? 14 : cellSz >= 26 ? 12 : cellSz >= 22 ? 11 : 10)
       : (cellSz >= 38 ? 13 : cellSz >= 30 ? 11 : 9);
 
+    // Coluna de Total à direita — só faz sentido para Rebuys e KOs
+    // (somar posições não tem significado, então Posição fica sem total).
+    var showTotal = (hmMetric === 'rebuys' || hmMetric === 'kos');
+    var totalColW = isMobile ? Math.max(cellSz, 34) : Math.max(cellSz + 6, 46);
+    var extraTotal = showTotal ? (totalColW + gap) : 0;
+
     var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
-      + '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+(isMobile?contW:tableW2)+'px;">';
+      + '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+((isMobile?contW:tableW2)+extraTotal)+'px;">';
 
     
     html += '<thead><tr>';
@@ -16489,6 +16495,9 @@ window.addEventListener('load', function(){
     wks.forEach(function(wk){
       html += '<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:9px;font-weight:600;padding:0 0 2px 0;white-space:nowrap;">WK'+String(wk).padStart(2,'0')+'</th>';
     });
+    if(showTotal){
+      html += '<th style="width:'+totalColW+'px;text-align:center;color:#e8c766;font-size:9px;font-weight:800;letter-spacing:.3px;padding:0 0 2px 0;white-space:nowrap;">Total</th>';
+    }
     html += '</tr></thead><tbody>';
 
     jogs.forEach(function(jog){
@@ -16519,6 +16528,19 @@ window.addEventListener('load', function(){
           + (hmMetric==='kos'&&val===0?'font-size:'+(fontSize-2)+'px;':'text-shadow:0 1px 2px rgba(0,0,0,0.9);')+'line-height:1;">'
           + lbl+'</div></td>';
       });
+      if(showTotal){
+        var totLinha=0;
+        wks.forEach(function(wk){
+          var rr=idx2[jog]?idx2[jog][wk]:null;
+          if(rr && +rr.faltou!==1){
+            if(hmMetric==='rebuys') totLinha += (rr.rebuys!=null?+rr.rebuys:0);
+            else                    totLinha += (rr.kos!=null?+rr.kos:0);
+          }
+        });
+        html += '<td style="width:'+totalColW+'px;height:'+cellSz+'px;padding:0;background:rgba(201,169,97,0.16);border-radius:4px;box-shadow:inset 0 0 0 1px rgba(201,169,97,0.35);">'
+          + '<div style="width:100%;height:'+cellSz+'px;display:flex;align-items:center;justify-content:center;color:#e8c766;font-size:'+fontSize+'px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,0.9);line-height:1;">'
+          + totLinha+'</div></td>';
+      }
       html += '</tr>';
     });
 
