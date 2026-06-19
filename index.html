@@ -4465,7 +4465,7 @@ body.mobile-mode #libwarn { display: none !important; }
 
  <!-- Corpo -->
  <div id="heatmap-novo-body" data-open="true" style="padding:0 12px 16px;">
- <div id="chartHeatmapNovo" style="width:100%;overflow-x:hidden;"></div>
+ <div id="chartHeatmapNovo" style="width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;"></div>
  </div>
 
  </div>
@@ -16486,8 +16486,7 @@ window.addEventListener('load', function(){
     var totalColW = isMobile ? Math.max(cellSz, 34) : Math.max(cellSz + 6, 46);
     var extraTotal = showTotal ? (totalColW + gap) : 0;
 
-    var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
-      + '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+(tableW2+extraTotal)+'px;">';
+    var html = '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+(tableW2+extraTotal)+'px;">';
 
     
     html += '<thead><tr>';
@@ -16544,7 +16543,7 @@ window.addEventListener('load', function(){
       html += '</tr>';
     });
 
-    html += '</tbody></table></div>';
+    html += '</tbody></table>';
     wrap.innerHTML = html;
   }
 
@@ -19176,12 +19175,15 @@ function _abrirTelaComDados(jogNome, nivelAtivo, BRASOES, NIVEL_INFO, jogsAll, j
   var telaScroll2 = document.createElement('div');
   telaScroll2.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
   var grid2 = document.createElement('div');
-  // Colunas responsivas: 2 no mobile (como já estava e ficou bom) e mais
-  // colunas no desktop para os brasões não ficarem gigantes em telas largas.
-  var _vwBr2 = window.innerWidth || 380;
-  var _colsBr2 = _vwBr2 < 560 ? 2 : _vwBr2 < 900 ? 3 : _vwBr2 < 1400 ? 4 : 5;
-  grid2.style.cssText = 'display:grid;grid-template-columns:repeat('+_colsBr2+',1fr);gap:10px;'
-    +'padding:8px 10px 40px;box-sizing:border-box;width:100%;max-width:1200px;margin:0 auto;';
+  // Preenche o monitor inteiro: lê a largura real da tela e calcula quantas
+  // colunas cabem para que cada brasão fique perto de um tamanho-alvo. Assim
+  // ocupa a tela toda em qualquer monitor, sem faixas vazias nas laterais,
+  // e mantém no mínimo 2 colunas (mobile).
+  var _avail2  = (window.innerWidth || 380);
+  var _alvoBr2 = 380; // largura-alvo de cada brasão (px) — calibrável
+  var _colsBr2 = Math.max(2, Math.round(_avail2 / _alvoBr2));
+  grid2.style.cssText = 'display:grid;grid-template-columns:repeat('+_colsBr2+',1fr);gap:14px;'
+    +'padding:10px 16px 40px;box-sizing:border-box;width:100%;';
 
   var svgKeys = {
     faisca: ['Explosivo','Colecionador','Soldado','Colecao Completa','Cofre F','Cacador','Primeiro Ouro','Fortaleza F','Gelo Vivo F','Ceifador'],
