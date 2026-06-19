@@ -427,5 +427,48 @@
       "Heron": "Cinco. Rebuys. CINCO. O campeão da WK22 voltou pra mesa WK23 aparentemente disposto a testar os limites do próprio sistema de rebuys. 1 KO de consolo, 8º lugar no fim e uma conta que vai fazer pensar duas vezes antes de dar call na próxima. A vingança da WK22 custou caro essa semana.",
       "Marcus": "Marcolino, o rei das últimas mãos, o profeta das cartas fracas, o lendário 5-e-7-offsuit — dessa vez não chegou lá. Quatro rebuys, zero KOs, 9º lugar. O dealer da noite foi o último a ser eliminado, e foi eliminado cedo. O universo cobrou o karma das semanas mágicas. Semana que vem, a lenda volta."
     }
+  },
+  "WK24": {
+    "titulo": "QQ no bolso, insta-call na alma e a 4ª coroa do Grey Galináceo",
+    "subtitulo": "Épica - A noite em que o frango cinza virou falcão",
+    "clima": 7,
+    "intro": "Algumas noites de poker têm um arco narrativo. Um começo difícil, um meio caótico, e um final que faz tudo fazer sentido. A WK24 de 17 de junho foi exatamente assim — e o protagonista foi Grey Galináceo.\nIsrael chegou sem Marcolino na mesa — o rei das últimas mãos faltou, deixando a cadeira vazia e o karma desprotegido. Eram 8 presentes, 17 entradas, 85 mil fichas e um roteiro que ninguém escreveria melhor. Grey não começou dominando. Começou sobrevivendo, acumulando, lendo a mesa com a frieza de quem já sabe que vai chegar lá — mesmo quando tudo ao redor sugere o contrário.\nMas antes do segundo tempo começar, a noite ganhou um ingrediente extra que nenhuma ata anterior teve. Charles — discreto nas cartas, genial na cozinha — chegou no intervalo com o rango dos seus eventos gastronômicos. Comida francesa de altíssimo nível. O tipo de coisa combina com poker de quarta em mesa de feltro de modo perfeito. O povo animou, os ânimos aqueceram, e o segundo tempo começou com estômago cheio e ambição dobrada. Diz a lenda que foi exatamente depois do rango francês que Grey guardou as Rainhas no bolso e esperou a hora certa. Coincidência? Provavelmente não.\nE então veio a mão do Cristiano. Com raise de 2.100 de Grey, o Cris — com toda a naturalidade do mundo — pagou com J6 offsuit. J. Seis. Off. Suit. A mesa olhou. Grey olhou. O universo olhou. E o flop entregou dois pares pro Cris como se fosse a coisa mais justa do mundo. Absurdo não é a palavra. É sacanagem com endereço e CEP. Grey, por misericórdia dos deuses que ainda tinham planos pra ele naquela noite, não sangrou tanto quanto merecia nessa mão. Recuperou. Respirou. E guardou o troco.\nO troco veio quatro mãos antes do fim. Com QQ no bolso — as Rainhas, as queridas, as incorruptíveis — Grey abre para 2.100. Heron, com QJ, paga tranquilo. O flop bate: J, 5 e 4. Heron acerta o top pair. Grey mantém a calma, dispara a c-bet: mais 2.100. Pura extração de valor, puro poker de manual. Heron — com o par de Valete na alma e confiança de sobra — vai all-in. Aproximadamente 7.000 fichas empurradas pro centro. Grey não pensa. Grey não hesita. Grey dá insta-call, vira as Rainhas e sorri. O board segura. Heron sai. Grey assume a liderança com firmeza e não larga mais.\nE porque o Plaza Mediterrâneo nunca deixa a última mão ser protocolo, o encerramento reservou mais um capítulo. Magu entrou com Q8, Oscar com J5. O flop bateu o 8 do Magu — mão dominada, situação clara, Oscar já contando os danos. Só que o turn desce um J. O Papito ressuscitou. Dobrou. Magu olhou pro board com a expressão de quem já viu coisa demais pra se surpreender — e ainda assim se surpreendeu. A última mão do Plaza cobra pedágio de todo mundo, sem exceção.\n1º lugar. Zero rebuy. 3 KOs. A 4ª vitória do Grey Galináceo está registrada na história do Plaza Mediterrâneo — e com ela, uma virada de ranking que muda o cenário do T2 e do ano inteiro.",
+    "maoTitulo": "QQ vs QJ: a c-bet perfeita, o all-in ousado e o insta-call que coroou a noite",
+    "maoDesc": "Faltavam 4 mãos para o fim. Grey abre para 2.100 com QQ. Heron paga com QJ — confiante, tranquilo, sem saber o que está por vir. O flop abre J♠ 5♦ 4♣. Heron acerta o top pair. Grey, primeiro a falar, não para — c-bet de 2.100, clássica, calculada, cirúrgica. Heron responde com tudo: all-in, aproximadamente 7.000 fichas. Grey não pestaneja: insta-call imediato, rainhas viradas, coração da mesa parado. O turn e o river não ajudam Heron. As Rainhas seguram. Grey assume a liderança e não entrega mais. Poker de nível, executado no momento exato, contra o oponente certo, com as cartas certas. A 4ª coroa foi construída nessa mão.",
+    "persJogador": "Israel",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "J6 off e ainda acerta dois pares?! Isso não se faz!",
+        "autor": "Grey Galináceo, indignado mas vivo"
+      },
+      {
+        "fala": "Call.",
+        "autor": "Grey (instantâneo, com QQ, sem nem respirar fundo)"
+      },
+      {
+        "fala": "Não acredito que paguei com QJ...",
+        "autor": "Heron, saindo pela segunda vez"
+      },
+      {
+        "fala": "Charles trouxe comida francesa e o Grey venceu. A cozinha francesa é boa demais.",
+        "autor": "A mesa inteira"
+      },
+      {
+        "fala": "Marcolino faltou e o Grey venceu. Coincidência?",
+        "autor": "Alguém, olhando pro teto"
+      }
+    ],
+    "jogadores": {
+      "Israel": "A 4ª vitória da carreira, construída com paciência, sangue frio e a mão do QQ executada com perfeição cirúrgica. Zero rebuy, 3 KOs, 32.500 fichas no fim. Sobreviveu ao absurdo do J6 do Cris, guardou o troco nas Rainhas e foi embora com o troféu. Com esse resultado, saltou para a vice-liderança anual e encostou em Pedroca. O frango cinza cresceu garras — e essa noite vai ficar na memória por muito tempo.",
+      "Cristiano": "2º lugar importantíssimo para o ranking do trimestre, com 1 rebuy e 1 KO. E olha... pagou raise de 2.100 com J6 offsuit, acertou dois pares no flop e quase eliminou o que viria ser o campeão da noite. Absurdo? Sim. Lucrativo? Também. O Cris joga no limite entre o gênio e o caos — dessa vez os dois apareceram juntos, e o resultado colocou ele de volta na briga do trimestre.",
+      "Oscar": "Papito sólido no 3º lugar, 2 rebuys no bolso e 2 KOs pelo caminho. Fez a noite dele sem chamar atenção — e ainda protagonizou a última mão: estava tecnicamente morto com J5 contra o Q8 do Magu, flop bateu o 8, tudo perdido. Até o turn descer um J e ressuscitar o Papito do nada. Dobrou, saiu de cabeça erguida e lembrou a todos que no Plaza ninguém está eliminado até estar eliminado.",
+      "Magu": "Dealer da noite e 4º lugar, mas com 3 rebuys que contam a história real: noite sofrida, entrou e saiu várias vezes, apenas 1 KO de consolo. E pra fechar com chave de ouro da ironia: na última mão estava dominando Oscar com Q8 contra J5 — flop trouxe o 8, mão controlada, resultado óbvio. Até o turn resolver ser cruel e descer o J pro Papito. Magu saiu com a pontuação consideravelmente menor do que merecia. A última mão do Plaza cobra pedágio de todo mundo, sem exceção — e dessa vez foi o Magulets quem pagou a conta.",
+      "Pedro": "5º lugar com zero rebuy e 2 KOs — eficiente e econômico como sempre. Pedroca segue tranquilo no topo do ranking anual e do trimestre, sabendo que basta existir para os outros terem que correr atrás. A liderança dele é sólida, mas o Grey encostou. A disputa ficou interessante.",
+      "Heron": "6º lugar, 1 rebuy e 2 KOs — fez barulho durante a noite mas protagonizou a derrota mais dolorosa: acertou top pair com QJ, foi all-in confiante e encontrou QQ do outro lado. Israel nem respirou antes de dar call. Heron saiu sem entender como as Rainhas estavam escondidas atrás de um raise tão comportado. Semana que vem, a revanche. Nem a McLaren amarela deu sorte pro roqueiro avaiano.",
+      "Charles": "7º lugar, zero rebuy, zero KO nas cartas — mas MVP absoluto do intervalo. Trouxe comida francesa de altíssimo nível dos seus eventos gastronômicos e alimentou a alma da mesa no momento exato em que o segundo tempo precisava de energia. Às vezes, a melhor jogada da noite não acontece no feltro. A noite ficou histórica também por culpa dele — e isso nenhum ranking captura.",
+      "Rafa": "8º lugar com 2 rebuys e 1 KO. Noite de sobrevivência que não sobreviveu. Foi eliminado por Israel, Oscar e Cristiano em momentos diferentes — quando três pessoas diferentes precisam se revezar pra te tirar da mesa, você estava incomodando mais do que os números mostram. A falta da pipoqueira está tirando a sorte do Rafilds.",
+      "Marcus": "Faltou. E na semana em que o Grey venceu, sua ausência foi o fator mais comentado da noite. Coincidência ou não, sem Marcolino na mesa o baralho resolveu obedecer outras leis. A cadeira vazia do rei das últimas mãos pesou de um jeito estranho no ar do Plaza Mediterrâneo. Semana que vem, a lenda volta."
+    }
   }
 }
