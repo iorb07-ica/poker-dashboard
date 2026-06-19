@@ -16071,42 +16071,94 @@ window.addEventListener('load', function(){
   }
 
   
-  function getMesesPremiados(men){
+  // Fonte de verdade: PREMIO_ENGINE (mesmo motor usado na tabela de perfil).
+  // Calcula prêmios e o flag "fechado" direto do ledger, então todo mês/tri/ano
+  // que já fechou aparece automaticamente — sem depender de array pré-calculado.
+  function getPremEngine(){
+    try{
+      if(window.PREMIO_ENGINE){
+        var led = getLedger();
+        if(led && led.length){
+          // mesmo padrão da tabela de perfil: reseta o cache compartilhado
+          // antes de calcular, senão o motor pode devolver um resultado antigo
+          // (ou vazio, se foi chamado no boot antes do ledger carregar)
+          if(typeof window.PREMIO_ENGINE.reset === 'function') window.PREMIO_ENGINE.reset();
+          return window.PREMIO_ENGINE.get(led);
+        }
+      }
+    }catch(e){ console.warn('PREMIO_ENGINE indisponível em desenharPremios', e); }
+    return null;
+  }
+
+  // Mês está premiado quando o motor o marca como FECHADO (todos os jogos do mês concluídos)
+  function getMesesPremiados(eng){
     var mp = {};
-    men.forEach(function(r){ if((r.premio_mensal||0)>0) mp[+r.mes]=true; });
+    if(eng && eng.mes){
+      Object.keys(eng.mes).forEach(function(m){
+        var pm = eng.mes[+m];
+        if(pm && pm.fechado) mp[+m] = true;
+      });
+    }
     return mp;
   }
 
-  
-  function getTriPremiados(mesesPremiados){
+  // Trimestre premiado quando o motor o marca como FECHADO
+  function getTriPremiados(eng){
     var tp = {};
-    var map = {1:[1,2,3],2:[4,5,6],3:[7,8,9],4:[10,11,12]};
-    Object.keys(map).forEach(function(t){
-      if(map[t].every(function(m){return mesesPremiados[m];})) tp[+t]=true;
-    });
+    if(eng && eng.tri){
+      Object.keys(eng.tri).forEach(function(t){
+        var pt = eng.tri[+t];
+        if(pt && pt.fechado) tp[+t] = true;
+      });
+    }
     return tp;
   }
 
-  
-  function getAnoPremiado(men, mesesPremiados){
-    // Só mostra prêmio anual se todos os 12 meses estiverem fechados
-    for(var m=1; m<=12; m++){ if(!mesesPremiados[m]) return false; }
-    return true;
+  // Ano premiado somente quando o motor o marca como FECHADO
+  function getAnoPremiado(eng){
+    if(eng && eng.ano){
+      var anos = Object.keys(eng.ano).map(Number);
+      if(anos.length){
+        var ultimo = Math.max.apply(null, anos);
+        var pa = eng.ano[ultimo];
+        return !!(pa && pa.fechado);
+      }
+    }
+    return false;
   }
 
   function desenharPremios(){
     var el = document.getElementById('chartPremios');
     if(!el) return;
 
-    var men      = getMensal();
-    var tri      = getTrimestre();
-    var anual    = getAnual();
+    var eng      = getPremEngine();
+
+    // O ledger é carregado por fetch assíncrono. Se o card desenhar ANTES
+    // dos dados chegarem, eng vem vazio. Em vez de mostrar um card em branco,
+    // exibimos "Carregando…" e re-tentamos até o ledger aparecer. Isso cobre
+    // a corrida entre o fetch dos dados e o primeiro render do card.
+    if(!eng || !eng.mes || !Object.keys(eng.mes).length){
+      desenharPremios._t = (desenharPremios._t || 0) + 1;
+      el.style.height = 'auto';
+      if(desenharPremios._t <= 40){   // ~20s de tentativas (40 x 500ms)
+        el.innerHTML = '<div style="padding:28px 0;text-align:center;color:#6b7a90;font-size:13px;">Carregando premiações…</div>';
+        setTimeout(desenharPremios, 500);
+      } else {
+        el.innerHTML = '<div style="padding:28px 0;text-align:center;color:#9fb3d4;font-size:13px;line-height:1.6;">'
+          + 'Sem dados de ledger para exibir.<br>'
+          + '<span style="font-size:11px;color:#6b7a90;">Os dados são carregados online — abra pelo site publicado, não pelo arquivo local.</span>'
+          + '</div>';
+      }
+      return;
+    }
+    desenharPremios._t = 0;
+
     var picks    = getPicks();
     var mesFiltro = getMesFiltro();
 
-    var mesesPremiados = getMesesPremiados(men);
-    var triPremiados   = getTriPremiados(mesesPremiados);
-    var anoPremiado    = getAnoPremiado(men, mesesPremiados);
+    var mesesPremiados = getMesesPremiados(eng);
+    var triPremiados   = getTriPremiados(eng);
+    var anoPremiado    = getAnoPremiado(eng);
 
     var mesNum = mesFiltro === 'todos' ? 0 : +mesFiltro;
     var trimestreDoMes = mesNum ? Math.ceil(mesNum / 3) : 0;
@@ -16115,39 +16167,52 @@ window.addEventListener('load', function(){
       : (trimestreDoMes > 0 && triPremiados[trimestreDoMes] && mesNum === trimestreDoMes * 3);
     var mostraAno = mesFiltro === 'todos' && anoPremiado;
 
+    // Universo de jogadores vindo do ledger (mesma base do motor)
     var todosJogs = Array.from(new Set(
-      men.filter(function(r){return r.saldo_mes_total!=null;}).map(function(r){return r.jogador;})
+      getLedger().map(function(r){return r.jogador;}).filter(Boolean)
     )).sort(function(a,b){return a.localeCompare(b,'pt-BR');});
     var jogs = picks.length ? todosJogs.filter(function(j){return picks.indexOf(j)>=0;}) : todosJogs;
 
     var dados = {};
     jogs.forEach(function(jog){
       var premMes=0, koGanho=0, premTri=0, premAno=0;
-      men.forEach(function(r){
-        if(r.jogador!==jog || r.saldo_mes_total==null) return;
-        var mes = +r.mes;
-        if(mesFiltro!=='todos' && mes!==+mesFiltro) return;
-        if(!mesesPremiados[mes]) return;
-        premMes += r2(r.premio_mensal);
-        var ko = r2(r.ajuste_KO_mes);
-        if(ko>0) koGanho+=ko;
-      });
-      if(mostraTri){
-        tri.forEach(function(r){
-          if(r.jogador!==jog) return;
+
+      // Mês + KO — só meses FECHADOS; respeita o filtro de mês
+      if(eng && eng.mes){
+        Object.keys(eng.mes).forEach(function(m){
+          var mes = +m;
+          if(!mesesPremiados[mes]) return;
+          if(mesFiltro!=='todos' && mes!==+mesFiltro) return;
+          var pm = eng.mes[mes];
+          if(!pm) return;
+          premMes += r2((pm.premMes && pm.premMes[jog]) || 0);
+          var ko = r2((pm.premKO && pm.premKO[jog]) || 0);
+          if(ko>0) koGanho += ko;
+        });
+      }
+
+      // Trimestral — só quando o(s) trimestre(s) estiverem fechados
+      if(mostraTri && eng && eng.tri){
+        Object.keys(eng.tri).forEach(function(t){
+          var triN = +t;
           if(mesFiltro !== 'todos'){
-            if(+r.trimestre === trimestreDoMes) premTri += r2(r.premio_trimestral);
+            if(triN !== trimestreDoMes) return;
           } else {
-            if(triPremiados[+r.trimestre]) premTri += r2(r.premio_trimestral);
+            if(!triPremiados[triN]) return;
           }
+          var pt = eng.tri[triN];
+          if(pt && pt.premTri) premTri += r2(pt.premTri[jog] || 0);
         });
       }
-      if(mostraAno){
-        anual.forEach(function(r){
-          if(r.jogador!==jog) return;
-          premAno += r2(r.premio_anual);
+
+      // Anual — só quando o ano estiver fechado
+      if(mostraAno && eng && eng.ano){
+        Object.keys(eng.ano).forEach(function(a){
+          var pa = eng.ano[+a];
+          if(pa && pa.premAno) premAno += r2(pa.premAno[jog] || 0);
         });
       }
+
       dados[jog] = {premMes:premMes, koGanho:koGanho, premTri:premTri, premAno:premAno};
     });
 
@@ -16228,7 +16293,7 @@ window.addEventListener('load', function(){
   window.addEventListener('resize',function(){ desenharPremios(); });
   window.addEventListener('load',function(){
     setTimeout(function(){
-      // Popular select premiações com apenas meses que têm dados
+      // Popular select premiações com os meses que têm dados
       var sel = document.getElementById('prem-mes-select');
       if(sel){
         var _rawP = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger)||[]);
@@ -16236,8 +16301,17 @@ window.addEventListener('load', function(){
         var _nomesP = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
         sel.innerHTML = '<option value="todos">Todos</option>';
         _mesesP.forEach(function(m){ sel.innerHTML += '<option value="'+m+'">'+(_nomesP[m]||m)+'</option>'; });
-        // Selecionar o mês mais recente
-        sel.selectedIndex = sel.options.length - 1;
+        // Selecionar por padrão o mês mais recente que já FECHOU
+        // (mês em aberto não tem prêmio definido, então não faz sentido abrir nele)
+        var _engSel = getPremEngine();
+        var _mesesFechados = _mesesP.filter(function(m){ return _engSel && _engSel.mes[m] && _engSel.mes[m].fechado; });
+        var _alvo = _mesesFechados.length ? _mesesFechados[_mesesFechados.length-1] : null;
+        if(_alvo){
+          var _idx = Array.prototype.findIndex.call(sel.options, function(o){ return +o.value === _alvo; });
+          sel.selectedIndex = _idx >= 0 ? _idx : sel.options.length - 1;
+        } else {
+          sel.selectedIndex = sel.options.length - 1;
+        }
       }
       desenharPremios();
     },2500);
@@ -16249,6 +16323,7 @@ window.addEventListener('load', function(){
     window.toggleCard = function(bodyId, arrowId){
       if(_orig) _orig(bodyId, arrowId);
       if(bodyId === 'prem-tip-body'){
+        desenharPremios._t = 0;   // reinicia as tentativas ao abrir o card
         setTimeout(function(){
           desenharPremios();
         }, 50);
