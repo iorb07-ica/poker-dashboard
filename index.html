@@ -16074,10 +16074,20 @@ window.addEventListener('load', function(){
   // Fonte de verdade: PREMIO_ENGINE (mesmo motor usado na tabela de perfil).
   // Calcula prêmios e o flag "fechado" direto do ledger, então todo mês/tri/ano
   // que já fechou aparece automaticamente — sem depender de array pré-calculado.
+  // Resolve o ledger pela MESMA cascata de fontes que o dropdown usa com
+  // sucesso. Necessário porque, após o carregamento, os dados sobrevivem em
+  // window.DATA.ledger, mas RAW/window.RAW podem ter sido zerados no processo.
+  function getLedgerCard(){
+    try{ if(window.RAW && window.RAW.length) return window.RAW; }catch(e){}
+    try{ if(window.DATA && window.DATA.ledger && window.DATA.ledger.length) return window.DATA.ledger; }catch(e){}
+    try{ var l = getLedger(); if(l && l.length) return l; }catch(e){}
+    return [];
+  }
+
   function getPremEngine(){
     try{
       if(window.PREMIO_ENGINE){
-        var led = getLedger();
+        var led = getLedgerCard();
         if(led && led.length){
           // mesmo padrão da tabela de perfil: reseta o cache compartilhado
           // antes de calcular, senão o motor pode devolver um resultado antigo
@@ -16169,7 +16179,7 @@ window.addEventListener('load', function(){
 
     // Universo de jogadores vindo do ledger (mesma base do motor)
     var todosJogs = Array.from(new Set(
-      getLedger().map(function(r){return r.jogador;}).filter(Boolean)
+      getLedgerCard().map(function(r){return r.jogador;}).filter(Boolean)
     )).sort(function(a,b){return a.localeCompare(b,'pt-BR');});
     var jogs = picks.length ? todosJogs.filter(function(j){return picks.indexOf(j)>=0;}) : todosJogs;
 
