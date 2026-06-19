@@ -16487,7 +16487,7 @@ window.addEventListener('load', function(){
     var extraTotal = showTotal ? (totalColW + gap) : 0;
 
     var html = '<div style="overflow-x:auto;-webkit-overflow-scrolling:touch;">'
-      + '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+((isMobile?contW:tableW2)+extraTotal)+'px;">';
+      + '<table style="border-collapse:separate;border-spacing:'+gap+'px;table-layout:fixed;width:'+(tableW2+extraTotal)+'px;">';
 
     
     html += '<thead><tr>';
@@ -17861,7 +17861,13 @@ window.abrirPerfil = function(jogadorNome){
       telaScroll.style.cssText = 'flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;';
 
       var grid = document.createElement('div');
-      grid.style.cssText = 'display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:8px 10px 40px;box-sizing:border-box;overflow:visible;width:100%;';
+      // Colunas responsivas: mantém 2 colunas no mobile (como já estava e ficou bom)
+      // e usa mais colunas no desktop para os brasões não ficarem gigantes em telas largas.
+      var _vwBr = window.innerWidth || 380;
+      var _colsBr = _vwBr < 560 ? 2 : _vwBr < 900 ? 3 : _vwBr < 1400 ? 4 : 5;
+      grid.style.cssText = 'display:grid;grid-template-columns:repeat('+_colsBr+',1fr);gap:10px;'
+        +'padding:8px 10px 40px;box-sizing:border-box;overflow:visible;width:100%;'
+        +'max-width:1200px;margin:0 auto;';
 
       
       var svgKeys = {
