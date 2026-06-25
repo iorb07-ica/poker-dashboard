@@ -470,5 +470,44 @@
       "Rafa": "8º lugar com 2 rebuys e 1 KO. Noite de sobrevivência que não sobreviveu. Foi eliminado por Israel, Oscar e Cristiano em momentos diferentes — quando três pessoas diferentes precisam se revezar pra te tirar da mesa, você estava incomodando mais do que os números mostram. A falta da pipoqueira está tirando a sorte do Rafilds.",
       "Marcus": "Faltou. E na semana em que o Grey venceu, sua ausência foi o fator mais comentado da noite. Coincidência ou não, sem Marcolino na mesa o baralho resolveu obedecer outras leis. A cadeira vazia do rei das últimas mãos pesou de um jeito estranho no ar do Plaza Mediterrâneo. Semana que vem, a lenda volta."
     }
+  },
+  "WK25": {
+    "titulo": "Papito eterno: Oscar vence a noite, o mês e ainda humilha o Grey duas vezes",
+    "subtitulo": "Histórica - A noite do suco de laranja, da vingança de Papito e do AK que virou pó",
+    "clima": 4,
+    "intro": "Há noites em que o poker é injusto. Há noites em que o poker é cruel. E há noites em que o poker é as duas coisas ao mesmo tempo, entregues pelo mesmo homem, com um sorriso no rosto e provavelmente um copo de suco de laranja na mão. A WK25 de 24 de junho foi essa noite — e Marcus Marcolino foi esse homem.\nA história começa com Grey Galináceo chegando confiante. Campeão da WK24, vice-líder anual, ascensão histórica no ranking. A semana era pra ser de consolidação. E então veio a primeira paulada no primeiro tempo: Marcolino, no comecinho do jogo, já obrigada Grey a abrir a carteira e iniciar os rebuys. Noite não anunciava boa coisa... Depois do intervalo, Grey com AK — mão premium, mão de campeão, mão que vence 70% dos confrontos pré-flop. Do outro lado? Marcus com A2. O board não precisou pensar muito. O 2 apareceu, Grey foi embora em 8º. Constrangedor não é a palavra. Marcus voltou. Segunda paulada. Mesma noite. Mesmo homem. Desta vez sem cerimônia: Grey foi expulso de vez em 8º lugar, com 2 rebuys no currículo e a memória amarga de ter sido destruído pelo suco de laranja em dose dupla. \"Sacanagem\", disse o Grey. E tinha razão.\nEnquanto isso, Oscar estava construindo uma obra de arte silenciosa. Zero rebuy, 2 KOs, 45.700 fichas no fim — a maior pilha da noite, disparado. Papito não precisou de drama, não precisou de sorte extraordinária. Jogou, dominou e fechou. 1º lugar na noite. 1º lugar no mês de junho. E de quebra, saltou para a 2ª posição no trimestre T2, ultrapassando Israel, Magu e Cristiano numa única noite. É o tipo de resultado que muda campeonatos.\nPedro foi sólido como sempre no 2º lugar — zero rebuy, 3 KOs — mantendo a liderança do trimestre e do ano com a tranquilidade de quem sabe que basta existir. Marcus, o carrasco do Grey, fechou em 3º com 3 KOs e saiu da noite como vilão favorito da temporada. Rafa foi o mártir oficial: 3 rebuys, 4º lugar. E Magu? 9º lugar, 2 rebuys, zero KOs — uma das piores noites do campeão da WK23 em toda a temporada. O que o karma dá, o karma cobra.",
+    "maoTitulo": "AK vs A2: a mão premium que virou pó nas mãos do homem do suco de laranja",
+    "maoDesc": "Grey entra com AK — a mão. A mão que todo jogador quer ver. Favorito estatístico, domínio pré-flop, situação controlada. Marcus olha as cartas: A2 offsuit. Chama assim mesmo. O flop coopera com quem menos merecia — o 2 aparece, o kicker do Grey não ajuda, e AK perde pro A2 numa das injustiças mais clássicas do poker. Grey foi embora pela terceira vez. Dessa vez em definitivo pra casa, com o rabinho entre as pernas. Duas pauladas, um homem, zero misericórdia. O suco de laranja nunca foi tão amargo.",
+    "persJogador": "Oscar",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "AK perdeu pro A2... SACANAGEM!",
+        "autor": "Grey Galináceo, indo pra casa chorar na cama que é lugar quente."
+      },
+      {
+        "fala": "Duas vezes na mesma noite... isso não se faz!",
+        "autor": "Israel, saindo em 8º"
+      },
+      {
+        "fala": "Eu só tava jogando minhas cartas.",
+        "autor": "Marcus, tomando o suco de laranja com calma"
+      },
+      {
+        "fala": "Oscar venceu o mês?! Papito é eterno.",
+        "autor": "A mesa inteira"
+      }
+    ],
+    "jogadores": {
+      "Oscar": "A noite perfeita de Papito: 1º lugar, zero rebuy, 2 KOs e 45.700 fichas — maior pilha da mesa. Venceu a noite, venceu o mês de junho e saltou para 2ª posição no trimestre T2, passando Israel, Magu e Cristiano de uma vez só. Quando Oscar decide que é sua noite, não tem muito o que fazer. Imperador absoluto da WK25.",
+      "Pedro": "2º lugar, zero rebuy, 3 KOs e 17.900 fichas. Pedroca foi Pedroca: sólido, consistente, incomodamente eficiente. Mantém a liderança no trimestre e no ranking anual com folga. A única ameaça real agora é o Oscar, que encostou no T2. O oráculo está de olho.",
+      "Marcus": "3º lugar, zero rebuy, 3 KOs e o título não-oficial de \"carrasco do Grey Galináceo\". Eliminou Israel duas vezes na mesma noite — primeiro no início, com motor ainda frio... depois com A2 contra AK, depois completando a obra. Marcolino saiu da noite como vilão favorito da temporada e subiu pontos importantes no ranking anual.",
+      "Rafa": "4º lugar com 3 rebuys e 1 KO. O mártir oficial voltou ao posto: foi eliminado por Charles, Pedro e Heron antes de finalmente sobreviver até o fim da noite. Dealer da noite e resistência personificada — cai, paga, volta, repete.",
+      "Cristiano": "5º lugar limpo: zero rebuy, 1 KO, sem drama. Noite de coleta de pontos silenciosa que vai contando no acumulado do trimestre, onde já ocupa a 4ª posição. O Cris invisível quando não aparece, perigoso quando aparece.",
+      "Heron": "6º lugar com 1 rebuy e 2 KOs. Noite mediana para o campeão da WK22 — fez barulho mas não chegou longe. Eliminou Magu e Rafa, mas foi despachado pelo Oscar antes do fim. A conta do rebuy foi mais barata que nas últimas semanas, pelo menos.",
+      "Charles": "7º lugar, 1 rebuy, 1 KO. Noite fantasma nas cartas, mas a reputação gastronômica continua intacta depois do show de comida francesa da WK24 e repetido na WK25. Charles é o único jogador da mesa que pode sair em 7º e ainda ser o MVP da noite dependendo do que trouxer de jantar.",
+      "Israel": "8º lugar, 2 rebuys e o orgulho partido em dois pelo mesmo homem. AK perdeu pro A2, rebuy, voltou, foi eliminado de novo. Grey Galináceo voou baixo demais na WK25 e despencou no ranking mensal e do trimestre. A vice-liderança anual está ameaçada — o Magu ainda está perto e Oscar vem acelerando. Semana de lamber as feridas.",
+      "Magu": "9º lugar, 2 rebuys, zero KOs. Uma das piores noites da temporada para o campeão da WK23. Depois de uma WK24 também difícil, Magu acumula duas semanas ruins num momento crítico do trimestre. Caiu no mês e viu Oscar passar na frente no trimestre. O karma da WK23 perfeita parece estar sendo cobrado parcelado."
+    }
   }
 }
