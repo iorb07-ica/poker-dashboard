@@ -16424,6 +16424,7 @@ window.addEventListener('load', function(){
     wks.forEach(function(wk){
       html += '<th style="width:'+cellSz+'px;text-align:center;color:#9fb3d4;font-size:9px;font-weight:600;padding:0 0 2px 0;white-space:nowrap;">WK'+String(wk).padStart(2,'0')+'</th>';
     });
+    html += '<th style="width:'+(cellSz+4)+'px;text-align:center;color:#a78bfa;font-size:9px;font-weight:800;padding:0 0 2px 4px;white-space:nowrap;">TOT</th>';
     html += '</tr></thead><tbody>';
 
     jogs.forEach(function(jog){
@@ -16454,7 +16455,24 @@ window.addEventListener('load', function(){
           + (hmMetric==='kos'&&val===0?'font-size:'+(fontSize-2)+'px;':'text-shadow:0 1px 2px rgba(0,0,0,0.9);')+'line-height:1;">'
           + lbl+'</div></td>';
       });
-      html += '</tr>';
+      // Total cell
+      var totalVal = 0;
+      if(hmMetric === 'posicao'){
+        // For position: count podiums (pos 1-3) or average
+        var played = wks.filter(function(wk){ var r=idx2[jog]?idx2[jog][wk]:null; return r&&!+r.faltou&&r.posicao!=null; });
+        totalVal = played.length ? Math.round(played.reduce(function(s,wk){ return s+(+(idx2[jog][wk].posicao)||0); },0)/played.length*10)/10 : null;
+      } else {
+        wks.forEach(function(wk){
+          var r=idx2[jog]?idx2[jog][wk]:null;
+          if(r&&!+r.faltou){
+            if(hmMetric==='rebuys') totalVal+=(+r.rebuys||0);
+            else totalVal+=(+r.kos||0);
+          }
+        });
+      }
+      var totalLabel = totalVal==null ? '–' : (hmMetric==='posicao' ? totalVal+'⌀' : totalVal>0 ? String(totalVal) : '–');
+      var totalColor = hmMetric==='posicao' ? '#9fb3d4' : hmMetric==='rebuys' ? '#60a5fa' : '#f97316';
+      html += '<td style="width:'+(cellSz+4)+'px;height:'+cellSz+'px;padding:0;background:rgba(167,139,250,0.08);border-radius:4px;border-left:1px solid rgba(167,139,250,0.2);">'        + '<div style="width:100%;height:'+cellSz+'px;display:flex;align-items:center;justify-content:center;'        + 'color:'+totalColor+';font-size:'+(fontSize+1)+'px;font-weight:900;line-height:1;">'+totalLabel+'</div></td>';      html += '</tr>';
     });
 
     html += '</tbody></table></div>';
