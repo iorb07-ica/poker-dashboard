@@ -10696,11 +10696,23 @@ document.addEventListener('DOMContentLoaded', function(){
     var tVal = Math.floor(mf.m / 3) + 1;
 
     if(sels.mes){
+      // Tenta o mês do calendário; se não existir nos dados, usa o maior disponível
       var optM = Array.from(sels.mes.options).find(function(o){ return +o.value === mVal; });
+      if(!optM && sels.mes.options.length){
+        var maxMesOpt = Array.from(sels.mes.options).reduce(function(a,b){ return +a.value > +b.value ? a : b; });
+        optM = maxMesOpt;
+        mVal = +maxMesOpt.value;
+      }
       if(optM){ sels.mes.value = String(mVal); state.mes = String(mVal); }
     }
     if(sels.tri){
+      // Tenta o trimestre do calendário; se não existir, usa o maior disponível
       var optT = Array.from(sels.tri.options).find(function(o){ return +o.value === tVal; });
+      if(!optT && sels.tri.options.length){
+        var maxTriOpt = Array.from(sels.tri.options).reduce(function(a,b){ return +a.value > +b.value ? a : b; });
+        optT = maxTriOpt;
+        tVal = +maxTriOpt.value;
+      }
       if(optT){ sels.tri.value = String(tVal); state.tri = String(tVal); }
     }
 
@@ -16042,7 +16054,9 @@ window.addEventListener('load', function(){
       var _nomesSF = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
       selSF.innerHTML = '<option value="todos">Todos</option>';
       _mesesSF.forEach(function(m){ selSF.innerHTML += '<option value="'+m+'">'+(_nomesSF[m]||m)+'</option>'; });
-      selSF.value = Math.max.apply(null, _mesesSF);
+      var _maxMesSF = String(Math.max.apply(null, _mesesSF));
+      selSF.value = _maxMesSF;
+      if(window.renderSaldoFin) setTimeout(window.renderSaldoFin, 150);
     }
     var selKO = document.getElementById('ko-mes-select');
     if(selKO){
