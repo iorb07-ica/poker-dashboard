@@ -10642,7 +10642,19 @@ document.addEventListener('DOMContentLoaded', function(){
         sel.value = String(target);
       }
     }
-    
+    function restoreSelMax(sel, savedVal, stateVal){
+      // If state is set, use it. Otherwise pick the max available option.
+      if(!sel || !sel.options.length) return;
+      var target = stateVal || savedVal;
+      var opts = Array.from(sel.options).map(function(o){ return +o.value; }).filter(Boolean);
+      var maxOpt = opts.length ? String(Math.max.apply(null, opts)) : null;
+      if(target && Array.from(sel.options).some(function(o){ return o.value == target; })){
+        sel.value = String(target);
+      } else if(maxOpt){
+        sel.value = maxOpt;
+      }
+    }
+
     var _maxWK = Math.max.apply(null, (window.RAW||[]).map(function(r){ return +r.wk||0; }).filter(Boolean));
     if(_maxWK && Array.from(sels.wk.options).some(function(o){ return +o.value === _maxWK; })){
       sels.wk.value = String(_maxWK);
@@ -10650,8 +10662,8 @@ document.addEventListener('DOMContentLoaded', function(){
     } else {
       restoreSel(sels.wk, saved.wk, state.wk);
     }
-    restoreSel(sels.mes, saved.mes, state.mes);
-    restoreSel(sels.tri, saved.tri, state.tri);
+    restoreSelMax(sels.mes, saved.mes, state.mes);
+    restoreSelMax(sels.tri, saved.tri, state.tri);
 
     
     sels.wk.onchange  = function(){ state.wk  = sels.wk.value;  window.renderMini('semana',    +sels.wk.value); };
@@ -15444,7 +15456,15 @@ window.addEventListener('load', function(){
 (function(){
   var sfView = 'acumulado'; 
   var sfTabelaAberta = false;
-  var sfMesFiltro = (function(){ var m=new Date().getMonth()+1; return m; })(); 
+  var sfMesFiltro = (function(){
+    // Use max mes available in data; fall back to calendar month
+    var raw = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger) || []);
+    if(raw.length){
+      var meses = raw.map(function(r){ return +r.mes||0; }).filter(Boolean);
+      if(meses.length) return Math.max.apply(null, meses);
+    }
+    return new Date().getMonth()+1;
+  })(); 
   var MESES = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   var CORES  = ['#22c55e','#3b82f6','#f59e0b','#ef4444','#a78bfa','#ec4899','#06b6d4','#84cc16','#f97316','#e2e8f0'];
 
@@ -16058,7 +16078,9 @@ window.addEventListener('load', function(){
       _mesesSF.forEach(function(m){ selSF.innerHTML += '<option value="'+m+'">'+(_nomesSF[m]||m)+'</option>'; });
       var _maxMesSF = String(Math.max.apply(null, _mesesSF));
       selSF.value = _maxMesSF;
-      if(window.renderSaldoFin) setTimeout(window.renderSaldoFin, 150);
+      // Update sfMesFiltro AND render
+      if(window.setSaldoMes) setTimeout(function(){ window.setSaldoMes(_maxMesSF); }, 50);
+      else if(window.renderSaldoFin) setTimeout(window.renderSaldoFin, 50);
     }
     var selKO = document.getElementById('ko-mes-select');
     if(selKO){
@@ -23554,7 +23576,9 @@ window.ntfyAbrirPainelAdmin = function() {
         if(_mesesSF.length){
           selSF.value = String(Math.max.apply(null, _mesesSF));
         }
-        setTimeout(function(){ if(window.renderSaldoFin) window.renderSaldoFin(); }, 80);
+        var _sfMaxVal = String(Math.max.apply(null, _mesesSF));
+        if(window.setSaldoMes) window.setSaldoMes(_sfMaxVal);
+        else setTimeout(function(){ if(window.renderSaldoFin) window.renderSaldoFin(); }, 80);
       }
       var selMes = document.getElementById('mini-mes');
       if(selMes && selMes.options.length){
