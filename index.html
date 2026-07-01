@@ -23501,4 +23501,102 @@ window.ntfyAbrirPainelAdmin = function() {
   window.addEventListener('load', function(){ setTimeout(tryRenderSaldo, 500); });
 })();
 </script>
+
+<script id="desktop-scroll-fix-final">
+(function(){
+  function applyDesktopCSS(){
+    if(document.body.classList.contains('mobile-mode')) return;
+    document.documentElement.style.overflowY = 'scroll';
+    document.documentElement.style.overflowX = 'hidden';
+    if(document.body.style.overflow !== 'hidden'){
+      document.body.style.overflowY = '';
+      document.body.style.overflowX = 'hidden';
+    }
+  }
+  document.addEventListener('wheel', function(e){
+    if(document.body.classList.contains('mobile-mode')) return;
+    if(document.body.style.overflow === 'hidden') return;
+    var el = e.target, absorbed = false;
+    while(el && el !== document.documentElement){
+      if(el === document.body) break;
+      var oy = window.getComputedStyle(el).overflowY;
+      var hasScroll = (oy === 'auto' || oy === 'scroll');
+      var canScroll = el.scrollHeight > el.clientHeight + 2;
+      if(hasScroll && canScroll){
+        var goingDown = e.deltaY > 0;
+        var atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 2;
+        var atTop = el.scrollTop <= 2;
+        if(goingDown && !atBottom){ absorbed = true; break; }
+        if(!goingDown && !atTop){ absorbed = true; break; }
+      }
+      el = el.parentElement;
+    }
+    if(!absorbed) window.scrollBy(0, e.deltaY);
+  }, {passive: true, capture: true});
+  window.addEventListener('load', function(){ setTimeout(applyDesktopCSS, 200); });
+  window.addEventListener('resize', applyDesktopCSS);
+  if(document.readyState !== 'loading') applyDesktopCSS();
+})();
+</script>
+
+
+<script id="resync-selectors-after-data">
+(function(){
+  function resyncSelectors(){
+    try{
+      var selSF = document.getElementById('sf-mes-select');
+      if(selSF){
+        var _rawSF = (window.RAW && window.RAW.length) ? window.RAW : ((window.DATA && window.DATA.ledger)||[]);
+        var _mesesSF = Array.from(new Set(_rawSF.map(function(r){return +r.mes;}))).filter(Boolean).sort(function(a,b){return a-b;});
+        var _nomesSF = ['','Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+        selSF.innerHTML = '<option value="todos">Todos</option>';
+        _mesesSF.forEach(function(m){ selSF.innerHTML += '<option value="'+m+'">'+(_nomesSF[m]||m)+'</option>'; });
+        if(_mesesSF.length){
+          selSF.value = String(Math.max.apply(null, _mesesSF));
+        }
+        setTimeout(function(){ if(window.renderSaldoFin) window.renderSaldoFin(); }, 80);
+      }
+      var selMes = document.getElementById('mini-mes');
+      if(selMes && selMes.options.length){
+        var mOpts = Array.from(selMes.options).map(function(o){return +o.value;}).filter(Boolean);
+        if(mOpts.length){
+          var maxM = String(Math.max.apply(null, mOpts));
+          var curM = selMes.value;
+          var exists = Array.from(selMes.options).some(function(o){return o.value===curM && +o.value>0;});
+          if(!exists){ selMes.value = maxM; selMes.dispatchEvent(new Event('change')); }
+        }
+      }
+      var selTri = document.getElementById('mini-tri');
+      if(selTri && selTri.options.length){
+        var tOpts = Array.from(selTri.options).map(function(o){return +o.value;}).filter(Boolean);
+        if(tOpts.length){
+          var maxT = String(Math.max.apply(null, tOpts));
+          var curT = selTri.value;
+          var existsT = Array.from(selTri.options).some(function(o){return o.value===curT && +o.value>0;});
+          if(!existsT){ selTri.value = maxT; selTri.dispatchEvent(new Event('change')); }
+        }
+      }
+    }catch(e){}
+  }
+  window.resyncSelectors = resyncSelectors;
+  // Hook afterDataLoaded
+  var _orig = window.afterDataLoaded;
+  if(typeof _orig === 'function'){
+    window.afterDataLoaded = function(){
+      var r = _orig.apply(this, arguments);
+      setTimeout(resyncSelectors, 400);
+      return r;
+    };
+  }
+  // Poll until data arrives
+  var _t = 0;
+  var _iv = setInterval(function(){
+    _t++;
+    var has = (window.RAW && window.RAW.length > 0);
+    if(has){ clearInterval(_iv); setTimeout(resyncSelectors, 500); }
+    if(_t > 150) clearInterval(_iv);
+  }, 200);
+})();
+</script>
+
 </html>
