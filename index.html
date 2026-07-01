@@ -10413,12 +10413,14 @@ document.addEventListener('DOMContentLoaded', function(){
  var mesNum = (mf.m+1);
  if(selMes){
  var optM = Array.from(selMes.options).find(o => +o.value===+mesNum);
+ if(!optM && selMes.options.length){ optM = Array.from(selMes.options).reduce(function(a,b){ return +a.value > +b.value ? a : b; }); mesNum = +optM.value; }
  if(optM){ selMes.value = String(mesNum); selMes.dispatchEvent(new Event('change')); }
  }
  
  var triNum = Math.floor(mf.m/3)+1;
  if(selTri){
  var optT = Array.from(selTri.options).find(o => +o.value===+triNum);
+ if(!optT && selTri.options.length){ optT = Array.from(selTri.options).reduce(function(a,b){ return +a.value > +b.value ? a : b; }); triNum = +optT.value; }
  if(optT){ selTri.value = String(triNum); selTri.dispatchEvent(new Event('change')); }
  }
  }
