@@ -509,5 +509,44 @@
       "Israel": "8º lugar, 2 rebuys e o orgulho partido em dois pelo mesmo homem. AK perdeu pro A2, rebuy, voltou, foi eliminado de novo. Grey Galináceo voou baixo demais na WK25 e despencou no ranking mensal e do trimestre. A vice-liderança anual está ameaçada — o Magu ainda está perto e Oscar vem acelerando. Semana de lamber as feridas.",
       "Magu": "9º lugar, 2 rebuys, zero KOs. Uma das piores noites da temporada para o campeão da WK23. Depois de uma WK24 também difícil, Magu acumula duas semanas ruins num momento crítico do trimestre. Caiu no mês e viu Oscar passar na frente no trimestre. O karma da WK23 perfeita parece estar sendo cobrado parcelado."
     }
+  },
+  "WK26": {
+    "titulo": "Heron intocável: 6 KOs, recorde da noite e a roleta russa que só ele sabe girar",
+    "subtitulo": "Reinado absoluto - A noite em que um homem jogou poker e os outros assistiram",
+    "clima": 9,
+    "intro": "Se você chegou na noite de quarta esperando um torneio normal, errou o endereço. A WK26 do Poker Series Plaza Mediterrâneo — primeira noite do novo trimestre, T3 — foi uma declaração de intenções. E a declaração tinha nome, sobrenome e K7 de paus na mão.\nHeron chegou ainda vibrando com o fim de semana épico. Aquela energia de quem já sabe o que vai acontecer antes de sentar. E aconteceu — com sobras. Um rebuy só pra dar graça, 6 eliminações no currículo, 58.375 fichas empilhadas no fim e um recorde de pontos da noite que ninguém vai apagar tão cedo. Enquanto isso, a paçoca bombava no canto, Marcolino acumulava rebuys com os olhos fechando de sono e Charlito voava alto feito quem não liga pro caos ao redor. Cenário perfeito para uma noite histórica.\nNo meio da carnificina, Magu protagonizou o momento mais esperançoso da noite: Queens no bolso, Q no river, trinca fechada, sobrevivência garantida. A mesa levantou. O coração voltou ao lugar. Todo mundo achou que ia virar. Aí veio Heron com K7 de paus — sem cerimônia, sem piedade — e eliminou. Cruel? Sim. Poker? Também. Foi o bad beat que a noite merecia: dar esperança primeiro, tirar tudo depois.\nRafa faltou e deixou a cadeira vazia numa das noites mais movimentadas do ano. Pedro foi o assassino silencioso com 5 KOs no bolso, mas caiu no 4º lugar antes de chegar ao pódio — a matemática do poker é assim, impiedosa. Charles segurou o 2º lugar com serenidade de quem sabe quando não brigar. Oscar garantiu o pódio com 1 rebuy de investimento. E quando alguém soltou \"a última mão é roleta russa\", ninguém discutiu — nessa mesa, na WK26, a roleta tinha nome. E ela só parou quando Heron quis. Heron tinha a noite garantida. Veio AQ na sua mão. Pagou. Prudente para não dar chance para os adversários. Viu o flop acertar seu A. Pedro foi pra cima acertando um segundo par de 9, deu all in. Papito, não tinha o que fazer e pagou. Heron pensou, analisou. E pagou. Mais 2 KOs na conta e quase limpou gerou. Só sobrou Charlito vivo com seu croissant para contar a história.",
+    "maoTitulo": "QQ + Q no river: a sobrevivência mais bonita da noite... que durou pouco",
+    "maoDesc": "Magu estava encurralado. Queens no bolso, all-in, mesa tensa. O river desce — Q. Trinca. Sobrevivência. A mesa explodiu. Magu levantou os braços. Parecia que a noite ia virar. Parecia. Porque algumas mãos depois, Heron voltou com K7 de paus e encerrou o sonho de vez. Da trinca salvadora ao 8º lugar, tudo em poucos minutos. O poker dá esperança com uma mão e tira tudo com a outra — e Heron foi o instrumento das duas.",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "A última mão é roleta russa",
+        "autor": "A mesa, resignada"
+      },
+      {
+        "fala": "QQ no river... sobrevivi!",
+        "autor": "Magu, por aproximadamente 3 minutos"
+      },
+      {
+        "fala": "K7 de paus.",
+        "autor": "Heron, encerrando a esperança do Magu sem explicação adicional"
+      },
+      {
+        "fala": "Marcolino tá dormindo ou jogando?",
+        "autor": "Alguém, olhando pro Marcus no 3º rebuy"
+      }
+    ],
+    "jogadores": {
+      "Heron": "Recorde de pontos da noite, 6 KOs, 58.375 fichas e 1 rebuy simbólico que não mudou nada. Chegou animado do fim de semana, deu uma aula completa de poker e saiu com o T3 inaugurado no seu nome. Fez chover no deserto. A roleta era dele.",
+      "Charles": "Charlito voando alto a noite toda: 2º lugar limpo, zero rebuy, zero KO e 21.625 fichas. Não precisou matar ninguém, não gastou um centavo extra e foi embora com o pódio. A elegância silenciosa do Charles em operação máxima.",
+      "Oscar": "Papito garantiu o pódio com 1 rebuy de investimento e sangue frio de quem não entra em pânico. 3º lugar consistente, pontos importantes para abrir o T3. Oscar não dominou a noite, mas nunca saiu do radar.",
+      "Pedro": "O assassino invisível: 5 KOs ao longo da noite, mais que qualquer um exceto Heron, e ainda assim caiu em 4º. Fez o trabalho sujo do torneio e não colheu o troféu. A crueldade estatística do poker em forma humana.",
+      "Marcus": "Dealer da noite e protagonista involuntário do departamento de rebuys: três entradas, zero KOs, 5º lugar no fim. Marcolino chegou quase dormindo, pagou três vezes pra jogar e ainda assim terminou no meio da tabela. Respeito pela persistência sonolenta.",
+      "Cristiano": "6º lugar, zero rebuy e 1 KO de honra antes de cair. Noite discreta de quem abre o T3 sem fazer barulho mas também sem gastar à toa. O Cris invisível coleta pontos em silêncio.",
+      "Israel": "7º lugar com 1 rebuy e zero KOs. Grey Galináceo sobreviveu mais uma semana sem aparecer nas estatísticas ofensivas — foi eliminado por Pedro e Cristiano e saiu na vice-lanterna da turma presente. O frango cinza começa o T3 quieto. Muito quieto.",
+      "Magu": "A noite mais cruel do Magu em meses: 8º lugar, 1 rebuy, 2 KOs e a sequência emocional mais violenta da mesa. QQ → Q no river → trinca → esperança → K7 do Heron → eliminação. Em minutos, viveu os dois extremos do poker. O T3 começou pesado pra ele.",
+      "Rafa": "Faltou. Na semana em que Heron fez história e a paçoca bombava, Rafa estava em outro lugar. A cadeira vazia dele sentiu falta de um mártir oficial."
+    }
   }
 }
