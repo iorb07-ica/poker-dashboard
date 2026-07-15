@@ -3511,7 +3511,7 @@ body.mobile-mode #libwarn { display: none !important; }
   var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
   var PERC=[0.40,0.30,0.15,0.10,0.05];
   var MES_NOMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25,26],7:[27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
   var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
 
   function getAvatarUrl(n){ return (window.photoFor && window.photoFor(n)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
@@ -3631,15 +3631,13 @@ body.mobile-mode #libwarn { display: none !important; }
 
   function getRankingMes(mes, wkMax){
     var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
-    var wksMes = MES_WKS[mes]||[];
-    var wksAte = wksMes.filter(function(w){ return w<=wkMax; });
     var pts = {};
     PLAYERS.forEach(function(p){ pts[p]=0; });
-    ledger.filter(function(r){ return wksAte.indexOf(+r.wk)>=0 && !+r.faltou; }).forEach(function(r){
+    ledger.filter(function(r){ return +r.mes===+mes && +r.wk<=wkMax && !+r.faltou; }).forEach(function(r){
       if(pts[r.jogador]!==undefined) pts[r.jogador] += (+r.pontos_calc||0);
     });
     var kos={}, rbs={};
-    ledger.filter(function(r){ return wksAte.indexOf(+r.wk)>=0 && !+r.faltou; }).forEach(function(r){ kos[r.jogador]=(kos[r.jogador]||0)+(+r.kos||0); rbs[r.jogador]=(rbs[r.jogador]||0)+(+r.rebuys||0); });
+    ledger.filter(function(r){ return +r.mes===+mes && +r.wk<=wkMax && !+r.faltou; }).forEach(function(r){ kos[r.jogador]=(kos[r.jogador]||0)+(+r.kos||0); rbs[r.jogador]=(rbs[r.jogador]||0)+(+r.rebuys||0); });
     return PLAYERS.map(function(p){ return {name:p, pts:pts[p], kos:kos[p]||0, rebuys:rbs[p]||0}; }).sort(function(a,b){ return b.pts-a.pts; });
   }
 
@@ -3800,7 +3798,7 @@ body.mobile-mode #libwarn { display: none !important; }
   var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
   var PERC=[0.40,0.30,0.15,0.10,0.05];
   var MES_NOMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25,26],7:[27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
   var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
 
   function getAvatarUrl(n){ return (window.photoFor && window.photoFor(n)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
@@ -3892,11 +3890,9 @@ body.mobile-mode #libwarn { display: none !important; }
 
   function getRankingMes(mes, wkMax){
     var ledger = window.DATA&&window.DATA.ledger ? window.DATA.ledger : [];
-    var wksMes = MES_WKS[mes]||[];
-    var wksAte = wksMes.filter(function(w){ return w<=wkMax; });
     var pts = {};
     PLAYERS.forEach(function(p){ pts[p]=0; });
-    ledger.filter(function(r){ return wksAte.indexOf(+r.wk)>=0 && !+r.faltou; }).forEach(function(r){
+    ledger.filter(function(r){ return +r.mes===+mes && +r.wk<=wkMax && !+r.faltou; }).forEach(function(r){
       if(pts[r.jogador]!==undefined) pts[r.jogador] += (+r.pontos_calc||0);
     });
     return PLAYERS.map(function(p){ return {name:p, pts:pts[p]}; }).sort(function(a,b){ return b.pts-a.pts; });
