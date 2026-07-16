@@ -575,5 +575,48 @@
       "Israel": "8º lugar, 1 rebuy, zero KOs. Grey Galináceo eliminado por Oscar e Marcus sem conseguir responder. O T3 começou difícil para o ex vice-líder anual — a WK28 precisa ser diferente.",
       "Charles": "9º lugar, zero rebuy, zero KO. A noite mais curta do Charlito do ano — chegou, sentou e saiu antes de qualquer história acontecer. Às vezes o poker não deixa nem o gastrônomo cozinhar."
     }
+  },
+  "WK28": {
+    "titulo": "Charlito coroado: trinca de dois, pote monstruoso e a coroa mais desejada do Plaza",
+    "subtitulo": "Épica - A mão do intervalo que definiu o campeão antes da pausa para hidratação",
+    "clima": 6,
+    "intro": "Há noites em que o poker parece ter memória. Nas últimas semanas, Charles era o cara que chegava, jogava bem, ficava no top 5 e ia embora sem o troféu — mas sempre com a comida mais boa da mesa. Na WK28 de 15 de julho, o baralho resolveu devolver tudo de uma vez. E devolveu com juros, na última mão do primeiro tempo, antes mesmo do intervalo.\nCasa cheia no Plaza: nove guerreiros, 25 entradas, 125 mil fichas e 20 KOs distribuídos pela noite. O clima estava tenso desde cedo — Magu pagando rebuys como dealer, Heron tentando se reanimar depois da WK27, e Charles quieto, acumulando, esperando o momento.\nO momento chegou na última mão antes do rebuy fechar. Pote enorme, cinco jogadores, três histórias simultâneas acontecendo no mesmo feltro. Charles entrou com 2♠2♥ — par de dois, mão humilde, expectativa zero. Magu foi no escuro com 8♣3♦, confiante no caos. Israel estava ali com JJ sereno, a melhor mão pré-flop da mesa. Marcus e Pedro também no pote, sem saber o que estava por vir. O flop abriu com um 2 na janela. Charles trincou — silenciosamente, sem piscar, sem revelar nada. Magu, que estava no escuro, acertou dois pares com 8 e 3. Se Charles não tivesse entrado na mão, o pote era do Magu. O board era dele. Só que Charles estava lá, com a trinca escondida, e levou tudo. No pote secundário, Israel com JJ foi superior a Marcus e Pedro, eliminando os dois numa tacada só. Grey Galináceo fez o trabalho silencioso enquanto Charlito pegava o ouro. Charles saiu daquela mão imenso — fichas suficientes para dominar o segundo tempo do começo ao fim.\nO resto da noite foi formalidade. Charles com 4 KOs no currículo, Rafa aparecendo do nada com zero rebuy e 6 KOs num segundo lugar histórico, Marcus segurando o 3º. E no outro extremo, Magu - financiador eterno do Ed - pagou quatro rebuys, fez zero KO e saiu em 8º com zero pontos. Depois de uma WK27 perfeita, o karma cobrou a conta com 8-3 no escuro e dois pares que não foram suficientes. Cristiano foi ainda pior: três rebuys, 9º lugar e pontuação negativa. Heron pagou três e terminou em 7º. Pedro segurou o 6º com 1 rebuy — pontos modestos, mas suficientes para manter a liderança anual intocável.",
+    "maoTitulo": "22 vs 83 vs JJ: o pote monstruoso que coroou Charlito antes do intervalo",
+    "maoDesc": "Última mão do primeiro tempo — último momento antes do rebuy fechar. Pote enorme, cinco vidas em jogo e três histórias acontecendo ao mesmo tempo no mesmo feltro vermelho do Plaza.\nCharles entra com 2♠2♥ — par de dois, mão humilde, expectativa zero. Magu vai no escuro com 8♣3♦, confiante no caos de quem não precisa ver as cartas pra apostar. Israel está ali com JJ no bolso, sereno como quem sabe que tem a melhor mão pré-flop. Marcus e Pedro também no pote.\nO flop abre com um 2 na janela. Trinca de Charles — silenciosa, discreta, escondida atrás de uma expressão neutra. Magu, que estava no escuro, acertou dois pares com 8 e 3. O board era dele. Se Charles não tivesse entrado na mão, ele levaria o maior pote da noite sem nem ter olhado as cartas antes de apostar. Só que Charles estava lá.\nO all-in foi inevitável. Trinca de 2s bateu dois pares de Magu no pote principal. No pote secundário, Israel com JJ eliminou Marcus e Pedro ao mesmo tempo — dois KOs numa tacada, fichas para o segundo tempo e a vice-liderança anual de presente. Charles saiu da mão enorme. O segundo tempo foi apenas a confirmação de uma coroa que já estava decidida antes do café.",
+    "persJogador": "Charles",
+    "persArq": "O Certeiro",
+    "falas": [
+      {
+        "fala": "Se eu não tivesse entrado... era seu, Magu.",
+        "autor": "Charles, virando os 22 com aquela calma"
+      },
+      {
+        "fala": "Entrei no escuro, fiz dois pares e perdi pra trinca de DOIS.",
+        "autor": "Magu, ainda processando"
+      },
+      {
+        "fala": "JJ eliminou dois de uma vez... e o Charles levou o pote principal com dois dois.",
+        "autor": "Israel, descrevendo o caos"
+      },
+      {
+        "fala": "6 KOs e zero rebuy no 2º lugar... Rafa tá acordado hoje",
+        "autor": "A mesa, surpresa"
+      },
+      {
+        "fala": "Pedro não ganhou quase nada essa semana e ainda lidera o ano. Absurdo.",
+        "autor": "A mesa, resignada"
+      }
+    ],
+    "jogadores": {
+      "Charles": "Campeão da WK28 com 4 KOs, 1 rebuy e 39.850 fichas. A virada aconteceu antes do intervalo: trinca de 22 no flop bateu dois pares de Magu no maior pote da noite e ele saiu imenso para o segundo tempo. 30.855 pontos na semana — melhor da noite. Subiu do 4º para o 2º no mês de Julho e de 7º para 6º no ranking anual. O gastrônomo do Plaza finalmente colocou o troféu na prateleira ao lado das receitas francesas.",
+      "Rafa": "A melhor noite do ano sem discussão: zero rebuy, 6 KOs, 2º lugar e 28.110 pontos. Saltou do 9º para o 5º no mês de Julho de uma vez só. O mártir oficial da temporada resolveu virar algoz — e fez muito bem feito.",
+      "Marcus": "3º lugar, 21.760 pontos na semana. Assumiu a liderança do mês de Julho com 60.045 pontos acumulados, passando Heron e Magu de uma tacada. Marcolino quieto acumula — e esse mês ele está em primeiro. Foi eliminado no pote secundário da mão dos 22, mas saiu com o 3º lugar geral.",
+      "Israel": "4º lugar, 4 KOs e participante da mão mais importante da noite: com JJ no pote secundário eliminou Marcus e Pedro ao mesmo tempo enquanto Charles pegava o pote principal com os 22. Dois KOs numa tacada, fichas para o segundo tempo e, de quebra, reconquistou a vice-liderança anual ultrapassando Magu (428.223 vs 423.968). O Grey Galináceo fez pouco barulho e muito resultado.",
+      "Oscar": "5º lugar, 3 KOs, 12.405 pontos. Noite administrada sem drama. Segura a 5ª posição anual com consistência de quem não precisa gritar pra aparecer no radar. Última mão foi dolorida. Aquele flush no river tirou o seu bronze da noite. Agora ele faz as malas para passear!",
+      "Pedro": "6º lugar, 1 KO, 8.600 pontos modestos — e foi eliminado junto com Marcus no pote secundário da mão dos JJ do Israel. Mas quem precisa de grande noite quando lidera o ano com folga? Pedro com 470.217 pontos anuais segue intocável no topo. A estratégia do maratonista: não cair nunca.",
+      "Heron": "7º lugar, 2 KOs, 3.700 pontos, 3 rebuys. Caiu do 1º para o 3º no mês de Julho depois da WK26 histórica. O ex-imperador do T3 e de julho perde a liderança dos 2 ranking. Ele piscou e Marcolino chegou quieto pelas costas.... Ui!",
+      "Magu": "Financiador do Ed da noite, 4 rebuys, 8º lugar e zero pontos. O protagonista involuntário da mão decisiva: foi no escuro com 8-3, acertou dois pares no flop e teria levado o maior pote da noite — se Charles não tivesse entrado com 22 e trincado na janela. O poker cobra com elegância. Caiu do 2º para o 3º no anual, perdendo a vice-liderança para Israel. A WK29 precisa ser completamente diferente.",
+      "Cristiano": "9º lugar, 3 rebuys e pontuação negativa (-500). A semana mais dura do Cris em meses. Caiu no ranking mensal e anual. Às vezes o poker simplesmente não colabora e é melhor aceitar o resultado e virar a página. Aquela bad beat do AK perder pra A9 é surreal!"
+    }
   }
 }
