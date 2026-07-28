@@ -618,5 +618,48 @@
       "Magu": "Financiador do Ed da noite, 4 rebuys, 8º lugar e zero pontos. O protagonista involuntário da mão decisiva: foi no escuro com 8-3, acertou dois pares no flop e teria levado o maior pote da noite — se Charles não tivesse entrado com 22 e trincado na janela. O poker cobra com elegância. Caiu do 2º para o 3º no anual, perdendo a vice-liderança para Israel. A WK29 precisa ser completamente diferente.",
       "Cristiano": "9º lugar, 3 rebuys e pontuação negativa (-500). A semana mais dura do Cris em meses. Caiu no ranking mensal e anual. Às vezes o poker simplesmente não colabora e é melhor aceitar o resultado e virar a página. Aquela bad beat do AK perder pra A9 é surreal!"
     }
+  },
+  "WK29": {
+    "titulo": "Grey Galináceo intocável: 5 KOs, zero rebuy e a noite que fechou o cerco em Pedro",
+    "subtitulo": "Dominante - A noite em que Israel virou líder de rebuys alheios e chegou perto do topo",
+    "clima": 5,
+    "intro": "Noite pequena no Plaza Mediterrâneo — só cinco guerreiros, quatro ausentes e uma quantidade desproporcional de rebuys pra uma mesa tão enxuta. Charles, Cristiano, Oscar e Pedro faltaram. Mas os que ficaram fizeram barulho o suficiente pra preencher todas as cadeiras vazias.\n\nIsrael chegou e nunca saiu. Zero rebuy. Cinco KOs. Campeão. Foto sorrindo atrás de uma pilha obscena de fichas. O Grey Galináceo protagonizou talvez a noite mais completa e dominante da sua temporada — e ela começou logo nas primeiras mãos, quando trincou no 9 contra os dois dez do Magu, dobrou e já sinalizou que a noite teria dono.\n\nO WhatsApp do grupo virou relatório de guerra em tempo real. Rodrigo Mitke marcou cada rebuy como um cronista de batalha: Marcus eliminou Rafa (22h14), Israel eliminou Magu (22h20), Israel eliminou Heron (22h28), Rafa eliminou Magu de novo (22h35), Rafa eliminou Heron de novo (22h35), Marcus eliminou Heron outra vez (22h47)... e assim foi, onze rebuys em sequência, Heron e Magu mantendo — nas palavras do Papito — \"a média histórica\". Quando alguém perguntou se o rebuy tinha acabado às 23h27, a resposta seca de Israel foi um \"Sim…\" que disse tudo.\n\nNo pós-rebuy, segunda mão do segundo tempo: Israel com AK, Rafa com AQ, flop A-K-J — dois pares pra Grey, par de ases pra Rafa. O J dobrou no turn. Rafa foi embora com 24 mil fichas e Israel chegou perto dos 63 mil. O dealer Edenilson, já chamado de bruxo pelo grupo, entregou a placa com o AKJ no momento exato. Rafa ainda digitou \"Te amo Ed\" no WhatsApp antes de processar o que tinha acontecido.\n\nMas a noite não foi passear. Magu — com 4 rebuys no currículo e o karma do desastre da WK28 ainda fresco — fez uma recuperação épica no segundo tempo. 3 KOs, 39.300 fichas no fim, a menos de mil e quinhentas fichas de Israel na última mão. Quase. Muito quase. No fim, Israel fechou com 40.700 fichas contra 39.300 do Magu — e o ouro número 5 do Grey Galináceo ficou no retrato.",
+    "maoTitulo": "AK vs AQ: Edenilson bruxo, flop AKJ e Rafa vai embora no pós-rebuy",
+    "maoDesc": "Segunda mão do segundo tempo. Rebuy fechado, fichas contadas, cinco jogadores ainda na disputa. Israel com AK, Rafa com AQ — um kicker de diferença que separa mundos. O flop abre A-K-J. Israel faz dois pares na janela. Rafa tem par de ases e não vai embora. O turn dobra o J: board A-K-J-J. Israel vira a mão, dois pares superiores, fim de jogo pra Rafa. Os 24 mil fichas de Rafa foram pro lado certo. Israel chegou perto dos 63 mil e assumiu controle total da noite. No WhatsApp, Oscar digitou \"Caralho\" e perguntou \"que mão foi essa?\". Rafa respondeu \"AK AQ\" e completou \"Te amo Ed\" pro dealer. Edenilson, impassível, já estava embaralhando o próximo baralho.",
+    "persJogador": "Israel",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Sim…",
+        "autor": "Israel, quando perguntaram se o rebuy tinha acabado (23h27)"
+      },
+      {
+        "fala": "Te amo Ed",
+        "autor": "Rafa, após ser eliminado pelo flop AKJ do dealer bruxo"
+      },
+      {
+        "fala": "Heron e Magu mantendo a média histórica de rebuys",
+        "autor": "Oscar, de casa, cronista à distância"
+      },
+      {
+        "fala": "Israel tá com uns 63k",
+        "autor": "Rodrigo, mandando o relatório de campo em tempo real"
+      },
+      {
+        "fala": "Edenilson dealer bruxo!!!",
+        "autor": "Oscar, após o AKJ no flop"
+      }
+    ],
+    "jogadores": {
+      "Israel": "Zero rebuy, 5 KOs, 40.700 fichas e a 5ª coroa da carreira. Trincou no 9 contra os dez do Magu logo no começo, dominou o segundo tempo com AK, eliminou Rafa na mão decisiva e fechou a noite com a maior pilha da mesa. 32.710 pontos na semana. E o dado mais importante: encostou em Pedro no ranking anual — gap de apenas 9.284 pontos (era quase 42 mil antes da noite). O cerco está fechando.",
+      "Magu": "2º lugar com 39.300 fichas, recuperação épica após 4 rebuys. Quase chegou lá na última mão — menos de 1.500 fichas de distância do título. Fez 3 KOs no segundo tempo e fechou com 24.090 pontos na semana. Subiu do 4º para o 2º no mês de Julho. A virada do Magulets no segundo tempo foi real — só não foi suficiente.",
+      "Heron": "3º lugar, 3 rebuys, 0 KOs. A noite do Heron foi um resumo do T3 até aqui: entra, paga rebuy, sobrevive, termina no pódio. 11.500 pontos. Caiu do 3º para o 4º no mês — Israel e Magu passaram — mas ainda na briga do trimestre.",
+      "Marcus": "4º lugar, 3 rebuys, 2 KOs. Marcolino abriu a noite eliminando Rafa logo no primeiro rebuy e depois sumiu do mapa ofensivo. 9.700 pontos na semana, mantém a liderança do mês com tranquilidade.",
+      "Rafa": "5º lugar, 1 rebuy e 4 KOs — o mais ativo no rebuy period, chegando a eliminar Magu e Heron duas vezes cada. Mas no pós-rebuy encontrou o AK do Israel e o dealer bruxo. Saiu com 10.900 pontos e mandou amor pro Ed.",
+      "Cristiano": "Procura-se o prefeito do Ribeirão da Ilha, gestor das obras da ilha da magia.",
+      "Charles": "Estava um camarão em viagem pra Maceió. Curtindo o Nordeste com a família e de olho nas notícias da NBA.",
+      "Pedro": "Comendo bacalhau e conhecendo um país novo: Portugal! Ah... Portugal, ó pá!",
+      "Oscar": "Navegando sobre águas colombianas, conhecendo a América do Sul e monitorando o desempenho dos guerreiros do poker. Até tentou participar do poker quase online... Mas ficou no quase!"
+    }
   }
 }
