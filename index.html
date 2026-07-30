@@ -16128,6 +16128,16 @@ window.addEventListener('load', function(){
   function getMesesPremiados(men){
     var mp = {};
     men.forEach(function(r){ if((r.premio_mensal||0)>0) mp[+r.mes]=true; });
+    // Inclui meses fechados pelo PREMIO_ENGINE mesmo quando mensal estatico tem null
+    if(window.PREMIO_ENGINE){
+      try{
+        window.PREMIO_ENGINE.reset();
+        var _eng = window.PREMIO_ENGINE.get(getLedger());
+        Object.keys(_eng.mes||{}).forEach(function(m){
+          if(_eng.mes[+m] && _eng.mes[+m].fechado) mp[+m]=true;
+        });
+      }catch(e){}
+    }
     return mp;
   }
 
@@ -16186,6 +16196,26 @@ window.addEventListener('load', function(){
         var ko = r2(r.ajuste_KO_mes);
         if(ko>0) koGanho+=ko;
       });
+      // Fallback: usa PREMIO_ENGINE para meses fechados sem dados no mensal estatico
+      if(window.PREMIO_ENGINE){
+        try{
+          window.PREMIO_ENGINE.reset();
+          var _engFB = window.PREMIO_ENGINE.get(getLedger());
+          Object.keys(_engFB.mes||{}).forEach(function(m){
+            m = +m;
+            var pm = _engFB.mes[m];
+            if(!pm || !pm.fechado) return;
+            if(mesFiltro!=='todos' && m!==+mesFiltro) return;
+            // Só usa fallback se o mensal estatico nao tem dados para esse mes/jogador
+            var temDadosEstaticos = men.some(function(r){ return r.jogador===jog && +r.mes===m && r.saldo_mes_total!=null; });
+            if(temDadosEstaticos) return;
+            var pMes = r2(pm.premMes[jog]||0);
+            var pKO  = r2(pm.premKO[jog]||0);
+            premMes += pMes;
+            if(pKO>0) koGanho += pKO;
+          });
+        }catch(e){}
+      }
       if(mostraTri){
         tri.forEach(function(r){
           if(r.jogador!==jog) return;
@@ -18131,12 +18161,26 @@ window.abrirPerfil = function(jogadorNome){
       if(wksPorMes[m].indexOf(w) < 0) wksPorMes[m].push(w);
     });
 
+    // Verificar quais meses estão fechados pelo PREMIO_ENGINE
+    var _mesesFechadosEng = {};
+    if(window.PREMIO_ENGINE){
+      try{
+        window.PREMIO_ENGINE.reset();
+        var _engWK = window.PREMIO_ENGINE.get(getLedger());
+        Object.keys(_engWK.mes||{}).forEach(function(m){
+          if(_engWK.mes[+m] && _engWK.mes[+m].fechado) _mesesFechadosEng[+m]=true;
+        });
+      }catch(e){}
+    }
+
     Object.keys(wksPorMes).forEach(function(m){
       m = +m;
-      // Não marcar FIM MÊS para o mês atual (ainda em aberto)
-      if(m >= mesAtualCalc) return;
+      // Marcar FIM MÊS se o mês está fechado pelo PREMIO_ENGINE
+      // (cobre o mês atual quando todas as WKs previstas já foram jogadas)
+      var fechadoEngine = !!_mesesFechadosEng[m];
+      if(!fechadoEngine && m >= mesAtualCalc) return;
 
-      // Para meses passados: usar a última WK registrada do ledger global
+      // Para meses fechados: usar a última WK registrada do ledger global
       var wksDoMes = wksPorMes[m];
       var ultimaWK = Math.max.apply(null, wksDoMes);
       wkUltimoDoMes[m] = ultimaWK;
