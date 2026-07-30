@@ -661,5 +661,40 @@
       "Pedro": "Comendo bacalhau e conhecendo um país novo: Portugal! Ah... Portugal, ó pá!",
       "Oscar": "Navegando sobre águas colombianas, conhecendo a América do Sul e monitorando o desempenho dos guerreiros do poker. Até tentou participar do poker quase online... Mas ficou no quase!"
     }
+  },
+  "WK30": {
+    "titulo": "Heron 7 ouros, Israel lidera o ano e Julho fecha com o Grey no topo",
+    "subtitulo": "Épica - A última mão de Julho que virou o ranking anual de cabeça pra baixo",
+    "clima": 5,
+    "intro": "Julho fechou. Cinco semanas, cinco histórias, um campeão de mês. E o nome que fecha o mês na liderança — do trimestre, do mês e agora do ranking anual — é Israel. Grey Galináceo.\n\nA WK30 de 29 de julho foi uma noite de mesa enxuta — cinco presentes, Charles, Cristiano, Oscar e Pedro de novo ausentes — mas densa em conteúdo. Heron chegou empilhando boas mãos: KK, QQ, top pairs. Não dá pra reclamar do baralho. Marcolino, sem perceber, cometeu o erro da noite: tinha QJ com board 2-2-A e apostou convicto nos seus dois pares. Esqueceu que se o adversário tivesse um Ás, faria dois pares superiores e varreria a mesa. O adversário tinha. Heron tinha o Ás. E levou.\n\nIsrael tentou as KK duas vezes mas não conseguiu extrair valor além dos blinds — mesa retraída, ninguém topou o confronto. No segundo tempo, o Grey fez o que sabe fazer: um call linda com segundo par no board num pote grande contra o Heron, levou as fichas e respirou. Depois trincou o 10 e se recuperou de vez, chegando à liderança da mesa e se posicionando para o heads-up.\n\nE então Magu — guerreiro da noite toda, perdendo no river repetidamente — teve seu momento mágico: com 5♦4♦ num pote pequeno, o 6 bateu no river e fez a broca milagrosa. Respirou. Voltou all-in contra Israel que tinha dado raise com J-10. Israel chamou. Estava ganhando até o turn. Mas então Heron apareceu com top pair de 6 no board, pagou o all-in de 10 mil fichas do Magu e encerrou o sonho do Magulets em 3º lugar. Heron fechou o heads-up com Israel e levantou a taça — o sétimo título do ano. Um número incrível.\n\nMas quem fechou Julho com mais sorriso foi Israel. Depois de duas primeiras semanas em julho desastrosas (um 8º e um 7º), consegue um belo feito. Campeão da WK29 e vice na WK30. Liderança do mês. Liderança do trimestre. E — voltando ao topo — liderança do ranking anual.",
+    "maoTitulo": "Magu, o 6 no river, o 5-4 e o top pair de Heron que encerrou tudo",
+    "maoDesc": "Magu estava encurralado. Noite de perdas no river, fichas murchas, paciência testada. Então veio o 6 no river com 5 e 4 na mão — broca milagrosa, mesa levantou, Magu respirou fundo. Fichas de volta. Vai de all-in contra Israel, que tinha dado raise com J-10. Israel chamou. Tava ganhando. Turn veio favorável. Parecia o fim de Magu. Parecia. Mas foi Heron quem encerrou a história: top pair de 6 no board, pagou o all-in de 10 mil fichas do Magu, e mandou o guerreiro pra casa em 3º. O heads-up entre Heron e Israel que se seguiu foi tenso — Israel havia feito um call lindo do segundo par e trincado o 10 no caminho — mas Heron fechou. Sétimo título. O Plaza registrou com silêncio respeitoso.",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Eu tinha dois pares! QJ com 22 no board...",
+        "autor": "Marcus, antes de ver o Ás do Heron"
+      },
+      {
+        "fala": "Call.",
+        "autor": "Israel, com segundo par, olho no olho do Heron, levando o pote"
+      },
+      {
+        "fala": "O 6 no river... broca! Milagre!",
+        "autor": "Magu, respirando fundo"
+      },
+      {
+        "fala": "Sete títulos. SETE.",
+        "autor": "A mesa, contando nos dedos"
+      }
+    ],
+    "jogadores": {
+      "Heron": "Campeão da WK30 com 2 KOs, 2 rebuys e 29.825 fichas. KK, QQ, top pairs — a noite toda com boas mãos e soube usá-las. Eliminou Magu no momento decisivo com top pair de 6 e encerrou o heads-up com Israel. 7 títulos em 2026 — número que somente ele tem na temporada. Subiu do 4º para o 2º no mês de Julho.",
+      "Israel": "2º lugar, zero rebuy, 2 KOs e 25.175 fichas. O call com segundo par foi a jogada da noite. Não ganhou a WK30, mas saiu com o que importava: liderança do mês de Julho, liderança do T3 e liderança do ranking anual — recuperando o posto depois de um belo intervalo. Grey Galináceo está no topo de tudo. Agosto começa com o frango cinza na ponta.",
+      "Magu": "3º lugar, 3 rebuys, 1 KO. Guerreiro até o fim: perdeu no river várias vezes, fez a broca com 5-4, respirou no jogo no all-in contra Israel. Saiu em 3º com 11.600 pontos na semana suficiente para subir no mês.",
+      "Marcus": "4º lugar, 1 rebuy, 2 KOs. Protagonizou o erro mais caro da noite: QJ com board 2-2-A, dois pares no bolso e Heron com o Ás na mão. Lição aprendida da forma mais dolorosa possível. 12.700 pontos na semana, mas caiu da liderança do mês para o 3º.",
+      "Rafa": "5º lugar, zero rebuy, 2 KOs e 12.200 pontos. Noite sólida e limpa — chegou, não pagou rebuy, fez dois KOs e saiu. Fecha Julho como rei dos KOs do mês com 13 eliminações em 5 semanas. Silenciosamente letal."
+    }
   }
 }
