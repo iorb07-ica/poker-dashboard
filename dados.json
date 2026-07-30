@@ -6596,8 +6596,8 @@
       "custo_rebuys": 50,
       "premio_noite": 13.2,
       "dealer": 22.22,
-      "antecipacao_dealer": 0,
-      "saldo_semana_final": 5.46,
+      "antecipacao_dealer": 200,
+      "saldo_semana_final": 205.46,
       "faltou": 0
     },
     {
@@ -6755,5 +6755,5 @@
   "trimestre": [],
   "anual": [],
   "podios": [],
-  "updated": "2026-07-30T12:38:16.589Z"
+  "updated": "2026-07-30T12:53:59.615Z"
 }
