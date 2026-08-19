@@ -747,5 +747,43 @@
       "Pedro": "Estava a assistir, ora pois, os resultados. Dormiu e acordou com Grey abrindo grande vantagem. Certeza que tá com muitas saudades do pokerzao. E vai voltar babando para recuperar a liderança do ano! Saudades, Pedroca!",
       "Rafa": "Rafilds driver anunciou aos 45 do segundo tempo que não ia entrar no gramado. Nosso motorista da rodada e de todas as outras, tá faltando demais. A mesa sentiu falta de suas histórias sempre interessantes."
     }
+  },
+  "WK32": {
+    "titulo": "Magu vence com estilo, passa Pedro no ano e o Grey virou coach com azar",
+    "subtitulo": "Revanche e drama - A noite que embaralhou o ranking anual e mandou Israel pro banco dos comentaristas",
+    "clima": 5,
+    "intro": "Pedroca voltou de Portugal, Marcolino voltou de onde quer que estivesse, e a mesa estava quase completa. Só o Rafilds faltou, provavelmente com saudade da última mão da WK anterior. Com oito guerreiros, 22 entradas e 110 mil fichas em campo, a WK32 de 12 de agosto prometia, e cumpriu.\n\nO grande personagem da noite foi Magu. Três rebuys, três KOs, 44.825 fichas e 29.248 pontos. Ganhou com estilo mesmo sangrado no começo, virou o jogo no segundo tempo e saiu com o título e com um bônus que ninguém esperava: passou Pedro no ranking anual. Sim. Magu agora é o 2º colocado do ano. Pedro, que voltou de viagem e terminou em 3º na noite, caiu pra 3º no geral também.\n\nMas o personagem mais divertido da noite foi outro.\n\nA SAGA DO COACH INVOLUNTÁRIO:\n\nIsrael teve uma noite para esquecer dentro da mesa. AA trincou no turn e perdeu pra sequência do Marcolino. JJ faltando duas mãos pro intervalo, se ferrou de novo. Quatro rebuys, zero KOs, 5º lugar. O Grey Galináceo foi eliminado antes da hora e, em vez de ir embora, tomou uma decisão que pareceu boa na hora: ficou do lado de Charles e começou a dar palpites.\n\nO resultado foi imediato e brutal. A cada conselho do Grey Galináceo, Charlito levava uma fatiada no stack. Não uma, não duas. Várias. A mesa percebeu o padrão antes do Charlito. Israel, generoso e talvez culpado, continuou aconselhando. Charles continuou perdendo fichas. O coaching havia virado amaldiçoamento. No fim, Charlito terminou em 4º com 20.350 fichas e 20.605 pontos, o que é um resultado muito bom por si só, provavelmente teria terminado em 1º se o Grey tivesse ido embora mais cedo rsss\n\nA NOITE DO PAPITO:\n\nOscar teve uma noite marcada por dois feitos simultâneos e inversamente proporcionais: fez 3 KOs com apenas 1 rebuy, mas terminou em 8º lugar. É o tipo de estatística que desafia a física. Papito eliminou gente, fez barulho e foi embora cedo.\n\nMas o verdadeiro destaque do Papito essa noite não foram os KOs. Foi a sopa de cebola. A digestão foi generosa, o ambiente agradeceu à sua maneira e Oscar cumpriu sua única função oficial de estagiário anotador de KOs com a lentidão de quem sabe que foi demitido pelo RH mas ainda não recebeu o aviso formal. Demorou em cada anotação. Peidou em paz. E saiu em 8º sem obrigação nenhuma.",
+    "maoTitulo": "AA com trinca no turn e sequência do Marcolino — o duplo azar do Galináceo",
+    "maoDesc": "Israel com AA, trinca de Ás no turn, mão aparentemente imbatível. Marcus tinha sequência armada no board e levou o pote. Duas mãos depois, JJ de Israel encontrou o adversário errado na hora errada. Em menos de 30 minutos, o Grey foi de favorito a eliminado duas vezes. A noite, que parecia ser de Israel, virou rápido e não avisou.",
+    "persJogador": "Magu",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Coach do Grey é maldição.",
+        "autor": "Charles, depois da terceira fatiada no stack"
+      },
+      {
+        "fala": "Papito peidando... e ainda demora pra anotar o KO.",
+        "autor": "A mesa, resignada"
+      },
+      {
+        "fala": "AA com trinca no turn... e perdi pra sequência.",
+        "autor": "Israel, elaborando o trauma"
+      },
+      {
+        "fala": "Magu passou Pedro no ano. PASSOU.",
+        "autor": "A mesa, atualizando o ranking em tempo real"
+      }
+    ],
+    "jogadores": {
+      "Magu": "1º lugar, 3 rebuys, 3 KOs, 44.825 fichas, 29.248 pontos. Três rebuys no começo, título no fim. É o Magu em modo completo: paga, aguenta, vira e vence. Passou Pedro no ranking anual na mesma noite em que ganhou o torneio. Coincidência ou estratégia? Com Magu nunca dá pra saber.",
+      "Marcus": "2º lugar, zero rebuy, 2 KOs, 22.750 fichas, 25.025 pontos. Eliminou Israel com sequência quando o Grey tinha AA com trinca no turn. Marcolino não avisou, não pediu licença, só venceu. Retornou de onde estava e foi direto pro pódio. Estilo próprio.",
+      "Pedro": "3º lugar, zero rebuy, 4 KOs, 22.075 fichas, 23.022 pontos. Voltou de Portugal, fez uma boa noite e ainda assim viu o ranking anual mudar de figura. Terminou o torneio em 3º e o ano em 3º também. A viagem estava ótima, a classificação menos. Mas colou no líder... Agora embolou geral. A disputa pelo título de 2026 tá especial!",
+      "Charles": "4º lugar, zero rebuy, 5 KOs, 20.350 fichas, 20.605 pontos. Liderou o ranking de eliminações da noite e terminou em 4º numa noite em que o coach estava ativamente piorando as coisas. Charlito Baguette fez uma baita noite apesar do Israel, não por causa dele. Pontos importantes na briga do ano.",
+      "Israel": "5º lugar, dealer da noite, 4 rebuys, zero KOs, 6.000 pontos. AA perdeu pra sequência, JJ se ferrou faltando duas mãos pro intervalo, quatro rebuys e nenhum KO. Depois tentou ajudar o Charlito e só atrapalhou. Uma noite pra guardar na gaveta e nunca mais abrir.",
+      "Cristiano": "6º lugar, 2 rebuys, zero KOs, 7.000 pontos. Noite sem brilho mas com consistência. O Cris foi, pagou, resistiu e saiu antes da metade. Pontos modestos mas presença garantida.",
+      "Heron": "7º lugar, 4 rebuys, 1 KO, 2.100 pontos. O rei dos 8 ouros teve a noite mais difícil de agosto. Quatro rebuys e um KO de consolação. Caiu no T3 pra 1.354 pontos acima do Magu. Heron sabe que o trimestre está mais disputado do que parece.",
+      "Oscar": "8º lugar, 1 rebuy, 3 KOs, 4.800 pontos. Fez KOs, comeu sopa de cebola, honrou o legado gastro-intestinal e anotou os KOs no ritmo da digestão. Papito em modo estagiário demitido, sem obrigação, sem urgência, com muita paz."
+    }
   }
 }
