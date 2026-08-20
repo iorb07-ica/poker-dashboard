@@ -785,5 +785,48 @@
       "Heron": "7º lugar, 4 rebuys, 1 KO, 2.100 pontos. O rei dos 8 ouros teve a noite mais difícil de agosto. Quatro rebuys e um KO de consolação. Caiu no T3 pra 1.354 pontos acima do Magu. Heron sabe que o trimestre está mais disputado do que parece.",
       "Oscar": "8º lugar, 1 rebuy, 3 KOs, 4.800 pontos. Fez KOs, comeu sopa de cebola, honrou o legado gastro-intestinal e anotou os KOs no ritmo da digestão. Papito em modo estagiário demitido, sem obrigação, sem urgência, com muita paz."
     }
+  },
+  "WK33": {
+    "titulo": "9 KOs, 9 rebuys, 9º ouro: a noite dos recordes que o Plaza nunca vai esquecer",
+    "subtitulo": "Histórica e épica: a maior noite em 8 anos de Poker Series Plaza Mediterrâneo",
+    "clima": 5,
+    "intro": "Tem noites históricas. E tem a WK33.\n\nNão existe comparação. Em 8 anos de Poker Series Plaza Mediterrâneo, nenhuma noite teve tantos recordes ao mesmo tempo. Record de fichas em mesa: 145.000. Record de rebuys numa única noite: 20. Record negativo absoluto de rebuys por pessoa: 9, batido com autoridade e elegância por Oscar, o Papito. E o mais incrível: 7 jogadores ainda ativos na última mão. Sete. Ao mesmo tempo. Com fichas. É o tipo de número que não acontece nessa mesa.\n\nCasa completíssima. Nove guerreiros presentes, 29 entradas, 23 KOs e um número de rebuys que envergonharia qualquer cassino profissional. Agosto entrou em modo épico e não avisou. O feltro vermelho do Plaza aguentou. Mal.\n\nHERON: 9 KOs, 9 VITÓRIAS, 1 RECORDE QUE ESCAPOU:\n\nHeron chegou na noite de agosto com a tranquilidade de quem já ganhou oito vezes e sabe como a história termina. Zero rebuy. Nove KOs. 32.975 fichas. 30.793 pontos. 9º título do ano. Em algum momento chegou a empilhar mais de 65.000 fichas, o que praticamente garantia que ninguém ia dormir cedo.\n\nNo primeiro tempo, Heron estava empatado com Magu no recorde histórico de eliminations numa única noite: 9 KOs. A mesa toda travou. Todos sabiam que o recorde de 10 KOs numa única partida, uma relíquia lendária, estava ao alcance. A tensão foi enorme. Ele chegou perto três vezes. Bateu na trave. Não conseguiu. O 10º KO ficou pra uma próxima noite, e enquanto isso o Plaza registrou empate no topo de uma das estatísticas mais difíceis de alcançar no grupo.\n\nO PAPITO E O RECORDE QUE NINGUÉM QUERIA:\n\nOscar fez 9 rebuys. Não é um erro de digitação. São nove buy-ins adicionais numa única noite. O recorde negativo absoluto da história de 8 anos do Poker Series Plaza Mediterrâneo, superado na quarta-feira com convicção e sem hesitação. A cada eliminação, Papito voltava. E voltava. E voltava de novo. No fim terminou em 5º com 20.400 fichas e fez 1 KO no caminho. Uma conta que vai doer na manhã seguinte. O lado positivo: terminou com fichas que ainda lhe deram 4620 pts. Já teve jogador que fez bem menos rebuys e ostenta o saldo mais negativo da história... que é, sabe rs\n\nAS MÃOS DA NOITE:\n\nMão 1: Charles com flush de ás e 4 de ouros contra Oscar\nBoard de ouros no pano, Oscar apostando com força. Charles esperou o river. O flush completou. O pote foi pro Charlito Baguette com a frieza de quem sabe que ouro é ouro. Papito foi pra fila do rebuy mais uma vez.\n\nMão 2: Oscar e a quadra de Reis\nNo meio do caos dos rebuys, Oscar teve seu momento de glória. Quadra de Reis, mão imbatível, pote gigante. Jogou contra Magu e Marcus e venceu os dois. Foi a mão que justificou toda a conta do Papito naquela noite. Uma jogada histórica que ficou registrada no feltro e na memória, mesmo que o saldo final pesasse.\n\nMão 3: Full house de Magu contra full house de Charles, o river cruel\nMagu estava dominando até o turn. Trinca de 10, mão forte, confiante, pote crescendo. Charles tinha dois pares, K e 8, e estava em desvantagem técnica. O river desce: um Rei. Os dois fazem full house ao mesmo tempo. Magu festejou por exatamente dois segundos antes de perceber o tamanho do problema. Full house de Reis com 8s é maior do que full house de 10s com Reis. Charles levou o pote. Magu levou a lição. O poker adora uma virada de última hora.\n\nMão 4: Israel com AA elimina três de uma vez\nGrey Galináceo com pardais, all-in triplo no meio da bagunça do primeiro tempo. Três adversários no pote. No turn, Charles tinha flush draw de ouros e estava vivo. A mão poderia virar. Não virou. Israel segurou, os três foram embora, o Grey chegou a mais de 30.000 fichas e ficou gigante no primeiro tempo. Uma só mão, três KOs, e 300 pts a mais no saldo de pontos.",
+    "maoTitulo": "A última mão - Tudo podia mudar",
+    "maoDesc": "All in no escuro de 18k de fichas de Marcolino... Magu pagou e Charlito foi também... 2 pares na mesa e Charlito puxa com Ás de kicker... Sobe para 2º lugar e Magu vence o pote secundário, ficando quase na mesma... por pouco nao passa Grey na noite. Ficou em 4º e não subiu no pódio por 1500 fichas.",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "9 rebuys. NOVE.",
+        "autor": "A mesa, incrédula, olhando pro Papito"
+      },
+      {
+        "fala": "Tava empatado com Magu no record de KOs... bateu na trave três vezes.",
+        "autor": "Todos, frustrados junto com Heron (SQN)"
+      },
+      {
+        "fala": "Full house dos dois? Mas qual é maior?",
+        "autor": "A mesa inteira calculando em tempo real"
+      },
+      {
+        "fala": "65.000 fichas... Heron tá com metade da mesa.",
+        "autor": "Alguém, descrevendo o óbvio"
+      },
+      {
+        "fala": "7 jogadores ainda ativos na última mão. Isso nunca aconteceu.",
+        "autor": "O grupo, registrando história"
+      }
+    ],
+    "jogadores": {
+      "Heron": "1º lugar, zero rebuy, 9 KOs, 32.975 fichas, 30.793 pontos. A noite mais impressionante do rei dos títulos: 9 KOs empatando o record histórico, mais de 65.000 fichas no pico, zero rebuy e o 9º ouro em 33 semanas (32 jogadas). Chegou perto do 10º KO três vezes. Não conseguiu. Vai ficar esse gostinho pra próxima. O resultado geral: imbatível. E entrou definitivamente na briga do ano!",
+      "Charles": "2º lugar, 1 rebuy, 3 KOs, 26.950 fichas, 24.885 pontos. Full house mais alto, flush de ás completado no river, pódio garantido. Charlito foi o jogador mais completo da noite, junto com Heron. Em agosto já lidera o mês com 61.690 pontos.",
+      "Israel": "3º lugar, zero rebuy, 6 KOs, 26.350 fichas, 24.505 pontos. AA eliminou três numa mão só no primeiro tempo e deu o tom do Grey na noite. Manteve a liderança anual e estendeu a vantagem. Consistente mesmo nas noites em que não leva o ouro.",
+      "Magu": "4º lugar, zero rebuy, 3 KOs, 24.875 fichas, 21.763 pontos. Full house de 10s perdeu pro full house de Reis do Charles no river mais cruel da noite. Terminou bem mesmo assim, zero rebuy e pontos importantes. Segura o 2º lugar anual com folga sobre Pedro.",
+      "Oscar": "5º lugar, 9 rebuys (RECORD HISTÓRICO), 1 KO, 20.400 fichas, 4.720 pontos. Fez quadra de Reis, eliminou Magu e Marcus numa mão, mas pagou nove vezes pra chegar lá. É o detentor do record negativo de maior sequência de rebuys em 8 anos de Plaza. Título não disputado e improvável de ser superado.",
+      "Pedro": "6º lugar, 3 rebuys, 1 KO, 13.450 fichas, 9.635 pontos. Voltou de Portugal, voltou pra mesa e está de volta na briga. Resultado ok pra uma noite de recordes. O ranking anual ainda mostra pressão de Magu pelo 2º lugar, mas dá uma esfriada. Vê Grey recuperar toda a diferença construída na semana passada.",
+      "Marcus": "7º lugar, 5 rebuys, zero KOs, 500 pontos. Cinco entradas e nenhuma caveira. A matematica não fecha, mas o poker raramente fecha. Marcus foi eliminado pela quadra de Reis do Papito no caminho, o que explica parte da conta.",
+      "Cristiano": "8º lugar, zero rebuy, zero KOs, 6.000 pontos. Noite de observador atento. Chegou, assistiu aos recordes sendo quebrados ao redor e saiu em 8º sem pagar rebuy. Às vezes a estratégia certa é não participar do caos. Os jogadores todos estão angustiados pela chaleira, que deixou de apitar no fim da noite.",
+      "Rafa": "9º lugar, 2 rebuys, zero KOs, 1.000 pontos. Último colocado da noite mais histórica do Plaza. Rafa foi o primeiro capítulo de uma história que não lembrava dele. No fim, pediu uber e ele mesmo aceitou a corrida. Parece que nem ganhou gorjeta. Tá precisando de pastilha Valda!"
+    }
   }
 }
