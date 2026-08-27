@@ -3682,7 +3682,7 @@ body.mobile-mode #libwarn { display: none !important; }
     var labelsDiv = document.getElementById('mt-mes-slider-labels');
     var slider = document.getElementById('mt-mes-slider');
     if(!labelsDiv || !slider) return;
-    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25,26], 7:[27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
     var wks = wkMap[mes] || [1,2,3,4];
     slider.min = wks[0];
     slider.max = wks[wks.length-1];
@@ -3720,7 +3720,7 @@ body.mobile-mode #libwarn { display: none !important; }
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25,26], 7:[27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
       var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
@@ -3939,7 +3939,7 @@ body.mobile-mode #libwarn { display: none !important; }
     var labelsDiv = document.getElementById('mt-mes-slider-labels');
     var slider = document.getElementById('mt-mes-slider');
     if(!labelsDiv || !slider) return;
-    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25,26], 7:[27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
     var wks = wkMap[mes] || [1,2,3,4];
     slider.min = wks[0];
     slider.max = wks[wks.length-1];
@@ -3977,7 +3977,7 @@ body.mobile-mode #libwarn { display: none !important; }
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25,26], 7:[27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
       var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
@@ -16128,6 +16128,17 @@ window.addEventListener('load', function(){
   function getMesesPremiados(men){
     var mp = {};
     men.forEach(function(r){ if((r.premio_mensal||0)>0) mp[+r.mes]=true; });
+    // Inclui meses fechados pelo PREMIO_ENGINE mesmo quando mensal estatico tem null
+    if(window.PREMIO_ENGINE){
+      try{
+        var _ldg = (typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
+        window.PREMIO_ENGINE.reset();
+        var _eng = window.PREMIO_ENGINE.get(_ldg);
+        Object.keys(_eng.mes||{}).forEach(function(m){
+          if(_eng.mes[+m] && _eng.mes[+m].fechado) mp[+m]=true;
+        });
+      }catch(e){}
+    }
     return mp;
   }
 
@@ -16186,6 +16197,26 @@ window.addEventListener('load', function(){
         var ko = r2(r.ajuste_KO_mes);
         if(ko>0) koGanho+=ko;
       });
+      // Fallback: usa PREMIO_ENGINE para meses fechados sem dados no mensal estatico
+      if(window.PREMIO_ENGINE){
+        try{
+          var _ldgFB2 = (typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
+          window.PREMIO_ENGINE.reset();
+          var _engFB = window.PREMIO_ENGINE.get(_ldgFB2);
+          Object.keys(_engFB.mes||{}).forEach(function(m){
+            m = +m;
+            var pm = _engFB.mes[m];
+            if(!pm || !pm.fechado) return;
+            if(mesFiltro!=='todos' && m!==+mesFiltro) return;
+            var temDadosEstaticos = men.some(function(r){ return r.jogador===jog && +r.mes===m && r.saldo_mes_total!=null; });
+            if(temDadosEstaticos) return;
+            var pMes = r2(pm.premMes[jog]||0);
+            var pKO  = r2(pm.premKO[jog]||0);
+            premMes += pMes;
+            if(pKO>0) koGanho += pKO;
+          });
+        }catch(e){}
+      }
       if(mostraTri){
         tri.forEach(function(r){
           if(r.jogador!==jog) return;
@@ -18131,12 +18162,24 @@ window.abrirPerfil = function(jogadorNome){
       if(wksPorMes[m].indexOf(w) < 0) wksPorMes[m].push(w);
     });
 
+    // Verificar quais meses estão fechados pelo PREMIO_ENGINE
+    var _mesesFechadosEng = {};
+    if(window.PREMIO_ENGINE){
+      try{
+        window.PREMIO_ENGINE.reset();
+        var _engWK = window.PREMIO_ENGINE.get(getLedger());
+        Object.keys(_engWK.mes||{}).forEach(function(m){
+          if(_engWK.mes[+m] && _engWK.mes[+m].fechado) _mesesFechadosEng[+m]=true;
+        });
+      }catch(e){}
+    }
+
     Object.keys(wksPorMes).forEach(function(m){
       m = +m;
-      // Não marcar FIM MÊS para o mês atual (ainda em aberto)
-      if(m >= mesAtualCalc) return;
+      // Marcar FIM MÊS se fechado pelo PREMIO_ENGINE (cobre mes atual ja encerrado)
+      var fechadoEngine = !!_mesesFechadosEng[m];
+      if(!fechadoEngine && m >= mesAtualCalc) return;
 
-      // Para meses passados: usar a última WK registrada do ledger global
       var wksDoMes = wksPorMes[m];
       var ultimaWK = Math.max.apply(null, wksDoMes);
       wkUltimoDoMes[m] = ultimaWK;
