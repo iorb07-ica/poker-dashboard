@@ -15531,7 +15531,12 @@ window.addEventListener('load', function(){
       });
       var maxKO  = Math.max.apply(null, Object.values(kos).concat([0]));
       var venc   = Object.keys(kos).filter(function(j){ return kos[j]===maxKO && maxKO>0; });
-      var perd   = jogs.filter(function(j){ return venc.indexOf(j)<0; });
+      // KO sempre usa TODOS os 9 jogadores como base, independente de ter jogado ou nao
+      // Excecoes por mes: jogadores que nao sao cobrados (ex: internacao)
+      var KO_EXCECOES = {1: ['Rafa']}; // Janeiro: Rafa internado, nao cobrado
+      var TODOS_JOGADORES = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+      var excMes = KO_EXCECOES[mes] || [];
+      var perd = TODOS_JOGADORES.filter(function(j){ return venc.indexOf(j)<0 && excMes.indexOf(j)<0; });
       var potKO  = r2(perd.length * TAXA_KO);
       var premKO = {};
       venc.forEach(function(j){ premKO[j] = r2(potKO / venc.length); });
@@ -16128,15 +16133,12 @@ window.addEventListener('load', function(){
   function getMesesPremiados(men){
     var mp = {};
     men.forEach(function(r){ if((r.premio_mensal||0)>0) mp[+r.mes]=true; });
-    // Inclui meses fechados pelo PREMIO_ENGINE mesmo quando mensal estatico tem null
     if(window.PREMIO_ENGINE){
       try{
-        var _ldg = (typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
+        var _ldg=(typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
         window.PREMIO_ENGINE.reset();
-        var _eng = window.PREMIO_ENGINE.get(_ldg);
-        Object.keys(_eng.mes||{}).forEach(function(m){
-          if(_eng.mes[+m] && _eng.mes[+m].fechado) mp[+m]=true;
-        });
+        var _eng=window.PREMIO_ENGINE.get(_ldg);
+        Object.keys(_eng.mes||{}).forEach(function(m){ if(_eng.mes[+m]&&_eng.mes[+m].fechado) mp[+m]=true; });
       }catch(e){}
     }
     return mp;
@@ -16197,23 +16199,20 @@ window.addEventListener('load', function(){
         var ko = r2(r.ajuste_KO_mes);
         if(ko>0) koGanho+=ko;
       });
-      // Fallback: usa PREMIO_ENGINE para meses fechados sem dados no mensal estatico
       if(window.PREMIO_ENGINE){
         try{
-          var _ldgFB2 = (typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
+          var _ldgFB2=(typeof RAW!=='undefined'&&Array.isArray(RAW)&&RAW.length)?RAW:((window.DATA&&window.DATA.ledger)||[]);
           window.PREMIO_ENGINE.reset();
-          var _engFB = window.PREMIO_ENGINE.get(_ldgFB2);
+          var _engFB=window.PREMIO_ENGINE.get(_ldgFB2);
           Object.keys(_engFB.mes||{}).forEach(function(m){
-            m = +m;
-            var pm = _engFB.mes[m];
-            if(!pm || !pm.fechado) return;
-            if(mesFiltro!=='todos' && m!==+mesFiltro) return;
-            var temDadosEstaticos = men.some(function(r){ return r.jogador===jog && +r.mes===m && r.saldo_mes_total!=null; });
-            if(temDadosEstaticos) return;
-            var pMes = r2(pm.premMes[jog]||0);
-            var pKO  = r2(pm.premKO[jog]||0);
-            premMes += pMes;
-            if(pKO>0) koGanho += pKO;
+            m=+m; var pm=_engFB.mes[m];
+            if(!pm||!pm.fechado) return;
+            if(mesFiltro!=='todos'&&m!==+mesFiltro) return;
+            var temDados=men.some(function(r){ return r.jogador===jog&&+r.mes===m&&r.saldo_mes_total!=null; });
+            if(temDados) return;
+            premMes+=r2(pm.premMes[jog]||0);
+            var pKO=r2(pm.premKO[jog]||0);
+            if(pKO>0) koGanho+=pKO;
           });
         }catch(e){}
       }
@@ -18162,27 +18161,21 @@ window.abrirPerfil = function(jogadorNome){
       if(wksPorMes[m].indexOf(w) < 0) wksPorMes[m].push(w);
     });
 
-    // Verificar quais meses estão fechados pelo PREMIO_ENGINE
-    var _mesesFechadosEng = {};
+    var _mesesFechadosEng={};
     if(window.PREMIO_ENGINE){
       try{
         window.PREMIO_ENGINE.reset();
-        var _engWK = window.PREMIO_ENGINE.get(getLedger());
-        Object.keys(_engWK.mes||{}).forEach(function(m){
-          if(_engWK.mes[+m] && _engWK.mes[+m].fechado) _mesesFechadosEng[+m]=true;
-        });
+        var _engWK=window.PREMIO_ENGINE.get(getLedger());
+        Object.keys(_engWK.mes||{}).forEach(function(m){ if(_engWK.mes[+m]&&_engWK.mes[+m].fechado) _mesesFechadosEng[+m]=true; });
       }catch(e){}
     }
-
     Object.keys(wksPorMes).forEach(function(m){
       m = +m;
-      // Marcar FIM MÊS se fechado pelo PREMIO_ENGINE (cobre mes atual ja encerrado)
-      var fechadoEngine = !!_mesesFechadosEng[m];
-      if(!fechadoEngine && m >= mesAtualCalc) return;
-
-      var wksDoMes = wksPorMes[m];
-      var ultimaWK = Math.max.apply(null, wksDoMes);
-      wkUltimoDoMes[m] = ultimaWK;
+      var fechadoEngine=!!_mesesFechadosEng[m];
+      if(!fechadoEngine && m>=mesAtualCalc) return;
+      var wksDoMes=wksPorMes[m];
+      var ultimaWK=Math.max.apply(null,wksDoMes);
+      wkUltimoDoMes[m]=ultimaWK;
     });
   })();
 
