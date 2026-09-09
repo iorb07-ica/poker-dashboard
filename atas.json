@@ -867,5 +867,41 @@
       "Rafa": "Fez corridas demais e não viu o taxímetro travar... o Uber não deve ter pago na quarta-feira... o cansaço bateu e ele preferiu ficar em casa no quentinho.",
       "Cristiano": "Cris faltou e não trouxe a encomenda do limão galego do papito. Equipes de detetives investigam a falta inesperada."
     }
+  },
+  "WK35": {
+    "titulo": "Hat-trick histórico: Heron conquista a relíquia lendária de 3 vitórias seguidas",
+    "subtitulo": "Setembro começa com o rei desbloqueando um dos feitos mais raros do Poker do Plaza",
+    "clima": 5,
+    "intro": "Existem feitos que parecem simples no papel e impossíveis na prática. Ganhar uma noite de poker é difícil. Ganhar duas seguidas é muito difícil. Ganhar três seguidas? Em 8 anos de Poker Series Plaza Mediterrâneo, apenas 2 jogadores tinham conquistado. Agora temos 3 nesse seleto hall.\n\nNa noite de 02 de setembro, Heron venceu a WK35. Simples assim. A WK33 era dele. A WK34 também. E a WK35 fechou o hat-trick histórico, desbloqueando uma das relíquias mais raras e difíceis do grupo: três vitórias consecutivas. O Plaza registrou com silêncio respeitoso. Seis guerreiros presentes, Cristiano, Marcus e Rafa ausentes, e uma noite que vai ficar marcada não pelo drama das mãos, mas pelo peso do feito.\n\n11 títulos no ano. Três seguidos. Heron é o jogador mais quente do Plaza em 2026 — e agora tem um número na estatística que ninguém mais tem. Charles segurou o 2º lugar com 3 KOs apesar dos 3 rebuys. Israel em 3º, eficiente e pontuando. Oscar, Magu e Pedro fecharam a mesa. E o ano, que parecia ter destino escrito, embaralhou mais uma vez.\n\nA última vez que alguém chegou perto de três vitórias seguidas foi... bem, ninguém chegou perto. É o tipo de feito que parece factível quando você vence duas vezes seguidas, e que revela toda sua dificuldade quando você chega na terceira noite e encontra a mesa, o baralho e o karma todos trabalhando contra você. Heron chegou, jogou, pagou 2 rebuys no caminho, fez 1 KO, acumulou 32.700 fichas e foi embora com o 11º título da temporada. Três seguidos. A relíquia está na prateleira.",
+    "maoTitulo": "A noite não precisou de uma mão épica. Precisava só de um campeão.",
+    "maoDesc": "Não houve uma mão cinematográfica, um straight flush ou uma quadra de Reis na WK35. O que houve foi consistência de quem já sabe como chegar ao fim. A última noite ganhou destaque... Heron quase pagou... ia limpar Grey... mas se segurou pq já estava com o título e a relíquia lendária desbloqueada. Heron administrou, sofreu com 2 rebuys no primeiro tempo, se reestabeleceu e conduziu o segundo tempo com a autoridade de quem está numa sequência histórica. Às vezes a mão da noite é a série toda.",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Três seguidas. TRÊS.",
+        "autor": "A mesa, contando nos dedos"
+      },
+      {
+        "fala": "Alguém já tinha feito isso antes?",
+        "autor": "Somente outros 2."
+      },
+      {
+        "fala": "Heron é o rei. Ponto.",
+        "autor": "A conclusão unânime"
+      },
+      {
+        "fala": "Setembro já começou errado pra todo mundo que não é Heron.",
+        "autor": "Pedro, olhando pro ranking"
+      }
+    ],
+    "jogadores": {
+      "Heron": "1º lugar, 2 rebuys, 1 KO, 32.700 fichas, 26.910 pontos. Hat-trick histórico. 11 títulos no ano. Relíquia desbloqueada. O que mais dizer? Passou Pedro no ranking anual por 376 míseros pontos, a menor margem do ano. A temporada de Heron é um fenômeno.",
+      "Charles": "2º lugar, 3 rebuys, 3 KOs, 30.000 fichas, 22.800 pontos. Vice consistente — mesmo pagando 3 rebuys, chegou ao pódio com a maior pilha da mesa atrás de Heron. Charlito segura o 3º no T3 e sobe pontos importantes no anual.",
+      "Israel": "3º lugar, zero rebuy, 3 KOs, 12.300 fichas, 19.990 pontos. Eficiente e limpo. Aumenta a vantagem na liderança anual e segura o 2º no T3. O Grey Galináceo acumula sem fazer barulho enquanto o hat-trick do Heron rouba a cena.",
+      "Oscar": "4º lugar, 1 rebuy, 1 KO, 12.600 pontos. Noite sólida. Pedro e Oscar praticamente empatados no T3 agora, separados por apenas 132 pontos.",
+      "Magu": "5º lugar, 3 rebuys, 2 KOs, 7.700 pontos. Noite pesada. O 2º lugar anual segura, mas Israel amplia a vantagem. Magu precisa de uma sequência forte em Setembro.",
+      "Pedro": "6º lugar, zero rebuy, 2 KOs, 10.200 pontos. Terminou a noite atrás do Heron no ranking anual, separado por 376 pontos. Pedroca viu a 3ª posição anual escorregar por uma margem menor que um bom pot. Setembro será decisivo."
+    }
   }
 }
