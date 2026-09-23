@@ -946,5 +946,43 @@
       "Israel": "8º lugar, zero rebuy, 1 KO, 6.100 pontos. Quadra de 9 sem extração, J no river de consolo, 8º lugar no fim. O Grey viu Pedro cortou 25 mil pontos de vantagem numa única noite. O lead anual encolheu de 72 mil para 47 mil pontos. Setembro está quente.",
       "Heron": "9º lugar, 5 rebuys, 0 KOs, -3.500 pontos. Recorde negativo da história do Plaza. Nada funcionou. Caiu o 3º para o 4º no anual. Mas tem 11 títulos e uma relíquia que poucos tem. A temporada dele continua sendo histórica, essa semana só ficou de fora do capítulo bom."
     }
+  },
+  "WK37": {
+    "titulo": "Magu de volta: 6 KOs, domínio total e o ranking anual que começou a tremer",
+    "subtitulo": "Setembro quente: Magu corta 18 mil pontos de Israel e o T3 fica num fio",
+    "clima": 5,
+    "intro": "Magu foi quem pagou Ed na noite. Numa outra semana isso seria motivo de resignação. Na WK37, foi motivo de festa.\n\nSeis KOs, 2 rebuys, 44.300 fichas e o título que a mesa toda sentiu chegando desde o começo. Magu como pagador do Ed costuma pagar rebuy e animar o grupo pelo lado errado. Nessa quarta-feira, decidiu fazer diferente: dominou do primeiro ao último chip, empilhou com autoridade e saiu com o título e com 30.890 pontos — a melhor pontuação individual da noite por larga margem. Uma noite que vai importar muito no fechamento do ano.\n\nPedro continuou a campanha de setembro com o 2º lugar, zero KOs de peso mas 22.300 fichas acumuladas. Oscar assustou no 3º com eficiência de quem não paga rebuy. Israel fez o básico em 4º. Charles, Cristiano, Heron e Rafa fecharam a tabela, com Rafa pagando 3 rebuys e saindo sem KO. Marcus faltou.\n\nMas o número que vai ficar dessa noite não é o da pontuação de Magu. É o gap entre ele e Israel no ranking anual: era 43.226 pontos. Agora é 25.036. Magu cortou quase 18 mil em uma única noite. Com poucas semanas pela frente, o título anual está em disputa de verdade.",
+    "maoTitulo": "Magu com 6 KOs: Magulets virou o feltro do avesso",
+    "maoDesc": "A noite do Magu foi construída KO a KO, ficha a ficha. Sem uma mão espetacular pra destacar, sem um river que parou a respiração — só poker consistente, agressivo no momento certo e tranquilo quando precisava. Seis eliminações, mais do que qualquer outro na mesa. Quando Magu está assim, sem forçar e sem errar, a mesa inteira sente. Pedro chegou ao 2º com quase metade das fichas do Magu. Ninguém chegou perto.",
+    "persJogador": "Magu",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Magu é quem paga o Ed e tá com 44 mil fichas. Explica.",
+        "autor": "A mesa, sem explicação"
+      },
+      {
+        "fala": "6 KOs na noite. Isso é pessoal.",
+        "autor": "Alguém, observando"
+      },
+      {
+        "fala": "Israel",
+        "autor": "Magu: 25 mil pontos. Vai até a última semana.\" — Magu, atualizando o grupo"
+      },
+      {
+        "fala": "T3: Heron e Israel com 2498 pontos de diferença. Um pot mal jogado define o trimestre.",
+        "autor": "A conta cruel"
+      }
+    ],
+    "jogadores": {
+      "Magu": "1º lugar, 2 rebuys, 6 KOs, 44.300 fichas, 30.890 pontos. Título do ano que mais importou até agora. Cortou 18 mil pontos do líder Grey em uma noite. A briga pelo campeonato anual está viva.",
+      "Pedro": "2º lugar, 1 rebuy, 2 KOs, 22.300 fichas, 23.390 pontos. Terceira semana seguida no top 2 de setembro. Pedro em modo setembro é outro jogador. Lidera o mês com 65.040 pontos e não para de acumular.",
+      "Oscar": "3º lugar, zero rebuy, 2 KOs, 18.400 fichas, 21.720 pontos. Papito limpo e eficiente. Passou Marcus no ranking anual e chegou ao 6º lugar geral. Quando Oscar não paga rebuy, ele pontua.",
+      "Israel": "4º lugar, 1 rebuy, 2 KOs, 12.700 pontos. Noite modesta mas positiva. Viu Magu cortar 18 mil de distância. O ano ainda é dele — mas por apenas 25 mil pontos com semanas contadas.",
+      "Charles": "5º lugar, 1 rebuy, zero KOs, 10.500 pontos. Setembro consistente: 45.500 pontos no mês, 3º no ranking mensal. Charlito acumula sem chamar atenção.",
+      "Cristiano": "6º lugar, 1 rebuy, zero KOs, 8.500 pontos. Presente, anotou pontos, foi embora. O Cris em modo silencioso.",
+      "Heron": "7º lugar, zero rebuy, 2 KOs, 8.200 pontos. Noite discreta depois do recorde negativo da semana passada. Zero rebuy é progresso. O T3 ainda é liderado por ele — por apenas 2.498 pontos sobre Israel.",
+      "Rafa": "8º lugar, 3 rebuys, zero KOs, 1.500 pontos. A semana de Rafa que ninguém quer ter: pagou três vezes sem eliminação e saiu em último entre os presentes."
+    }
   }
 }
