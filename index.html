@@ -2714,6 +2714,7 @@ document.addEventListener('DOMContentLoaded', function(){
 body.mobile-mode #libwarn { display: none !important; }
 </style>
 </header>
+<div id="dashboard-status-bar" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 14px;font-size:11px;font-weight:700;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,0.05);min-height:24px;"></div>
 
 <!-- Barra mobile simples -->
 <div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:env(safe-area-inset-top) 16px 0;align-items:flex-end;justify-content:space-between;gap:10px;min-height:82px;height:calc(82px + env(safe-area-inset-top));box-shadow:0 3px 24px rgba(0,0,0,0.6);-webkit-">
@@ -3140,7 +3141,7 @@ body.mobile-mode #libwarn { display: none !important; }
     <input type="range" min="1" max="4" value="4" step="1" id="mt-mes-slider" oninput="window.mtMesSetWK(+this.value)" style="width:100%;accent-color:#a78bfa;">
     <div id="mt-mes-slider-labels" style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"></div>
   </div>
-  <div id="mt-mes-pill"id="mt-mes-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div>
+  <div id="mt-mes-pill"id="mt-mes-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div><div id="mt-mes-prog" style="font-size:10px;font-weight:700;color:rgba(167,139,250,0.6);flex-shrink:0;"></div>
 </div>
 <div style="margin-top:18px;padding-bottom:4px;"><div class="mini-prizes" id="mini-mes-prizes"></div><div class="mini-rule" id="mini-mes-rule"></div></div>
 </div>
@@ -3165,7 +3166,7 @@ body.mobile-mode #libwarn { display: none !important; }
     <input type="range" min="1" max="52" value="13" step="1" id="mt-tri-slider" oninput="window.mtTriSetWK(+this.value)"  style="width:100%;accent-color:#a78bfa;">
     <div style="display:flex;justify-content:space-between;font-size:8px;color:rgba(255,255,255,0.25);font-weight:600;"><span>WK1</span><span>WK3</span><span>WK5</span><span>WK7</span><span>WK9</span><span>WK12</span></div>
   </div>
-  <div id="mt-tri-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div>
+  <div id="mt-tri-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div><div id="mt-tri-prog" style="font-size:10px;font-weight:700;color:rgba(167,139,250,0.6);flex-shrink:0;"></div>
 </div>
 <div style="margin-top:18px;padding-bottom:4px;"><div class="mini-prizes" id="mini-tri-prizes"></div><div class="mini-rule" id="mini-tri-rule"></div></div>
 </div>
@@ -3300,7 +3301,7 @@ body.mobile-mode #libwarn { display: none !important; }
        <span>WK1</span><span>WK3</span><span>WK5</span><span>WK7</span><span>WK9</span><span>WK12</span>
      </div>
    </div>
-   <div id="mt-wk-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div>
+   <div id="mt-wk-pill" style="font-size:11px;font-weight:800;color:#a78bfa;background:rgba(167,139,250,0.12);border-radius:6px;padding:3px 9px;flex-shrink:0;">WK 12</div><div id="mt-ano-prog" style="font-size:10px;font-weight:700;color:rgba(167,139,250,0.6);flex-shrink:0;"></div>
  </div>
  <div style="margin-top:20px;">
    <div id="mt-prizes" style="padding-top:8px;border-top:1px dashed #1f2a3a;color:#e6edf3;font-size:12px;line-height:1.35;"></div>
@@ -3467,6 +3468,8 @@ body.mobile-mode #libwarn { display: none !important; }
   window.mtSetWK = function(wk){
     mtCurrentWK = wk;
     mtRender(wk, true);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(null, wk, wk);
+    if(window._updateDashboardStatus) window._updateDashboardStatus();
   };
 
   window.mtTogglePlay = function(){
@@ -3565,6 +3568,98 @@ body.mobile-mode #libwarn { display: none !important; }
 
 
 
+
+/* ── Status atualização + progresso períodos ────────────── */
+window._updateDashboardStatus = function(){
+  var raw = (window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+  if(!raw.length) return;
+  var maxWK = Math.max.apply(null, raw.map(function(r){return+r.wk||0;}));
+  var lastRow = raw.filter(function(r){return+r.wk===maxWK;})[0];
+  var lastDate = lastRow ? (lastRow.data||lastRow.date||'') : '';
+
+  // Encontrar a última quarta-feira que aconteceu
+  // Jogo é quarta à noite, termina ~1:30am quinta
+  // Então: quinta (após 1:30am) já conta como "quarta jogada"
+  // Usamos: a última quarta-feira cujo início já passou
+  var hoje = new Date();
+  var dow = hoje.getDay(); // 0=dom,1=seg,2=ter,3=qua,4=qui,5=sex,6=sab
+  // Quantos dias atrás foi a última quarta?
+  // Se hoje=qua(3): 0 dias atrás (hoje). Se qui(4):1. Sex(5):2. Sab(6):3.
+  // Dom(0):4. Seg(1):5. Ter(2):6.
+  // Quantos dias atrás foi a última quarta JÁ ENCERRADA
+  // Quarta (3) ainda está acontecendo, só vira "passada" na quinta
+  // Dom=0:5, Seg=1:6, Ter=2:0(nunca), Qua=3:7(semana anterior), Qui=4:1, Sex=5:2, Sab=6:3
+  // Simplificado: a última quarta ANTES de hoje (não incluindo hoje se hoje for quarta)
+  var diasAteQua = dow === 3 ? 7   // hoje é quarta: última quarta foi há 7 dias
+                 : dow > 3  ? dow - 3    // qui=1, sex=2, sab=3
+                 : dow + 4; // dom=4, seg=5, ter=6
+  var ultimaQua = new Date(hoje);
+  ultimaQua.setDate(hoje.getDate() - diasAteQua);
+  ultimaQua.setHours(0,0,0,0);
+
+  // Verificar se a data da última WK no ledger >= última quarta
+  var atualizado = false;
+  if(lastDate){
+    var parts = lastDate.split(/[\/\-]/);
+    var dLastWK;
+    if(parts[0].length===4){ dLastWK = new Date(+parts[0],+parts[1]-1,+parts[2]); }
+    else { dLastWK = new Date(+parts[2],+parts[1]-1,+parts[0]); }
+    dLastWK.setHours(0,0,0,0);
+    atualizado = dLastWK >= ultimaQua;
+  }
+
+  var bar = document.getElementById('dashboard-status-bar');
+  if(!bar) return;
+  if(atualizado){
+    bar.innerHTML = '<span style="color:#4ade80;font-size:13px;">✅</span>'
+      +'<span style="color:#4ade80;">Atualizado</span>'
+      +'<span style="color:rgba(255,255,255,0.25);">·</span>'
+      +'<span style="color:rgba(255,255,255,0.6);">WK'+maxWK+'</span>'
+      +(lastDate?'<span style="color:rgba(255,255,255,0.25);">·</span>'
+        +'<span style="color:rgba(255,255,255,0.45);">'+lastDate+'</span>':'');
+    bar.style.background='rgba(34,197,94,0.04)';
+  } else {
+    bar.innerHTML = '<span style="color:#fbbf24;font-size:13px;">⚠️</span>'
+      +'<span style="color:#fbbf24;">Desatualizado</span>'
+      +'<span style="color:rgba(255,255,255,0.25);">·</span>'
+      +'<span style="color:rgba(255,255,255,0.5);">Última: WK'+maxWK
+        +(lastDate?' · '+lastDate:'')+'</span>';
+    bar.style.background='rgba(251,191,36,0.05)';
+  }
+};
+
+window._updatePeriodProgress = function(mes, triWK, anoWK){
+  var WK_MES={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
+  var WK_TRI={1:[1,2,3,4,5,6,7,8,9,10,11,12],2:[13,14,15,16,17,18,19,20,21,22,23,24,25],3:[26,27,28,29,30,31,32,33,34,35,36,37,38,39],4:[40,41,42,43,44,45,46,47,48,49,50]};
+  var raw=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+  var maxWKGlobal=raw.length?Math.max.apply(null,raw.map(function(r){return+r.wk||0;})):0;
+
+  // Progresso do Mês
+  if(mes){
+    var wksMes=WK_MES[+mes]||[];
+    var jogadasMes=wksMes.filter(function(w){return w<=maxWKGlobal;}).length;
+    var totalMes=wksMes.length;
+    var elMes=document.getElementById('mt-mes-prog');
+    if(elMes) elMes.textContent=jogadasMes+'/'+totalMes+' sem.';
+  }
+
+  // Progresso do Trimestre
+  var triAtual=1;
+  if(triWK){
+    var raw2=(window.RAW&&window.RAW.length)?window.RAW:[];
+    var wkRow=raw2.find(function(r){return+r.wk===+triWK;});
+    triAtual=wkRow?(+wkRow.trimestre||1):1;
+  }
+  var wksTri=WK_TRI[triAtual]||[];
+  var jogadasTri=wksTri.filter(function(w){return w<=maxWKGlobal;}).length;
+  var totalTri=wksTri.length;
+  var elTri=document.getElementById('mt-tri-prog');
+  if(elTri) elTri.textContent=jogadasTri+'/'+totalTri+' sem.';
+
+  // Progresso Anual (50 semanas)
+  var elAno=document.getElementById('mt-ano-prog');
+  if(elAno) elAno.textContent=maxWKGlobal+'/50 sem.';
+};
 /* ── Badge mês fechado + coroa ─────────────────────────────── */
 window._updateMesBadge = function(mes, wkMax){
   var FIM_MESES=[0,4,8,12,17,21,25,30,34,38,43,47,52];
@@ -3766,6 +3861,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
     if(window._updateMesBadge) window._updateMesBadge(mtMesCur, wk);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(mtMesCur, wk, wk);
   };
 
   window.mtMesSetMes = function(mes){
@@ -3787,6 +3883,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
     if(window._updateMesBadge) window._updateMesBadge(mes, maxWk);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(mes, maxWk, maxWk);
   };
 
   window.mtMesTogglePlay = function(){
@@ -3839,6 +3936,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var prevRankingTri = wk>1 ? (window.getRankingTri || getRankingUpToWK)(_triSel, wk-1) : [];
     renderRows('mt-tri', ranking, pot, true, prevRankingTri);
     updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(null, wk, wk);
   };
 
   window.mtTriTogglePlay = function(){
@@ -4035,6 +4133,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
     if(window._updateMesBadge) window._updateMesBadge(mtMesCur, wk);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(mtMesCur, wk, wk);
   };
 
   window.mtMesSetMes = function(mes){
@@ -4056,6 +4155,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
     if(window._updateMesBadge) window._updateMesBadge(mes, maxWk);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(mes, maxWk, maxWk);
   };
 
   window.mtMesTogglePlay = function(){
@@ -4167,6 +4267,8 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false, _prevRkMesI);
     window.updatePrizes('mini-mes-prizes','mini-mes-rule', rMes, getPotMes(_mesAtual, _maxWK));
     if(window._updateMesBadge) window._updateMesBadge(_mesAtual, _maxWK);
+    if(window._updateDashboardStatus) window._updateDashboardStatus();
+    if(window._updatePeriodProgress) window._updatePeriodProgress(_mesAtual, _maxWkDoTri, _maxWK);
     // Garantir que o select mini-tri está no trimestre correto ANTES de renderizar
     var _selTri = document.getElementById('mini-tri');
     if(_selTri) _selTri.value = String(_triAtual);
