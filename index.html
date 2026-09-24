@@ -3381,11 +3381,12 @@ body.mobile-mode #libwarn { display: none !important; }
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       row.innerHTML =
-        '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="mt-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>'+
+        '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+
         avHtml+'</div>'+
         '<div style="flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;">'+
           '<div id="mt-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
           '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
+          '<div id="mt-delta-'+p+'" style="position:absolute;top:0;right:95px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:900;white-space:nowrap;z-index:2;"></div>'+
           '<div id="mt-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>'+
         '</div>';
       area.appendChild(row);
@@ -3549,14 +3550,14 @@ body.mobile-mode #libwarn { display: none !important; }
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       av.appendChild(img);
       row.innerHTML =
-        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>';
+        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
       row.appendChild(av);
       var barOuter = document.createElement('div');
       barOuter.style.cssText = 'flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;';
       barOuter.innerHTML =
         '<div id="'+prefix+'-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
         '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
-        '<div id="'+prefix+'-ko-'+p+'" style="position:absolute;top:0;right:90px;bottom:0;display:flex;align-items:center;font-size:10px;font-weight:700;color:rgba(249,115,22,0.85);white-space:nowrap;z-index:2;gap:2px;"></div>'+'<div id="'+prefix+'-rb-'+p+'" style="position:absolute;top:0;right:52px;bottom:0;display:flex;align-items:center;font-size:10px;font-weight:700;color:rgba(96,165,250,0.85);white-space:nowrap;z-index:2;"></div>'+'<div id="'+prefix+'-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>';
+        '<div id="'+prefix+'-ko-'+p+'" style="position:absolute;top:0;right:90px;bottom:0;display:flex;align-items:center;font-size:10px;font-weight:700;color:rgba(249,115,22,0.85);white-space:nowrap;z-index:2;gap:2px;"></div>'+'<div id="'+prefix+'-rb-'+p+'" style="position:absolute;top:0;right:52px;bottom:0;display:flex;align-items:center;font-size:10px;font-weight:700;color:rgba(96,165,250,0.85);white-space:nowrap;z-index:2;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="position:absolute;top:0;right:138px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:900;white-space:nowrap;z-index:2;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="position:absolute;top:0;right:95px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:900;white-space:nowrap;z-index:2;"></div>'+'<div id="'+prefix+'-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>';
       row.appendChild(barOuter);
       list.appendChild(row);
     });
@@ -3567,17 +3568,18 @@ body.mobile-mode #libwarn { display: none !important; }
 function _applyDelta(prefix, name, currIdx, prevRanking){
   var el = document.getElementById(prefix+'-delta-'+name);
   if(!el) return;
-  if(!prevRanking || !prevRanking.length){ el.textContent=''; return; }
+  if(!prevRanking || !prevRanking.length){ el.innerHTML=''; return; }
   var prevIdx = -1;
   for(var i=0;i<prevRanking.length;i++){
     var n = prevRanking[i].name || prevRanking[i].jogador;
     if(n===name){ prevIdx=i; break; }
   }
-  if(prevIdx<0){ el.textContent=''; return; }
-  var diff = prevIdx - currIdx; // positivo = subiu
-  if(diff===0){ el.textContent=''; return; }
-  el.innerHTML = diff>0 ? '▲'+diff : '▼'+Math.abs(diff);
-  el.style.color = diff>0 ? '#22c55e' : '#ef4444';
+  if(prevIdx<0){ el.innerHTML=''; return; }
+  var diff = prevIdx - currIdx;
+  if(diff===0){ el.innerHTML=''; return; }
+  var col = diff>0 ? '#4ade80' : '#f87171';
+  var sym = diff>0 ? '▲' : '▼';
+  el.innerHTML = '<span style="background:'+col+'22;color:'+col+';padding:2px 5px;border-radius:4px;font-size:11px;font-weight:900;letter-spacing:.3px;">'+sym+Math.abs(diff)+'</span>';
 }
   function renderRows(prefix, ranking, pot, animate, prevRanking){
     var maxPts = Math.max(ranking[0]?ranking[0].pts:1, 1);
@@ -3863,14 +3865,14 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       av.appendChild(img);
       row.innerHTML =
-        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>';
+        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
       row.appendChild(av);
       var barOuter = document.createElement('div');
       barOuter.style.cssText = 'flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;';
       barOuter.innerHTML =
         '<div id="'+prefix+'-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
         '<div style="position:absolute;top:0;left:14px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:700;color:rgba(255,255,255,0.9);white-space:nowrap;z-index:2;text-shadow:0 1px 3px rgba(0,0,0,0.8);">'+p+'</div>'+
-        '<div id="'+prefix+'-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>';
+        '<div id="'+prefix+'-delta-'+p+'" style="position:absolute;top:0;right:95px;bottom:0;display:flex;align-items:center;font-size:11px;font-weight:900;white-space:nowrap;z-index:2;"></div>'+'<div id="'+prefix+'-pts-'+p+'" style="position:absolute;top:0;right:8px;bottom:0;display:flex;align-items:center;font-size:12px;font-weight:900;color:#fff;letter-spacing:.2px;text-shadow:0 1px 5px rgba(0,0,0,0.7);white-space:nowrap;z-index:2;"></div>';
       row.appendChild(barOuter);
       list.appendChild(row);
     });
@@ -8875,11 +8877,11 @@ function miniRow(pos, name, pontos, delta){
  const delay = ((pos-1) * 0.07).toFixed(2);
  let arrowHtml = '';
  if(delta && delta!==0){
-  const col = delta>0?'#22c55e':'#ef4444';
+  const col = delta>0?'#4ade80':'#f87171';
   const sym = delta>0?'▲'+delta:'▼'+Math.abs(delta);
-  arrowHtml = `<span style="font-size:9px;font-weight:900;color:${col};margin-left:3px;flex-shrink:0;">${sym}</span>`;
+  arrowHtml = `<span style="background:${col}22;color:${col};padding:1px 4px;border-radius:3px;font-size:10px;font-weight:900;margin-left:4px;flex-shrink:0;">${sym}</span>`;
  }
- return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;">${name}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+ return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;gap:0;">${name}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
 }
 
 function renderMini(per, val){
