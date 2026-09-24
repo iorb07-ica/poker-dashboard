@@ -3124,7 +3124,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
 <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a2a3a,rgba(167,139,250,0.25));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">📅</div>
 <div style="min-width:0;">
-<div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Mês</div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Mês</div><div id="mini-mes-status-badge"></div></div>
 <div style="font-size:11px;color:#6b82a0;margin-top:1px;white-space:nowrap;">Pontuação acumulada no mês</div>
 </div>
 </div>
@@ -3447,7 +3447,7 @@ body.mobile-mode #libwarn { display: none !important; }
       }
       if(rowEls[r.name]) rowEls[r.name].style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
-      _applyDelta('mt', r.name, idx, prevRankingAno);
+      if(window._applyDelta) window._applyDelta('mt', r.name, idx, prevRankingAno);
     });
 
     var prizes = document.getElementById('mt-prizes');
@@ -3565,7 +3565,7 @@ body.mobile-mode #libwarn { display: none !important; }
 
 
 /* ── Delta arrow helper ─────────────────────────────────────── */
-function _applyDelta(prefix, name, currIdx, prevRanking){
+window._applyDelta = function(prefix, name, currIdx, prevRanking){
   var el = document.getElementById(prefix+'-delta-'+name);
   if(!el) return;
   if(!prevRanking || !prevRanking.length){ el.innerHTML=''; return; }
@@ -3580,7 +3580,7 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
   var col = diff>0 ? '#4ade80' : '#f87171';
   var sym = diff>0 ? '▲' : '▼';
   el.innerHTML = '<span style="background:'+col+'22;color:'+col+';padding:2px 5px;border-radius:4px;font-size:11px;font-weight:900;letter-spacing:.3px;">'+sym+Math.abs(diff)+'</span>';
-}
+};
   function renderRows(prefix, ranking, pot, animate, prevRanking){
     var maxPts = Math.max(ranking[0]?ranking[0].pts:1, 1);
     ranking.forEach(function(r, idx){
@@ -3615,7 +3615,7 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
       }
       if(row) row.style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
-      _applyDelta(prefix, r.name, idx, prevRanking);
+      if(window._applyDelta) window._applyDelta(prefix, r.name, idx, prevRanking);
     });
   }
 
@@ -3906,7 +3906,7 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
       }
       if(row) row.style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
-      _applyDelta(prefix, r.name, idx, prevRanking);
+      if(window._applyDelta) window._applyDelta(prefix, r.name, idx, prevRanking);
     });
   }
 
@@ -8872,7 +8872,11 @@ function initMiniCombos(){
  setTimeout(function(){ if(sels.tri && sels.tri.value) { (window.renderMini||renderMini)('trimestre', +sels.tri.value); if(typeof window.mtTriSetWK==='function'){ var _mxWk=Math.max.apply(null,RAW.filter(function(r){return +r.trimestre===+sels.tri.value;}).map(function(r){return +r.wk||0;})); window.mtTriSetWK(_mxWk||13); } } }, 500);
 }
 
-function miniRow(pos, name, pontos, delta){
+function miniRowFaltou(name){
+ return `<div class="mini-item" style="opacity:0.38;border:1px dashed rgba(255,255,255,0.12);background:rgba(255,255,255,0.02);border-radius:6px;padding:4px 10px;display:flex;align-items:center;gap:8px;margin:1px 0;"><span style="font-size:12px;">🚫</span><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);">${name}</span><span style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3);font-style:italic;">faltou</span></div>`;
+}
+
+function miniRow(pos, name, pontos, delta, isCampeao){
  const badge = pos===1? '🥇' : pos===2? '🥈' : pos===3? '🥉' : pos+'.';
  const delay = ((pos-1) * 0.07).toFixed(2);
  let arrowHtml = '';
@@ -8881,7 +8885,9 @@ function miniRow(pos, name, pontos, delta){
   const sym = delta>0?'▲'+delta:'▼'+Math.abs(delta);
   arrowHtml = `<span style="background:${col}22;color:${col};padding:1px 4px;border-radius:3px;font-size:10px;font-weight:900;margin-left:4px;flex-shrink:0;">${sym}</span>`;
  }
- return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;gap:0;">${name}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+ const campeaoStyle = isCampeao ? 'box-shadow:0 0 0 1.5px rgba(250,204,21,0.5),0 0 12px rgba(250,204,21,0.15);' : '';
+ const coroa = isCampeao ? '<span style="font-size:13px;margin-left:3px;">👑</span>' : '';
+ return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;${campeaoStyle}"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;gap:0;">${name}${coroa}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
 }
 
 function renderMini(per, val){
@@ -8901,6 +8907,25 @@ else if(per==='trimestre'){ rows = RAW.filter(r=>+r.trimestre===+val); }
  
 const picks = selectedPlayers(); if(picks.length) rows = rows.filter(r=>picks.includes(r.jogador));
 
+// ── SEMANA: mostrar todos com indicador de faltou ─────────────────────────
+if(per==='semana'){
+  const ALL_PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+  const wkNum = +String(val).replace('WK','');
+  // Quem tem registro nessa WK (jogou ou faltou)
+  const wkRows = RAW.filter(r=>+r.wk===wkNum);
+  const jogouSet = new Set(wkRows.filter(r=>!+r.faltou).map(r=>r.jogador));
+  const faltouSet = new Set(wkRows.filter(r=>+r.faltou).map(r=>r.jogador));
+  // Agregar quem jogou e ordenar por pontos
+  const agg = aggregate(rows).filter(r=>jogouSet.has(r.jogador));
+  // Montar lista: jogadores ordenados por pts + faltou no fim
+  const jogouList = agg.map((r,i)=>miniRow(i+1, r.jogador, r.pontos, 0));
+  // Jogadores sem nenhum registro nessa WK também faltaram
+  ALL_PLAYERS.forEach(p=>{ if(!jogouSet.has(p) && !faltouSet.has(p)) faltouSet.add(p); });
+  const faltouList = Array.from(faltouSet).map(p=>miniRowFaltou(p));
+  target.innerHTML = jogouList.join('') + (faltouList.length ? '<div style="border-top:1px dashed rgba(255,255,255,0.08);margin:4px 0 2px;"></div>' + faltouList.join('') : '');
+  return;
+}
+
 const agg = aggregate(rows);
 const top = agg.slice(0,5);
 // Delta: ranking anterior (WK-1 dentro do mesmo período)
@@ -8916,6 +8941,30 @@ if(per==='mes' || per==='trimestre'){
 }
 const prevPosMapMini = {};
 prevRowsMini.forEach((r,i)=>{ prevPosMapMini[r.jogador]=i+1; });
+
+// ── MÊS: badge de encerrado + coroa no campeão ───────────────────────────
+if(per==='mes'){
+  const FIM_MESES=[0,4,8,12,17,21,25,30,34,38,43,47,52];
+  const maxWKGlobal = RAW.length ? Math.max(...RAW.map(r=>+r.wk||0)) : 0;
+  const mesFechado = FIM_MESES[+val]>0 && maxWKGlobal>=FIM_MESES[+val];
+  // Atualizar badge no header do card
+  const badgeEl = document.getElementById('mini-mes-status-badge');
+  if(badgeEl){
+    if(mesFechado){
+      badgeEl.innerHTML='<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">✅ Encerrado</span>';
+    } else {
+      badgeEl.innerHTML='<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento</span>';
+    }
+  }
+  target.innerHTML = top.map((r,i)=>{
+    const pp = prevPosMapMini[r.jogador];
+    const diff = (pp!==undefined && pp!==(i+1)) ? pp-(i+1) : 0;
+    const isCampeao = mesFechado && i===0;
+    return miniRow(i+1, r.jogador, r.pontos, diff, isCampeao);
+  }).join('');
+  return;
+}
+
 target.innerHTML = top.map((r,i)=>{
   const pp = prevPosMapMini[r.jogador];
   const diff = (pp!==undefined && pp!==(i+1)) ? pp-(i+1) : 0;
