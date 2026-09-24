@@ -3381,7 +3381,7 @@ body.mobile-mode #libwarn { display: none !important; }
       img.style.cssText = 'width:100%;height:100%;object-fit:cover;';
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       row.innerHTML =
-        '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+
+        '<div id="mt-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="mt-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>'+
         avHtml+'</div>'+
         '<div style="flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;">'+
           '<div id="mt-fill-'+p+'" style="position:absolute;top:0;left:0;bottom:0;width:0%;-webkit-mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);mask-image:linear-gradient(to right,#000 0%,#000 62%,transparent 100%);transition:width 1.4s cubic-bezier(.22,1,.36,1);"></div>'+
@@ -3397,6 +3397,7 @@ body.mobile-mode #libwarn { display: none !important; }
 
   function mtRender(wk, animate){
     var ranking = mtGetRanking(wk);
+    var prevRankingAno = wk > 1 ? mtGetRanking(wk - 1) : [];
     var maxPts = Math.max(ranking[0].pts, 1);
     var pot = (window._POTE_ANO && window._POTE_ANO[wk]) || POTE[wk] || 0;
     var pill = document.getElementById('mt-wk-pill');
@@ -3445,6 +3446,7 @@ body.mobile-mode #libwarn { display: none !important; }
       }
       if(rowEls[r.name]) rowEls[r.name].style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
+      _applyDelta('mt', r.name, idx, prevRankingAno);
     });
 
     var prizes = document.getElementById('mt-prizes');
@@ -3547,7 +3549,7 @@ body.mobile-mode #libwarn { display: none !important; }
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       av.appendChild(img);
       row.innerHTML =
-        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
+        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>';
       row.appendChild(av);
       var barOuter = document.createElement('div');
       barOuter.style.cssText = 'flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;';
@@ -3560,7 +3562,24 @@ body.mobile-mode #libwarn { display: none !important; }
     });
   }
 
-  function renderRows(prefix, ranking, pot, animate){
+
+/* ── Delta arrow helper ─────────────────────────────────────── */
+function _applyDelta(prefix, name, currIdx, prevRanking){
+  var el = document.getElementById(prefix+'-delta-'+name);
+  if(!el) return;
+  if(!prevRanking || !prevRanking.length){ el.textContent=''; return; }
+  var prevIdx = -1;
+  for(var i=0;i<prevRanking.length;i++){
+    var n = prevRanking[i].name || prevRanking[i].jogador;
+    if(n===name){ prevIdx=i; break; }
+  }
+  if(prevIdx<0){ el.textContent=''; return; }
+  var diff = prevIdx - currIdx; // positivo = subiu
+  if(diff===0){ el.textContent=''; return; }
+  el.innerHTML = diff>0 ? '▲'+diff : '▼'+Math.abs(diff);
+  el.style.color = diff>0 ? '#22c55e' : '#ef4444';
+}
+  function renderRows(prefix, ranking, pot, animate, prevRanking){
     var maxPts = Math.max(ranking[0]?ranking[0].pts:1, 1);
     ranking.forEach(function(r, idx){
       var pct = r.pts>0 ? Math.max(Math.round((r.pts/maxPts)*100), 25) : 0;
@@ -3594,6 +3613,7 @@ body.mobile-mode #libwarn { display: none !important; }
       }
       if(row) row.style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
+      _applyDelta(prefix, r.name, idx, prevRanking);
     });
   }
 
@@ -3695,7 +3715,11 @@ body.mobile-mode #libwarn { display: none !important; }
     if(pill) pill.textContent = 'WK ' + wk;
     var ranking = getRankingMes(mtMesCur, wk);
     var pot = getPotMes(mtMesCur, wk);
-    renderRows('mt-mes', ranking, pot, true);
+    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wksMes = _wkMesMap[mtMesCur]||[];
+    var _prevWkMes = _wksMes.indexOf(wk)>0 ? _wksMes[_wksMes.indexOf(wk)-1] : null;
+    var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
+    renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
   };
 
@@ -3711,7 +3735,11 @@ body.mobile-mode #libwarn { display: none !important; }
     if(pill) pill.textContent = 'WK ' + maxWk;
     var ranking = getRankingMes(mes, maxWk);
     var pot = getPotMes(mes, maxWk);
-    renderRows('mt-mes', ranking, pot, true);
+    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wksMes2 = _wkMesMap2[mes]||[];
+    var _prevWk2 = _wksMes2.indexOf(maxWk)>0 ? _wksMes2[_wksMes2.indexOf(maxWk)-1] : null;
+    var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
+    renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
   };
 
@@ -3762,7 +3790,8 @@ body.mobile-mode #libwarn { display: none !important; }
     // Filtrar pelo trimestre correto
     var ranking = (window.getRankingTri || getRankingUpToWK)(_triSel, wk);
     var pot = (window.getPotTriFiltrado) ? window.getPotTriFiltrado(_triSel, wk) : getPotTri(wk);
-    renderRows('mt-tri', ranking, pot, true);
+    var prevRankingTri = wk>1 ? (window.getRankingTri || getRankingUpToWK)(_triSel, wk-1) : [];
+    renderRows('mt-tri', ranking, pot, true, prevRankingTri);
     updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
   };
 
@@ -3834,7 +3863,7 @@ body.mobile-mode #libwarn { display: none !important; }
       img.onerror = function(){ this.parentNode.textContent = INITIALS[p]; };
       av.appendChild(img);
       row.innerHTML =
-        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>';
+        '<div id="'+prefix+'-pos-'+p+'" style="width:26px;text-align:right;flex-shrink:0;"></div>'+'<div id="'+prefix+'-delta-'+p+'" style="width:18px;text-align:center;flex-shrink:0;font-size:9px;font-weight:900;line-height:1;align-self:center;"></div>';
       row.appendChild(av);
       var barOuter = document.createElement('div');
       barOuter.style.cssText = 'flex:1;height:39px;background:rgba(255,255,255,0.03);border-radius:6px;position:relative;overflow:hidden;';
@@ -3847,7 +3876,7 @@ body.mobile-mode #libwarn { display: none !important; }
     });
   }
 
-  function renderRows(prefix, ranking, pot, animate){
+  function renderRows(prefix, ranking, pot, animate, prevRanking){
     var maxPts = Math.max(ranking[0]?ranking[0].pts:1, 1);
     ranking.forEach(function(r, idx){
       var pct = r.pts>0 ? Math.max(Math.round((r.pts/maxPts)*100), 25) : 0;
@@ -3875,6 +3904,7 @@ body.mobile-mode #libwarn { display: none !important; }
       }
       if(row) row.style.order = idx;
       if(avEl) avEl.style.borderColor = avBorder(idx);
+      _applyDelta(prefix, r.name, idx, prevRanking);
     });
   }
 
@@ -3952,7 +3982,11 @@ body.mobile-mode #libwarn { display: none !important; }
     if(pill) pill.textContent = 'WK ' + wk;
     var ranking = getRankingMes(mtMesCur, wk);
     var pot = getPotMes(mtMesCur, wk);
-    renderRows('mt-mes', ranking, pot, true);
+    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wksMes = _wkMesMap[mtMesCur]||[];
+    var _prevWkMes = _wksMes.indexOf(wk)>0 ? _wksMes[_wksMes.indexOf(wk)-1] : null;
+    var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
+    renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
   };
 
@@ -3968,7 +4002,11 @@ body.mobile-mode #libwarn { display: none !important; }
     if(pill) pill.textContent = 'WK ' + maxWk;
     var ranking = getRankingMes(mes, maxWk);
     var pot = getPotMes(mes, maxWk);
-    renderRows('mt-mes', ranking, pot, true);
+    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wksMes2 = _wkMesMap2[mes]||[];
+    var _prevWk2 = _wksMes2.indexOf(maxWk)>0 ? _wksMes2[_wksMes2.indexOf(maxWk)-1] : null;
+    var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
+    renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
   };
 
@@ -8826,32 +8864,55 @@ function initMiniCombos(){
  setTimeout(function(){ if(sels.tri && sels.tri.value) { (window.renderMini||renderMini)('trimestre', +sels.tri.value); if(typeof window.mtTriSetWK==='function'){ var _mxWk=Math.max.apply(null,RAW.filter(function(r){return +r.trimestre===+sels.tri.value;}).map(function(r){return +r.wk||0;})); window.mtTriSetWK(_mxWk||13); } } }, 500);
 }
 
-function renderMini(per, val){
- 
- var _key = '_lastRender_' + per;
- var now = Date.now();
- if (window[_key] && now - window[_key] < 30) return;
- window[_key] = now;
- const elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
- const target = document.getElementById(elId);
- if(!target) return;
- let rows = [];
- if(per==='semana'){ rows = RAW.filter(r=>+r.wk===+val); }
- else if(per==='mes'){ rows = RAW.filter(r=>+r.mes===+val); }
- else if(per==='trimestre'){ rows = RAW.filter(r=>+r.trimestre===+val); }
-
- 
- const picks = selectedPlayers(); if(picks.length) rows = rows.filter(r=>picks.includes(r.jogador));
-
- const agg = aggregate(rows); 
- const top = agg.slice(0,5);
- target.innerHTML = top.map((r,i)=> miniRow(i+1, r.jogador, r.pontos)).join('');
-}
-
-function miniRow(pos, name, pontos){
+function miniRow(pos, name, pontos, delta){
  const badge = pos===1? '🥇' : pos===2? '🥈' : pos===3? '🥉' : pos+'.';
  const delay = ((pos-1) * 0.07).toFixed(2);
- return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name">${name}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+ let arrowHtml = '';
+ if(delta && delta!==0){
+  const col = delta>0?'#22c55e':'#ef4444';
+  const sym = delta>0?'▲'+delta:'▼'+Math.abs(delta);
+  arrowHtml = `<span style="font-size:9px;font-weight:900;color:${col};margin-left:3px;flex-shrink:0;">${sym}</span>`;
+ }
+ return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;">${name}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+}
+
+function renderMini(per, val){
+ 
+var _key = '_lastRender_' + per;
+var now = Date.now();
+if (window[_key] && now - window[_key] < 30) return;
+window[_key] = now;
+const elId = per==='semana' ? 'mini-wk-list' : per==='mes' ? 'mini-mes-list' : 'mini-tri-list';
+const target = document.getElementById(elId);
+if(!target) return;
+let rows = [];
+if(per==='semana'){ rows = RAW.filter(r=>+r.wk===+val); }
+else if(per==='mes'){ rows = RAW.filter(r=>+r.mes===+val); }
+else if(per==='trimestre'){ rows = RAW.filter(r=>+r.trimestre===+val); }
+
+ 
+const picks = selectedPlayers(); if(picks.length) rows = rows.filter(r=>picks.includes(r.jogador));
+
+const agg = aggregate(rows);
+const top = agg.slice(0,5);
+// Delta: ranking anterior (WK-1 dentro do mesmo período)
+let prevRowsMini = [];
+if(per==='mes' || per==='trimestre'){
+  const maxWkMini = rows.length ? Math.max(...rows.map(r=>+r.wk||0)) : 0;
+  const prevWkMini = maxWkMini > 1 ? maxWkMini - 1 : 0;
+  if(prevWkMini > 0){
+    let rPrev = per==='mes' ? RAW.filter(r=>+r.mes===+val && +r.wk<=prevWkMini)
+                            : RAW.filter(r=>+r.trimestre===+val && +r.wk<=prevWkMini);
+    prevRowsMini = aggregate(rPrev).slice(0,9);
+  }
+}
+const prevPosMapMini = {};
+prevRowsMini.forEach((r,i)=>{ prevPosMapMini[r.jogador]=i+1; });
+target.innerHTML = top.map((r,i)=>{
+  const pp = prevPosMapMini[r.jogador];
+  const diff = (pp!==undefined && pp!==(i+1)) ? pp-(i+1) : 0;
+  return miniRow(i+1, r.jogador, r.pontos, diff);
+}).join('');
 }
 
 function initChampCombos(){
