@@ -4045,7 +4045,8 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
     if(slider) slider.value = wk;
     var ranking = getRankingUpToWK(wk);
     var pot = getPotTri(wk);
-    renderRows('mt-tri', ranking, pot, true);
+    var _prevRkTri4=mtTriCur>1?(window.getRankingTri||getRankingUpToWK)(_triSel,mtTriCur-1):[];
+    renderRows('mt-tri', ranking, pot, true, _prevRkTri4);
     updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
   };
 
@@ -4112,7 +4113,10 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
     if(_sliderAno){ _sliderAno.max = _maxWK; _sliderAno.value = _maxWK; }
     // Renderizar com dados atuais
     var rMes = getRankingMes(_mesAtual, _maxWK);
-    window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false);
+    var _wkMesMapI={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wksMesI=_wkMesMapI[_mesAtual]||[]; var _prevWkMesI=_wksMesI.indexOf(_maxWK)>0?_wksMesI[_wksMesI.indexOf(_maxWK)-1]:null;
+    var _prevRkMesI=_prevWkMesI?getRankingMes(_mesAtual,_prevWkMesI):[];
+    window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false, _prevRkMesI);
     window.updatePrizes('mini-mes-prizes','mini-mes-rule', rMes, getPotMes(_mesAtual, _maxWK));
     // Garantir que o select mini-tri está no trimestre correto ANTES de renderizar
     var _selTri = document.getElementById('mini-tri');
@@ -4122,7 +4126,8 @@ function _applyDelta(prefix, name, currIdx, prevRanking){
     if(_sliderTri){ _sliderTri.value = _maxWkDoTri; }
     var rTri = (window.getRankingTri || getRankingTri)(_triAtual, _maxWkDoTri);
     var _potTri = (window.getPotTriFiltrado || getPotTriFiltrado)(_triAtual, _maxWkDoTri);
-    window.renderRows('mt-tri', rTri, _potTri, false);
+    var _prevRkTriI=_maxWkDoTri>1?(window.getRankingTri||getRankingTri)(_triAtual,_maxWkDoTri-1):[];
+    window.renderRows('mt-tri', rTri, _potTri, false, _prevRkTriI);
     window.updatePrizes('mini-tri-prizes','mini-tri-rule', rTri, _potTri);
   }
 
@@ -8846,7 +8851,8 @@ function initMiniCombos(){
   // Renderizar diretamente com filtro de trimestre (sem passar por mtTriSetWK)
   var _rTri = (window.getRankingTri || getRankingTri)(_triSel, _maxWkTri);
   var _pTri = window.getPotTriFiltrado ? window.getPotTriFiltrado(_triSel, _maxWkTri) : getPotTri(_maxWkTri);
-  if(window.renderRows) window.renderRows('mt-tri', _rTri, _pTri, false);
+  var _prevRk8849=window._lastTriWK&&window._lastTriWK>1?(window.getRankingTri||function(){return[];})(window._lastTriSel||3,window._lastTriWK-1):[];
+  if(window.renderRows) window.renderRows('mt-tri', _rTri, _pTri, false, _prevRk8849);
   if(window.updatePrizes) window.updatePrizes('mini-tri-prizes','mini-tri-rule', _rTri, _pTri);
   // Atualizar slider e pill
   var _pill = document.getElementById('mt-tri-pill');
@@ -10740,7 +10746,8 @@ document.addEventListener('DOMContentLoaded', function(){
         var _rTri = window.getRankingTri(triVal, lastWk);
         var _pTri = window.getPotTriFiltrado(triVal, lastWk);
         if(typeof window.renderRows === 'function'){
-          window.renderRows('mt-tri', _rTri, _pTri, false);
+          var _prevRkT10=_wk&&_wk>1?(window.getRankingTri||function(){return[];})(1,_wk-1):[];
+          window.renderRows('mt-tri', _rTri, _pTri, false, _prevRkT10);
           window.updatePrizes('mini-tri-prizes','mini-tri-rule', _rTri, _pTri);
         }
         // Atualizar slider e pill
