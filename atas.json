@@ -984,5 +984,46 @@
       "Heron": "7º lugar, zero rebuy, 2 KOs, 8.200 pontos. Noite discreta depois do recorde negativo da semana passada. Zero rebuy é progresso. O T3 ainda é liderado por ele — por apenas 2.498 pontos sobre Israel.",
       "Rafa": "8º lugar, 3 rebuys, zero KOs, 1.500 pontos. A semana de Rafa que ninguém quer ter: pagou três vezes sem eliminação e saiu em último entre os presentes."
     }
+  },
+  "WK38": {
+    "titulo": "12 títulos: Heron empata o recorde histórico de Grey enquanto Grey abre vantagem no ano",
+    "subtitulo": "A noite do blefe épico, da ida ao banheiro que custou 13000 fichas ao Magu e do record empatado",
+    "clima": 5,
+    "intro": "A WK38 de 23 de setembro vai ser lembrada por muita coisa. Pelo blefe mais caro do Magu em meses. Pela previsão de Israel que se realizou em tempo real. Pela mão de 7-2 que Marcus acertou no river. Pela trinca de 5 que ressuscitou o Charlito. E, acima de tudo, pelo número que pausou tudo quando apareceu no placar: 12.\n\nDoze vitórias no ano. Heron empatou o recorde histórico do Plaza Mediterrâneo, estabelecido por ninguém menos que Grey Galináceo em 2024. Israel, que é o próprio Grey, estava sentado na mesa quando o recorde dele foi igualado pela frente dos seus olhos. O poker tem um senso de humor muito refinado.\n\nE enquanto Heron igualava o record de Israel, Israel devolvia na mesma moeda: abriu a maior vantagem anual da temporada. O gap que era 25 mil na semana passada foi para 50 mil numa única noite. Dois homens na mesa, dois legados em disputa, e o feltro vermelho do Plaza registrando tudo sem cerimônia.\n\nA HISTÓRIA DA IDA AO BANHEIRO:\n\nEm algum momento da noite, Heron levantou da cadeira. Banheiro. Coisa simples, direito humano básico. Magu, com a bondade genética de quem nasceu pra criar situações, anunciou em voz alta que Heron seria o botão na próxima mão e que ele tinha tempo de não desperdiçar uma boa posição na mesa para jogar.\n\nHeron voltou.\n\nIsrael, com a serenidade de quem já viu esse filme antes, olhou pra mesa e disse: \"Vai fazer o cara jogar e vai se arrepender. Vai lembrar dessa mão por semanas.\"\n\nO que aconteceu a seguir foi exatamente o que Israel disse que ia acontecer.\n\nA MÃO DA NOITE:\n\nHeron sentou. Magu começou a subir. Pressão cirúrgica, apostas crescendo, leitura de mesa — Magu fez uma performance de quem tem alguma coisa. Heron foi pagando, cauteloso mas presente. No river, com 4800 fichas sobrando, Magu foi all-in. Encerrou o time bank de Heron. Três vezes. Heron pensou de verdade.\n\nChamou. Com top pair de 10.\n\nMagu virou: nada. Sem par, sem draw, sem absolutamente nada que justificasse uma única ficha apostada. Saiu puto. E saiu em último, com 5 rebuys no currículo, 600 míseros pontos no bolso e a certeza de que Israel estava certo lá atrás. Heron levou o pot. E mais tarde levou o título.\n\nA lição: nunca chame alguém de volta do banheiro pra uma mão que você não tem.\n\nA ÚLTIMA MÃO:\n\nO encerramento foi à altura da noite. Marcus com 7-2 offsuit — a pior mão do poker — acertou o 7 no river e levou o pote secundário com a naturalidade de quem acha que isso é normal. Charles, que estava na mão com trinca de 5, recuperou boa parte das fichas e terminou com quase 9000, saindo em 4º com dignidade. Charlito Baguette não desiste nunca.",
+    "maoTitulo": "TOP 10 pra cima do blefe de Magulets",
+    "maoDesc": "A mão que será lembrada por bastante tempo. O hero call histórico que levou Heron ao 12º ouro no ano, igualando o recorde anual de 12 vitórias num único ano (mas ainda restam 12 semanas e ele pode ultrapassar essa marca e se isolar)",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Vai se arrepender. Vai lembrar dessa mão por semanas.",
+        "autor": "Israel, antes da mão do Magu"
+      },
+      {
+        "fala": "...",
+        "autor": "Magu, depois de virar nada no river"
+      },
+      {
+        "fala": "12 vitórias. Empatou meu record.",
+        "autor": "Israel, com sentimentos misturados"
+      },
+      {
+        "fala": "Marcus ganhou um pote com 7",
+        "autor": "2 off. Isso é um sinal do universo.\" — A mesa, processando"
+      },
+      {
+        "fala": "\"Eu não tenho glande\" Magulets confundindo a cabeça da rola com o prepúcio kkkkkk",
+        "autor": ""
+      }
+    ],
+    "jogadores": {
+      "Heron": "1º lugar, 2 rebuys, 4 KOs, 29.450 fichas, 26.235 pontos. Voltou do banheiro, pagou o blefe do Magu com top pair de 10 e foi embora com o 12º título do ano. Empatou o record histórico de vitórias numa única temporada, que pertence ao Grey. Uma semana mais e fica isolado no topo de uma das estatísticas mais difíceis do Poker do Plaza",
+      "Israel": "2º lugar, zero rebuy, 3 KOs, 26.350 fichas, 26.205 pontos. Previu o desastre do Magu com precisão cirúrgica e ficou a 30 pontos de Heron no placar. Enquanto via o record ser igualado, dobrou a vantagem anual de 25 mil para 50 mil.",
+      "Marcus": "3º lugar, 1 rebuy, 3 KOs, 25.900 fichas, 22.570 pontos. Acertou o 7 no river com 7-2 off e ganhou o pote secundário da última mão com a cara de quem calculou tudo. Marcolino e as últimas mãos têm uma relação que vai além da estatística. Certeza que foi o velho que deu esse pote pra ele",
+      "Charles": "4º lugar, zero rebuy, 1 KO, 8.300 fichas, 16.590 pontos. Fez trinca de 5 na última mão e recuperou o suficiente pra fechar bem a noite. Charlito subiu para o 3º no T3, passando Magu num dos dias mais difíceis do Magulets.",
+      "Oscar": "5º lugar, 1 rebuy, 1 KO, 10.600 pontos. Noite dentro do esperado. Papito pontua e não sangra.",
+      "Pedro": "6º lugar, 2 rebuys, 1 KO, 7.100 pontos. Semana fraca para o líder de setembro, que vê Israel chegando no mês. Ainda lidera setembro com 72.140 pontos mas a vantagem reduziu.",
+      "Magu": "7º lugar, dealer da noite, 5 rebuys, 1 KO, 600 pontos. Foi de 30 mil de gap para Israel para 50 mil em uma noite. Chamou Heron de volta do banheiro, blefou all-in no river sem nada, perdeu, saiu em último, pagou cinco vezes. Uma noite que vai doer no ranking e na memória por semanas, como Israel havia previsto."
+    }
   }
 }
