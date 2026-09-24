@@ -3564,6 +3564,48 @@ body.mobile-mode #libwarn { display: none !important; }
   }
 
 
+
+/* ── Badge mês fechado + coroa ─────────────────────────────── */
+window._updateMesBadge = function(mes, wkMax){
+  var FIM_MESES=[0,4,8,12,17,21,25,30,34,38,43,47,52];
+  var maxWKG = wkMax || (window.RAW&&window.RAW.length ? Math.max.apply(null,window.RAW.map(function(r){return+r.wk||0;})) : 0);
+  var fechado = FIM_MESES[+mes]>0 && maxWKG>=FIM_MESES[+mes];
+  // Atualizar badge
+  var badgeEl = document.getElementById('mini-mes-status-badge');
+  if(badgeEl){
+    badgeEl.innerHTML = fechado
+      ? '<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">✅ Encerrado</span>'
+      : '<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento</span>';
+  }
+  // Coroa no 1º lugar do mt-mes-list (card visível)
+  var allPlayers=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+  allPlayers.forEach(function(p){
+    var row = document.getElementById('mt-mes-prow-'+p);
+    if(!row) return;
+    var crEl = document.getElementById('mt-mes-coroa-'+p);
+    if(fechado){
+      // Descobrir quem é o 1º (order:0)
+      if(row.style.order==='0'){
+        if(!crEl){
+          crEl = document.createElement('span');
+          crEl.id = 'mt-mes-coroa-'+p;
+          crEl.textContent = '👑';
+          crEl.style.cssText = 'position:absolute;top:2px;left:55px;font-size:13px;z-index:10;pointer-events:none;';
+          row.style.position='relative';
+          row.appendChild(crEl);
+        }
+        row.style.boxShadow='0 0 0 1.5px rgba(250,204,21,0.5),0 0 10px rgba(250,204,21,0.12)';
+        row.style.borderRadius='6px';
+      } else {
+        if(crEl) crEl.remove();
+        row.style.boxShadow='';
+      }
+    } else {
+      if(crEl) crEl.remove();
+      row.style.boxShadow='';
+    }
+  });
+};
 /* ── Delta arrow helper ─────────────────────────────────────── */
 window._applyDelta = function(prefix, name, currIdx, prevRanking){
   var el = document.getElementById(prefix+'-delta-'+name);
@@ -3723,6 +3765,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
     renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+    if(window._updateMesBadge) window._updateMesBadge(mtMesCur, wk);
   };
 
   window.mtMesSetMes = function(mes){
@@ -3743,6 +3786,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
     renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+    if(window._updateMesBadge) window._updateMesBadge(mes, maxWk);
   };
 
   window.mtMesTogglePlay = function(){
@@ -3990,6 +4034,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
     renderRows('mt-mes', ranking, pot, true, prevRanking);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+    if(window._updateMesBadge) window._updateMesBadge(mtMesCur, wk);
   };
 
   window.mtMesSetMes = function(mes){
@@ -4010,6 +4055,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
     renderRows('mt-mes', ranking, pot, true, prevRankingMes);
     updatePrizes('mini-mes-prizes', 'mini-mes-rule', ranking, pot);
+    if(window._updateMesBadge) window._updateMesBadge(mes, maxWk);
   };
 
   window.mtMesTogglePlay = function(){
@@ -4120,6 +4166,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var _prevRkMesI=_prevWkMesI?getRankingMes(_mesAtual,_prevWkMesI):[];
     window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false, _prevRkMesI);
     window.updatePrizes('mini-mes-prizes','mini-mes-rule', rMes, getPotMes(_mesAtual, _maxWK));
+    if(window._updateMesBadge) window._updateMesBadge(_mesAtual, _maxWK);
     // Garantir que o select mini-tri está no trimestre correto ANTES de renderizar
     var _selTri = document.getElementById('mini-tri');
     if(_selTri) _selTri.value = String(_triAtual);
@@ -8675,7 +8722,7 @@ function filterData(perOverride, valOverride){
  const per = perOverride || document.getElementById('periodo').value;
  const val = (valOverride!=null? valOverride : document.getElementById('granular').value);
  let rows = [];
- if(per==='semana'){ rows = RAW.filter(r=>String(r.wk)===String(val)); }
+ if(per==='semana'){ const _wkN=+String(val).replace('WK',''); rows = RAW.filter(r=>+r.wk===_wkN); }
  else if(per==='mes'){ rows = RAW.filter(r=>String(r.mes)===String(val)); }
  else if(per==='trimestre'){ rows = RAW.filter(r=>String(r.trimestre)===String(val)); }
  else { rows = RAW.filter(r=>String(r.ano)===String(val)); }
@@ -9039,7 +9086,7 @@ function renderChampions(){
  if(!pSel || !gSel) return;
  const per = pSel.value, val = gSel.value;
  let rows = [];
- if(per==='semana'){ rows = RAW.filter(r=>String(r.wk)===String(val)); }
+ if(per==='semana'){ const _wkN=+String(val).replace('WK',''); rows = RAW.filter(r=>+r.wk===_wkN); }
  else if(per==='mes'){ rows = RAW.filter(r=>String(r.mes)===String(val)); }
  else if(per==='trimestre'){ rows = RAW.filter(r=>String(r.trimestre)===String(val)); }
  else { rows = RAW.filter(r=>String(r.ano)===String(val)); }
