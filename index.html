@@ -46,6 +46,31 @@ button, [onclick], .chip, .mini-item, .card {
   transform: translateZ(0);
   backface-visibility: hidden;
 }
+
+/* ── Status dot (ping) ─────────────────────────────── */
+#status-dot {
+  position:relative;display:inline-flex;align-items:center;
+  justify-content:center;width:10px;height:10px;flex-shrink:0;
+}
+#status-dot .dot-core {
+  width:8px;height:8px;border-radius:50%;
+  background:#22c55e;display:block;position:relative;z-index:1;
+  transition:background 0.4s;
+}
+#status-dot.desatualizado .dot-core { background:#6b7280; }
+#status-dot .dot-ring {
+  position:absolute;inset:-3px;border-radius:50%;
+  border:2px solid #22c55e;opacity:0;
+  animation:dot-ping 1.8s cubic-bezier(0,0,0.2,1) infinite;
+}
+#status-dot.desatualizado .dot-ring {
+  border-color:#6b7280;animation:none;
+}
+@keyframes dot-ping {
+  0%   { transform:scale(1);   opacity:0.8; }
+  80%  { transform:scale(2.2); opacity:0;   }
+  100% { transform:scale(2.2); opacity:0;   }
+}
 </style>
 
 <link rel="preconnect" href="https://raw.githubusercontent.com"/>
@@ -232,6 +257,7 @@ body.perfil-open #mobile-topbar {
     *{box-sizing:border-box}
     html { overflow-y: scroll; overflow-x: hidden; background:#060d1a; }
     body{
+      padding-top: env(safe-area-inset-top, 0px);
       margin:0;color:var(--text);font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial;
       -webkit-tap-highlight-color:transparent;touch-action:pan-y;
       -webkit-overflow-scrolling:touch;overscroll-behavior-y:none;
@@ -240,7 +266,7 @@ body.perfil-open #mobile-topbar {
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
       background-size: cover, 240px 240px;
     }
-    header{position:relative;padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;transition:background 0.35s ease,border-color 0.35s ease;}
+    header{position:relative;padding:12px 24px;padding-top:12px;border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;transition:background 0.35s ease,border-color 0.35s ease;}
     h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
     #libwarn{display:none;margin-top:8px;padding:8px 10px;border:1px dashed #f59e0b;border-radius:10px;background:rgba(245,158,11,.08);color:#fbbf24;font-size:13px}
     .container{padding:16px;max-width:2400px;margin:0 auto}
@@ -2568,6 +2594,7 @@ document.addEventListener('DOMContentLoaded', function(){
   <div style="font-size:16px;font-weight:800;color:#e6edf3;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Poker do Plaza</div>
   <div style="font-size:11px;color:#4a9ef5;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;white-space:nowrap;">Dashboard 2026</div>
  </div>
+ <div id="status-dot" title="Status de atualização"><span class="dot-core"></span><span class="dot-ring"></span></div>
 </div>
 <!-- Botões: compactos (28px), flex:0 0 auto, nunca quebram linha -->
 <div style="display:flex;gap:4px;align-items:center;flex:0 0 auto;flex-shrink:0;margin-left:8px;">
@@ -2714,7 +2741,6 @@ document.addEventListener('DOMContentLoaded', function(){
 body.mobile-mode #libwarn { display: none !important; }
 </style>
 </header>
-<div id="dashboard-status-bar" style="position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;font-size:10px;font-weight:700;letter-spacing:.2px;overflow:hidden;max-height:0;transition:max-height 0.3s,padding 0.3s;"></div>
 
 <!-- Barra mobile simples -->
 <div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:env(safe-area-inset-top) 16px 0;align-items:flex-end;justify-content:space-between;gap:10px;min-height:82px;height:calc(82px + env(safe-area-inset-top));box-shadow:0 3px 24px rgba(0,0,0,0.6);-webkit-">
@@ -2778,7 +2804,7 @@ body.mobile-mode #libwarn { display: none !important; }
 
 <select id="premioPlayer" style="display:none"></select>
 
-<div class="card" id="card-dados" style="display:flex;align-items:center;gap:8px;padding:10px 14px;">
+<div class="card" id="card-dados" style="display:none !important;align-items:center;gap:8px;padding:10px 14px;">
 <button class="btn" id="btn-load" style="white-space:nowrap;font-size:12px;padding:6px 12px;">📂 Carregar XLSX</button>
 <button id="btn-save-html" onclick="salvarHTML()" title="Salvar dashboard" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;border:none;border-radius:10px;padding:6px 14px;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">💾 Salvar</button>
 <button onclick="abrirConfigGH()" title="Configurar GitHub Token" style="background:#1e2e46;color:#8a9ab8;border:none;border-radius:8px;padding:5px 8px;font-size:12px;cursor:pointer;flex-shrink:0;line-height:1;">⚙️</button>
@@ -2795,7 +2821,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <option value="rebuys">Rebuys</option>
 </select>
 
-<div class="card">
+<div class="card" id="card-chips-filtro" style="display:none !important;">
 <div class="card-title">Filtro de Jogadores</div>
 <div id="chips-parent" style="display:flex;flex-direction:column;gap:8px;">
 <div class="chips" id="chips" style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;"></div>
@@ -3573,68 +3599,35 @@ body.mobile-mode #libwarn { display: none !important; }
 /* ── Status atualização + progresso períodos ────────────── */
 window._updateDashboardStatus = function(){
   var raw = (window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
-  if(!raw.length) return;
+  var dot = document.getElementById('status-dot');
+  if(!dot) return;
+  if(!raw.length){ dot.className='desatualizado'; dot.title='Sem dados'; return; }
   var maxWK = Math.max.apply(null, raw.map(function(r){return+r.wk||0;}));
   var lastRow = raw.filter(function(r){return+r.wk===maxWK;})[0];
   var lastDate = lastRow ? (lastRow.data_wk||lastRow.data||lastRow.date||'') : '';
-
-  // Encontrar a última quarta-feira que aconteceu
-  // Jogo é quarta à noite, termina ~1:30am quinta
-  // Então: quinta (após 1:30am) já conta como "quarta jogada"
-  // Usamos: a última quarta-feira cujo início já passou
+  // Encontrar última quarta-feira encerrada
   var hoje = new Date();
-  var dow = hoje.getDay(); // 0=dom,1=seg,2=ter,3=qua,4=qui,5=sex,6=sab
-  // Quantos dias atrás foi a última quarta?
-  // Se hoje=qua(3): 0 dias atrás (hoje). Se qui(4):1. Sex(5):2. Sab(6):3.
-  // Dom(0):4. Seg(1):5. Ter(2):6.
-  // Quantos dias atrás foi a última quarta JÁ ENCERRADA
-  // Quarta (3) ainda está acontecendo, só vira "passada" na quinta
-  // Dom=0:5, Seg=1:6, Ter=2:0(nunca), Qua=3:7(semana anterior), Qui=4:1, Sex=5:2, Sab=6:3
-  // Simplificado: a última quarta ANTES de hoje (não incluindo hoje se hoje for quarta)
-  var diasAteQua = dow === 3 ? 7   // hoje é quarta: última quarta foi há 7 dias
-                 : dow > 3  ? dow - 3    // qui=1, sex=2, sab=3
-                 : dow + 4; // dom=4, seg=5, ter=6
+  var dow = hoje.getDay();
+  var diasAteQua = dow===3?7:dow>3?dow-3:dow+4;
   var ultimaQua = new Date(hoje);
-  ultimaQua.setDate(hoje.getDate() - diasAteQua);
+  ultimaQua.setDate(hoje.getDate()-diasAteQua);
   ultimaQua.setHours(0,0,0,0);
-
-  // Verificar se a data da última WK no ledger >= última quarta
   var atualizado = false;
   if(lastDate){
-    var parts = lastDate.split(/[\/\-]/);
+    var _dp=lastDate.split(/[\/\-]/);
     var dLastWK;
-    if(parts[0].length===4){ dLastWK = new Date(+parts[0],+parts[1]-1,+parts[2]); }
-    else { dLastWK = new Date(+parts[2],+parts[1]-1,+parts[0]); }
-    dLastWK.setHours(0,0,0,0);
-    atualizado = dLastWK >= ultimaQua;
-  }
-
-  var bar = document.getElementById('dashboard-status-bar');
-  if(!bar) return;
-  bar.style.maxHeight='30px'; bar.style.padding='3px 14px'; bar.style.borderBottom='1px solid rgba(255,255,255,0.05)';
-  // Formatar data para DD/MM/AAAA
-  var displayDate = '';
-  if(lastDate){
-    var _dp = lastDate.split(/[\/\-]/);
     if(_dp.length===3){
-      displayDate = _dp[0].length===4 ? _dp[2]+'/'+_dp[1]+'/'+_dp[0] : lastDate;
+      dLastWK=_dp[0].length===4?new Date(+_dp[0],+_dp[1]-1,+_dp[2]):new Date(+_dp[2],+_dp[1]-1,+_dp[0]);
+      dLastWK.setHours(0,0,0,0);
+      atualizado=dLastWK>=ultimaQua;
     }
   }
   if(atualizado){
-    bar.innerHTML = '<span style="color:#4ade80;font-size:13px;">✅</span>'
-      +'<span style="color:#4ade80;">Atualizado</span>'
-      +'<span style="color:rgba(255,255,255,0.25);">·</span>'
-      +'<span style="color:rgba(255,255,255,0.6);">WK'+maxWK+'</span>'
-      +(displayDate?'<span style="color:rgba(255,255,255,0.25);">·</span>'
-        +'<span style="color:rgba(255,255,255,0.45);">'+displayDate+'</span>':'');
-    bar.style.background='rgba(34,197,94,0.04)';
+    dot.className='';
+    dot.title='✅ Atualizado · WK'+maxWK+(lastDate?' · '+lastDate:'');
   } else {
-    bar.innerHTML = '<span style="color:#fbbf24;font-size:13px;">⚠️</span>'
-      +'<span style="color:#fbbf24;">Desatualizado</span>'
-      +'<span style="color:rgba(255,255,255,0.25);">·</span>'
-      +'<span style="color:rgba(255,255,255,0.5);">Última: WK'+maxWK
-        +(displayDate?' · '+displayDate:'')+'</span>';
-    bar.style.background='rgba(251,191,36,0.05)';
+    dot.className='desatualizado';
+    dot.title='⚠️ Desatualizado · Última: WK'+maxWK+(lastDate?' · '+lastDate:'');
   }
 };
 
@@ -8681,6 +8674,7 @@ function initSelectors(){
 }
 
 function afterDataLoaded(){
+  setTimeout(function(){ if(window._updateDashboardStatus) window._updateDashboardStatus(); }, 1200);
  try{ (RAW||[]).forEach(r=>{ r.wk = wkNum(r.wk); }); }catch(e){}
  JOGADORES = Array.from(new Set(RAW.map(r=>r.jogador))).filter(Boolean);
  buildPlayerChips(JOGADORES);
