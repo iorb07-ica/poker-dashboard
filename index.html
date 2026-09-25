@@ -10996,27 +10996,19 @@ document.addEventListener('DOMContentLoaded', function(){
     };
     if(sels.tri) sels.tri.onchange = function(){
       state.tri = sels.tri.value;
-      window.renderMini('trimestre', +sels.tri.value);
       var triVal = +sels.tri.value;
       var triWks = (window.RAW||[]).filter(function(r){ return +r.trimestre===triVal; }).map(function(r){ return +r.wk||0; });
       var lastWk = triWks.length ? Math.max.apply(null, triWks) : 1;
-      // Renderizar diretamente com o trimestre correto
-      if(window.getRankingTri && window.getPotTriFiltrado){
-        var _rTri = window.getRankingTri(triVal, lastWk);
-        var _pTri = window.getPotTriFiltrado(triVal, lastWk);
-        if(typeof window.renderRows === 'function'){
-          var _prevRkT10=_wk&&_wk>1?(window.getRankingTri||function(){return[];})(1,_wk-1):[];
-          window.renderRows('mt-tri', _rTri, _pTri, false, _prevRkT10);
-          window.updatePrizes('mini-tri-prizes','mini-tri-rule', _rTri, _pTri);
-        }
-        // Atualizar slider e pill
-        var _pill = document.getElementById('mt-tri-pill');
-        var _slider = document.getElementById('mt-tri-slider');
-        if(_pill) _pill.textContent = 'WK '+lastWk;
-        if(_slider){ _slider.value = lastWk; }
-      } else if(typeof window.mtTriSetWK === 'function'){
+      // Atualizar slider antes de chamar mtTriSetWK
+      var _slider = document.getElementById('mt-tri-slider');
+      if(_slider){ _slider.max = Math.max(lastWk, +_slider.max||52); _slider.value = lastWk; }
+      // Chamar mtTriSetWK que lê mini-tri e renderiza corretamente com setas
+      if(typeof window.mtTriSetWK === 'function'){
         window.mtTriSetWK(lastWk);
       }
+      // Badge e progresso
+      if(window._updateTriBadge) window._updateTriBadge(triVal);
+      if(window._updatePeriodProgress) window._updatePeriodProgress(null, lastWk, lastWk);
     };
 
     
