@@ -5821,8 +5821,7 @@ function tabNav(cardId){
 }
 
 (function(){
-  
-  var tabMap = [
+  var TAB_MAP = [
     { tab:'perfis',      id:'card-perfis' },
     { tab:'medalhas',    id:'card-medalhas-periodo' },
     { tab:'ranking',     id:'card-ranking-anual' },
@@ -5832,47 +5831,94 @@ function tabNav(cardId){
     { tab:'rivalidades', id:'card-rivalidades' },
   ];
 
+  var _currentTab = null;
+
   function setActive(tabKey){
-    // Só atualizar se o tabKey corresponde a um botão real na navbar
-    var exists = !!document.querySelector('.tab-item[data-tab="'+tabKey+'"]');
-    if(!exists) return;
-    document.querySelectorAll('.tab-item').forEach(function(btn){
-      btn.classList.toggle('active', btn.getAttribute('data-tab') === tabKey);
+    if(tabKey === _currentTab) return;
+    var btn = document.querySelector('.tab-item[data-tab="'+tabKey+'"]');
+    if(!btn) return;
+    _currentTab = tabKey;
+    document.querySelectorAll('.tab-item').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-tab') === tabKey);
     });
   }
 
-  
+  // Clique nas abas — atualiza active e navega
   document.addEventListener('click', function(e){
     var btn = e.target.closest('.tab-item');
     if(!btn) return;
     var tab = btn.getAttribute('data-tab');
-    if(!tab) return;
-    if(tab === 'feedback'){
-      
-      btn.classList.add('active');
-      return;
-    }
-    
+    if(!tab || tab === 'feedback') return;
     setActive(tab);
   });
 
-  function onScroll(){
-    if(_tabScrolling) return;
-    var scrollEl = document.scrollingElement || document.documentElement;
-    var scrollTop = scrollEl.scrollTop || window.pageYOffset || 0;
-    var mid = scrollTop + window.innerHeight * 0.4;
-    var active = null;
-    tabMap.forEach(function(t){
-      var el = document.getElementById(t.id);
-      if(!el) return;
-      var top = el.getBoundingClientRect().top + scrollTop;
-      if(top <= mid) active = t.tab;
+  // IntersectionObserver: mais confiável no mobile que scroll events
+  function initScrollSpy(){
+    // Ativar a primeira aba por padrão
+    setActive('perfis');
+
+    if(!window.IntersectionObserver){
+      // Fallback: scroll event clássico
+      window.addEventListener('scroll', function(){
+        if(_tabScrolling) return;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || 0;
+        var mid = scrollTop + window.innerHeight * 0.4;
+        var found = null;
+        TAB_MAP.forEach(function(t){
+          var el = document.getElementById(t.id);
+          if(!el) return;
+          var top = el.getBoundingClientRect().top + scrollTop;
+          if(top <= mid) found = t.tab;
+        });
+        if(found) setActive(found);
+      }, {passive:true});
+      return;
+    }
+
+    // Rastrear qual card está mais perto do topo da viewport
+    var visibleTops = {};
+
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        visibleTops[entry.target.id] = entry.isIntersecting
+          ? entry.boundingClientRect.top
+          : (entry.boundingClientRect.top < 0 ? -Infinity : Infinity);
+      });
+
+      // Encontrar o card visível cujo topo está mais próximo do topo da tela
+      var best = null;
+      var bestScore = Infinity;
+      TAB_MAP.forEach(function(t){
+        var el = document.getElementById(t.id);
+        if(!el) return;
+        var rect = el.getBoundingClientRect();
+        // Card que está parcialmente visível e mais próximo do topo
+        if(rect.bottom > 0 && rect.top < window.innerHeight){
+          var score = Math.abs(rect.top);
+          if(rect.top <= window.innerHeight * 0.5) score = rect.top < 0 ? -rect.top : rect.top;
+          if(score < bestScore || best === null){
+            bestScore = score;
+            best = t.tab;
+          }
+        }
+      });
+      if(best && !_tabScrolling) setActive(best);
+    }, {
+      threshold: [0, 0.05, 0.1, 0.25, 0.5],
+      rootMargin: '0px 0px -30% 0px'
     });
-    if(active) setActive(active);
+
+    TAB_MAP.forEach(function(t){
+      var el = document.getElementById(t.id);
+      if(el) observer.observe(el);
+    });
   }
 
-  window.addEventListener('scroll', onScroll, { passive:true });
-  setTimeout(onScroll, 800);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', function(){ setTimeout(initScrollSpy, 600); });
+  } else {
+    setTimeout(initScrollSpy, 600);
+  }
 })();
 </script>
 
