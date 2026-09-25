@@ -5884,18 +5884,19 @@ function tabNav(cardId){
 (function(){
   
   var tabMap = [
-    { tab:'perfis',   id:'card-perfis' },
-    { tab:'medalhas', id:'card-medalhas-periodo' },
-    { tab:'ranking',  id:'card-ranking-anual' },
-    { tab:'calc',     id:'card-calculadora' },
-    { tab:'saldo',    id:'card-saldo-financeiro' },
-    { tab:'atas',     id:'card-atas' },
-    { tab:'duelo',    id:'card-duelo' },
-    { tab:'voz',      id:'card-voz' },
-    { tab:'roadmap',  id:'card-roadmap' },
+    { tab:'perfis',      id:'card-perfis' },
+    { tab:'medalhas',    id:'card-medalhas-periodo' },
+    { tab:'ranking',     id:'card-ranking-anual' },
+    { tab:'calc',        id:'card-calculadora' },
+    { tab:'saldo',       id:'card-saldo-financeiro' },
+    { tab:'atas',        id:'card-atas' },
+    { tab:'rivalidades', id:'card-rivalidades' },
   ];
 
   function setActive(tabKey){
+    // Só atualizar se o tabKey corresponde a um botão real na navbar
+    var exists = !!document.querySelector('.tab-item[data-tab="'+tabKey+'"]');
+    if(!exists) return;
     document.querySelectorAll('.tab-item').forEach(function(btn){
       btn.classList.toggle('active', btn.getAttribute('data-tab') === tabKey);
     });
