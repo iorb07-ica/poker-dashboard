@@ -240,7 +240,7 @@ body.perfil-open #mobile-topbar {
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
       background-size: cover, 240px 240px;
     }
-    header{padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;transition:background 0.35s ease,border-color 0.35s ease;}
+    header{position:relative;padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));padding-bottom:24px;border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;position-type:relative;transition:background 0.35s ease,border-color 0.35s ease;}
     h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
     #libwarn{display:none;margin-top:8px;padding:8px 10px;border:1px dashed #f59e0b;border-radius:10px;background:rgba(245,158,11,.08);color:#fbbf24;font-size:13px}
     .container{padding:16px;max-width:2400px;margin:0 auto}
@@ -2713,8 +2713,7 @@ document.addEventListener('DOMContentLoaded', function(){
 @media (max-width: 768px) { #libwarn { display: none !important; } }
 body.mobile-mode #libwarn { display: none !important; }
 </style>
-</header>
-<div id="dashboard-status-bar" style="display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 14px;font-size:11px;font-weight:700;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,0.05);min-height:24px;"></div>
+<div id="dashboard-status-bar" style="position:absolute;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;gap:5px;padding:2px 14px;font-size:10px;font-weight:700;letter-spacing:.2px;"></div></header>
 
 <!-- Barra mobile simples -->
 <div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:env(safe-area-inset-top) 16px 0;align-items:flex-end;justify-content:space-between;gap:10px;min-height:82px;height:calc(82px + env(safe-area-inset-top));box-shadow:0 3px 24px rgba(0,0,0,0.6);-webkit-">
@@ -3517,7 +3516,7 @@ body.mobile-mode #libwarn { display: none !important; }
   var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
   var PERC=[0.40,0.30,0.15,0.10,0.05];
   var MES_NOMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
   var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
 
   function getAvatarUrl(n){ return (window.photoFor && window.photoFor(n)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
@@ -3575,7 +3574,7 @@ window._updateDashboardStatus = function(){
   if(!raw.length) return;
   var maxWK = Math.max.apply(null, raw.map(function(r){return+r.wk||0;}));
   var lastRow = raw.filter(function(r){return+r.wk===maxWK;})[0];
-  var lastDate = lastRow ? (lastRow.data||lastRow.date||'') : '';
+  var lastDate = lastRow ? (lastRow.data_wk||lastRow.data||lastRow.date||'') : '';
 
   // Encontrar a última quarta-feira que aconteceu
   // Jogo é quarta à noite, termina ~1:30am quinta
@@ -3629,7 +3628,7 @@ window._updateDashboardStatus = function(){
 };
 
 window._updatePeriodProgress = function(mes, triWK, anoWK){
-  var WK_MES={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
+  var WK_MES={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
   var WK_TRI={1:[1,2,3,4,5,6,7,8,9,10,11,12],2:[13,14,15,16,17,18,19,20,21,22,23,24,25],3:[26,27,28,29,30,31,32,33,34,35,36,37,38,39],4:[40,41,42,43,44,45,46,47,48,49,50]};
   var raw=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
   var maxWKGlobal=raw.length?Math.max.apply(null,raw.map(function(r){return+r.wk||0;})):0;
@@ -3662,7 +3661,7 @@ window._updatePeriodProgress = function(mes, triWK, anoWK){
 };
 /* ── Badge mês fechado + coroa ─────────────────────────────── */
 window._updateMesBadge = function(mes, wkMax){
-  var FIM_MESES=[0,4,8,12,17,21,25,30,34,38,43,47,52];
+  var FIM_MESES=[0,4,8,12,17,21,25,30,34,39,43,47,52];
   var maxWKG = wkMax || (window.RAW&&window.RAW.length ? Math.max.apply(null,window.RAW.map(function(r){return+r.wk||0;})) : 0);
   var fechado = FIM_MESES[+mes]>0 && maxWKG>=FIM_MESES[+mes];
   // Atualizar badge
@@ -3672,34 +3671,19 @@ window._updateMesBadge = function(mes, wkMax){
       ? '<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">✅ Encerrado</span>'
       : '<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento</span>';
   }
-  // Coroa no 1º lugar do mt-mes-list (card visível)
-  var allPlayers=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
-  allPlayers.forEach(function(p){
-    var row = document.getElementById('mt-mes-prow-'+p);
+  // Borda dourada no 1º lugar (sem coroa) quando mês encerrado
+  var allP=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+  allP.forEach(function(p){
+    var row=document.getElementById('mt-mes-prow-'+p);
     if(!row) return;
-    var crEl = document.getElementById('mt-mes-coroa-'+p);
-    if(fechado){
-      // Descobrir quem é o 1º (order:0)
-      if(row.style.order==='0'){
-        if(!crEl){
-          crEl = document.createElement('span');
-          crEl.id = 'mt-mes-coroa-'+p;
-          crEl.textContent = '👑';
-          crEl.style.cssText = 'position:absolute;top:2px;left:55px;font-size:13px;z-index:10;pointer-events:none;';
-          row.style.position='relative';
-          row.appendChild(crEl);
-        }
-        row.style.boxShadow='0 0 0 1.5px rgba(250,204,21,0.5),0 0 10px rgba(250,204,21,0.12)';
-        row.style.borderRadius='6px';
-      } else {
-        if(crEl) crEl.remove();
-        row.style.boxShadow='';
-      }
+    if(fechado && row.style.order==='0'){
+      row.style.boxShadow='0 0 0 1.5px rgba(250,204,21,0.45),0 0 10px rgba(250,204,21,0.1)';
+      row.style.borderRadius='6px';
     } else {
-      if(crEl) crEl.remove();
       row.style.boxShadow='';
     }
   });
+
 };
 /* ── Delta arrow helper ─────────────────────────────────────── */
 window._applyDelta = function(prefix, name, currIdx, prevRanking){
@@ -3841,7 +3825,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var labelsDiv = document.getElementById('mt-mes-slider-labels');
     var slider = document.getElementById('mt-mes-slider');
     if(!labelsDiv || !slider) return;
-    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
     var wks = wkMap[mes] || [1,2,3,4];
     slider.min = wks[0];
     slider.max = wks[wks.length-1];
@@ -3854,7 +3838,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     if(pill) pill.textContent = 'WK ' + wk;
     var ranking = getRankingMes(mtMesCur, wk);
     var pot = getPotMes(mtMesCur, wk);
-    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
     var _wksMes = _wkMesMap[mtMesCur]||[];
     var _prevWkMes = _wksMes.indexOf(wk)>0 ? _wksMes[_wksMes.indexOf(wk)-1] : null;
     var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
@@ -3876,7 +3860,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     if(pill) pill.textContent = 'WK ' + maxWk;
     var ranking = getRankingMes(mes, maxWk);
     var pot = getPotMes(mes, maxWk);
-    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
     var _wksMes2 = _wkMesMap2[mes]||[];
     var _prevWk2 = _wksMes2.indexOf(maxWk)>0 ? _wksMes2[_wksMes2.indexOf(maxWk)-1] : null;
     var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
@@ -3891,7 +3875,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
       var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
@@ -3971,7 +3955,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
   var PLAYERS=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
   var PERC=[0.40,0.30,0.15,0.10,0.05];
   var MES_NOMES=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+  var MES_WKS={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
   var R_MES=3, R_TRI=2, EXTRAS_MES={1:4}, EXTRAS_TRI={1:4};
 
   function getAvatarUrl(n){ return (window.photoFor && window.photoFor(n)) || 'https://github.com/iorb07-ica/poker-dashboard/blob/main/avatars/'+n.toLowerCase()+'.jpg?raw=true'; }
@@ -4113,7 +4097,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var labelsDiv = document.getElementById('mt-mes-slider-labels');
     var slider = document.getElementById('mt-mes-slider');
     if(!labelsDiv || !slider) return;
-    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+    var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
     var wks = wkMap[mes] || [1,2,3,4];
     slider.min = wks[0];
     slider.max = wks[wks.length-1];
@@ -4126,7 +4110,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     if(pill) pill.textContent = 'WK ' + wk;
     var ranking = getRankingMes(mtMesCur, wk);
     var pot = getPotMes(mtMesCur, wk);
-    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wkMesMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
     var _wksMes = _wkMesMap[mtMesCur]||[];
     var _prevWkMes = _wksMes.indexOf(wk)>0 ? _wksMes[_wksMes.indexOf(wk)-1] : null;
     var prevRanking = _prevWkMes ? getRankingMes(mtMesCur, _prevWkMes) : [];
@@ -4148,7 +4132,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     if(pill) pill.textContent = 'WK ' + maxWk;
     var ranking = getRankingMes(mes, maxWk);
     var pot = getPotMes(mes, maxWk);
-    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wkMesMap2={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
     var _wksMes2 = _wkMesMap2[mes]||[];
     var _prevWk2 = _wksMes2.indexOf(maxWk)>0 ? _wksMes2[_wksMes2.indexOf(maxWk)-1] : null;
     var prevRankingMes = _prevWk2 ? getRankingMes(mes, _prevWk2) : [];
@@ -4163,7 +4147,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
+      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
       var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
@@ -4261,7 +4245,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     if(_sliderAno){ _sliderAno.max = _maxWK; _sliderAno.value = _maxWK; }
     // Renderizar com dados atuais
     var rMes = getRankingMes(_mesAtual, _maxWK);
-    var _wkMesMapI={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
+    var _wkMesMapI={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34,35],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50,51,52]};
     var _wksMesI=_wkMesMapI[_mesAtual]||[]; var _prevWkMesI=_wksMesI.indexOf(_maxWK)>0?_wksMesI[_wksMesI.indexOf(_maxWK)-1]:null;
     var _prevRkMesI=_prevWkMesI?getRankingMes(_mesAtual,_prevWkMesI):[];
     window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false, _prevRkMesI);
@@ -9025,7 +9009,7 @@ function miniRowFaltou(name){
  return `<div class="mini-item" style="opacity:0.38;border:1px dashed rgba(255,255,255,0.12);background:rgba(255,255,255,0.02);border-radius:6px;padding:4px 10px;display:flex;align-items:center;gap:8px;margin:1px 0;"><span style="font-size:12px;">🚫</span><span style="font-size:11px;font-weight:600;color:rgba(255,255,255,0.5);">${name}</span><span style="margin-left:auto;font-size:10px;color:rgba(255,255,255,0.3);font-style:italic;">faltou</span></div>`;
 }
 
-function miniRow(pos, name, pontos, delta, isCampeao){
+function miniRow(pos, name, pontos, delta){
  const badge = pos===1? '🥇' : pos===2? '🥈' : pos===3? '🥉' : pos+'.';
  const delay = ((pos-1) * 0.07).toFixed(2);
  let arrowHtml = '';
@@ -9034,9 +9018,7 @@ function miniRow(pos, name, pontos, delta, isCampeao){
   const sym = delta>0?'▲'+delta:'▼'+Math.abs(delta);
   arrowHtml = `<span style="background:${col}22;color:${col};padding:1px 4px;border-radius:3px;font-size:10px;font-weight:900;margin-left:4px;flex-shrink:0;">${sym}</span>`;
  }
- const campeaoStyle = isCampeao ? 'box-shadow:0 0 0 1.5px rgba(250,204,21,0.5),0 0 12px rgba(250,204,21,0.15);' : '';
- const coroa = isCampeao ? '<span style="font-size:13px;margin-left:3px;">👑</span>' : '';
- return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;${campeaoStyle}"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;gap:0;">${name}${coroa}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
+ return `<div class="mini-item p${pos}" style="animation:cardSpringUp 0.45s cubic-bezier(0.34,1.4,0.64,1) ${delay}s both;"><div class="pos">${badge}</div><div class="name" style="display:flex;align-items:center;gap:0;">${name}${arrowHtml}</div><div class="pts">${fmt(Math.round(pontos))} pts</div></div>`;
 }
 
 function renderMini(per, val){
@@ -9093,7 +9075,7 @@ prevRowsMini.forEach((r,i)=>{ prevPosMapMini[r.jogador]=i+1; });
 
 // ── MÊS: badge de encerrado + coroa no campeão ───────────────────────────
 if(per==='mes'){
-  const FIM_MESES=[0,4,8,12,17,21,25,30,34,38,43,47,52];
+  const FIM_MESES=[0,4,8,12,17,21,25,30,34,39,43,47,52];
   const maxWKGlobal = RAW.length ? Math.max(...RAW.map(r=>+r.wk||0)) : 0;
   const mesFechado = FIM_MESES[+val]>0 && maxWKGlobal>=FIM_MESES[+val];
   // Atualizar badge no header do card
@@ -15812,7 +15794,7 @@ window.addEventListener('load', function(){
 
       
       
-      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,39,43,47,52];
       var wkFechaMes = FIM_MESES[mes] || 0;
       var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
       var maxWKLancada = wksNoLedger.length ? Math.max.apply(null, wksNoLedger) : 0;
@@ -15841,7 +15823,7 @@ window.addEventListener('load', function(){
       rank.slice(0,5).forEach(function(e,i){ premTri[e[0]] = r2(pot * PERC[i]); });
 
       
-      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,39,43,47,52];
       var ultimoMesTri = Math.max.apply(null, meses);
       var wkFechaTri = FIM_MESES[ultimoMesTri] || 0;
       var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
@@ -19771,7 +19753,7 @@ function buildPrevisao(){
   var wksLeftMes, wksLeftTri, wksLeftAno, labelMes, labelTri;
 
   // Mapa de fim de mês por semana (quartas-feiras exatas 2026)
-  var fimMeses = [0,4,8,12,17,21,25,30,34,38,43,47,52]; // wk que fecha cada mês (jan=4,fev=8,mar=12...)
+  var fimMeses = [0,4,8,12,17,21,25,30,34,39,43,47,52]; // wk que fecha cada mês (jan=4,fev=8,mar=12...)
   var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   var mesIdx = 0;
   for(var mi=0; mi<fimMeses.length-1; mi++){ if(wkNow <= fimMeses[mi+1]){ mesIdx=mi; break; } }
