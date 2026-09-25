@@ -3482,7 +3482,8 @@ body.mobile-mode #libwarn { display: none !important; }
         window.mtSetWK(wk);
         var slider = document.getElementById('mt-slider');
         if(slider) slider.value = wk;
-        if(wk>=12){ clearInterval(mtInterval); mtPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+        var _mxAnual = Math.min((window.RAW&&window.RAW.length?Math.max.apply(null,window.RAW.map(function(r){return+r.wk||0;})):38), 50);
+        if(wk>=_mxAnual){ clearInterval(mtInterval); mtPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
       }, 900);
     } else {
       clearInterval(mtInterval);
@@ -3691,12 +3692,15 @@ window._updateMesBadge = function(mes, wkMax){
   var maxWKG = wkMax || (window.RAW&&window.RAW.length ? Math.max.apply(null,window.RAW.map(function(r){return+r.wk||0;})) : 0);
   var fechado = FIM_MESES[+mes]>0 && maxWKG>=FIM_MESES[+mes];
   // Atualizar badge
-  // Calcular progresso do mês
-  var WK_MES_B={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
+  // Calcular progresso do mês usando ledger (wks reais + MES_WKS para total esperado)
   var maxWKG2 = maxWKG || 0;
-  var wksMesB = WK_MES_B[+mes]||[];
-  var jogadasB = wksMesB.filter(function(w){return w<=maxWKG2;}).length;
-  var totalB = wksMesB.length;
+  var _rawBadge=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+  var _wksMesBadge=Array.from(new Set(_rawBadge.filter(function(r){return+r.mes===+mes;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+  var jogadasB=_wksMesBadge.filter(function(w){return w<=maxWKG2;}).length;
+  // Total esperado: todas as wks do mês no ledger (inclui futuras se cadastradas) ou mapa de fallback
+  var WK_MES_B={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
+  var totalB=_wksMesBadge.length||WK_MES_B[+mes]&&WK_MES_B[+mes].length||4;
+  if(totalB<WK_MES_B[+mes]&&WK_MES_B[+mes].length) totalB=WK_MES_B[+mes].length;
   var progStr = totalB>0 ? ' · '+jogadasB+'/'+totalB : '';
   var badgeEl = document.getElementById('mini-mes-status-badge');
   if(badgeEl){
@@ -3909,8 +3913,10 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
-      var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
+      // Usar WKs reais do ledger para o mês atual
+      var _ledMes=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+      var allWks=Array.from(new Set(_ledMes.filter(function(r){return+r.mes===mtMesCur;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+      if(!allWks.length){ var wkMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]}; allWks=(wkMap[mtMesCur]||[1]); }
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
       var curWkIdx = allWks.indexOf(startWk);
@@ -3966,14 +3972,20 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-tri-play-icon');
     if(mtTriPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wk = mtTriCur >= 12 ? 0 : mtTriCur;
+      // WKs reais do trimestre selecionado
+      var _selTriNow = +((document.getElementById('mini-tri')||{}).value||1);
+      var _rawTri=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+      var _allWksTri=Array.from(new Set(_rawTri.filter(function(r){return+r.trimestre===_selTriNow;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+      if(!_allWksTri.length){clearInterval(mtTriInterval);mtTriPlaying=false;if(icon)icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';return;}
+      var _curTriIdx = mtTriCur && _allWksTri.indexOf(mtTriCur)>=0 ? _allWksTri.indexOf(mtTriCur) : -1;
+      if(_curTriIdx >= _allWksTri.length-1) _curTriIdx = -1; // reinicia se já estava no fim
       mtTriInterval = setInterval(function(){
-        wk++;
-        window.mtTriSetWK(wk);
-        var _selTriVal = 1;
-        try{ var _raw3=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]); var _wksTri2=_raw3.filter(function(r){return +r.wk<=wk;}).map(function(r){return +r.trimestre||0;}); _selTriVal=_wksTri2.length?Math.max.apply(null,_wksTri2):1; }catch(e){}
-        var _maxWkTri2 = Math.max.apply(null,(window.RAW&&window.RAW.length?window.RAW:((window.DATA&&window.DATA.ledger)||[])).filter(function(r){return +r.trimestre===_selTriVal;}).map(function(r){return +r.wk||0;})||[12]);
-        if(wk>=_maxWkTri2){ clearInterval(mtTriInterval); mtTriPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+        _curTriIdx++;
+        if(_curTriIdx >= _allWksTri.length){ clearInterval(mtTriInterval); mtTriPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; return; }
+        var _wkNow = _allWksTri[_curTriIdx];
+        window.mtTriSetWK(_wkNow);
+        var _slider = document.getElementById('mt-tri-slider');
+        if(_slider) _slider.value = _wkNow;
       }, 900);
     } else {
       clearInterval(mtTriInterval);
@@ -4186,8 +4198,10 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-mes-play-icon');
     if(mtMesPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wkMap = {1:[1,2,3,4], 2:[5,6,7,8], 3:[9,10,11,12], 4:[13,14,15,16,17], 5:[18,19,20,21], 6:[22,23,24,25], 7:[26,27,28,29,30], 8:[31,32,33,34,35], 9:[35,36,37,38,39], 10:[40,41,42,43], 11:[44,45,46,47], 12:[48,49,50,51,52]};
-      var allWks = (wkMap[mtMesCur]||[9,10,11,12]);
+      // Usar WKs reais do ledger para o mês atual
+      var _ledMes=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+      var allWks=Array.from(new Set(_ledMes.filter(function(r){return+r.mes===mtMesCur;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+      if(!allWks.length){ var wkMap={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]}; allWks=(wkMap[mtMesCur]||[1]); }
       var maxWk = allWks[allWks.length-1];
       var startWk = (mtMesCurWK >= maxWk) ? allWks[0]-1 : mtMesCurWK;
       var curWkIdx = allWks.indexOf(startWk);
@@ -4214,11 +4228,25 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var slider = document.getElementById('mt-tri-slider');
     if(pill) pill.textContent = 'WK '+wk;
     if(slider) slider.value = wk;
-    var ranking = getRankingUpToWK(wk);
-    var pot = getPotTri(wk);
-    var _prevRkTri4=mtTriCur>1?(window.getRankingTri||getRankingUpToWK)(_triSel,mtTriCur-1):[];
-    renderRows('mt-tri', ranking, pot, true, _prevRkTri4);
+    // Pegar trimestre selecionado no select mini-tri
+    var _triSel2 = 1;
+    var _selTriEl = document.getElementById('mini-tri');
+    if(_selTriEl && _selTriEl.value){ _triSel2 = +_selTriEl.value || 1; }
+    else {
+      var _raw2=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+      var _wkRow2=_raw2.find(function(r){return+r.wk===wk;});
+      _triSel2=_wkRow2?(+_wkRow2.trimestre||1):1;
+    }
+    var ranking = (window.getRankingTri||getRankingUpToWK)(_triSel2, wk);
+    var pot = (window.getPotTriFiltrado)?window.getPotTriFiltrado(_triSel2,wk):getPotTri(wk);
+    var _ledT2=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+    var _wksTri3=Array.from(new Set(_ledT2.filter(function(r){return+r.trimestre===_triSel2;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+    var _prevWkT3=_wksTri3.indexOf(wk)>0?_wksTri3[_wksTri3.indexOf(wk)-1]:null;
+    var prevRankingTri3=_prevWkT3?(window.getRankingTri||getRankingUpToWK)(_triSel2,_prevWkT3):[];
+    renderRows('mt-tri', ranking, pot, true, prevRankingTri3);
     updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
+    if(window._updatePeriodProgress) window._updatePeriodProgress(null, wk, wk);
+    if(window._updateTriBadge) window._updateTriBadge(_triSel2);
   };
 
   window.mtTriTogglePlay = function(){
@@ -4226,11 +4254,20 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     var icon = document.getElementById('mt-tri-play-icon');
     if(mtTriPlaying){
       if(icon) icon.innerHTML='<rect x="3" y="2" width="4" height="12" rx="1"/><rect x="9" y="2" width="4" height="12" rx="1"/>';
-      var wk = mtTriCur >= 12 ? 0 : mtTriCur;
+      // WKs reais do trimestre selecionado
+      var _selTriNow = +((document.getElementById('mini-tri')||{}).value||1);
+      var _rawTri=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+      var _allWksTri=Array.from(new Set(_rawTri.filter(function(r){return+r.trimestre===_selTriNow;}).map(function(r){return+r.wk||0;}))).sort(function(a,b){return a-b;});
+      if(!_allWksTri.length){clearInterval(mtTriInterval);mtTriPlaying=false;if(icon)icon.innerHTML='<polygon points="4,2 14,8 4,14"/>';return;}
+      var _curTriIdx = mtTriCur && _allWksTri.indexOf(mtTriCur)>=0 ? _allWksTri.indexOf(mtTriCur) : -1;
+      if(_curTriIdx >= _allWksTri.length-1) _curTriIdx = -1; // reinicia se já estava no fim
       mtTriInterval = setInterval(function(){
-        wk++;
-        window.mtTriSetWK(wk);
-        if(wk>=12){ clearInterval(mtTriInterval); mtTriPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; }
+        _curTriIdx++;
+        if(_curTriIdx >= _allWksTri.length){ clearInterval(mtTriInterval); mtTriPlaying=false; if(icon) icon.innerHTML='<polygon points="4,2 14,8 4,14"/>'; return; }
+        var _wkNow = _allWksTri[_curTriIdx];
+        window.mtTriSetWK(_wkNow);
+        var _slider = document.getElementById('mt-tri-slider');
+        if(_slider) _slider.value = _wkNow;
       }, 900);
     } else {
       clearInterval(mtTriInterval);
