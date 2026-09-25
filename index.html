@@ -3149,7 +3149,7 @@ body.mobile-mode #libwarn { display: none !important; }
 <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
 <div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#1a2a1a,rgba(34,197,94,0.2));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🏅</div>
 <div style="min-width:0;">
-<div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Trimestre</div>
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;"><div style="font-size:14px;font-weight:800;color:#e6edf3;letter-spacing:.1px;white-space:nowrap;">Ranking do Trimestre</div><div id="mini-tri-status-badge"></div></div>
 <div style="font-size:11px;color:#6b82a0;margin-top:1px;white-space:nowrap;">Pontuação acumulada no trimestre</div>
 </div>
 </div>
@@ -3609,20 +3609,28 @@ window._updateDashboardStatus = function(){
 
   var bar = document.getElementById('dashboard-status-bar');
   if(!bar) return;
+  // Formatar data para DD/MM/AAAA
+  var displayDate = '';
+  if(lastDate){
+    var _dp = lastDate.split(/[\/\-]/);
+    if(_dp.length===3){
+      displayDate = _dp[0].length===4 ? _dp[2]+'/'+_dp[1]+'/'+_dp[0] : lastDate;
+    }
+  }
   if(atualizado){
     bar.innerHTML = '<span style="color:#4ade80;font-size:13px;">✅</span>'
       +'<span style="color:#4ade80;">Atualizado</span>'
       +'<span style="color:rgba(255,255,255,0.25);">·</span>'
       +'<span style="color:rgba(255,255,255,0.6);">WK'+maxWK+'</span>'
-      +(lastDate?'<span style="color:rgba(255,255,255,0.25);">·</span>'
-        +'<span style="color:rgba(255,255,255,0.45);">'+lastDate+'</span>':'');
+      +(displayDate?'<span style="color:rgba(255,255,255,0.25);">·</span>'
+        +'<span style="color:rgba(255,255,255,0.45);">'+displayDate+'</span>':'');
     bar.style.background='rgba(34,197,94,0.04)';
   } else {
     bar.innerHTML = '<span style="color:#fbbf24;font-size:13px;">⚠️</span>'
       +'<span style="color:#fbbf24;">Desatualizado</span>'
       +'<span style="color:rgba(255,255,255,0.25);">·</span>'
       +'<span style="color:rgba(255,255,255,0.5);">Última: WK'+maxWK
-        +(lastDate?' · '+lastDate:'')+'</span>';
+        +(displayDate?' · '+displayDate:'')+'</span>';
     bar.style.background='rgba(251,191,36,0.05)';
   }
 };
@@ -3660,16 +3668,41 @@ window._updatePeriodProgress = function(mes, triWK, anoWK){
   if(elAno) elAno.textContent=maxWKGlobal+'/50 sem.';
 };
 /* ── Badge mês fechado + coroa ─────────────────────────────── */
+
+window._updateTriBadge = function(tri){
+  var WK_TRI={1:[1,2,3,4,5,6,7,8,9,10,11,12],2:[13,14,15,16,17,18,19,20,21,22,23,24,25],3:[26,27,28,29,30,31,32,33,34,35,36,37,38,39],4:[40,41,42,43,44,45,46,47,48,49,50]};
+  var FIM_TRI={1:12,2:25,3:39,4:50};
+  var raw=(window.RAW&&window.RAW.length)?window.RAW:((window.DATA&&window.DATA.ledger)||[]);
+  var maxWKG=raw.length?Math.max.apply(null,raw.map(function(r){return+r.wk||0;})):0;
+  var fechadoTri=FIM_TRI[+tri]>0&&maxWKG>=FIM_TRI[+tri];
+  var wksTri=WK_TRI[+tri]||[];
+  var jogadas=wksTri.filter(function(w){return w<=maxWKG;}).length;
+  var total=wksTri.length;
+  var progStr=total>0?' · '+jogadas+'/'+total:'';
+  var el=document.getElementById('mini-tri-status-badge');
+  if(el){
+    el.innerHTML=fechadoTri
+      ?'<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">✅ Encerrado</span>'
+      :'<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento'+progStr+'</span>';
+  }
+};
 window._updateMesBadge = function(mes, wkMax){
   var FIM_MESES=[0,4,8,12,17,21,25,30,34,39,43,47,52];
   var maxWKG = wkMax || (window.RAW&&window.RAW.length ? Math.max.apply(null,window.RAW.map(function(r){return+r.wk||0;})) : 0);
   var fechado = FIM_MESES[+mes]>0 && maxWKG>=FIM_MESES[+mes];
   // Atualizar badge
+  // Calcular progresso do mês
+  var WK_MES_B={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
+  var maxWKG2 = maxWKG || 0;
+  var wksMesB = WK_MES_B[+mes]||[];
+  var jogadasB = wksMesB.filter(function(w){return w<=maxWKG2;}).length;
+  var totalB = wksMesB.length;
+  var progStr = totalB>0 ? ' · '+jogadasB+'/'+totalB : '';
   var badgeEl = document.getElementById('mini-mes-status-badge');
   if(badgeEl){
     badgeEl.innerHTML = fechado
       ? '<span style="background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(74,222,128,0.3);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">✅ Encerrado</span>'
-      : '<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento</span>';
+      : '<span style="background:rgba(251,191,36,0.12);color:#fbbf24;border:1px solid rgba(251,191,36,0.25);border-radius:6px;padding:2px 8px;font-size:10px;font-weight:800;letter-spacing:.3px;">🟡 Em andamento'+progStr+'</span>';
   }
   // Borda dourada no 1º lugar (sem coroa) quando mês encerrado
   var allP=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
@@ -3925,6 +3958,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     renderRows('mt-tri', ranking, pot, true, prevRankingTri);
     updatePrizes('mini-tri-prizes', 'mini-tri-rule', ranking, pot);
     if(window._updatePeriodProgress) window._updatePeriodProgress(null, wk, wk);
+    if(window._updateTriBadge){ var _t=document.getElementById('mini-tri'); if(_t) window._updateTriBadge(+_t.value||3); }
   };
 
   window.mtTriTogglePlay = function(){
@@ -4256,6 +4290,7 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
     window.renderRows('mt-mes', rMes, getPotMes(_mesAtual, _maxWK), false, _prevRkMesI);
     window.updatePrizes('mini-mes-prizes','mini-mes-rule', rMes, getPotMes(_mesAtual, _maxWK));
     if(window._updateMesBadge) window._updateMesBadge(_mesAtual, _maxWK);
+    if(window._updateTriBadge) window._updateTriBadge(_triAtual);
     if(window._updateDashboardStatus) window._updateDashboardStatus();
     if(window._updatePeriodProgress) window._updatePeriodProgress(_mesAtual, _maxWkDoTri, _maxWK);
     // Garantir que o select mini-tri está no trimestre correto ANTES de renderizar
@@ -8988,19 +9023,17 @@ function initMiniCombos(){
   var _triSel = +sels.tri.value;
   var _wksTri = RAW.filter(function(r){return +r.trimestre===_triSel;}).map(function(r){return +r.wk||0;});
   var _maxWkTri = _wksTri.length ? Math.max.apply(null, _wksTri) : 1;
-  // Renderizar diretamente com filtro de trimestre (sem passar por mtTriSetWK)
-  var _rTri = (window.getRankingTri || getRankingTri)(_triSel, _maxWkTri);
-  var _pTri = window.getPotTriFiltrado ? window.getPotTriFiltrado(_triSel, _maxWkTri) : getPotTri(_maxWkTri);
-  var _wksSorted=_wksTri.slice().sort(function(a,b){return a-b;});
-  var _prevWkTri=_wksSorted.length>1&&_wksSorted.indexOf(_maxWkTri)>0?_wksSorted[_wksSorted.indexOf(_maxWkTri)-1]:null;
-  var _prevRk8849=_prevWkTri?(window.getRankingTri||getRankingTri)(_triSel,_prevWkTri):[];
-  if(window.renderRows) window.renderRows('mt-tri', _rTri, _pTri, false, _prevRk8849);
-  if(window.updatePrizes) window.updatePrizes('mini-tri-prizes','mini-tri-rule', _rTri, _pTri);
-  // Atualizar slider e pill
-  var _pill = document.getElementById('mt-tri-pill');
+  // Atualizar slider para max WK do trimestre selecionado
   var _slider = document.getElementById('mt-tri-slider');
-  if(_pill) _pill.textContent = 'WK '+_maxWkTri;
-  if(_slider) _slider.value = _maxWkTri;
+  if(_slider){ _slider.value = _maxWkTri; _slider.max = _maxWkTri; }
+  // Chamar mtTriSetWK que lê o select mini-tri e renderiza corretamente
+  if(typeof window.mtTriSetWK === 'function') window.mtTriSetWK(_maxWkTri);
+  if(window.updatePrizes){
+    var _rTri2 = (window.getRankingTri||function(){return[];})(_triSel, _maxWkTri);
+    var _pTri2 = window.getPotTriFiltrado ? window.getPotTriFiltrado(_triSel, _maxWkTri) : 0;
+    window.updatePrizes('mini-tri-prizes','mini-tri-rule', _rTri2, _pTri2);
+  }
+  if(window._updatePeriodProgress) window._updatePeriodProgress(null, _maxWkTri, _maxWkTri);
 };
 
  
