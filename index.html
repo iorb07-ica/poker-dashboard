@@ -10896,23 +10896,35 @@ document.addEventListener('DOMContentLoaded', function(){
         var found = agg.find(function(a){ return a.jogador === r.jogador; });
         return found || {jogador: r.jogador, pontos: +r.pontos_calc||0};
       });
-      // Adicionar faltosos no final
+      // Adicionar faltosos no final com flag _faltou
       var faltosos = (window.RAW||[]).filter(function(r){ return +r.wk === wkNum && +r.faltou; });
       faltosos.forEach(function(r){
         var found = agg.find(function(a){ return a.jogador === r.jogador; });
-        if(!found){
-          var aggF = typeof window.aggregate === 'function' ? 
-            (window.aggregate((window.RAW||[]).filter(function(x){ return +x.wk===wkNum; })) || []) : [];
-          var aggRow = aggF.find(function(a){ return a.jogador === r.jogador; });
-          agg.push(aggRow || {jogador: r.jogador, pontos: 0});
-        }
+        if(!found) agg.push({jogador: r.jogador, pontos: 0, _faltou: true});
+        else found._faltou = true;
+      });
+      // Jogadores sem nenhum registro na WK também faltaram
+      var ALL_P=['Israel','Magu','Heron','Charles','Oscar','Pedro','Cristiano','Marcus','Rafa'];
+      ALL_P.forEach(function(p){
+        var inAgg = agg.find(function(a){return a.jogador===p;});
+        if(!inAgg) agg.push({jogador:p, pontos:0, _faltou:true});
       });
     }
     
     var list = agg.slice(0, 9);
-    var maxPts = maxVal(list);
+    var maxPts = maxVal(list.filter(function(r){return !r._faltou;}));
 
-    target.innerHTML = list.map(function(r, i){ return miniRowHTML(i+1, r.jogador, r.pontos, maxPts); }).join('');
+    // Separar jogadores e faltosos
+    var jogouHTML = list.filter(function(r){return !r._faltou;})
+      .map(function(r, i){ return miniRowHTML(i+1, r.jogador, r.pontos, maxPts); }).join('');
+    var faltouHTML = list.filter(function(r){return !!r._faltou;})
+      .map(function(r){
+        return typeof window.miniRowFaltou==='function'
+          ? window.miniRowFaltou(r.jogador)
+          : '<div style="opacity:.38;padding:3px 8px;font-size:11px;color:rgba(255,255,255,.4);">🚫 '+r.jogador+' · faltou</div>';
+      }).join('');
+    var divider = faltouHTML ? '<div style="border-top:1px dashed rgba(255,255,255,0.08);margin:4px 0 2px;"></div>' : '';
+    target.innerHTML = jogouHTML + divider + faltouHTML;
 
     
     requestAnimationFrame(function(){
