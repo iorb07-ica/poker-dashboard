@@ -240,7 +240,7 @@ body.perfil-open #mobile-topbar {
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'><g fill='none' stroke='%23263547' stroke-width='1' opacity='0.18'><path d='M60 30c20 0 20 20 40 20s20-20 40-20 20 20 40 20 20-20 40-20'/><circle cx='60' cy='60' r='8'/><rect x='110' y='110' width='16' height='16' rx='2'/><path d='M30 210c20 0 20-20 40-20s20 20 40 20 20-20 40-20 20 20 40 20 20-20 40-20'/><path d='M40 40l20 20M60 40l-20 20'/></g></svg>");
       background-size: cover, 240px 240px;
     }
-    header{position:relative;padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;position-type:relative;transition:background 0.35s ease,border-color 0.35s ease;}
+    header{position:relative;padding:12px 24px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid #1c2330;background:linear-gradient(180deg,#0d1220, #0a0e19);box-shadow:0 6px 20px rgba(0,0,0,.35);position:sticky;top:0;z-index:5;transition:background 0.35s ease,border-color 0.35s ease;}
     h1{margin:0;font-size:20px;display:flex;gap:10px;align-items:center}
     #libwarn{display:none;margin-top:8px;padding:8px 10px;border:1px dashed #f59e0b;border-radius:10px;background:rgba(245,158,11,.08);color:#fbbf24;font-size:13px}
     .container{padding:16px;max-width:2400px;margin:0 auto}
@@ -2714,7 +2714,7 @@ document.addEventListener('DOMContentLoaded', function(){
 body.mobile-mode #libwarn { display: none !important; }
 </style>
 </header>
-<div id="dashboard-status-bar" style="position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:5px;padding:3px 14px;font-size:10px;font-weight:700;letter-spacing:.2px;border-bottom:1px solid rgba(255,255,255,0.05);min-height:22px;"></div>
+<div id="dashboard-status-bar" style="position:sticky;top:0;z-index:4;display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;font-size:10px;font-weight:700;letter-spacing:.2px;overflow:hidden;max-height:0;transition:max-height 0.3s,padding 0.3s;"></div>
 
 <!-- Barra mobile simples -->
 <div id="mobile-topbar" style="display:none;position:fixed;top:0;left:0;right:0;z-index:9999;background:linear-gradient(135deg,#060d1a 0%,#0d1629 100%);border-bottom:1px solid rgba(59,130,246,0.20);padding:env(safe-area-inset-top) 16px 0;align-items:flex-end;justify-content:space-between;gap:10px;min-height:82px;height:calc(82px + env(safe-area-inset-top));box-shadow:0 3px 24px rgba(0,0,0,0.6);-webkit-">
@@ -3611,6 +3611,7 @@ window._updateDashboardStatus = function(){
 
   var bar = document.getElementById('dashboard-status-bar');
   if(!bar) return;
+  bar.style.maxHeight='30px'; bar.style.padding='3px 14px'; bar.style.borderBottom='1px solid rgba(255,255,255,0.05)';
   // Formatar data para DD/MM/AAAA
   var displayDate = '';
   if(lastDate){
@@ -5586,68 +5587,6 @@ window._applyDelta = function(prefix, name, currIdx, prevRanking){
 
 
 <!-- ═══ CARD: ROADMAP ═══ -->
-<div id="card-roadmap" style="margin-top:16px;width:100%;box-sizing:border-box;">
-  <div class="card" style="padding:0;overflow:hidden;">
-    <div onclick="window.toggleCard('roadmap-body','roadmap-arrow')" style="padding:14px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.05);">
-      <div>
-        <div class="card-title">Próximas versões</div>
-        <div style="font-size:18px;font-weight:900;color:#e6edf3;">Roadmap 2026</div>
-      </div>
-      <span id="roadmap-arrow" style="font-size:13px;color:rgba(255,255,255,0.3);transition:transform .25s;">▼</span>
-    </div>
-    <div id="roadmap-body" style="display:none;padding:14px;">
-
-      <!-- Implementado: Notificações -->
-      <div style="border:1px solid rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);border-radius:12px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">🔔</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#34d399;">Notificações Push individuais (ntfy)</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(52,211,153,0.15);color:#34d399;border-radius:6px;padding:2px 8px;">✅ IMPLEMENTADO</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Cada jogador recebe push no celular ao desbloquear uma relíquia. Canal individual por jogador via ntfy.sh (gratuito, sem servidor).</div>
-            <button onclick="ntfyAbrirPainelAdmin()" style="width:100%;padding:10px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.3);border-radius:10px;color:#34d399;font-size:13px;font-weight:800;cursor:pointer;">🔔 Abrir painel de notificações</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Implementado: Modo Duelo -->
-      <div style="border:1px solid rgba(52,211,153,0.3);background:rgba(52,211,153,0.05);border-radius:12px;padding:14px;margin-bottom:10px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">⚔️</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#34d399;">Modo Duelo — Head-to-Head</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(52,211,153,0.15);color:#34d399;border-radius:6px;padding:2px 8px;">✅ IMPLEMENTADO</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;">Comparador head-to-head entre dois jogadores: vitórias, pódios, KOs, pontos, streak, ROI, rebuys e faltas.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Backlog: Crônica -->
-      <div style="border:1px solid rgba(96,165,250,0.2);background:rgba(96,165,250,0.04);border-radius:12px;padding:14px;">
-        <div style="display:flex;align-items:flex-start;gap:10px;">
-          <div style="font-size:22px;flex-shrink:0;">📰</div>
-          <div style="flex:1;">
-            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-bottom:5px;">
-              <div style="font-size:13px;font-weight:900;color:#60a5fa;">Crônica automática da noite</div>
-              <span style="font-size:9px;font-weight:800;letter-spacing:1px;background:rgba(96,165,250,0.12);color:#60a5fa;border-radius:6px;padding:2px 8px;">BACKLOG</span>
-            </div>
-            <div style="font-size:11px;color:rgba(255,255,255,0.4);line-height:1.6;margin-bottom:8px;">Após registrar a WK, gerar texto estilo jornalismo esportivo com os destaques da noite. Compartilhável direto no grupo do WhatsApp.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">🤖 IA generativa</span>
-              <span style="font-size:9px;background:rgba(255,255,255,0.06);border-radius:6px;padding:2px 7px;color:rgba(255,255,255,0.3);">💬 WhatsApp-ready</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 <div class="footer" style="margin-top:28px;padding-bottom:calc(80px + env(safe-area-inset-bottom, 16px));">🃏 Poker Series Plaza Mediterrâneo &mdash; Ano 9</div>
 
 <!-- ═══ TAB BAR ═══ -->
