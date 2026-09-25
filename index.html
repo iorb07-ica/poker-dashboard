@@ -3699,8 +3699,8 @@ window._updateMesBadge = function(mes, wkMax){
   var jogadasB=_wksMesBadge.filter(function(w){return w<=maxWKG2;}).length;
   // Total esperado: todas as wks do mês no ledger (inclui futuras se cadastradas) ou mapa de fallback
   var WK_MES_B={1:[1,2,3,4],2:[5,6,7,8],3:[9,10,11,12],4:[13,14,15,16,17],5:[18,19,20,21],6:[22,23,24,25],7:[26,27,28,29,30],8:[31,32,33,34],9:[35,36,37,38,39],10:[40,41,42,43],11:[44,45,46,47],12:[48,49,50]};
-  var totalB=_wksMesBadge.length||WK_MES_B[+mes]&&WK_MES_B[+mes].length||4;
-  if(totalB<WK_MES_B[+mes]&&WK_MES_B[+mes].length) totalB=WK_MES_B[+mes].length;
+  var _mapTotal=(WK_MES_B[+mes]||[]).length||4;
+  var totalB=Math.max(_wksMesBadge.length, _mapTotal);
   var progStr = totalB>0 ? ' · '+jogadasB+'/'+totalB : '';
   var badgeEl = document.getElementById('mini-mes-status-badge');
   if(badgeEl){
