@@ -9103,6 +9103,7 @@ function miniRowFaltou(name){
     '</div>' +
   '</div>';
 }
+window.miniRowFaltou = miniRowFaltou;
 
 function miniRow(pos, name, pontos, delta){
  const badge = pos===1? '🥇' : pos===2? '🥈' : pos===3? '🥉' : pos+'.';
@@ -10903,10 +10904,12 @@ document.addEventListener('DOMContentLoaded', function(){
       var wkNum = +val;
       var rawWK = (window.RAW||[]).filter(function(r){ return +r.wk === wkNum && !+r.faltou; });
       rawWK.sort(function(a,b){ return (+a.posicao||99) - (+b.posicao||99); });
-      // Reconstruir list na ordem de posição
+      // Reconstruir list na ordem de posição — usar pontos_calc direto do ledger
       agg = rawWK.map(function(r){
-        var found = agg.find(function(a){ return a.jogador === r.jogador; });
-        return found || {jogador: r.jogador, pontos: +r.pontos_calc||0};
+        // Somar pontos_calc de todos os registros deste jogador nesta WK
+        var allRows = (window.RAW||[]).filter(function(x){ return +x.wk===wkNum && x.jogador===r.jogador && !+x.faltou; });
+        var pts = allRows.reduce(function(s,x){ return s+(+x.pontos_calc||0); }, 0);
+        return {jogador: r.jogador, pontos: pts};
       });
       // Adicionar faltosos no final com flag _faltou
       var faltosos = (window.RAW||[]).filter(function(r){ return +r.wk === wkNum && +r.faltou; });
