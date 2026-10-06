@@ -10494,8 +10494,11 @@ function refreshAwards(){
  
  const triByJ = {};
  (TRIMESTRE||[]).forEach(r=>{
- if(per==='semana' || per==='mes') return;
- if(per==='trimestre' && String(r.trimestre||r.Trimestre) !== String(val)) return;
+ if(per==='semana') return;
+ if(per==='mes'){
+  const triDoMes = Math.ceil((parseInt(val)||0)/3);
+  if(String(r.trimestre||r.Trimestre) !== String(triDoMes)) return;
+ } else if(per==='trimestre' && String(r.trimestre||r.Trimestre) !== String(val)) return;
  if(per==='ano' && String(r.ano||r.Ano||r['ano']) !== String(val) && r.ano!=null) return;
  
  const j = pickText(r,['jogador','Jogador','player','Player','nome','Nome']); if(!j) return;
