@@ -1025,5 +1025,48 @@
       "Pedro": "6º lugar, 2 rebuys, 1 KO, 7.100 pontos. Semana fraca para o líder de setembro, que vê Israel chegando no mês. Ainda lidera setembro com 72.140 pontos mas a vantagem reduziu.",
       "Magu": "7º lugar, dealer da noite, 5 rebuys, 1 KO, 600 pontos. Foi de 30 mil de gap para Israel para 50 mil em uma noite. Chamou Heron de volta do banheiro, blefou all-in no river sem nada, perdeu, saiu em último, pagou cinco vezes. Uma noite que vai doer no ranking e na memória por semanas, como Israel havia previsto."
     }
+  },
+  "WK39": {
+    "titulo": "O Décimo Terceiro: Heron varre setembro, enterra o T3 e isola o recorde histórico do Plaza",
+    "subtitulo": "30 de setembro. Último jogo do trimestre. O homem que não para de ganhar voltou pra casa com mais um",
+    "clima": 5,
+    "intro": "Tinha tudo pra ser uma noite de encerramento tranquilo. Setembro fechando, T3 encerrando, a temporada chegando no ato final. O Grey liderava o T3 por 2.528 pontos sobre Israel — vantagem real mas pequena o suficiente pra deixar todo mundo desconfortável.\n\nHeron olhou pra esse número, achou pequeno demais pra seu gosto, e foi buscar um resultado que não deixasse dúvida.\n\n28.778 pontos. Vitória. 13º título no ano. Setembro campeão. T3 campeão por 24.706 pontos de vantagem sobre Israel. Tudo resolvido numa única noite de trabalho.\n\nTreze vitórias num ano. Nunca existiu no Plaza Mediterrâneo. Em 9 temporadas, o recorde era 12, feito pelo Grey em 2024 e igualado pelo Heron na semana passada. O 13º chegou na última sexta-feira de setembro como se fosse o mais natural do mundo.\n\nO FIM DO T3 — OSCAR E MAGU COMPLETAM A HISTÓRIA:\n\nNo ato final, Oscar segurou o 2º lugar com uma das melhores noites do ano: zero rebuy, 27.825 fichas, 26.548 pontos. O Papito limpo é perigoso.\n\nMagu pegou o 3º por tabela ao eliminar Oscar no fim, mas saiu atrás de quem eliminou. Deu o 3º de setembro para si mesmo e entregou o ouro para Heron por tabela. Às vezes o poker cobra com ironia.",
+    "maoTitulo": "Magu bet no river. Heron pensa, consome os time banks, chama. Segundo par. De novo.",
+    "maoDesc": "Semana passada foi igual. Magu pressionou, foi all-in, Heron chamou com segundo par e levou. A mesa toda sabia. Magu sabia. E mesmo assim o roteiro se repetiu.\n\nNo momento que valia a liderança de fichas — e por tabela a noite inteira —, Magu escalou, fez cena, apostou forte no river. Heron gastou os time banks. Pensou de verdade. E chamou com segundo par, pelo segundo jogo seguido, valendo o décimo terceiro título.\n\nO Magu continuou na disputa e ainda conseguiu ficar no pódio vencendo a última mão sobre Papito. A rivalidade mais quente do Plaza em 2026 tem um placar claro: Heron está perdendo em vezes mas está vencendo nos momentos decisivos e nos calls impossíveis.",
+    "persJogador": "Heron",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Décimo terceiro. Isolado.",
+        "autor": "O grupo, contando pela última vez"
+      },
+      {
+        "fala": "Magu de novo perdeu contra o Heron? Igual à semana passada.",
+        "autor": "A mesa, incrédula"
+      },
+      {
+        "fala": "Segundo par. ELE CHAMOU COM SEGUNDO PAR DE NOVO.",
+        "autor": "Alguém, questionando a realidade"
+      },
+      {
+        "fala": "Heron ganhou setembro. Heron ganhou o T3. E ainda faltam semanas.",
+        "autor": "O Grey, olhando pro calendário"
+      },
+      {
+        "fala": "Pedro liderava setembro há semanas e Heron passou tudo na última rodada.",
+        "autor": "A crueldade do formato"
+      }
+    ],
+    "jogadores": {
+      "Heron": "1º lugar, 1 rebuy, 1 KO, 33.925 fichas, 28.778 pontos. Campeão de setembro (86.622 pts). Campeão do T3 (263.494 pts, +24.706 sobre Israel). 13º título do ano. Recorde absoluto e isolado do Plaza Mediterrâneo. Sem mais o que dizer.",
+      "Oscar": "2º lugar, zero rebuy, 2 KOs, 27.825 fichas, 26.548 pontos. Papito com uma das melhores noites do segundo semestre. Zero rebuy, fichas e pódio. Quando Oscar não paga rebuy, ele pontua de verdade.",
+      "Magu": "º lugar, zero rebuy, 2 KOs, 15.300 fichas, 20.790 pontos. Perdeu pro Heron no call impossível mas ainda chegou ao pódio. Fecha setembro em 3º (75.522 pts) e fica em 4º no T3 final. O ano ainda está em aberto.",
+      "Charles": "4º lugar, zero rebuy, 4 KOs, 12.950 fichas, 18.285 pontos. Charlito com 4 KOs e zero rebuy fecha setembro em 2º lugar (80.375 pts) e T3 em 3º (226.236). Uma campanha sólida no trimestre.",
+      "Rafa": "5º lugar, 3 rebuys, 3 KOs, 7.800 pontos. Pagou caro pra ficar, ficou. Três KOs ajudaram a justificar a conta.",
+      "Marcus": "6º lugar, 1 rebuy, 1 KO, 8.600 pontos. Existe, pontua, vai embora. O Marcolino de setembro fechou em 7º no mês. Sem tesão, complica.",
+      "Israel": "7º lugar, 1 rebuy, 1 KO, 6.600 pontos. Noite ruim na pior rodada possível — viu Heron aumentar a vantagem no T3 de 2.528 para 24.706 numa única noite. Fecha setembro em 6º. Ainda lidera o anual, mas outubro vai precisar de resposta.",
+      "Pedro": "8º lugar, 2 rebuys, 0 KOs, 3.000 pontos. Tinha liderado setembro do começo ao fim e caiu para 4º no último jogo (75.140 pts). O poker não tem misericórdia com quem conta o título antes de terminar. Segura o 3º anual por apenas 4.852 sobre Heron.",
+      "Cristiano": "9º lugar, 1 rebuy, 2.500 pontos. Aparecer é o primeiro passo."
+    }
   }
 }
