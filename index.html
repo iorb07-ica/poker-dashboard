@@ -15605,7 +15605,7 @@ window.addEventListener('load', function(){
 
       
       
-      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,39,43,47,52];
       var wkFechaMes = FIM_MESES[mes] || 0;
       var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
       var maxWKLancada = wksNoLedger.length ? Math.max.apply(null, wksNoLedger) : 0;
@@ -15634,7 +15634,7 @@ window.addEventListener('load', function(){
       rank.slice(0,5).forEach(function(e,i){ premTri[e[0]] = r2(pot * PERC[i]); });
 
       
-      var FIM_MESES = [0,4,8,12,17,21,25,30,34,38,43,47,52];
+      var FIM_MESES = [0,4,8,12,17,21,25,30,34,39,43,47,52];
       var ultimoMesTri = Math.max.apply(null, meses);
       var wkFechaTri = FIM_MESES[ultimoMesTri] || 0;
       var wksNoLedger = Array.from(new Set(ledger.map(function(r){ return +r.wk; }))).filter(Boolean);
@@ -19564,7 +19564,7 @@ function buildPrevisao(){
   var wksLeftMes, wksLeftTri, wksLeftAno, labelMes, labelTri;
 
   // Mapa de fim de mês por semana (quartas-feiras exatas 2026)
-  var fimMeses = [0,4,8,12,17,21,25,30,34,38,43,47,52]; // wk que fecha cada mês (jan=4,fev=8,mar=12...)
+  var fimMeses = [0,4,8,12,17,21,25,30,34,39,43,47,52]; // wk que fecha cada mês (jan=4,fev=8,mar=12...)
   var nomesMes = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
   var mesIdx = 0;
   for(var mi=0; mi<fimMeses.length-1; mi++){ if(wkNow <= fimMeses[mi+1]){ mesIdx=mi; break; } }
