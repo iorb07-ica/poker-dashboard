@@ -1886,7 +1886,7 @@ function renderLive(){
   var presentes=PL_LIVE.filter(function(p){return!eliminados.includes(p);});
   fichasDiv.innerHTML=presentes.map(function(p){
     var stored=localStorage.getItem('live_fichas_'+wk+'_'+p)||'';
-    return '<div class="fichas-item"><label>'+p+'</label><input type="number" min="0" step="25" placeholder="0" value="'+stored+'" oninput="localStorage.setItem(\'live_fichas_'+wk+'_'+p+'\',this.value)"/></div>';
+    return '<div class="fichas-item"><label>'+p+'</label><input type="number" min="0" step="25" inputmode="numeric" pattern="[0-9]*" placeholder="0" value="'+stored+'" oninput="localStorage.setItem(\'live_fichas_'+wk+'_'+p+'\',this.value)"/></div>';
   }).join('');
   localStorage.setItem('live_events_'+wk, JSON.stringify(_liveEvents));
 }
