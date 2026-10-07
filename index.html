@@ -8817,6 +8817,70 @@ function calcularTodasReliquias(){
       var olimpo = titulosAnuais >= 1;
       var eterno  = titulosAnuais >= 3;
 
+      // ── Variáveis adicionais para arrays ──────────────────────────
+      // Ceifador F: líder de KOs em qualquer mês fechado
+      var ceifador = (function(){
+        var found=false;
+        mesesFechadosJogados.forEach(function(m){
+          var myKO=rows.filter(function(r){return+r.mes===m;}).reduce(function(s,r){return s+fv(r.kos);},0);
+          var allKO=jogs.map(function(j2){return ledger.filter(function(r){return r.jogador===j2&&+r.mes===m;}).reduce(function(s,r){return s+fv(r.kos);},0);});
+          if(myKO>0&&myKO===Math.max.apply(null,allKO)) found=true;
+        });
+        return found;
+      })();
+      // Gelo Vivo C: jogou mês inteiro sem rebuyar
+      var geloVivoC = (function(){
+        var found=false;
+        mesesFechadosJogados.forEach(function(m){
+          var mn=rows.filter(function(r){return+r.mes===m;});
+          if(mn.length>0&&mn.every(function(r){return fv(r.rebuys)===0;})) found=true;
+        });
+        return found;
+      })();
+      // Dinastia: campeão mensal em 3 meses consecutivos
+      var dinastia = (function(){
+        var campMes=meses.map(function(m){
+          if(!mesFechado(m)) return false;
+          var pts={}; ledger.filter(function(r){return+r.mes===m&&!+r.faltou;}).forEach(function(r){pts[r.jogador]=(pts[r.jogador]||0)+fv(r.pontos_calc);});
+          var top=Object.entries(pts).sort(function(a,b){return b[1]-a[1];})[0]; return top&&top[0]===jog;
+        });
+        return maxConsec(meses,function(m){return campMes[meses.indexOf(m)];})>=3;
+      })();
+      // Dragão: ganhou a noite E único com fichas > 0
+      var dragao = (function(){
+        var found=false;
+        wksSorted.forEach(function(wk){
+          var wkAll=ledger.filter(function(r){return+r.wk===wk&&!+r.faltou;});
+          if(wkAll.length<3) return;
+          var meuRow=rows.find(function(r){return+r.wk===wk;});
+          if(!meuRow||fv(meuRow.posicao)!==1) return;
+          var outroComFichas=wkAll.some(function(r){return r.jogador!==jog&&fv(r.fichas_restantes)>0;});
+          if(!outroComFichas&&fv(meuRow.fichas_restantes)>0) found=true;
+        });
+        return found;
+      })();
+      // Grand Slam: ganhou semana + mês + trimestre na última WK do trimestre
+      var grandSlam = (function(){
+        var FIM_GS=[0,4,8,12,17,21,25,30,34,39,43,47,52];
+        var found=false;
+        tris.forEach(function(t){
+          if(!triFechado(t)) return;
+          var wkFim=FIM_GS[t*3]||0; if(!wkFim) return;
+          // ganhou a última semana do trimestre?
+          var ganhouWK=rows.some(function(r){return+r.wk===wkFim&&fv(r.posicao)===1;});
+          if(!ganhouWK) return;
+          // liderou o trimestre?
+          var ptsTri={}; ledger.filter(function(r){return+r.trimestre===t&&!+r.faltou;}).forEach(function(r){ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+fv(r.pontos_calc);});
+          var topTri=Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0];
+          if(!topTri||topTri[0]!==jog) return;
+          // liderou o mês que fecha o trimestre?
+          var ptsMes={}; ledger.filter(function(r){return+r.mes===t*3&&!+r.faltou;}).forEach(function(r){ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+fv(r.pontos_calc);});
+          var topMes=Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0];
+          if(topMes&&topMes[0]===jog) found=true;
+        });
+        return found;
+      })();
+
       // ── FAÍSCA (10 relíquias) ──
       var faisca = [
         noitesKO2 >= 4,           // Explosivo
@@ -8826,9 +8890,9 @@ function calcularTodasReliquias(){
         cofreF,                    // Cofre F
         noites3KO >= 1,            // Caçador
         vitorias >= 1,             // Primeiro Ouro
-        false,                     // Fortaleza F (complexo)
+        fortalezaF,                // Fortaleza F
         venceuSemRebuy && vitorias>=1, // Gelo Vivo F
-        false,                     // Ceifador F
+        ceifador,                  // Ceifador F
       ];
       // ── CHAMA (10 relíquias) ──
       var chama = [
@@ -8837,22 +8901,22 @@ function calcularTodasReliquias(){
         podioConsec >= 3,          // Pódio Constante
         totalMedalhas >= 10,       // Colecionador C
         kos_total >= 50,           // Exterminador
-        false,                     // Gelo Vivo C
+        geloVivoC,                 // Gelo Vivo C
         fenix,                     // Fênix
         cofreC,                    // Cofre C
-        false,                     // Fortaleza C
+        fortalezaC,                // Fortaleza C
         koLider3meses,             // Ceifador Implacável
       ];
       // ── INFERNO (10 relíquias) ──
       var inferno = [
         podioConsec >= 5,          // Vulcão
-        false,                     // Fortaleza I
+        fortalezaI,                // Fortaleza I
         totalMedalhas >= 20,       // Colecionador I
-        false,                     // Dinastia
-        kos_total >= 100,          // Tubarão Branco (ajustado)
+        dinastia,                  // Dinastia
+        kos_total >= 100,          // Tubarão Branco (100 KOs acumulados)
         hatTrick,                  // Hat-trick
-        false,                     // Dragão
-        false,                     // Grand Slam
+        dragao,                    // Dragão
+        grandSlam,                 // Grand Slam
         olimpo,                    // Olimpo
         eterno,                    // Eterno
       ];
@@ -17303,25 +17367,36 @@ window.calcularBrasoesJogador = function(jogadorNome) {
   var dinastia=_dynastiaAtual;
   var tubarao=_anoPorDezembro&&playerRows.some(function(r){ return fv(r.kos)>=10; });
   var hatTrick=maxConsec(wksSorted,function(wk){ var r=playerRows.find(function(x){ return +x.wk===wk; }); return r&&fv(r.posicao)===1; })>=3;
+  // Dragão: ganhou a noite E é o único com fichas > 0 (limpou a mesa)
   var dragao=false;
-  if(_anoPorDezembro) wksSorted.forEach(function(wk){
+  wksSorted.forEach(function(wk){
     var wkAll=ledger.filter(function(r){ return +r.wk===wk&&!+r.faltou; });
     if(wkAll.length<3) return;
     var meuRow=playerRows.find(function(r){ return +r.wk===wk; });
     if(!meuRow||fv(meuRow.posicao)!==1) return;
-    if(wkAll.every(function(r){ return r.jogador===jogadorNome||fv(r.fichas_restantes)===0; })) dragao=true;
+    // só o vencedor tem fichas > 0
+    var outroComFichas=wkAll.some(function(r){ return r.jogador!==jogadorNome&&fv(r.fichas_restantes)>0; });
+    if(!outroComFichas&&fv(meuRow.fichas_restantes)>0) dragao=true;
   });
+  // Grand Slam: ganhou semana + mês + trimestre JUNTOS (última semana do trimestre)
   var grandSlam=false;
-  if(_engR&&_anoPorDezembro) trimestres.forEach(function(t){
+  var FIM_MESES_GS=[0,4,8,12,17,21,25,30,34,39,43,47,52];
+  if(_engR) trimestres.forEach(function(t){
     var triData=_engR.tri[t]; if(!triData||!triData.fechado) return;
+    // Último mês do trimestre e sua última WK
+    var ultimoMesTri=t*3;
+    var wkFechaTri=FIM_MESES_GS[ultimoMesTri]||0; if(!wkFechaTri) return;
+    // 1. Jogador liderou o trimestre
     var ptsTri={}; ledger.filter(function(r){ return +r.trimestre===t&&!+r.faltou; }).forEach(function(r){ ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+fv(r.pontos_calc); });
-    var topTri=Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0]; if(!topTri||topTri[0]!==jogadorNome) return;
-    Array.from(new Set(ledger.filter(function(r){ return +r.trimestre===t; }).map(function(r){ return +r.mes; }))).forEach(function(m){
-      var mesData=_engR.mes[m]; if(!mesData||!mesData.fechado) return;
-      var ptsMes={}; ledger.filter(function(r){ return +r.mes===m&&!+r.faltou; }).forEach(function(r){ ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+fv(r.pontos_calc); });
-      var topMes=Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0]; if(!topMes||topMes[0]!==jogadorNome) return;
-      if(playerRows.some(function(r){ return +r.mes===m&&fv(r.posicao)===1; })) grandSlam=true;
-    });
+    var topTri=Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0];
+    if(!topTri||topTri[0]!==jogadorNome) return;
+    // 2. Jogador liderou o mês que fecha o trimestre
+    var ptsMes={}; ledger.filter(function(r){ return +r.mes===ultimoMesTri&&!+r.faltou; }).forEach(function(r){ ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+fv(r.pontos_calc); });
+    var topMes=Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0];
+    if(!topMes||topMes[0]!==jogadorNome) return;
+    // 3. Jogador ganhou especificamente a última semana do trimestre
+    var meuUltimaWK=playerRows.find(function(r){ return +r.wk===wkFechaTri&&fv(r.posicao)===1; });
+    if(meuUltimaWK) grandSlam=true;
   });
   var olimpo=_olimpoHOF;
   var eterno=_titulosHOF>=3;
