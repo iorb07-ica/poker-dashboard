@@ -1977,35 +1977,101 @@ function liveAplicar(){
 
 async function livePublicar(){
   var st=document.getElementById('live-pub-status');
+  var btn=document.getElementById('btn-live-pub');
+
+  // 1. Verificar pré-requisitos
+  if(!_html){st.textContent='❌ Carregue o index.html na Seção 1 primeiro';st.className='pub-status err';return;}
+  var token=localStorage.getItem('gh_token')||'';
+  if(!token){st.textContent='❌ Configure o GitHub Token na Seção 7 primeiro';st.className='pub-status err';return;}
+
+  btn.disabled=true;
+  
+  // 2. Aplicar dados do modo ao vivo no formulário
   st.textContent='📥 Aplicando dados...';st.className='pub-status';
   liveAplicar();
-  // Salvar a noite
+  await new Promise(r=>setTimeout(r,400));
+
+  // 3. Salvar a noite nos dados internos
+  st.textContent='💾 Salvando noite...';
   salvarNoite();
-  // Esperar um tick para o _html ser atualizado
-  await new Promise(r=>setTimeout(r,300));
-  st.textContent='📡 Publicando no GitHub...';
-  if(!_html){st.textContent='❌ Carregue o index.html primeiro';st.className='pub-status err';return;}
-  var dadosStr=document.getElementById('dados-json-content')&&document.getElementById('dados-json-content').value;
-  // Usar o mesmo mecanismo do baixar() para gerar os dados
-  var u=_html;
-  var ok=await publicarGitHub(null, null);
-  // Na verdade, vamos usar o mesmo baixar() mas também commitar
-  st.textContent='⬇️ Gerando arquivos...';
-  // Simular o baixar mas capturar o conteúdo
+  await new Promise(r=>setTimeout(r,400));
+
+  // 4. Gerar o conteúdo dos arquivos (mesma lógica do baixar())
+  st.textContent='⚙️ Gerando arquivos...';
+  await new Promise(r=>setTimeout(r,200));
+  
   try{
-    // Chamar a lógica interna do baixar sem fazer o download
-    var dadosJSON=extrairJSON(_html,'ledger','array');
-    // Reconstruir como o baixar() faz
-    var wkN=parseInt(document.getElementById('nwk').value)||0;
-    st.textContent='🚀 Publicando no GitHub...';
-    // Usar baixar() normal + publicar separadamente depois
-    baixar();
-    st.textContent='✅ Download iniciado! Suba os arquivos manualmente ou use a integração GitHub.';
+    // Replicar a lógica do baixar() para capturar o conteúdo sem fazer download
+    var u = _html;
+    
+    // Injetar ledger
+    u = u.replace(/window\.DATA\.ledger\s*=\s*\[[\s\S]*?\];/, 'window.DATA.ledger = '+JSON.stringify(_led)+';');
+    
+    // Injetar eliminações
+    var eliStr = 'window.DATA.eliminacoes = '+JSON.stringify(_eli)+';';
+    if(u.indexOf('window.DATA.eliminacoes')>=0){
+      u = u.replace(/window\.DATA\.eliminacoes\s*=\s*\{[\s\S]*?\};/, eliStr);
+    }
+    
+    // Injetar HOF
+    u = u.replace(/var DEFAULT_HOF\s*=\s*\{[\s\S]*?\};/, 'var DEFAULT_HOF = '+JSON.stringify(_nfd.hof||{})+';');
+
+    // Gerar dados.json
+    var dadosObj = {ledger: _led, eliminacoes: _eli};
+    var dadosStr = JSON.stringify(dadosObj, null, 2);
+
+    // Gerar atas.json
+    var atasStr = JSON.stringify(_nfd.atas||{}, null, 2);
+
+    var wkN = parseInt(document.getElementById('live-wk').value)||0;
+    var repo = localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
+    var branch = localStorage.getItem('gh_branch')||'main';
+    var headers = {
+      'Authorization':'token '+token,
+      'Accept':'application/vnd.github.v3+json',
+      'Content-Type':'application/json'
+    };
+
+    async function commitFile(path, content, msg){
+      // Pegar SHA atual
+      var shaRes = await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+branch, {headers});
+      var shaJ = await shaRes.json();
+      var sha = shaJ.sha;
+      // Encode em base64
+      var b64 = btoa(unescape(encodeURIComponent(content)));
+      var body = {message:msg, content:b64, branch:branch};
+      if(sha) body.sha = sha;
+      var r = await fetch('https://api.github.com/repos/'+repo+'/contents/'+path, {
+        method:'PUT', headers, body:JSON.stringify(body)
+      });
+      var j = await r.json();
+      if(!j.content) throw new Error(path+': '+(j.message||'erro no commit'));
+      return true;
+    }
+
+    var msg = 'WK'+wkN+' — registro via admin mobile';
+
+    // 5. Publicar os 3 arquivos
+    st.textContent='📡 Publicando index.html...';
+    await commitFile('index.html', u, msg);
+
+    st.textContent='📡 Publicando dados.json...';
+    await commitFile('dados.json', dadosStr, msg);
+
+    st.textContent='📡 Publicando atas.json...';
+    await commitFile('atas.json', atasStr, msg);
+
+    st.textContent='✅ Publicado! Dashboard atualiza em ~1 minuto.';
     st.className='pub-status ok';
-    toast('📦 Arquivos gerados!');
+    toast('🚀 WK'+wkN+' publicada no GitHub!');
+
   }catch(e){
-    st.textContent='❌ '+e.message;st.className='pub-status err';
+    st.textContent='❌ '+e.message;
+    st.className='pub-status err';
+    toast('Erro: '+e.message);
   }
+
+  btn.disabled=false;
 }
 
 function toast(m){var t=document.getElementById('tz');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},2500);}
