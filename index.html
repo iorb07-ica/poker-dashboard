@@ -17798,7 +17798,7 @@ window.abrirPerfil = function(jogadorNome){
     var fortalezaI = _wksJogadasI.length > 0 && fortI;
 
     
-    var colecionadorI = _anoPorDezembro && totalMedalhas >= 20;
+    var colecionadorI = totalMedalhas >= 20;
 
     
     var _dynastiaHOF = false;
@@ -17815,7 +17815,7 @@ window.abrirPerfil = function(jogadorNome){
     var dinastia = _dynastiaHOF || _dynastiaAtual;
 
     
-    var tubarao = _anoPorDezembro && playerRows.some(function(r){ return (+r.kos||0) >= 10; });
+    var tubarao = playerRows.some(function(r){ return (+r.kos||0) >= 10; });
 
     
     // Hat-trick: 3 vitórias consecutivas — vale durante o ano
@@ -17827,54 +17827,38 @@ window.abrirPerfil = function(jogadorNome){
     
     
     
+    // Dragão: ganhou a noite E único com fichas > 0 (limpou a mesa)
     var dragao = false;
-    if(_anoPorDezembro){
-      wksSorted.forEach(function(wk){
-        var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
-        var nPresentes = wkAll.length;
-        if(nPresentes < 3) return;
-        var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
-        if(!meuRow) return;
-        if(+meuRow.posicao !== 1) return; 
-        
-        var todosEliminados = wkAll.every(function(r){
-          if(r.jogador === jogadorNome) return true; 
-          var fichas = +r.fichas_restantes || 0;
-          return fichas === 0;
-        });
-        if(todosEliminados) dragao = true;
-      });
-    }
+    wksSorted.forEach(function(wk){
+      var wkAll = ledger.filter(function(r){ return +r.wk===wk && !+r.faltou; });
+      if(wkAll.length < 3) return;
+      var meuRow = playerRows.find(function(r){ return +r.wk===wk; });
+      if(!meuRow || +meuRow.posicao !== 1) return;
+      var outroComFichas = wkAll.some(function(r){ return r.jogador!==jogadorNome && (+r.fichas_restantes||0)>0; });
+      if(!outroComFichas && (+meuRow.fichas_restantes||0)>0) dragao = true;
+    });
 
     
+    // Grand Slam: ganhou semana + mês + trimestre na última WK do trimestre
     var grandSlam = false;
-    if(_engR && _anoPorDezembro){
-      trimestres.forEach(function(t){
-        var triData = _engR.tri[t];
-        
-        if(!triData || !triData.fechado) return;
-        
-        var ptsTri = {};
-        ledger.filter(function(r){ return +r.trimestre===t && !+r.faltou; }).forEach(function(r){ ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+(+r.pontos_calc||0); });
-        var topTri = Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0];
-        if(!topTri || topTri[0]!==jogadorNome) return;
-
-        
-        var mesTri = Array.from(new Set(ledger.filter(function(r){ return +r.trimestre===t; }).map(function(r){ return +r.mes; })));
-        mesTri.forEach(function(m){
-          var mesData = _engR.mes[m];
-          if(!mesData || !mesData.fechado) return;
-          
-          var ptsMes = {};
-          ledger.filter(function(r){ return +r.mes===m && !+r.faltou; }).forEach(function(r){ ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+(+r.pontos_calc||0); });
-          var topMes = Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0];
-          if(!topMes || topMes[0]!==jogadorNome) return;
-          
-          var venceuNoite = playerRows.some(function(r){ return +r.mes===m && +r.posicao===1; });
-          if(venceuNoite) grandSlam = true;
-        });
-      });
-    }
+    var _FIM_GS=[0,4,8,12,17,21,25,30,34,39,43,47,52];
+    trimestres.forEach(function(t){
+      var wkFim = _FIM_GS[t*3]||0; if(!wkFim) return;
+      // T fechado?
+      if(_FIM_GS[t*3] > Math.max.apply(null, ledger.map(function(r){return+r.wk||0;}))) return;
+      // ganhou a última WK do trimestre?
+      if(!playerRows.some(function(r){return +r.wk===wkFim&&+r.posicao===1;})) return;
+      // liderou o trimestre?
+      var ptsTri={};
+      ledger.filter(function(r){return+r.trimestre===t&&!+r.faltou;}).forEach(function(r){ptsTri[r.jogador]=(ptsTri[r.jogador]||0)+(+r.pontos_calc||0);});
+      var topTri=Object.entries(ptsTri).sort(function(a,b){return b[1]-a[1];})[0];
+      if(!topTri||topTri[0]!==jogadorNome) return;
+      // liderou o mês que fecha o trimestre?
+      var ptsMes={};
+      ledger.filter(function(r){return+r.mes===t*3&&!+r.faltou;}).forEach(function(r){ptsMes[r.jogador]=(ptsMes[r.jogador]||0)+(+r.pontos_calc||0);});
+      var topMes=Object.entries(ptsMes).sort(function(a,b){return b[1]-a[1];})[0];
+      if(topMes&&topMes[0]===jogadorNome) grandSlam=true;
+    });
 
     
     var _anoFechado = _anoPorDezembro;
