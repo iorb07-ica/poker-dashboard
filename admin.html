@@ -2110,8 +2110,7 @@ async function carregarDoGitHub(){
     var j = await res.json();
     if(!j.content){ throw new Error(j.message||'Arquivo não encontrado'); }
     // Decodificar base64
-    var b64 = j.content.replace(/
-/g,'');
+    var b64 = j.content.split('\n').join('');
     var content = decodeURIComponent(escape(atob(b64)));
     // Processar como se tivesse carregado via arquivo
     _html = content;
