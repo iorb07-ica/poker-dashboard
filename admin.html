@@ -357,19 +357,20 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
       </div>
     </div>
 
-    <!-- Modais ao vivo -->
+    <!-- Modal 1: quem eliminou quem -->
     <div id="live-modal" style="display:none;" class="modal-overlay" onclick="if(event.target===this)fecharModal()">
       <div class="modal-box">
-        <h3 id="modal-title">O que aconteceu?</h3>
-        <button class="modal-btn" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);color:#fff;" onclick="registrarEvento('rebuy')">🔄 Rebuy — voltou ao jogo</button>
-        <button class="modal-btn" style="background:linear-gradient(135deg,#1e3a5f,#3b82f6);color:#fff;" onclick="abrirKoSelect()">💀 Eliminação — escolher quem eliminou</button>
-        <button class="modal-btn" style="background:var(--bg3);color:var(--muted);border:1px solid var(--bdr);" onclick="fecharModal()">Cancelar</button>
+        <h3><span id="modal-killer-name" style="color:var(--gold);"></span> eliminou quem?</h3>
+        <div id="modal-victim-btns"></div>
+        <button class="modal-btn" style="background:var(--bg3);color:var(--muted);border:1px solid var(--bdr);margin-top:4px;" onclick="fecharModal()">Cancelar</button>
       </div>
     </div>
+    <!-- Modal 2: saiu ou rebuy -->
     <div id="ko-modal" style="display:none;" class="modal-overlay" onclick="if(event.target===this)fecharKoModal()">
       <div class="modal-box">
-        <h3>Quem eliminou <span id="ko-victim-name" style="color:var(--red);"></span>?</h3>
-        <div id="ko-modal-btns"></div>
+        <h3><span id="ko-victim-name" style="color:var(--red);"></span> saiu ou rebuy?</h3>
+        <button class="modal-btn" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);color:#fff;" onclick="registrarEvento('eliminacao')">💀 Saiu da noite</button>
+        <button class="modal-btn" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;" onclick="registrarEvento('rebuy')">🔄 Fez rebuy — voltou</button>
         <button class="modal-btn" style="background:var(--bg3);color:var(--muted);border:1px solid var(--bdr);margin-top:4px;" onclick="fecharKoModal()">Cancelar</button>
       </div>
     </div>
@@ -1872,28 +1873,36 @@ function renderLive(){
 }
 
 function setDealer(p){_liveDealer=p;localStorage.setItem('live_dealer_'+document.getElementById('live-wk').value,p);renderLive();toast('💰 Dealer: '+p);}
-function abrirModal(p){_liveVitima=p;document.getElementById('modal-title').textContent='O que aconteceu com '+p+'?';document.getElementById('live-modal').style.display='flex';}
-function fecharModal(){document.getElementById('live-modal').style.display='none';_liveVitima=null;}
-function abrirKoSelect(){
-  document.getElementById('live-modal').style.display='none';
-  document.getElementById('ko-victim-name').textContent=_liveVitima;
+function abrirModal(killer){
+  _liveKiller=killer; _liveVitima=null;
+  document.getElementById('modal-killer-name').textContent=killer;
   var PL_LIVE=['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
   var eliminados=_liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;});
-  var presentes=PL_LIVE.filter(function(p){return!eliminados.includes(p)&&p!==_liveVitima;});
-  document.getElementById('ko-modal-btns').innerHTML=presentes.map(function(p){
-    return '<button class="modal-btn" style="background:var(--bg3);color:var(--text);border:1px solid var(--bdr);" onclick="registrarEvento(\'eliminacao\',\''+p+'\')">'+p+'</button>';
+  var outros=PL_LIVE.filter(function(p){return !eliminados.includes(p)&&p!==killer;});
+  document.getElementById('modal-victim-btns').innerHTML=outros.map(function(p){
+    return '<button class="modal-btn" style="background:var(--bg3);color:var(--text);border:1px solid var(--bdr);" onclick="escolherVitima(\''+p+'\')">' +p+'</button>';
   }).join('');
+  document.getElementById('live-modal').style.display='flex';
+}
+function escolherVitima(vitima){
+  _liveVitima=vitima;
+  document.getElementById('live-modal').style.display='none';
+  document.getElementById('ko-victim-name').textContent=vitima;
   document.getElementById('ko-modal').style.display='flex';
 }
+function fecharModal(){document.getElementById('live-modal').style.display='none';_liveKiller=null;_liveVitima=null;}
+function abrirKoSelect(){}
 function fecharKoModal(){document.getElementById('ko-modal').style.display='none';}
-function registrarEvento(tipo, eliminou){
+function registrarEvento(tipo){
+  var vitima=_liveVitima;
+  var killer=_liveKiller;
   fecharModal();fecharKoModal();
-  if(!_liveVitima) return;
-  var ev={tipo,vitima:_liveVitima,eliminou:eliminou||'?'};
+  if(!vitima||!killer) return;
+  var ev={tipo:tipo,vitima:vitima,eliminou:killer};
   if(tipo==='eliminacao'){ev.posicao=_livePosAtual;_livePosAtual--;}
   _liveEvents.push(ev);
   renderLive();
-  toast(tipo==='rebuy'?'🔄 Rebuy '+_liveVitima:'💀 '+_liveVitima+' eliminado em '+ev.posicao+'º');
+  toast(tipo==='rebuy'?'🔄 Rebuy: '+killer+' KO '+vitima+' (voltou)':'💀 '+killer+' eliminou '+vitima+' ('+ev.posicao+'º)');
 }
 function removerEvento(i){_liveEvents.splice(i,1);renderLive();}
 
