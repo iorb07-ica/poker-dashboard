@@ -1851,7 +1851,7 @@ function renderLive(){
   var pDiv=document.getElementById('live-player-btns');
   pDiv.innerHTML=PL_LIVE.map(function(p){
     var elim=eliminados.includes(p);
-    return '<button class="live-player-btn" style="'+(elim?'opacity:.3;text-decoration:line-through;':'')+'" onclick="'+(elim?'':'"abrirModal(\''+p+'\')"')+'" '+(elim?'disabled':'')+'>'+p+'</button>';
+    return '<button class="live-player-btn" style="'+(elim?'opacity:.3;text-decoration:line-through;':'')+'" onclick="'+(elim?'':'abrirModal(\''+p+'\')')+'" '+(elim?'disabled':'')+'>'+p+'</button>';
   }).join('');
   // Eventos
   var evDiv=document.getElementById('live-events');
