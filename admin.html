@@ -138,6 +138,8 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
         </div>
         <div id="fok" class="fok" style="display:none;"><span>&#9989;</span><span class="fn" id="fn">-</span><button class="btn bgh" style="padding:3px 9px;font-size:11px;" onclick="document.getElementById('fi').click()">Trocar</button></div>
         <input type="file" id="fi" accept=".html" style="display:none" onchange="lfile(this)"/>
+        <button class="btn bp bfw" onclick="carregarDoGitHub()" id="btn-gh-load" style="margin-top:10px;">☁️ Carregar index.html do GitHub</button>
+        <div id="gh-load-status" class="pub-status"></div>
       </div>
     </div>
 
@@ -348,8 +350,25 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
           <div id="live-events" style="margin-bottom:14px;max-height:200px;overflow-y:auto;"></div>
 
           <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">🃏 Posições e Fichas Finais</div>
-          <div id="live-final" class="fichas-grid" style="margin-bottom:14px;"></div>
+          <div id="live-final" class="fichas-grid" style="margin-bottom:10px;"></div>
 
+          <!-- Painel de validação ao vivo -->
+          <div id="live-validation" style="display:none;background:var(--bg3);border-radius:10px;padding:12px;margin-bottom:12px;">
+            <div style="font-size:10px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">✅ Validação</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <div class="wvc" id="lv-fichas" style="padding:8px;border-radius:8px;">
+                <div style="font-size:10px;color:var(--muted);font-weight:800;">FICHAS</div>
+                <div style="font-size:13px;font-weight:800;" id="lv-fichas-val">-</div>
+              </div>
+              <div class="wvc" id="lv-kos" style="padding:8px;border-radius:8px;">
+                <div style="font-size:10px;color:var(--muted);font-weight:800;">KOs</div>
+                <div style="font-size:13px;font-weight:800;" id="lv-kos-val">-</div>
+              </div>
+            </div>
+            <div id="lv-msg" style="font-size:12px;padding:8px;border-radius:8px;background:var(--bg2);"></div>
+          </div>
+
+          <button class="btn bgh bfw" onclick="liveValidar()" style="margin-bottom:8px;">🔍 Verificar Dados</button>
           <button class="btn bg2 bfw" onclick="liveAplicar()" style="margin-bottom:8px;">📥 Aplicar na Semana (preenche o formulário)</button>
           <button class="btn bgold bfw" onclick="livePublicar()" id="btn-live-pub" style="margin-bottom:6px;">🚀 Salvar e Publicar direto no GitHub</button>
           <div id="live-pub-status" class="pub-status"></div>
@@ -2072,6 +2091,121 @@ async function livePublicar(){
   }
 
   btn.disabled=false;
+}
+
+
+// ── Carregar index.html direto do GitHub ─────────────────────────────────────
+async function carregarDoGitHub(){
+  var st = document.getElementById('gh-load-status');
+  var btn = document.getElementById('btn-gh-load');
+  var token = localStorage.getItem('gh_token')||'';
+  var repo = localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
+  var branch = localStorage.getItem('gh_branch')||'main';
+  if(!token){ st.textContent='❌ Configure o GitHub Token na Seção 7 primeiro'; st.className='pub-status err'; return; }
+  btn.disabled=true;
+  st.textContent='⬇️ Baixando index.html do GitHub...'; st.className='pub-status';
+  try{
+    var url = 'https://api.github.com/repos/'+repo+'/contents/index.html?ref='+branch;
+    var res = await fetch(url, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
+    var j = await res.json();
+    if(!j.content){ throw new Error(j.message||'Arquivo não encontrado'); }
+    // Decodificar base64
+    var b64 = j.content.replace(/
+/g,'');
+    var content = decodeURIComponent(escape(atob(b64)));
+    // Processar como se tivesse carregado via arquivo
+    _html = content;
+    var m = _html.match(/window\.DATA\.ledger\s*=\s*(\[[\s\S]*?\]);/);
+    if(m){ try{ _led = JSON.parse(m[1]); }catch(e){} }
+    var me = _html.match(/window\.DATA\.eliminacoes\s*=\s*(\{[\s\S]*?\});/);
+    if(me){ try{ _eli = JSON.parse(me[1]); }catch(e){} }
+    // Atualizar UI
+    document.getElementById('fok').style.display='flex';
+    document.getElementById('fn').textContent = 'index.html (GitHub — '+_led.length+' registros)';
+    document.getElementById('fbadge').textContent = _led.length+' registros';
+    // Auto-preencher WK sugerida
+    var wks = Array.from(new Set(_led.map(function(r){return+r.wk;}))).filter(Boolean);
+    var proxWK = wks.length ? Math.max.apply(null,wks)+1 : 1;
+    var nwkEl = document.getElementById('nwk');
+    if(nwkEl && !nwkEl.value) nwkEl.value = proxWK;
+    var lwkEl = document.getElementById('live-wk');
+    if(lwkEl && !lwkEl.value) lwkEl.value = proxWK;
+    // Reconstruir listas de semanas
+    buildWT(); buildAWK();
+    st.textContent='✅ Carregado! '+_led.length+' registros ('+wks.length+' semanas)'; st.className='pub-status ok';
+    toast('✅ index.html carregado do GitHub');
+  }catch(e){
+    st.textContent='❌ '+e.message; st.className='pub-status err';
+  }
+  btn.disabled=false;
+}
+
+
+// ── Validação do Modo ao Vivo ─────────────────────────────────────────────────
+function liveValidar(){
+  var wk = document.getElementById('live-wk').value||'0';
+  var PL_LIVE = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
+
+  // Elimindados e rebuys dos eventos
+  var eliminados = _liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;});
+  var totalRebuys = _liveEvents.filter(function(e){return e.tipo==='rebuy';}).length;
+  var presentes = PL_LIVE.length; // todos os 9 (faltou ainda não implementado no live)
+
+  // Fichas dos inputs
+  var totalFichasInformado = 0;
+  var finalistas = 0;
+  PL_LIVE.forEach(function(p){
+    var f = parseInt(localStorage.getItem('live_fichas_'+wk+'_'+p))||0;
+    totalFichasInformado += f;
+    if(f > 0) finalistas++;
+  });
+
+  // KOs dos eventos
+  var totalKOs = _liveEvents.length; // cada evento (rebuy ou elim) = 1 KO para quem eliminou
+  var totalEntradas = presentes + totalRebuys;
+  var totalFichasEsperado = totalEntradas * 5000;
+  var totalKOsEsperado = totalEntradas - finalistas;
+
+  // Atualizar painel
+  var panel = document.getElementById('live-validation');
+  panel.style.display = 'block';
+
+  var fichasOk = totalFichasInformado === totalFichasEsperado;
+  var kosOk = totalKOs === totalKOsEsperado;
+
+  var fEl = document.getElementById('lv-fichas');
+  var kEl = document.getElementById('lv-kos');
+  var fVal = document.getElementById('lv-fichas-val');
+  var kVal = document.getElementById('lv-kos-val');
+  var msg = document.getElementById('lv-msg');
+
+  fEl.style.background = fichasOk ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
+  fVal.style.color = fichasOk ? 'var(--green)' : 'var(--red)';
+  fVal.textContent = totalFichasInformado.toLocaleString('pt-BR') + ' / ' + totalFichasEsperado.toLocaleString('pt-BR');
+
+  kEl.style.background = kosOk ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
+  kVal.style.color = kosOk ? 'var(--green)' : 'var(--red)';
+  kVal.textContent = totalKOs + ' / ' + totalKOsEsperado;
+
+  var problems = [];
+  if(!fichasOk){
+    var diff = totalFichasEsperado - totalFichasInformado;
+    problems.push('Fichas: ' + (diff > 0 ? 'faltam ' + diff.toLocaleString('pt-BR') : 'sobram ' + Math.abs(diff).toLocaleString('pt-BR')));
+  }
+  if(!kosOk){
+    problems.push('KOs: registrados ' + totalKOs + ', esperados ' + totalKOsEsperado + ' (' + totalEntradas + ' entradas - ' + finalistas + ' finalistas)');
+  }
+  if(totalFichasInformado === 0 && eliminados.length < presentes - 1){
+    problems.push('Preencha as fichas dos jogadores que ainda estão na mesa.');
+  }
+
+  if(problems.length){
+    msg.style.color = 'var(--red)';
+    msg.textContent = '⚠️ ' + problems.join(' | ');
+  } else {
+    msg.style.color = 'var(--green)';
+    msg.textContent = '✅ Tudo fechando: fichas e KOs batem. Pode publicar!';
+  }
 }
 
 function toast(m){var t=document.getElementById('tz');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},2500);}
