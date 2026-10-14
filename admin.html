@@ -433,8 +433,12 @@ function hdrop(e){e.preventDefault();var f=e.dataTransfer.files[0];if(f)pfile(f)
 function lfile(i){var f=i.files[0];if(f)pfile(f);}
 function pfile(f){
   var r=new FileReader();
-  r.onload=function(e){
-    _html=e.target.result;
+  r.onload=function(e){ processarIndexHtml(e.target.result, f.name); };
+  r.readAsText(f);
+}
+function processarIndexHtml(conteudo, nome){
+  {
+    _html=conteudo;
     var m=_html.match(/window\.DATA\.ledger\s*=\s*(\[[\s\S]*?\]);/);
     if(m){try{_led=JSON.parse(m[1]);}catch(x){_led=[];}}
     var me=_html.match(/window\.DATA\.eliminacoes\s*=\s*(\{[\s\S]*?\});/);
@@ -446,18 +450,17 @@ function pfile(f){
     if(nm){try{var nd=JSON.parse(nm[1]);if(nd&&typeof nd==='object')_nfd=nd;}catch(x){}}
     document.getElementById('uz').style.display='none';
     document.getElementById('fok').style.display='flex';
-    document.getElementById('fn').textContent=f.name;
+    document.getElementById('fn').textContent=nome;
     document.getElementById('b0').textContent='Carregado';
     document.getElementById('b0').style.cssText='background:rgba(34,197,94,.15);color:#4ade80;';
-    document.getElementById('fbadge').textContent=f.name;
+    document.getElementById('fbadge').textContent=nome;
     document.getElementById('fbadge').style.cssText='font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);';
     document.getElementById('dlb').disabled=false;
     buildWT();buildAWK();buildHOF();buildTorn();updC();
     var pj=document.getElementById('apj');
     pj.innerHTML='<option value="">- Jogador -</option>'+PL.map(function(p){return'<option>'+p+'</option>';}).join('');
     toast('Arquivo carregado!');
-  };
-  r.readAsText(f);
+  }
 }
 function gwks(){return Array.from(new Set(_led.map(function(r){return+r.wk||0;}))).filter(Boolean).sort(function(a,b){return a-b;});}
 function getValidEliminations(){
@@ -2120,21 +2123,18 @@ async function carregarDoGitHub(){
   st.textContent='⬇️ Baixando index.html do GitHub...'; st.className='pub-status';
   try{
     var url = 'https://api.github.com/repos/'+repo+'/contents/index.html?ref='+branch;
-    var res = await fetch(url, {headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json'}});
-    var j = await res.json();
-    if(!j.content){ throw new Error(j.message||'Arquivo não encontrado'); }
-    // Decodificar base64
-    var b64 = j.content.split('\n').join('');
-    var content = decodeURIComponent(escape(atob(b64)));
-    // Processar como se tivesse carregado via arquivo
-    _html = content;
-    var m = _html.match(/window\.DATA\.ledger\s*=\s*(\[[\s\S]*?\]);/);
-    if(m){ try{ _led = JSON.parse(m[1]); }catch(e){} }
-    var me = _html.match(/window\.DATA\.eliminacoes\s*=\s*(\{[\s\S]*?\});/);
-    if(me){ try{ _eli = JSON.parse(me[1]); }catch(e){} }
-    // Atualizar UI
-    document.getElementById('fok').style.display='flex';
-    document.getElementById('fn').textContent = 'index.html (GitHub — '+_led.length+' registros)';
+    // Formato "raw": devolve o arquivo puro e aceita arquivos acima de 1 MB (o index.html tem ~2 MB)
+    var res = await fetch(url, {cache:'no-store', headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.raw'}});
+    if(!res.ok){
+      var msg='Erro '+res.status;
+      try{ var ej=await res.json(); if(ej.message) msg+=': '+ej.message; }catch(x){}
+      throw new Error(msg);
+    }
+    var content = await res.text();
+    if(!content || content.indexOf('window.DATA')<0){ throw new Error('Arquivo veio vazio ou sem os dados do dashboard'); }
+    // Processar exatamente como o carregamento por arquivo (ledger, eliminações, Hall da Fama, atas, torneios)
+    processarIndexHtml(content, 'index.html (GitHub)');
+    document.getElementById('fn').textContent = 'index.html (GitHub, '+_led.length+' registros)';
     document.getElementById('fbadge').textContent = _led.length+' registros';
     // Auto-preencher WK sugerida
     var wks = Array.from(new Set(_led.map(function(r){return+r.wk;}))).filter(Boolean);
