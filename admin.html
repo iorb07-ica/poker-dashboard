@@ -1642,7 +1642,9 @@ async function interpretarWpp(){
     '- Ignore conversa paralela, piadas e comentários.\n\n'+
     'Faça toda a análise mentalmente. NÃO escreva explicação, raciocínio, markdown ou qualquer texto fora do JSON.\n'+
     'Retorne APENAS um JSON válido, começando com { e terminando com }, com este formato exato:\n'+
-    '{"posicoes":{"Heron":1,"Israel":2,...},"rebuys":{"Magu":2,"Pedro":1,...},"fichas":{"Heron":17825,"Israel":14500,...},"eliminacoes":[{"de":"Magu","para":"Pedro"},...],"dealer":"Israel","faltou":["Rafa"],"obs":"qualquer observação relevante"}\n'+
+    '{"posicoes":{"Heron":1,"Israel":2,...},"fichas":{"Heron":17825,"Israel":14500,...},"eliminacoes":[{"quem_eliminou":"Heron","eliminado":"Magu"},...],"faltou":["Rafa"],"obs":"qualquer observação relevante"}\n'+
+    'Em "eliminacoes" liste TODAS as quedas da noite em ordem cronológica, inclusive as que viraram rebuy. "quem_eliminou" é quem tirou, "eliminado" é quem caiu (em \"Heron KO Magu\": quem_eliminou=Heron, eliminado=Magu).\n'+
+    'Não informe rebuys nem dealer: o sistema calcula.\n'+
     'Se não encontrar alguma informação, omita a chave. Retorne {} se não encontrar nada.\n'+
     'Valores de fichas são números inteiros. Posições são números 1-9.';
   var result=await callClaude(prompt, images, {system:'Você é um extrator de dados. Responda exclusivamente com um único objeto JSON válido. Nunca escreva texto antes ou depois do JSON.', maxTokens:8000});
@@ -1653,12 +1655,12 @@ async function interpretarWpp(){
     var ini=clean.indexOf('{'), fim=clean.lastIndexOf('}');
     if(ini>=0&&fim>ini) clean=clean.substring(ini,fim+1);
     _wppData=JSON.parse(clean);
+    normalizarWpp(_wppData);
     var html='<strong>✅ Dados interpretados:</strong><br>';
     if(_wppData.posicoes){html+='<br><b>Posições:</b> '+Object.entries(_wppData.posicoes).map(([j,p])=>p+'º '+j).join(', ');}
-    if(_wppData.rebuys){html+='<br><b>Rebuys:</b> '+Object.entries(_wppData.rebuys).map(([j,r])=>j+' ×'+r).join(', ');}
+    if(_wppData.rebuys){var rbl=Object.entries(_wppData.rebuys).filter(([j,r])=>r>0);html+='<br><b>Rebuys (calculados pelas eliminações):</b> '+(rbl.length?rbl.map(([j,r])=>j+' ×'+r).join(', '):'nenhum');}
     if(_wppData.fichas){html+='<br><b>Fichas:</b> '+Object.entries(_wppData.fichas).map(([j,f])=>j+' '+f.toLocaleString('pt-BR')).join(', ');}
-    if(_wppData.eliminacoes&&_wppData.eliminacoes.length){html+='<br><b>Eliminações:</b> '+_wppData.eliminacoes.map(e=>e.de+' ⚔️ '+e.para).join(', ');}
-    if(_wppData.dealer){html+='<br><b>Dealer:</b> '+_wppData.dealer;}
+    if(_wppData.eliminacoes&&_wppData.eliminacoes.length){html+='<br><b>Eliminações ('+_wppData.eliminacoes.length+'):</b> '+_wppData.eliminacoes.map(e=>e.de+' eliminou '+e.para).join(' · ');}
     if(_wppData.faltou&&_wppData.faltou.length){html+='<br><b>Faltou:</b> '+_wppData.faltou.join(', ');}
     if(_wppData.obs){html+='<br><em>Obs: '+_wppData.obs+'</em>';}
     var res=document.getElementById('wpp-result');res.style.display='block';res.innerHTML=html;
@@ -1670,80 +1672,67 @@ async function interpretarWpp(){
   }
 }
 
+// Converte a resposta da IA para o formato do admin: de = quem eliminou, para = quem caiu.
+// Rebuys NÃO vêm da IA: são calculados pelas quedas de cada jogador.
+function normalizarWpp(d){
+  var nomes=PL.slice();
+  function nome(x){
+    if(!x) return '';
+    var t=String(x).trim().toLowerCase();
+    var achou=nomes.find(function(p){return p.toLowerCase()===t;});
+    return achou||String(x).trim();
+  }
+  var elis=(d.eliminacoes||[]).map(function(e){
+    var k=e.quem_eliminou||e.killer||'', v=e.eliminado||e.vitima||'';
+    return {de:nome(k), para:nome(v)};
+  }).filter(function(e){return e.de&&e.para&&e.de!==e.para;});
+  d.eliminacoes=elis;
+  var pos={}; Object.keys(d.posicoes||{}).forEach(function(k){pos[nome(k)]=+d.posicoes[k];}); d.posicoes=pos;
+  var fi={};  Object.keys(d.fichas||{}).forEach(function(k){fi[nome(k)]=+d.fichas[k]||0;}); d.fichas=fi;
+  d.faltou=(d.faltou||[]).map(nome);
+  // Quedas por jogador. Quem terminou com fichas nunca saiu de vez: todas as quedas foram rebuy.
+  // Quem terminou sem fichas: a última queda foi a definitiva.
+  var quedas={}; elis.forEach(function(e){quedas[e.para]=(quedas[e.para]||0)+1;});
+  var rb={};
+  Object.keys(pos).forEach(function(p){
+    var q=quedas[p]||0;
+    rb[p]=(fi[p]>0)?q:Math.max(0,q-1);
+  });
+  d.rebuys=rb;
+  delete d.dealer;
+}
 function aplicarWpp(){
   if(!_wppData){toast('Interprete primeiro');return;}
-  // Preencher posições
-  if(_wppData.posicoes){
-    Object.entries(_wppData.posicoes).forEach(function([jogador,pos]){
-      var rows=document.querySelectorAll('#ptb tr');
-      rows.forEach(function(tr){
-        if(tr.querySelector('td.pn')&&tr.querySelector('td.pn').textContent.trim()===jogador){
-          var sel=tr.querySelector('select.ep');
-          if(sel) sel.value=pos;
-        }
-      });
-    });
-  }
-  // Preencher rebuys
-  if(_wppData.rebuys){
-    Object.entries(_wppData.rebuys).forEach(function([jogador,r]){
-      var rows=document.querySelectorAll('#ptb tr');
-      rows.forEach(function(tr){
-        if(tr.querySelector('td.pn')&&tr.querySelector('td.pn').textContent.trim()===jogador){
-          var inp=tr.querySelector('input.er');
-          if(inp){inp.value=r;wkRowChanged(inp);}
-        }
-      });
-    });
-  }
-  // Preencher fichas
-  if(_wppData.fichas){
-    Object.entries(_wppData.fichas).forEach(function([jogador,f]){
-      var rows=document.querySelectorAll('#ptb tr');
-      rows.forEach(function(tr){
-        if(tr.querySelector('td.pn')&&tr.querySelector('td.pn').textContent.trim()===jogador){
-          var inp=tr.querySelector('input.ef2');
-          if(inp){inp.value=f;wkRowChanged(inp);}
-        }
-      });
-    });
-  }
-  // Faltou
-  if(_wppData.faltou&&_wppData.faltou.length){
-    _wppData.faltou.forEach(function(jogador){
-      var rows=document.querySelectorAll('#ptb tr');
-      rows.forEach(function(tr){
-        if(tr.querySelector('td.pn')&&tr.querySelector('td.pn').textContent.trim()===jogador){
-          var chk=tr.querySelector('input.efl');
-          if(chk&&!chk.checked){chk.checked=true;sp(chk);}
-        }
-      });
-    });
-  }
-  // Dealer
-  if(_wppData.dealer){
-    var rows=document.querySelectorAll('#ptb tr');
-    rows.forEach(function(tr){
-      if(tr.querySelector('td.pn')&&tr.querySelector('td.pn').textContent.trim()===_wppData.dealer){
-        var chk=tr.querySelector('input.edl');
-        if(chk&&!chk.checked){chk.checked=true;wkRowChanged(chk);}
-      }
-    });
-  }
-  // Eliminações
-  if(_wppData.eliminacoes&&_wppData.eliminacoes.length){
-    var wk=parseInt(document.getElementById('nwk').value)||0;
-    if(!_eli[wk]) _eli[wk]=[];
-    _eli[wk]=_eli[wk].concat(_wppData.eliminacoes.map(function(e){return{de:e.de,para:e.para};}));
-    buildEliList(wk);
-    syncKOsFromElis();
-  }
+  if(!_html){toast('Carregue o index.html primeiro (Seção 1)');return;}
+  var d=_wppData;
+  // Abre uma noite nova com a tabela de jogadores montada, se ainda não houver uma aberta
+  var formAberto=document.getElementById('nf').style.display==='block'&&document.querySelectorAll('#ptb tr').length>0;
+  if(!formAberto||_ewk!==null){ novaNoite(); }
+  var wk=parseInt(document.getElementById('nwk').value)||0;
+  getWeekRows().forEach(function(tr){
+    var p=tr.getAttribute('data-p');
+    var sel=tr.querySelector('.ep'), chk=tr.querySelector('.efl');
+    var rb=tr.querySelector('.er'), fi=tr.querySelector('.ef2'), dl=tr.querySelector('.edl');
+    if(d.posicoes[p]){
+      sel.value=String(d.posicoes[p]); chk.checked=false; tr.className='';
+      rb.value=d.rebuys[p]||0;
+      fi.value=d.fichas[p]||0;
+    }else{
+      sel.value=''; chk.checked=true; tr.className='dm';
+      rb.value=0; fi.value=0;
+    }
+    if(dl) dl.checked=false;
+  });
+  // Eliminações: substitui (não soma), para não duplicar se aplicar duas vezes
+  _eli[wk]=d.eliminacoes.slice();
+  buildEliList(wk);
   refreshPosOptions();
+  syncKOsFromElis();
   updateWeekValidation();
-  // Garantir que a seção da semana está aberta
   document.getElementById('nf').style.display='block';
-  tog('c1');
-  toast('✅ Dados aplicados! Revise e salve.');
+  var c1=document.getElementById('c1'); if(c1&&c1.classList.contains('collapsed')) c1.classList.remove('collapsed');
+  document.getElementById('nf').scrollIntoView({behavior:'smooth',block:'start'});
+  toast('✅ Dados aplicados na WK'+wk+'. Confira e salve.');
   document.getElementById('btn-aplicar').style.display='none';
 }
 
