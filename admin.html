@@ -85,6 +85,11 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
 @media(max-width:580px){.wr{padding:8px;}.hg{grid-template-columns:repeat(2,1fr);}}
 
 .ai-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:rgba(99,102,241,.2);color:#a5b4fc;margin-left:6px;}
+.live-top{display:grid;grid-template-columns:72px minmax(0,1fr) 90px 80px;gap:8px;margin-bottom:4px;}
+.live-top .fd{min-width:0;}
+.live-top input,.live-top select{min-width:0;max-width:100%;box-sizing:border-box;height:38px;}
+.live-top input[type=date]{-webkit-appearance:none;appearance:none;text-align:left;}
+@media (max-width:520px){.live-top{grid-template-columns:72px minmax(0,1fr);}}
 .live-player-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
 .live-player-btn{padding:12px 6px;border-radius:10px;border:1px solid var(--bdr);background:var(--bg3);color:var(--text);font-size:13px;font-weight:800;cursor:pointer;text-align:center;}
 .live-player-btn.dealer{border-color:var(--gold);background:rgba(251,191,36,.1);color:var(--gold);}
@@ -330,17 +335,17 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
     <div class="cd collapsed" id="c7">
       <div class="ch" onclick="tog('c7')"><span>🎮</span><h2>8. Modo ao Vivo <span class="ai-badge">NOVO</span></h2><span class="bg" style="background:rgba(34,197,94,.12);color:#4ade80;">Registre durante o jogo</span><span class="cv">▼</span></div>
       <div class="cb">
-        <div class="rw" style="margin-bottom:4px;">
-          <div class="fd" style="flex:0 0 80px;"><label>WK</label>
+        <div class="live-top">
+          <div class="fd"><label>WK</label>
             <input type="number" id="live-wk" placeholder="40" min="1" max="99" inputmode="numeric" onchange="liveTrocouWK()"/>
           </div>
-          <div class="fd" style="flex:0 0 150px;"><label>Data</label>
+          <div class="fd"><label>Data</label>
             <input type="date" id="live-data" oninput="autoMesTri(this.value,'live')"/>
           </div>
-          <div class="fd" style="flex:0 0 70px;"><label>Mês</label>
+          <div class="fd"><label>Mês</label>
             <select id="live-mes"><option value="1">Jan</option><option value="2">Fev</option><option value="3">Mar</option><option value="4">Abr</option><option value="5">Mai</option><option value="6">Jun</option><option value="7">Jul</option><option value="8">Ago</option><option value="9">Set</option><option value="10">Out</option><option value="11">Nov</option><option value="12">Dez</option></select>
           </div>
-          <div class="fd" style="flex:0 0 60px;"><label>Tri</label>
+          <div class="fd"><label>Tri</label>
             <select id="live-tri"><option value="1">T1</option><option value="2">T2</option><option value="3">T3</option><option value="4">T4</option></select>
           </div>
         </div>
@@ -1654,8 +1659,8 @@ function autoMesTri(dateVal, prefix){
   if(isNaN(d.getTime())) return;
   var m=d.getMonth()+1, t=Math.ceil(m/3);
   var pfx=prefix||'n';
-  var mesEl=document.getElementById(pfx+'mes');
-  var triEl=document.getElementById(pfx+'tri');
+  var mesEl=document.getElementById(pfx+'mes')||document.getElementById(pfx+'-mes');
+  var triEl=document.getElementById(pfx+'tri')||document.getElementById(pfx+'-tri');
   if(mesEl) mesEl.value=m;
   if(triEl) triEl.value=t;
 }
