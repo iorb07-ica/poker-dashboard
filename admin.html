@@ -404,8 +404,8 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
     <div id="ko-modal" style="display:none;" class="modal-overlay" onclick="if(event.target===this)fecharKoModal()">
       <div class="modal-box">
         <h3><span id="ko-victim-name" style="color:var(--red);"></span> saiu ou rebuy?</h3>
+        <button class="modal-btn" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;" onclick="registrarEvento('rebuy')">🔄 Fez rebuy, voltou</button>
         <button class="modal-btn" style="background:linear-gradient(135deg,#7f1d1d,#ef4444);color:#fff;" onclick="registrarEvento('eliminacao')">💀 Saiu da noite</button>
-        <button class="modal-btn" style="background:linear-gradient(135deg,#1a3a6e,#3b82f6);color:#fff;" onclick="registrarEvento('rebuy')">🔄 Fez rebuy — voltou</button>
         <button class="modal-btn" style="background:var(--bg3);color:var(--muted);border:1px solid var(--bdr);margin-top:4px;" onclick="fecharKoModal()">Cancelar</button>
       </div>
     </div>
