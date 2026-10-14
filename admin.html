@@ -332,7 +332,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
       <div class="cb">
         <div class="rw" style="margin-bottom:4px;">
           <div class="fd" style="flex:0 0 80px;"><label>WK</label>
-            <input type="number" id="live-wk" placeholder="40" min="1" max="99"/>
+            <input type="number" id="live-wk" placeholder="40" min="1" max="99" inputmode="numeric" onchange="liveTrocouWK()"/>
           </div>
           <div class="fd" style="flex:0 0 150px;"><label>Data</label>
             <input type="date" id="live-data" oninput="autoMesTri(this.value,'live')"/>
@@ -347,6 +347,9 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
         <button class="btn bg2 bfw" onclick="liveIniciar()" style="margin-bottom:12px;">▶ Iniciar / Retomar Noite</button>
 
         <div id="live-area" style="display:none;">
+          <div style="font-size:10px;font-weight:800;color:#60a5fa;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">👥 Quem está jogando hoje? <span style="color:var(--muted);text-transform:none;font-weight:600;">(toque para tirar quem faltou)</span></div>
+          <div id="live-presenca-btns" class="live-player-grid" style="margin-bottom:14px;"></div>
+
           <div style="font-size:10px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">💰 Dealer da noite</div>
           <div id="live-dealer-btns" class="live-player-grid" style="margin-bottom:14px;"></div>
 
@@ -379,6 +382,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
           <button class="btn bg2 bfw" onclick="liveAplicar()" style="margin-bottom:8px;">📥 Aplicar na Semana (preenche o formulário)</button>
           <button class="btn bgold bfw" onclick="livePublicar()" id="btn-live-pub" style="margin-bottom:6px;">🚀 Salvar e Publicar direto no GitHub</button>
           <div id="live-pub-status" class="pub-status"></div>
+          <button class="btn bgh bfw" onclick="liveZerar()" style="margin-top:10px;font-size:11px;opacity:.75;">🗑 Zerar registros desta noite neste aparelho</button>
         </div>
       </div>
     </div>
@@ -430,6 +434,8 @@ function _abrirApp(){
   document.getElementById('login').style.display='none';
   document.getElementById('app').style.display='block';
   init();
+  // Já puxa o index.html do GitHub ao abrir, se o token estiver configurado
+  if(!_html && localStorage.getItem('gh_token')){ setTimeout(function(){ try{ carregarDoGitHub(); }catch(e){} },50); }
 }
 function doLogin(){
   if(document.getElementById('pwd').value===PW){
@@ -488,6 +494,7 @@ function processarIndexHtml(conteudo, nome){
     document.getElementById('fbadge').style.cssText='font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(34,197,94,.12);color:#4ade80;border:1px solid rgba(34,197,94,.2);';
     document.getElementById('dlb').disabled=false;
     buildWT();buildAWK();buildHOF();buildTorn();updC();
+    sugerirSemanas();
     var pj=document.getElementById('apj');
     pj.innerHTML='<option value="">- Jogador -</option>'+PL.map(function(p){return'<option>'+p+'</option>';}).join('');
     toast('Arquivo carregado!');
@@ -557,9 +564,50 @@ function buildWT(){
   el.innerHTML=wks.map(function(w){return'<button onclick="editWK('+w+')">WK'+String(w).padStart(2,'0')+'</button>';}).join('');
   document.getElementById('b1').textContent=wks.length+' semanas';
 }
+// ── Próxima noite: WK seguinte à última registrada, data = última data + 7 dias ──
+function _fmtISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function dataDaWK(wk){
+  wk=parseInt(wk,10)||0; if(!wk||!_led.length) return '';
+  var wks=gwks(); if(!wks.length) return '';
+  // usa a WK registrada mais próxima abaixo dela como referência
+  var ref=wks.filter(function(w){return w<=wk;}).pop()||wks[wks.length-1];
+  var r=_led.find(function(x){return +x.wk===ref&&x.data_wk;});
+  if(!r||!/^\d{4}-\d{2}-\d{2}$/.test(r.data_wk)) return '';
+  var p=r.data_wk.split('-').map(Number);
+  return _fmtISO(new Date(p[0],p[1]-1,p[2]+7*(wk-ref)));
+}
+function proximaWK(){ var w=gwks(); return w.length?Math.max.apply(null,w)+1:1; }
+// Preenche WK e data do Modo ao Vivo e da Nova Noite sozinho.
+// Se já existe uma noite ao vivo em andamento (WK ainda não publicada), mantém ela.
+function sugerirSemanas(){
+  var prox=proximaWK(), ultima=prox-1;
+  var lw=document.getElementById('live-wk'), ld=document.getElementById('live-data');
+  if(lw&&ld){
+    var emAndamento=parseInt(localStorage.getItem('live_wk_atual')||'',10)||0;
+    var wk=(emAndamento>ultima)?emAndamento:prox;
+    lw.value=wk;
+    ld.value=localStorage.getItem('live_data_'+wk)||dataDaWK(wk)||ld.value;
+    if(ld.value) autoMesTri(ld.value,'live');
+    try{localStorage.setItem('live_wk_atual',String(wk));}catch(e){}
+  }
+  var nf=document.getElementById('nf');
+  if(_ewk===null&&(!nf||nf.style.display!=='block')){
+    document.getElementById('nwk').value=prox;
+    var dn=dataDaWK(prox); if(dn){ document.getElementById('ndata').value=dn; autoMesTri(dn); }
+  }
+}
+function liveTrocouWK(){
+  var wk=_liveWK();
+  try{localStorage.setItem('live_wk_atual',wk);}catch(e){}
+  var ld=document.getElementById('live-data');
+  ld.value=localStorage.getItem('live_data_'+wk)||dataDaWK(wk)||ld.value;
+  if(ld.value) autoMesTri(ld.value,'live');
+  if(document.getElementById('live-area').style.display==='block') liveIniciar();
+}
 function novaNoite(){
   _ewk=null;var wks=gwks();
   document.getElementById('nwk').value=wks.length?Math.max.apply(null,wks)+1:1;
+  var _dn=dataDaWK(document.getElementById('nwk').value); if(_dn){ document.getElementById('ndata').value=_dn; autoMesTri(_dn); }
   document.getElementById('nftit').textContent='Nova Noite';
   document.getElementById('bdelwk').style.display='none';
   buildPT(null);buildEliList(0);document.getElementById('nf').style.display='block';
@@ -1967,75 +2015,128 @@ async function publicarGitHub(dados_json_str, index_html_str){
 }
 
 // ── MODO AO VIVO ─────────────────────────────────────────
+// Tudo fica salvo no aparelho por semana (live_*_WK), então dá para recarregar a página no meio do jogo.
 var _liveEvents=[];
 var _liveDealer=null;
 var _liveVitima=null;
-var _livePosAtual=9;
+var _liveKiller=null;
+var _livePresentes=[];
+
+function _liveWK(){ return document.getElementById('live-wk').value||'0'; }
+function _liveSalvar(){
+  var wk=_liveWK();
+  try{
+    localStorage.setItem('live_events_'+wk, JSON.stringify(_liveEvents));
+    localStorage.setItem('live_presentes_'+wk, JSON.stringify(_livePresentes));
+  }catch(e){}
+}
+function _liveEliminados(){ return _liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;}); }
+// Posição de quem saiu de vez: o primeiro a sair fica em último (nº de presentes), e assim por diante
+function _livePosicoes(){
+  var n=_livePresentes.length, pos={}, k=0;
+  _liveEvents.forEach(function(e){ if(e.tipo==='eliminacao'){ pos[e.vitima]=n-k; k++; } });
+  return pos;
+}
+function _liveFichas(p){ return parseInt(localStorage.getItem('live_fichas_'+_liveWK()+'_'+p),10)||0; }
 
 function liveIniciar(){
-  var wk=document.getElementById('live-wk').value;
-  if(!wk){
-    // Auto-sugerir próxima WK
-    var wks=gwks();
-    document.getElementById('live-wk').value=wks.length?Math.max.apply(null,wks)+1:1;
-    wk=document.getElementById('live-wk').value;
-  }
-  // Auto-data hoje
+  var wkEl=document.getElementById('live-wk');
+  if(!wkEl.value) wkEl.value=proximaWK();
+  var wk=wkEl.value;
+  try{localStorage.setItem('live_wk_atual',wk);}catch(e){}
+  // Data: jogo atravessa a madrugada, então antes do meio-dia conta como a noite anterior
   var d=document.getElementById('live-data');
-  if(!d.value){var n=new Date();d.value=n.toISOString().split('T')[0];autoMesTri(d.value,'live');}
-  // Resetar estado
-  _liveEvents=JSON.parse(localStorage.getItem('live_events_'+wk)||'[]');
+  var salva=localStorage.getItem('live_data_'+wk);
+  if(salva) d.value=salva;
+  else if(dataDaWK(wk)) d.value=dataDaWK(wk);
+  if(!d.value){
+    var n=new Date(); if(n.getHours()<12) n.setDate(n.getDate()-1);
+    d.value=n.getFullYear()+'-'+String(n.getMonth()+1).padStart(2,'0')+'-'+String(n.getDate()).padStart(2,'0');
+  }
+  autoMesTri(d.value,'live');
+  try{localStorage.setItem('live_data_'+wk,d.value);}catch(e){}
+  try{_liveEvents=JSON.parse(localStorage.getItem('live_events_'+wk)||'[]');}catch(e){_liveEvents=[];}
+  try{_livePresentes=JSON.parse(localStorage.getItem('live_presentes_'+wk)||'null');}catch(e){_livePresentes=null;}
+  if(!Array.isArray(_livePresentes)||!_livePresentes.length) _livePresentes=PL.slice();
   _liveDealer=localStorage.getItem('live_dealer_'+wk)||null;
-  _livePosAtual=9;
   renderLive();
   document.getElementById('live-area').style.display='block';
-  toast('▶ Modo ao vivo — WK'+wk);
+  document.getElementById('live-validation').style.display='none';
+  toast('▶ Modo ao vivo: WK'+wk+(_liveEvents.length?' ('+_liveEvents.length+' eventos recuperados)':''));
+}
+// Guarda a data escolhida para a semana
+document.addEventListener('DOMContentLoaded',function(){
+  var d=document.getElementById('live-data');
+  if(d) d.addEventListener('change',function(){ if(d.value){ autoMesTri(d.value,'live'); try{localStorage.setItem('live_data_'+_liveWK(),d.value);}catch(e){} } });
+});
+
+function liveTogglePresenca(p){
+  var temEvento=_liveEvents.some(function(e){return e.vitima===p||e.eliminou===p;});
+  var i=_livePresentes.indexOf(p);
+  if(i>=0){
+    if(temEvento){toast(p+' já tem evento registrado. Apague o evento antes de tirar da mesa.');return;}
+    _livePresentes.splice(i,1);
+  }else{
+    _livePresentes.push(p);
+    _livePresentes.sort(function(a,b){return PL.indexOf(a)-PL.indexOf(b);});
+  }
+  _liveSalvar(); renderLive();
 }
 
 function renderLive(){
-  var wk=document.getElementById('live-wk').value||'0';
-  var PL_LIVE=['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
-  // Quem já foi eliminado
-  var eliminados=_liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;});
-  // Dealer btns
-  var dealerDiv=document.getElementById('live-dealer-btns');
-  dealerDiv.innerHTML=PL_LIVE.map(function(p){
-    return '<button class="live-player-btn'+(p===_liveDealer?' dealer':'')+'" onclick="setDealer(\''+p+'\')">'+
-      (p===_liveDealer?'💰 ':'')+p+'</button>';
+  var wk=_liveWK();
+  var eliminados=_liveEliminados();
+  var posMap=_livePosicoes();
+  // Presença
+  document.getElementById('live-presenca-btns').innerHTML=PL.map(function(p){
+    var on=_livePresentes.indexOf(p)>=0;
+    return '<button class="live-player-btn" style="'+(on?'border-color:#3b82f6;background:rgba(59,130,246,.15);':'opacity:.35;')+'" onclick="liveTogglePresenca(\''+p+'\')">'+(on?'✓ ':'')+p+'</button>';
   }).join('');
-  // Player btns
-  var pDiv=document.getElementById('live-player-btns');
-  pDiv.innerHTML=PL_LIVE.map(function(p){
-    var elim=eliminados.includes(p);
-    return '<button class="live-player-btn" style="'+(elim?'opacity:.3;text-decoration:line-through;':'')+'" onclick="'+(elim?'':'abrirModal(\''+p+'\')')+'" '+(elim?'disabled':'')+'>'+p+'</button>';
+  // Dealer (só entre os presentes)
+  document.getElementById('live-dealer-btns').innerHTML=_livePresentes.map(function(p){
+    return '<button class="live-player-btn'+(p===_liveDealer?' dealer':'')+'" onclick="setDealer(\''+p+'\')">'+(p===_liveDealer?'💰 ':'')+p+'</button>';
+  }).join('');
+  // Quem eliminou (só presentes ainda na mesa)
+  document.getElementById('live-player-btns').innerHTML=_livePresentes.map(function(p){
+    var elim=eliminados.indexOf(p)>=0;
+    return '<button class="live-player-btn" style="'+(elim?'opacity:.3;text-decoration:line-through;':'')+'" '+(elim?'disabled':'onclick="abrirModal(\''+p+'\')"')+'>'+p+'</button>';
   }).join('');
   // Eventos
   var evDiv=document.getElementById('live-events');
-  if(!_liveEvents.length){evDiv.innerHTML='<div style="color:var(--muted);font-size:12px;">Nenhum evento registrado</div>';return;}
-  evDiv.innerHTML=_liveEvents.map(function(e,i){
-    var txt=e.tipo==='rebuy'?('🔄 Rebuy #'+(i+1)+' — '+e.vitima+' voltou ao jogo ('+e.eliminou+' KO)'):
-                             ('💀 Eliminado: '+e.vitima+' em '+e.posicao+'º — KO: '+e.eliminou);
-    return '<div class="ev-row"><span class="ev-txt">'+txt+'</span><button class="ev-del" onclick="removerEvento('+i+')">✕</button></div>';
-  }).join('');
-  // Fichas finais
-  var fichasDiv=document.getElementById('live-final');
-  var presentes=PL_LIVE.filter(function(p){return!eliminados.includes(p);});
-  fichasDiv.innerHTML=presentes.map(function(p){
+  if(!_liveEvents.length){
+    evDiv.innerHTML='<div style="color:var(--muted);font-size:12px;">Nenhum evento registrado. Toque em quem eliminou.</div>';
+  }else{
+    var nRb=0;
+    evDiv.innerHTML=_liveEvents.map(function(e,i){
+      var txt=e.tipo==='rebuy'
+        ? ('🔄 '+e.eliminou+' tirou '+e.vitima+' (rebuy '+(++nRb)+')')
+        : ('💀 '+e.eliminou+' eliminou '+e.vitima+' ('+posMap[e.vitima]+'º)');
+      return '<div class="ev-row"><span class="ev-txt">'+(i+1)+'. '+txt+'</span><button class="ev-del" onclick="removerEvento('+i+')">✕</button></div>';
+    }).join('');
+    evDiv.scrollTop=evDiv.scrollHeight;
+  }
+  // Fichas finais: só quem ainda está na mesa
+  var naMesa=_livePresentes.filter(function(p){return eliminados.indexOf(p)<0;});
+  document.getElementById('live-final').innerHTML=naMesa.map(function(p){
     var stored=localStorage.getItem('live_fichas_'+wk+'_'+p)||'';
     return '<div class="fichas-item"><label>'+p+'</label><input type="number" min="0" step="25" inputmode="numeric" pattern="[0-9]*" placeholder="0" value="'+stored+'" oninput="localStorage.setItem(\'live_fichas_'+wk+'_'+p+'\',this.value)"/></div>';
-  }).join('');
-  localStorage.setItem('live_events_'+wk, JSON.stringify(_liveEvents));
+  }).join('')||'<div style="color:var(--muted);font-size:12px;">Ninguém na mesa.</div>';
+  _liveSalvar();
 }
 
-function setDealer(p){_liveDealer=p;localStorage.setItem('live_dealer_'+document.getElementById('live-wk').value,p);renderLive();toast('💰 Dealer: '+p);}
+function setDealer(p){
+  _liveDealer=(_liveDealer===p)?null:p;
+  var k='live_dealer_'+_liveWK();
+  try{ if(_liveDealer) localStorage.setItem(k,_liveDealer); else localStorage.removeItem(k); }catch(e){}
+  renderLive(); toast(_liveDealer?'💰 Dealer: '+_liveDealer:'Dealer desmarcado');
+}
 function abrirModal(killer){
   _liveKiller=killer; _liveVitima=null;
   document.getElementById('modal-killer-name').textContent=killer;
-  var PL_LIVE=['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
-  var eliminados=_liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;});
-  var outros=PL_LIVE.filter(function(p){return !eliminados.includes(p)&&p!==killer;});
+  var eliminados=_liveEliminados();
+  var outros=_livePresentes.filter(function(p){return eliminados.indexOf(p)<0&&p!==killer;});
   document.getElementById('modal-victim-btns').innerHTML=outros.map(function(p){
-    return '<button class="modal-btn" style="background:var(--bg3);color:var(--text);border:1px solid var(--bdr);" onclick="escolherVitima(\''+p+'\')">' +p+'</button>';
+    return '<button class="modal-btn" style="background:var(--bg3);color:var(--text);border:1px solid var(--bdr);" onclick="escolherVitima(\''+p+'\')">'+p+'</button>';
   }).join('');
   document.getElementById('live-modal').style.display='flex';
 }
@@ -2045,89 +2146,75 @@ function escolherVitima(vitima){
   document.getElementById('ko-victim-name').textContent=vitima;
   document.getElementById('ko-modal').style.display='flex';
 }
-function fecharModal(){document.getElementById('live-modal').style.display='none';_liveKiller=null;_liveVitima=null;}
+function fecharModal(){document.getElementById('live-modal').style.display='none';}
 function abrirKoSelect(){}
 function fecharKoModal(){document.getElementById('ko-modal').style.display='none';}
 function registrarEvento(tipo){
-  var vitima=_liveVitima;
-  var killer=_liveKiller;
-  fecharModal();fecharKoModal();
+  var vitima=_liveVitima, killer=_liveKiller;
+  fecharModal(); fecharKoModal();
+  _liveVitima=null; _liveKiller=null;
   if(!vitima||!killer) return;
-  var ev={tipo:tipo,vitima:vitima,eliminou:killer};
-  if(tipo==='eliminacao'){ev.posicao=_livePosAtual;_livePosAtual--;}
-  _liveEvents.push(ev);
+  _liveEvents.push({tipo:tipo,vitima:vitima,eliminou:killer,hora:Date.now()});
   renderLive();
-  toast(tipo==='rebuy'?'🔄 Rebuy: '+killer+' KO '+vitima+' (voltou)':'💀 '+killer+' eliminou '+vitima+' ('+ev.posicao+'º)');
+  if(tipo==='rebuy') toast('🔄 '+killer+' tirou '+vitima+' (rebuy)');
+  else toast('💀 '+killer+' eliminou '+vitima+' ('+_livePosicoes()[vitima]+'º)');
 }
-function removerEvento(i){_liveEvents.splice(i,1);renderLive();}
+function removerEvento(i){
+  var e=_liveEvents[i]; if(!e) return;
+  if(!confirm('Apagar o evento '+(i+1)+': '+e.eliminou+' → '+e.vitima+'?')) return;
+  _liveEvents.splice(i,1); renderLive();
+}
+function liveZerar(){
+  var wk=_liveWK();
+  if(!confirm('Apagar todos os registros ao vivo da WK'+wk+' neste aparelho?\n\nIsso não mexe no que já foi publicado.')) return;
+  try{
+    ['live_events_','live_presentes_','live_dealer_','live_data_'].forEach(function(k){localStorage.removeItem(k+wk);});
+    PL.forEach(function(p){localStorage.removeItem('live_fichas_'+wk+'_'+p);});
+  }catch(e){}
+  _liveEvents=[]; _livePresentes=PL.slice(); _liveDealer=null;
+  renderLive(); document.getElementById('live-validation').style.display='none';
+  toast('Registros da WK'+wk+' zerados');
+}
 
 function liveAplicar(){
-  var wk=document.getElementById('live-wk').value;
+  var wk=parseInt(_liveWK(),10)||0;
   var data=document.getElementById('live-data').value;
-  if(!wk||!data){toast('Preencha WK e Data');return;}
-  // Abrir a seção de semanas e criar nova noite
+  if(!wk||!data){toast('Preencha WK e Data');return false;}
+  // Abre uma noite limpa na Seção 2 com a WK e a data do ao vivo
+  novaNoite();
   document.getElementById('nwk').value=wk;
   document.getElementById('ndata').value=data;
   autoMesTri(data);
-  document.getElementById('nmes').value=document.getElementById('live-mes').value;
-  document.getElementById('ntri').value=document.getElementById('live-tri').value;
-  buildPT(null);
-  var PL_LIVE=['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
-  var eliminados=_liveEvents.filter(function(e){return e.tipo==='eliminacao';});
-  // Preencher posições
-  eliminados.forEach(function(e){
-    var rows=document.querySelectorAll('#ptb tr');
-    rows.forEach(function(tr){
-      if(tr.getAttribute('data-p')===e.vitima){
-        var sel=tr.querySelector('select.ep');
-        if(sel) sel.value=e.posicao;
-      }
-    });
-  });
-  // Posições dos restantes (1º ao nº que ficou)
-  var n=1;
-  var presentes=PL_LIVE.filter(function(p){return!eliminados.map(function(e){return e.vitima;}).includes(p);});
-  presentes.forEach(function(p){
-    var rows=document.querySelectorAll('#ptb tr');
-    rows.forEach(function(tr){
-      if(tr.getAttribute('data-p')===p){var sel=tr.querySelector('select.ep');if(sel)sel.value=n++;}
-    });
-  });
-  // Rebuys
-  var rebuyCounts={};
-  _liveEvents.filter(function(e){return e.tipo==='rebuy';}).forEach(function(e){rebuyCounts[e.vitima]=(rebuyCounts[e.vitima]||0)+1;});
-  Object.entries(rebuyCounts).forEach(function([j,r]){
-    var rows=document.querySelectorAll('#ptb tr');
-    rows.forEach(function(tr){
-      if(tr.getAttribute('data-p')===j){var inp=tr.querySelector('input.er');if(inp){inp.value=r;wkRowChanged(inp);}}
-    });
-  });
-  // Fichas
-  PL_LIVE.forEach(function(p){
-    var f=localStorage.getItem('live_fichas_'+wk+'_'+p)||'';
-    if(f){
-      var rows=document.querySelectorAll('#ptb tr');
-      rows.forEach(function(tr){
-        if(tr.getAttribute('data-p')===p){var inp=tr.querySelector('input.ef2');if(inp){inp.value=f;wkRowChanged(inp);}}
-      });
+  var eliminados=_liveEliminados();
+  var posMap=_livePosicoes();
+  // Quem ficou na mesa: posição pela quantidade de fichas (mais fichas = melhor posição)
+  var naMesa=_livePresentes.filter(function(p){return eliminados.indexOf(p)<0;})
+    .sort(function(a,b){return _liveFichas(b)-_liveFichas(a);});
+  naMesa.forEach(function(p,i){posMap[p]=i+1;});
+  var rebuys={};
+  _liveEvents.forEach(function(e){ if(e.tipo==='rebuy') rebuys[e.vitima]=(rebuys[e.vitima]||0)+1; });
+  getWeekRows().forEach(function(tr){
+    var p=tr.getAttribute('data-p');
+    var sel=tr.querySelector('.ep'), chk=tr.querySelector('.efl');
+    var rb=tr.querySelector('.er'), fi=tr.querySelector('.ef2'), dl=tr.querySelector('.edl');
+    if(_livePresentes.indexOf(p)>=0){
+      sel.value=String(posMap[p]||''); chk.checked=false; tr.className='';
+      rb.value=rebuys[p]||0;
+      fi.value=naMesa.indexOf(p)>=0?_liveFichas(p):0;
+    }else{
+      sel.value=''; chk.checked=true; tr.className='dm'; rb.value=0; fi.value=0;
     }
+    if(dl) dl.checked=(p===_liveDealer);
   });
-  // Dealer
-  if(_liveDealer){
-    var rows=document.querySelectorAll('#ptb tr');
-    rows.forEach(function(tr){
-      if(tr.getAttribute('data-p')===_liveDealer){var chk=tr.querySelector('input.edl');if(chk&&!chk.checked){chk.checked=true;wkRowChanged(chk);}}
-    });
-  }
-  // Eliminações
-  _eli[parseInt(wk)]=_liveEvents.filter(function(e){return e.eliminou!=='?';}).map(function(e){return{de:e.eliminou,para:e.vitima};});
-  buildEliList(parseInt(wk));
-  syncKOsFromElis();
+  _eli[wk]=_liveEvents.map(function(e){return {de:e.eliminou,para:e.vitima};});
+  buildEliList(wk);
   refreshPosOptions();
+  syncKOsFromElis();
   updateWeekValidation();
   document.getElementById('nf').style.display='block';
-  tog('c1');
-  toast('✅ Dados aplicados no formulário!');
+  var c1=document.getElementById('c1'); if(c1) c1.classList.remove('collapsed');
+  toast('✅ WK'+wk+' preenchida na Seção 2. Confira antes de publicar.');
+  return true;
 }
 
 async function livePublicar(){
@@ -2143,7 +2230,10 @@ async function livePublicar(){
   
   // 2. Aplicar dados do modo ao vivo no formulário
   st.textContent='📥 Aplicando dados...';st.className='pub-status';
-  liveAplicar();
+  if(!liveValidar()){st.textContent='❌ Os dados ao vivo não fecham. Veja a validação acima antes de publicar.';st.className='pub-status err';btn.disabled=false;return;}
+  var dBR=document.getElementById('live-data').value.split('-').reverse().join('/');
+  if(!confirm('Publicar a WK'+_liveWK()+' (data '+dBR+') no GitHub?')){btn.disabled=false;st.textContent='';return;}
+  if(liveAplicar()!==true){st.textContent='❌ Preencha WK e Data';st.className='pub-status err';btn.disabled=false;return;}
   await new Promise(r=>setTimeout(r,400));
 
   // 3. Salvar a noite nos dados internos
@@ -2220,69 +2310,36 @@ async function carregarDoGitHub(){
 
 // ── Validação do Modo ao Vivo ─────────────────────────────────────────────────
 function liveValidar(){
-  var wk = document.getElementById('live-wk').value||'0';
-  var PL_LIVE = ['Charles','Cristiano','Heron','Israel','Magu','Marcus','Oscar','Pedro','Rafa'];
-
-  // Elimindados e rebuys dos eventos
-  var eliminados = _liveEvents.filter(function(e){return e.tipo==='eliminacao';}).map(function(e){return e.vitima;});
-  var totalRebuys = _liveEvents.filter(function(e){return e.tipo==='rebuy';}).length;
-  var presentes = PL_LIVE.length; // todos os 9 (faltou ainda não implementado no live)
-
-  // Fichas dos inputs
-  var totalFichasInformado = 0;
-  var finalistas = 0;
-  PL_LIVE.forEach(function(p){
-    var f = parseInt(localStorage.getItem('live_fichas_'+wk+'_'+p))||0;
-    totalFichasInformado += f;
-    if(f > 0) finalistas++;
-  });
-
-  // KOs dos eventos
-  var totalKOs = _liveEvents.length; // cada evento (rebuy ou elim) = 1 KO para quem eliminou
-  var totalEntradas = presentes + totalRebuys;
-  var totalFichasEsperado = totalEntradas * 5000;
-  var totalKOsEsperado = totalEntradas - finalistas;
-
-  // Atualizar painel
-  var panel = document.getElementById('live-validation');
-  panel.style.display = 'block';
-
-  var fichasOk = totalFichasInformado === totalFichasEsperado;
-  var kosOk = totalKOs === totalKOsEsperado;
-
-  var fEl = document.getElementById('lv-fichas');
-  var kEl = document.getElementById('lv-kos');
-  var fVal = document.getElementById('lv-fichas-val');
-  var kVal = document.getElementById('lv-kos-val');
-  var msg = document.getElementById('lv-msg');
-
-  fEl.style.background = fichasOk ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
-  fVal.style.color = fichasOk ? 'var(--green)' : 'var(--red)';
-  fVal.textContent = totalFichasInformado.toLocaleString('pt-BR') + ' / ' + totalFichasEsperado.toLocaleString('pt-BR');
-
-  kEl.style.background = kosOk ? 'rgba(34,197,94,.15)' : 'rgba(239,68,68,.15)';
-  kVal.style.color = kosOk ? 'var(--green)' : 'var(--red)';
-  kVal.textContent = totalKOs + ' / ' + totalKOsEsperado;
-
-  var problems = [];
-  if(!fichasOk){
-    var diff = totalFichasEsperado - totalFichasInformado;
-    problems.push('Fichas: ' + (diff > 0 ? 'faltam ' + diff.toLocaleString('pt-BR') : 'sobram ' + Math.abs(diff).toLocaleString('pt-BR')));
-  }
-  if(!kosOk){
-    problems.push('KOs: registrados ' + totalKOs + ', esperados ' + totalKOsEsperado + ' (' + totalEntradas + ' entradas - ' + finalistas + ' finalistas)');
-  }
-  if(totalFichasInformado === 0 && eliminados.length < presentes - 1){
-    problems.push('Preencha as fichas dos jogadores que ainda estão na mesa.');
-  }
-
-  if(problems.length){
-    msg.style.color = 'var(--red)';
-    msg.textContent = '⚠️ ' + problems.join(' | ');
-  } else {
-    msg.style.color = 'var(--green)';
-    msg.textContent = '✅ Tudo fechando: fichas e KOs batem. Pode publicar!';
-  }
+  var eliminados=_liveEliminados();
+  var nPres=_livePresentes.length;
+  var totalRebuys=_liveEvents.filter(function(e){return e.tipo==='rebuy';}).length;
+  var naMesa=_livePresentes.filter(function(p){return eliminados.indexOf(p)<0;});
+  var totalFichasInformado=0, finalistas=0, semFichas=[];
+  naMesa.forEach(function(p){ var f=_liveFichas(p); totalFichasInformado+=f; if(f>0) finalistas++; else semFichas.push(p); });
+  var totalKOs=_liveEvents.length;
+  var totalEntradas=nPres+totalRebuys;
+  var totalFichasEsperado=totalEntradas*5000;
+  var totalKOsEsperado=totalEntradas-naMesa.length;
+  var panel=document.getElementById('live-validation'); panel.style.display='block';
+  var fichasOk=totalFichasInformado===totalFichasEsperado;
+  var kosOk=totalKOs===totalKOsEsperado;
+  var fEl=document.getElementById('lv-fichas'), kEl=document.getElementById('lv-kos');
+  var fVal=document.getElementById('lv-fichas-val'), kVal=document.getElementById('lv-kos-val'), msg=document.getElementById('lv-msg');
+  fEl.style.background=fichasOk?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)';
+  fVal.style.color=fichasOk?'var(--green)':'var(--red)';
+  fVal.textContent=totalFichasInformado.toLocaleString('pt-BR')+' / '+totalFichasEsperado.toLocaleString('pt-BR');
+  kEl.style.background=kosOk?'rgba(34,197,94,.15)':'rgba(239,68,68,.15)';
+  kVal.style.color=kosOk?'var(--green)':'var(--red)';
+  kVal.textContent=totalKOs+' / '+totalKOsEsperado;
+  var problems=[];
+  if(nPres<2) problems.push('Marque quem está jogando.');
+  if(!fichasOk){var diff=totalFichasEsperado-totalFichasInformado; problems.push('Fichas: '+(diff>0?'faltam '+diff.toLocaleString('pt-BR'):'sobram '+Math.abs(diff).toLocaleString('pt-BR'))+' ('+nPres+' presentes + '+totalRebuys+' rebuys = '+totalEntradas+' entradas × 5.000).');}
+  if(semFichas.length) problems.push('Sem fichas e não eliminado: '+semFichas.join(', ')+'. Ou registre a eliminação ou preencha as fichas.');
+  if(!kosOk) problems.push('KOs: registrados '+totalKOs+', esperados '+totalKOsEsperado+'.');
+  var fs=naMesa.map(_liveFichas); if(fs.length>1&&new Set(fs).size!==fs.length) problems.push('Dois jogadores na mesa com a mesma quantidade de fichas: a posição entre eles fica indefinida.');
+  if(problems.length){ msg.style.color='var(--red)'; msg.textContent='⚠️ '+problems.join(' | '); }
+  else { msg.style.color='var(--green)'; msg.textContent='✅ Tudo fechando: '+nPres+' presentes, '+totalEntradas+' entradas, fichas e KOs batem.'; }
+  return problems.length===0;
 }
 
 function toast(m){var t=document.getElementById('tz');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('on');},2500);}
