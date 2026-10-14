@@ -1572,7 +1572,7 @@ function autoMesTri(dateVal, prefix){
 }
 
 // ── Chamada genérica ao Claude ────────────────────────────
-async function callClaude(prompt, images){
+async function callClaude(prompt, images, opts){
   var key=localStorage.getItem('anthr_key')||'';
   if(!key){toast('Configure a API Key do Claude na seção 7');return null;}
   var content=[];
@@ -1581,14 +1581,18 @@ async function callClaude(prompt, images){
   }
   content.push({type:'text',text:prompt});
   try{
+    var body={model:'claude-sonnet-4-6',max_tokens:(opts&&opts.maxTokens)||8000,messages:[{role:'user',content}]};
+    if(opts&&opts.system) body.system=opts.system;
     var res=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
       headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:2000,messages:[{role:'user',content}]})
+      body:JSON.stringify(body)
     });
     var j=await res.json();
     if(j.error){toast('Erro Claude: '+j.error.message);return null;}
-    return j.content&&j.content[0]&&j.content[0].text||null;
+    var txt=(j.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
+    if(j.stop_reason==='max_tokens') toast('Aviso: resposta do Claude veio cortada (limite de tamanho)');
+    return txt||null;
   }catch(e){toast('Erro: '+e.message);return null;}
 }
 
@@ -1626,15 +1630,25 @@ async function interpretarWpp(){
     'Apelidos: Grey/Grey Galináceo=Israel, Magulets/Maguinho=Magu, Papito/Papito=Oscar, Charlito=Charles, Pedroca/Bacalhau=Pedro, Marcolino=Marcus.\n'+
     'Analise as mensagens do WhatsApp e/ou prints abaixo e extraia os dados da noite de poker.\n\n'+
     (txt?'MENSAGENS:\n'+txt+'\n\n':'')+
-    'Retorne APENAS um JSON válido, sem texto extra, com este formato exato:\n'+
+    'REGRAS DE LEITURA:\n'+
+    '- "X KO Y" significa que X eliminou Y (X é quem tirou, Y é quem caiu).\n'+
+    '- Se a mesma pessoa cai e continua jogando depois, aquilo foi um rebuy. Conte os rebuys de cada um.\n'+
+    '- "Fora 7#", "Fora #3" etc. indicam a posição final de quem caiu de vez.\n'+
+    '- Se alguém corrigir uma lista anterior (ex.: outra pessoa reenvia a ordem certa), vale SEMPRE a versão corrigida, a mais recente.\n'+
+    '- O placar final ("1º Fulano: 42.000") traz as posições do topo e as fichas finais.\n'+
+    '- Ignore conversa paralela, piadas e comentários.\n\n'+
+    'Faça toda a análise mentalmente. NÃO escreva explicação, raciocínio, markdown ou qualquer texto fora do JSON.\n'+
+    'Retorne APENAS um JSON válido, começando com { e terminando com }, com este formato exato:\n'+
     '{"posicoes":{"Heron":1,"Israel":2,...},"rebuys":{"Magu":2,"Pedro":1,...},"fichas":{"Heron":17825,"Israel":14500,...},"eliminacoes":[{"de":"Magu","para":"Pedro"},...],"dealer":"Israel","faltou":["Rafa"],"obs":"qualquer observação relevante"}\n'+
     'Se não encontrar alguma informação, omita a chave. Retorne {} se não encontrar nada.\n'+
     'Valores de fichas são números inteiros. Posições são números 1-9.';
-  var result=await callClaude(prompt, images);
+  var result=await callClaude(prompt, images, {system:'Você é um extrator de dados. Responda exclusivamente com um único objeto JSON válido. Nunca escreva texto antes ou depois do JSON.', maxTokens:8000});
   btn.disabled=false;btn.textContent='🤖 Interpretar com Claude';
   if(!result) return;
   try{
     var clean=result.replace(/```json\n?|```\n?/g,'').trim();
+    var ini=clean.indexOf('{'), fim=clean.lastIndexOf('}');
+    if(ini>=0&&fim>ini) clean=clean.substring(ini,fim+1);
     _wppData=JSON.parse(clean);
     var html='<strong>✅ Dados interpretados:</strong><br>';
     if(_wppData.posicoes){html+='<br><b>Posições:</b> '+Object.entries(_wppData.posicoes).map(([j,p])=>p+'º '+j).join(', ');}
@@ -1648,7 +1662,7 @@ async function interpretarWpp(){
     document.getElementById('btn-aplicar').style.display='block';
   }catch(e){
     document.getElementById('wpp-result').style.display='block';
-    document.getElementById('wpp-result').innerHTML='<strong style="color:#f87171;">⚠️ Não consegui parsear o JSON. Resposta bruta:</strong><br>'+result.substring(0,300);
+    document.getElementById('wpp-result').innerHTML='<strong style="color:#f87171;">⚠️ Não consegui parsear o JSON. Resposta bruta:</strong><br>'+result.substring(0,1500);
     document.getElementById('btn-aplicar').style.display='none';
   }
 }
