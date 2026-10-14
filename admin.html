@@ -2109,9 +2109,9 @@ function renderLive(){
     var nRb=0;
     evDiv.innerHTML=_liveEvents.map(function(e,i){
       var txt=e.tipo==='rebuy'
-        ? ('🔄 '+e.eliminou+' tirou '+e.vitima+' (rebuy '+(++nRb)+')')
-        : ('💀 '+e.eliminou+' eliminou '+e.vitima+' ('+posMap[e.vitima]+'º)');
-      return '<div class="ev-row"><span class="ev-txt">'+(i+1)+'. '+txt+'</span><button class="ev-del" onclick="removerEvento('+i+')">✕</button></div>';
+        ? ('🔄 <b>#'+(++nRb)+' Rebuy:</b> '+e.eliminou+' KO '+e.vitima)
+        : ('💀 <b>#'+posMap[e.vitima]+' Fora:</b> '+e.eliminou+' KO '+e.vitima);
+      return '<div class="ev-row"><span class="ev-txt">'+txt+'</span><button class="ev-del" onclick="removerEvento('+i+')">✕</button></div>';
     }).join('');
     evDiv.scrollTop=evDiv.scrollHeight;
   }
@@ -2156,12 +2156,12 @@ function registrarEvento(tipo){
   if(!vitima||!killer) return;
   _liveEvents.push({tipo:tipo,vitima:vitima,eliminou:killer,hora:Date.now()});
   renderLive();
-  if(tipo==='rebuy') toast('🔄 '+killer+' tirou '+vitima+' (rebuy)');
-  else toast('💀 '+killer+' eliminou '+vitima+' ('+_livePosicoes()[vitima]+'º)');
+  if(tipo==='rebuy') toast('🔄 #'+_liveEvents.filter(function(x){return x.tipo==='rebuy';}).length+' Rebuy: '+killer+' KO '+vitima);
+  else toast('💀 #'+_livePosicoes()[vitima]+' Fora: '+killer+' KO '+vitima);
 }
 function removerEvento(i){
   var e=_liveEvents[i]; if(!e) return;
-  if(!confirm('Apagar o evento '+(i+1)+': '+e.eliminou+' → '+e.vitima+'?')) return;
+  if(!confirm('Apagar o evento '+(i+1)+': '+e.eliminou+' KO '+e.vitima+'?')) return;
   _liveEvents.splice(i,1); renderLive();
 }
 function liveZerar(){
