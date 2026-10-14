@@ -113,7 +113,11 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
     <div style="font-size:38px;margin-bottom:10px;">&#127183;</div>
     <h1>Poker do Plaza</h1>
     <p>Painel Administrativo</p>
-    <input type="password" id="pwd" placeholder="Senha..."/>
+    <input type="password" id="pwd" placeholder="Senha..." autocomplete="current-password"/>
+    <label style="display:flex;align-items:center;justify-content:center;gap:8px;margin:4px 0 14px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none;">
+      <input type="checkbox" id="lembrar" checked style="width:18px;height:18px;margin:0;accent-color:#3b82f6;cursor:pointer;"/>
+      Manter conectado neste aparelho
+    </label>
     <div class="em" id="perr"></div>
     <button class="btn bp bfw" onclick="doLogin()" style="padding:12px;">Entrar</button>
   </div>
@@ -124,6 +128,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
     <span style="font-size:17px;">&#127183;</span>
     <h1>Poker do Plaza &mdash; Admin</h1>
     <span id="fbadge" style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:rgba(251,191,36,.12);color:#fcd34d;border:1px solid rgba(251,191,36,.2);">Sem arquivo</span>
+    <button onclick="sairAdmin()" title="Sair e esquecer a senha neste aparelho" style="margin-left:8px;background:none;border:1px solid rgba(255,255,255,.12);border-radius:999px;color:var(--muted);font-size:11px;font-weight:700;padding:3px 10px;cursor:pointer;">Sair</button>
   </div>
 
   <div class="wr">
@@ -413,12 +418,36 @@ var AC=['Glacial - Ninguem falava','Fria - Mesa reservada','Neutra - Noite tranq
 var _html=null,_led=[],_nfd={},_ewk=null,_eli={};
 
 document.getElementById('pwd').onkeydown=function(e){if(e.key==='Enter')doLogin();};
+// ── Login com "Manter conectado" ──────────────────────────
+// Guarda uma marca derivada da senha: se a senha mudar no código, todos os aparelhos pedem login de novo.
+var AUTH_KEY='poker_admin_auth', AUTH_VAL='ok-'+btoa(PW);
+function _authLembrado(){
+  try{ return localStorage.getItem(AUTH_KEY)===AUTH_VAL || sessionStorage.getItem(AUTH_KEY)===AUTH_VAL; }catch(e){ return false; }
+}
+function _abrirApp(){
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').style.display='block';
+  init();
+}
 function doLogin(){
   if(document.getElementById('pwd').value===PW){
-    document.getElementById('login').style.display='none';
-    document.getElementById('app').style.display='block';
-    init();
+    try{
+      if(document.getElementById('lembrar').checked) localStorage.setItem(AUTH_KEY,AUTH_VAL);
+      else localStorage.removeItem(AUTH_KEY);
+      sessionStorage.setItem(AUTH_KEY,AUTH_VAL); // mantém nesta aba mesmo sem a opção marcada
+    }catch(e){}
+    _abrirApp();
   }else{document.getElementById('perr').textContent='Senha incorreta.';document.getElementById('pwd').value='';}
+}
+function sairAdmin(){
+  if(!confirm('Sair do admin? Vai pedir a senha de novo neste aparelho.')) return;
+  try{ localStorage.removeItem(AUTH_KEY); sessionStorage.removeItem(AUTH_KEY); }catch(e){}
+  location.reload();
+}
+// Entrada automática: esconde a tela de senha na hora (sem piscar) e abre o painel quando a página termina de carregar
+if(_authLembrado()){
+  document.getElementById('login').style.display='none';
+  window.addEventListener('DOMContentLoaded',function(){ _abrirApp(); });
 }
 function init(){
   try{_nfd=JSON.parse(localStorage.getItem('nf_data_plaza')||'{}')||{};}catch(e){_nfd={};}
