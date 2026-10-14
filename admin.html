@@ -188,8 +188,10 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
           </div>
           <div style="display:flex;gap:7px;flex-wrap:wrap;">
             <button class="btn bp" onclick="salvarNoite()">&#128190; Salvar</button>
+            <button class="btn bgold" onclick="salvarEPublicar()" id="btn-pub-semana">🚀 Salvar e Publicar no GitHub</button>
             <button class="btn bgh" onclick="cancelN()">Cancelar</button>
           </div>
+          <div class="pub-status" id="pub-semana-status" style="margin-top:8px;"></div>
         </div>
       </div>
     </div>
@@ -702,11 +704,11 @@ function salvarNoite(){
   var wk=parseInt(document.getElementById('nwk').value)||0,data=document.getElementById('ndata').value;
   var mes=parseInt(document.getElementById('nmes').value)||1,tri=parseInt(document.getElementById('ntri').value)||1;
   var ano=data?parseInt(data.split('-')[0]):2026;
-  if(!wk||!data){toast('Preencha WK e Data');return;}
+  if(!wk||!data){toast('Preencha WK e Data');return false;}
 
   syncKOsFromElis();
   var valid=updateWeekValidation();
-  if(!valid.ok){toast('Revise a semana antes de salvar.');return;}
+  if(!valid.ok){toast('Revise a semana antes de salvar.');return false;}
 
   // Constants (same as dashboard)
   var BUYIN=25, FATOR_FICHAS=0.3, PTS_KO=100, PTS_REBUY=-1500, R_NOITE=3;
@@ -760,6 +762,7 @@ function salvarNoite(){
   document.getElementById('nftit').textContent='Editando WK'+String(wk).padStart(2,'0');
   document.querySelectorAll('#wt button').forEach(function(t){t.classList.toggle('on',t.textContent==='WK'+String(wk).padStart(2,'0'));});
   toast('WK'+wk+' salva com '+presentes.length+' jogadores, '+totalRebuys+' rebuys e '+valid.state.totalKOsInformado+' KOs!');
+  return true;
 }
 function buildHOF(){
   var hof=_nfd.hof||{};if(!Object.keys(hof).length)PL.forEach(function(p){hof[p]={ouro:0,prata:0,bronze:0};});
@@ -822,6 +825,10 @@ function toggleAtaChip(btn){
 }
 function loadAta(){
   var wk=document.getElementById('awk').value,d=(_nfd.atas&&_nfd.atas[wk])||{};
+  preencherAta(d);
+}
+function preencherAta(d){
+  d=d||{};
   sv('at',d.titulo||'');sv('as',d.subtitulo||'');sv('ai',d.intro||'');sv('amt',d.maoTitulo||'');sv('amd',d.maoDesc||'');
   document.getElementById('ac').value=d.clima!==undefined?d.clima:5;cu();
   var pj=document.getElementById('apj');if(d.persJogador)pj.value=d.persJogador;
@@ -860,7 +867,9 @@ function salvarAta(){
   toast('Ata da '+wk+' salva!');
 }
 function delAta(){var wk=document.getElementById('awk').value;if(!confirm('Apagar ata da '+wk+'?'))return;if(_nfd.atas)delete _nfd.atas[wk];loadAta();toast('Ata apagada.');}
+var _captura=null; // quando ativo, baixar() entrega os arquivos aqui em vez de baixar
 function downloadBlob(filename, content, mime){
+  if(_captura){ _captura[filename]=content; return; }
   var b = new Blob([content], {type: mime||'application/octet-stream'}), url = URL.createObjectURL(b), a = document.createElement('a');
   a.href = url; a.download = filename; a.click();
   setTimeout(function(){ URL.revokeObjectURL(url); }, 3000);
@@ -1686,7 +1695,7 @@ async function interpretarWpp(){
     _wppData=JSON.parse(clean);
     normalizarWpp(_wppData);
     var html='<strong>✅ Dados interpretados:</strong><br>';
-    if(_wppData.posicoes){html+='<br><b>Posições:</b> '+Object.entries(_wppData.posicoes).map(([j,p])=>p+'º '+j).join(', ');}
+    if(_wppData.posicoes){html+='<br><b>Posições:</b> '+Object.entries(_wppData.posicoes).filter(([j,p])=>p>0).sort((a,b)=>a[1]-b[1]).map(([j,p])=>p+'º '+j).join(', ');}
     if(_wppData.rebuys){var rbl=Object.entries(_wppData.rebuys).filter(([j,r])=>r>0);html+='<br><b>Rebuys (calculados pelas eliminações):</b> '+(rbl.length?rbl.map(([j,r])=>j+' ×'+r).join(', '):'nenhum');}
     if(_wppData.fichas){html+='<br><b>Fichas:</b> '+Object.entries(_wppData.fichas).map(([j,f])=>j+' '+f.toLocaleString('pt-BR')).join(', ');}
     if(_wppData.eliminacoes&&_wppData.eliminacoes.length){html+='<br><b>Eliminações ('+_wppData.eliminacoes.length+'):</b> '+_wppData.eliminacoes.map(e=>e.de+' eliminou '+e.para).join(' · ');}
@@ -1716,7 +1725,7 @@ function normalizarWpp(d){
     return {de:nome(k), para:nome(v)};
   }).filter(function(e){return e.de&&e.para&&e.de!==e.para;});
   d.eliminacoes=elis;
-  var pos={}; Object.keys(d.posicoes||{}).forEach(function(k){pos[nome(k)]=+d.posicoes[k];}); d.posicoes=pos;
+  var pos={}; Object.keys(d.posicoes||{}).forEach(function(k){var v=+d.posicoes[k]; if(v>0) pos[nome(k)]=v;}); d.posicoes=pos;
   var fi={};  Object.keys(d.fichas||{}).forEach(function(k){fi[nome(k)]=+d.fichas[k]||0;}); d.fichas=fi;
   d.faltou=(d.faltou||[]).map(nome);
   // Quedas por jogador. Quem terminou com fichas nunca saiu de vez: todas as quedas foram rebuy.
@@ -1769,70 +1778,162 @@ function aplicarWpp(){
 async function gerarAtaIA(){
   var st=document.getElementById('ata-ia-status');
   var btn=document.getElementById('btn-gerar-ata');
-  // Pegar dados da semana atual do formulário
-  var wk=document.getElementById('awk').value||document.getElementById('nwk').value;
-  if(!wk){toast('Selecione a semana na seção de Ata');return;}
-  var rows=getWeekRows?getWeekRows():[];
-  var elis=_eli[parseInt(wk)]||[];
-  var maoDesc=document.getElementById('mao-desc').value;
+  // Semana: a que está aberta na Seção 2; se não houver, a escolhida na Seção 5
+  var nf=document.getElementById('nf');
+  var wkNum=0;
+  if(nf&&nf.style.display==='block') wkNum=parseInt(document.getElementById('nwk').value)||0;
+  if(!wkNum) wkNum=parseInt(String(document.getElementById('awk').value||'').replace(/\D/g,''))||0;
+  if(!wkNum){toast('Abra a semana na Seção 2 ou escolha na Seção 5');return;}
+  var wkKey='WK'+String(wkNum).padStart(2,'0');
+  var ent=_led.filter(function(r){return +r.wk===wkNum;});
+  if(!ent.length){
+    st.textContent='❌ A '+wkKey+' ainda não foi salva. Clique em "Salvar" na Seção 2 primeiro (só guarda aqui, não publica) e gere a ata de novo.';
+    st.className='pub-status err';return;
+  }
+  var f0=ent[0], mes=+f0.mes, tri=+f0.trimestre, ano=+f0.ano||2026;
+  // Resultado da noite
+  var presentes=ent.filter(function(r){return !r.faltou;}).sort(function(a,b){return a.posicao-b.posicao;});
+  var ausentes=ent.filter(function(r){return r.faltou;}).map(function(r){return r.jogador;});
+  var rowsStr=presentes.map(function(r){
+    return r.posicao+'º '+r.jogador+': '+r.rebuys+' rebuy(s), '+r.kos+' KO(s), '+Number(r.fichas_restantes||0).toLocaleString('pt-BR')+' fichas, '+Math.round(r.pontos_calc||0).toLocaleString('pt-BR')+' pts';
+  }).join('\n');
+  var elis=_eli[wkNum]||[];
+  var elisStr=elis.map(function(e,i){return (i+1)+'. '+e.de+' eliminou '+e.para;}).join('\n');
+  // Rankings até esta semana
+  function ranking(filtro){
+    var t={};
+    _led.filter(function(r){return (+r.ano||2026)===ano && +r.wk<=wkNum && !r.faltou && filtro(r);})
+      .forEach(function(r){t[r.jogador]=(t[r.jogador]||0)+(+r.pontos_calc||0);});
+    return Object.entries(t).sort(function(a,b){return b[1]-a[1];}).map(function(e,i){return (i+1)+'º '+e[0]+' '+Math.round(e[1]).toLocaleString('pt-BR');}).join(', ');
+  }
+  var rkMes=ranking(function(r){return +r.mes===mes;});
+  var rkTri=ranking(function(r){return +r.trimestre===tri;});
+  var rkAno=ranking(function(){return true;});
+  var maoDesc=document.getElementById('mao-desc').value.trim();
+  var wppTxt=(document.getElementById('wpp-text')&&document.getElementById('wpp-text').value.trim())||'';
   var maoImgs=document.getElementById('mao-imgs').files;
-  btn.disabled=true;btn.textContent='⏳ Gerando...';st.textContent='🤖 Chamando Claude...';st.className='pub-status';
-  // Contexto das últimas semanas
-  var recentes=_led.slice(-27).filter(function(r){return r.wk<parseInt(wk);});
-  var ankPrev={};
-  recentes.forEach(function(r){if(!ankPrev[r.jogador])ankPrev[r.jogador]=0;ankPrev[r.jogador]+=(r.pontos_calc||0);});
-  var rankPrevStr=Object.entries(ankPrev).sort(function(a,b){return b[1]-a[1];}).map(function(e,i){return (i+1)+'º '+e[0]+' '+Math.round(e[1]).toLocaleString('pt-BR')+'pts';}).join(', ');
-  var rowsStr=rows.map(function(r){return r.jogador+': '+r.posicao+'º, '+r.rebuys+' rebuys, '+r.kos+' KOs, '+r.fichas_restantes+' fichas';}).join('\n');
-  var elisStr=elis.map(function(e){return e.de+' eliminou '+e.para;}).join('\n');
+  var arquetipos=Array.from(document.querySelectorAll('#apa option')).map(function(o){return o.value;}).filter(Boolean);
+  btn.disabled=true;btn.textContent='⏳ Gerando...';st.textContent='🤖 Escrevendo a ata da '+wkKey+'...';st.className='pub-status';
   var images=[];
   for(var f of maoImgs){
     var b64=await new Promise(res=>{var r=new FileReader();r.onload=e=>res(e.target.result.split(',')[1]);r.readAsDataURL(f);});
     images.push({type:f.type,data:b64});
   }
-  var prompt='Você é o cronista oficial do grupo de poker "Plaza Mediterrâneo" (Ano 9, 2026).\n'+
-    'Jogadores: Charles/Charlito, Cristiano, Heron, Israel/Grey Galináceo, Magu/Magulets, Marcus/Marcolino, Oscar/Papito, Pedro/Pedroca, Rafa.\n\n'+
-    'WK'+wk+' — Resultados:\n'+rowsStr+'\n\n'+
-    'Eliminações:\n'+elisStr+'\n\n'+
-    'Ranking anual recente (3 semanas atrás):\n'+rankPrevStr+'\n\n'+
-    (maoDesc?'Mão da noite:\n'+maoDesc+'\n\n':'')+
-    'Escreva a ata completa neste formato EXATO:\n\n'+
-    '**TÍTULO:**\n`[uma linha provocativa sobre a noite]`\n\n'+
-    '**SUBTÍTULO:**\n`[contexto/sabor da noite]`\n\n'+
-    '**CLIMA:** [número de presentes]. [vibe de 1 linha]\n\n'+
-    '**INTRODUÇÃO:**\n[3-4 parágrafos narrativos com drama, contexto, o que aconteceu]\n\n'+
-    '**MÃO DA NOITE — TÍTULO:**\n`[uma linha sobre a mão épica]`\n\n'+
-    '**MÃO DA NOITE — DESCRIÇÃO:**\n[parágrafo descrevendo a mão]\n\n'+
-    '**FALAS ICÔNICAS:**\n> "frase" — Jogador\n[3-4 falas inventadas/reais no estilo do grupo]\n\n'+
-    '**PERSONAGEM DA NOITE:**\nJogador: **Nome** — Arquétipo: **O [título]**\n\n'+
-    '**DESTAQUES POR JOGADOR:**\n[Para cada jogador: posição, rebuys, KOs, fichas, pontos, comentário sardônico]\n\n'+
-    '**PANORAMA DOS RANKINGS — PÓS WK'+wk+':**\n[Rankings mês/tri/anual com pontos]\n\n'+
-    'Tom: sarcástico, divertido, íntimo do grupo. Sem ser genérico. Use os apelidos.';
-  var result=await callClaude(prompt, images);
+  var prompt='Você é o cronista oficial do grupo de poker "Plaza Mediterrâneo" (temporada '+ano+').\n'+
+    'Jogadores e apelidos: Charles/Charlito, Cristiano, Heron, Israel/Grey Galináceo, Magu/Magulets, Marcus/Marcolino, Oscar/Papito, Pedro/Pedroca, Rafa.\n\n'+
+    wkKey+' ('+(f0.data_wk||'')+'), '+presentes.length+' presentes'+(ausentes.length?', ausentes: '+ausentes.join(', '):'')+'.\n\n'+
+    'RESULTADO DA NOITE:\n'+rowsStr+'\n\n'+
+    'ELIMINAÇÕES EM ORDEM (inclui as que viraram rebuy):\n'+(elisStr||'(sem registro)')+'\n\n'+
+    'RANKING DO MÊS (até '+wkKey+'): '+rkMes+'\n'+
+    'RANKING DO TRIMESTRE T'+tri+' (até '+wkKey+'): '+rkTri+'\n'+
+    'RANKING ANUAL (até '+wkKey+'): '+rkAno+'\n\n'+
+    (maoDesc?'MÃO DA NOITE (relato do Israel):\n'+maoDesc+'\n\n':'')+
+    (wppTxt?'CONVERSA DO GRUPO NO WHATSAPP DURANTE A NOITE (use para falas reais e clima):\n'+wppTxt.substring(0,12000)+'\n\n':'')+
+    'Escreva a ata e devolva APENAS um JSON válido, sem nenhum texto fora dele, neste formato:\n'+
+    '{"titulo":"uma linha provocativa","subtitulo":"contexto e sabor da noite","clima":0-10,'+
+    '"intro":"3 a 4 parágrafos separados por \\n\\n, com drama e o que aconteceu de fato",'+
+    '"maoTitulo":"uma linha sobre a mão da noite","maoDesc":"um parágrafo descrevendo a mão",'+
+    '"persJogador":"nome exato de um jogador presente","persArq":"um destes arquétipos exatamente: '+arquetipos.join(', ')+'",'+
+    '"falas":[{"fala":"frase","autor":"Nome"}],'+
+    '"jogadores":{"Nome":"2 a 3 frases sardônicas sobre a noite dele, citando posição, rebuys e KOs"}}\n\n'+
+    'Regras: "clima" é um número de 0 (glacial) a 10 (apocalipse). Em "jogadores" inclua todos os presentes, com o nome exato. '+
+    'Use os números reais acima, não invente resultado. Para "falas", prefira frases reais da conversa do WhatsApp (3 a 4). '+
+    'Se não houver relato da mão da noite, escolha o lance mais marcante das eliminações. '+
+    'Tom: sarcástico, divertido, íntimo do grupo, sem ser genérico. Use os apelidos.';
+  var result=await callClaude(prompt, images, {system:'Você escreve atas de poker e responde exclusivamente com um único objeto JSON válido, sem texto antes ou depois.', maxTokens:8000});
   btn.disabled=false;btn.textContent='✨ Gerar Ata com IA';
-  if(!result){st.textContent='❌ Erro ao gerar';st.className='pub-status err';return;}
-  // Preencher o campo de introdução da ata
-  var introEl=document.getElementById('ai');
-  if(introEl){
-    // Extrair partes da ata
-    var tituloM=result.match(/\*\*TÍTULO:\*\*\s*\n`([^`]+)`/);
-    var subtM=result.match(/\*\*SUBTÍTULO:\*\*\s*\n`([^`]+)`/);
-    var introM=result.match(/\*\*INTRODUÇÃO:\*\*\n([\s\S]*?)\n\n\*\*MÃO/);
-    var maoTM=result.match(/\*\*MÃO DA NOITE — TÍTULO:\*\*\s*\n`([^`]+)`/);
-    var maoDM=result.match(/\*\*MÃO DA NOITE — DESCRIÇÃO:\*\*\n([\s\S]*?)\n\n\*\*FALAS/);
-    var falasM=result.match(/\*\*FALAS ICÔNICAS:\*\*\n([\s\S]*?)\n\n\*\*PERSONAGEM/);
-    if(tituloM) sv('at', tituloM[1].trim());
-    if(subtM) sv('as', subtM[1].trim());
-    if(introM) sv('ai', introM[1].trim());
-    if(maoTM) sv('amt', maoTM[1].trim());
-    if(maoDM) sv('amd', maoDM[1].trim());
-    if(falasM) sv('af', falasM[1].trim());
-    tog('c4');
-    st.textContent='✅ Ata gerada! Veja na seção 5.';st.className='pub-status ok';
-    toast('✅ Ata gerada — confira na seção 5');
-  } else {
-    st.innerHTML='✅ Gerado:<br><textarea style="width:100%;height:200px;background:var(--bg3);color:var(--text);border:1px solid var(--bdr);border-radius:8px;padding:8px;font-size:11px;margin-top:8px;" readonly>'+result+'</textarea>';
-    st.className='pub-status ok';
+  if(!result){st.textContent='❌ Erro ao gerar (veja o aviso no rodapé)';st.className='pub-status err';return;}
+  var ata;
+  try{
+    var clean=result.replace(/```json\n?|```\n?/g,'').trim();
+    var a=clean.indexOf('{'), b=clean.lastIndexOf('}');
+    if(a>=0&&b>a) clean=clean.substring(a,b+1);
+    ata=JSON.parse(clean);
+  }catch(e){
+    st.innerHTML='⚠️ A IA respondeu fora do formato. Texto recebido:<br><textarea style="width:100%;height:200px;background:var(--bg3);color:var(--text);border:1px solid var(--bdr);border-radius:8px;padding:8px;font-size:11px;margin-top:8px;" readonly></textarea>';
+    st.querySelector('textarea').value=result;
+    st.className='pub-status err';return;
   }
+  // Normalizar e guardar a ata da semana
+  var nomeOk=function(n){var t=String(n||'').trim().toLowerCase();return PL.find(function(p){return p.toLowerCase()===t;})||'';};
+  var jogs={};
+  Object.keys(ata.jogadores||{}).forEach(function(k){var n=nomeOk(k); if(n&&ata.jogadores[k]) jogs[n]=String(ata.jogadores[k]).trim();});
+  var clima=parseInt(ata.clima,10); if(isNaN(clima)) clima=5; clima=Math.max(0,Math.min(10,clima));
+  var arq=arquetipos.indexOf(ata.persArq)>=0?ata.persArq:'';
+  var d={
+    titulo:String(ata.titulo||'').trim(), subtitulo:String(ata.subtitulo||'').trim(), clima:clima,
+    intro:String(ata.intro||'').trim(), maoTitulo:String(ata.maoTitulo||'').trim(), maoDesc:String(ata.maoDesc||'').trim(),
+    persJogador:nomeOk(ata.persJogador), persArq:arq,
+    falas:(ata.falas||[]).filter(function(x){return x&&x.fala;}).map(function(x){return {fala:String(x.fala).replace(/^"|"$/g,'').trim(),autor:String(x.autor||'').trim()};}),
+    jogadores:jogs
+  };
+  if(!_nfd.atas)_nfd.atas={};
+  _nfd.atas[wkKey]=d;
+  try{localStorage.setItem('nf_data_plaza',JSON.stringify(_nfd));}catch(e){}
+  // Mostrar na Seção 5 já com a semana certa selecionada
+  var sel=document.getElementById('awk');
+  if(!Array.from(sel.options).some(function(o){return o.value===wkKey;})){
+    var op=document.createElement('option');op.value=wkKey;op.textContent=wkKey;sel.appendChild(op);
+  }
+  sel.value=wkKey;
+  preencherAta(d);
+  var c4=document.getElementById('c4'); if(c4) c4.classList.remove('collapsed');
+  if(c4) c4.scrollIntoView({behavior:'smooth',block:'start'});
+  st.textContent='✅ Ata da '+wkKey+' gerada e salva. Está aberta na Seção 5 para você revisar; se editar algo, clique em "Salvar Ata".';
+  st.className='pub-status ok';
+  toast('✅ Ata da '+wkKey+' pronta na Seção 5');
+}
+
+// ── Gerar os 3 arquivos com a MESMA lógica do botão Baixar (recalcula mês, trimestre e ano) ──
+function gerarArquivosPublicacao(){
+  _captura={};
+  try{ baixar(); } finally { var arq=_captura; _captura=null; }
+  if(!arq['index.html']) throw new Error('Não consegui gerar o index.html');
+  return arq;
+}
+// Commita os arquivos no GitHub, um por vez, mostrando o andamento em "st"
+async function commitArquivosGitHub(arq, msg, st){
+  var token=localStorage.getItem('gh_token')||'';
+  var repo=localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
+  var branch=localStorage.getItem('gh_branch')||'main';
+  if(!token) throw new Error('Configure o GitHub Token na Seção 7');
+  var headers={'Authorization':'token '+token,'Accept':'application/vnd.github.v3+json','Content-Type':'application/json'};
+  var ordem=['index.html','dados.json','atas.json'].filter(function(n){return arq[n]!=null;});
+  for(var i=0;i<ordem.length;i++){
+    var path=ordem[i];
+    if(st) st.textContent='📡 Publicando '+path+' ('+(i+1)+'/'+ordem.length+')...';
+    var shaRes=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+branch,{headers:headers,cache:'no-store'});
+    var shaJ={}; try{ shaJ=await shaRes.json(); }catch(e){}
+    var body={message:msg,content:btoa(unescape(encodeURIComponent(arq[path]))),branch:branch};
+    if(shaJ.sha) body.sha=shaJ.sha;
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/'+path,{method:'PUT',headers:headers,body:JSON.stringify(body)});
+    var j={}; try{ j=await r.json(); }catch(e){}
+    if(!r.ok||!j.content) throw new Error(path+': '+(j.message||('erro '+r.status)));
+  }
+}
+// Botão da Seção 2: salva a semana do formulário e publica os 3 arquivos
+async function salvarEPublicar(){
+  var st=document.getElementById('pub-semana-status'), btn=document.getElementById('btn-pub-semana');
+  if(!_html){ st.textContent='❌ Carregue o index.html na Seção 1 primeiro'; st.className='pub-status err'; return; }
+  if(!localStorage.getItem('gh_token')){ st.textContent='❌ Configure o GitHub Token na Seção 7 primeiro'; st.className='pub-status err'; return; }
+  var wk=parseInt(document.getElementById('nwk').value)||0;
+  var data=document.getElementById('ndata').value;
+  var dataBR=data?data.split('-').reverse().join('/'):'?';
+  if(!confirm('Publicar a WK'+wk+' (data '+dataBR+') no GitHub?\n\nO dashboard público será atualizado em cerca de 1 minuto.')) return;
+  btn.disabled=true; st.className='pub-status';
+  try{
+    st.textContent='💾 Salvando a semana...';
+    if(salvarNoite()!==true) throw new Error('A semana não foi salva. Confira as validações.');
+    st.textContent='⚙️ Gerando arquivos...';
+    await new Promise(function(r){setTimeout(r,150);});
+    var arq=gerarArquivosPublicacao();
+    await commitArquivosGitHub(arq, 'WK'+wk+' - registro via admin', st);
+    st.textContent='✅ WK'+wk+' publicada! O dashboard atualiza em cerca de 1 minuto.'; st.className='pub-status ok';
+    toast('🚀 WK'+wk+' publicada no GitHub!');
+  }catch(e){
+    st.textContent='❌ '+e.message; st.className='pub-status err'; toast('Erro: '+e.message);
+  }
+  btn.disabled=false;
 }
 
 // ── Publicar no GitHub ────────────────────────────────────
@@ -2047,7 +2148,7 @@ async function livePublicar(){
 
   // 3. Salvar a noite nos dados internos
   st.textContent='💾 Salvando noite...';
-  salvarNoite();
+  if(salvarNoite()!==true){st.textContent='❌ A semana não foi salva. Confira as validações na Seção 2.';st.className='pub-status err';btn.disabled=false;return;}
   await new Promise(r=>setTimeout(r,400));
 
   // 4. Gerar o conteúdo dos arquivos (mesma lógica do baixar())
@@ -2055,65 +2156,10 @@ async function livePublicar(){
   await new Promise(r=>setTimeout(r,200));
   
   try{
-    // Replicar a lógica do baixar() para capturar o conteúdo sem fazer download
-    var u = _html;
-    
-    // Injetar ledger
-    u = u.replace(/window\.DATA\.ledger\s*=\s*\[[\s\S]*?\];/, 'window.DATA.ledger = '+JSON.stringify(_led)+';');
-    
-    // Injetar eliminações
-    var eliStr = 'window.DATA.eliminacoes = '+JSON.stringify(_eli)+';';
-    if(u.indexOf('window.DATA.eliminacoes')>=0){
-      u = u.replace(/window\.DATA\.eliminacoes\s*=\s*\{[\s\S]*?\};/, eliStr);
-    }
-    
-    // Injetar HOF
-    u = u.replace(/var DEFAULT_HOF\s*=\s*\{[\s\S]*?\};/, 'var DEFAULT_HOF = '+JSON.stringify(_nfd.hof||{})+';');
-
-    // Gerar dados.json
-    var dadosObj = {ledger: _led, eliminacoes: _eli};
-    var dadosStr = JSON.stringify(dadosObj, null, 2);
-
-    // Gerar atas.json
-    var atasStr = JSON.stringify(_nfd.atas||{}, null, 2);
-
+    // Mesma geração completa do botão Baixar (recalcula mês, trimestre e ano)
     var wkN = parseInt(document.getElementById('live-wk').value)||0;
-    var repo = localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
-    var branch = localStorage.getItem('gh_branch')||'main';
-    var headers = {
-      'Authorization':'token '+token,
-      'Accept':'application/vnd.github.v3+json',
-      'Content-Type':'application/json'
-    };
-
-    async function commitFile(path, content, msg){
-      // Pegar SHA atual
-      var shaRes = await fetch('https://api.github.com/repos/'+repo+'/contents/'+path+'?ref='+branch, {headers});
-      var shaJ = await shaRes.json();
-      var sha = shaJ.sha;
-      // Encode em base64
-      var b64 = btoa(unescape(encodeURIComponent(content)));
-      var body = {message:msg, content:b64, branch:branch};
-      if(sha) body.sha = sha;
-      var r = await fetch('https://api.github.com/repos/'+repo+'/contents/'+path, {
-        method:'PUT', headers, body:JSON.stringify(body)
-      });
-      var j = await r.json();
-      if(!j.content) throw new Error(path+': '+(j.message||'erro no commit'));
-      return true;
-    }
-
-    var msg = 'WK'+wkN+' — registro via admin mobile';
-
-    // 5. Publicar os 3 arquivos
-    st.textContent='📡 Publicando index.html...';
-    await commitFile('index.html', u, msg);
-
-    st.textContent='📡 Publicando dados.json...';
-    await commitFile('dados.json', dadosStr, msg);
-
-    st.textContent='📡 Publicando atas.json...';
-    await commitFile('atas.json', atasStr, msg);
+    var arq = gerarArquivosPublicacao();
+    await commitArquivosGitHub(arq, 'WK'+wkN+' - registro via admin mobile', st);
 
     st.textContent='✅ Publicado! Dashboard atualiza em ~1 minuto.';
     st.className='pub-status ok';
