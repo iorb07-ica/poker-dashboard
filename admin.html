@@ -88,6 +88,7 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
 @media(max-width:580px){.wr{padding:8px;}.hg{grid-template-columns:repeat(2,1fr);}}
 
 .ai-badge{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:999px;background:rgba(99,102,241,.2);color:#a5b4fc;margin-left:6px;}
+@media (max-width:640px){.dlb{display:none !important;}}
 .live-top{display:grid;grid-template-columns:72px minmax(0,1fr) 90px 80px;gap:8px;margin-bottom:4px;}
 .live-top .fd{min-width:0;}
 .live-top input,.live-top select{min-width:0;max-width:100%;box-sizing:border-box;height:38px;}
@@ -290,12 +291,12 @@ html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:sy
       <div class="cb">
         <div class="rw">
           <div class="fd"><label>🔑 Anthropic API Key</label>
-            <input type="password" id="anthr-key" placeholder="sk-ant-api03-..." oninput="localStorage.setItem('anthr_key',this.value)"/>
+            <input type="password" id="anthr-key" placeholder="sk-ant-api03-..." oninput="localStorage.setItem('anthr_key',limparChave(this.value))" onblur="this.value=limparChave(this.value)"/>
           </div>
         </div>
         <div class="rw">
           <div class="fd"><label>🐙 GitHub Token (para publicar automaticamente)</label>
-            <input type="password" id="gh-token" placeholder="ghp_..." oninput="localStorage.setItem('gh_token',this.value)"/>
+            <input type="password" id="gh-token" placeholder="ghp_..." oninput="localStorage.setItem('gh_token',limparChave(this.value))" onblur="this.value=limparChave(this.value)"/>
           </div>
         </div>
         <div class="rw">
@@ -441,7 +442,7 @@ function _authLembrado(){
 // ── Atualização automática ───────────────────────────────
 // A cada versão nova, ADMIN_VERSAO muda. Ao abrir (ou voltar para o app), o admin compara com o GitHub
 // e, se houver versão mais nova, recarrega por um endereço novo, que fura o cache do celular.
-var ADMIN_VERSAO='2026-10-14-r1';
+var ADMIN_VERSAO='2026-10-15-r5';
 async function checarAtualizacao(){
   try{
     var repo=localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
@@ -510,6 +511,48 @@ function pfile(f){
   r.onload=function(e){ processarIndexHtml(e.target.result, f.name); };
   r.readAsText(f);
 }
+// Junta TODAS as atas, bruxarias, torneios e mídia já publicados no index (base64 antigo + seed)
+// com o que existe neste aparelho. Sem isso, publicar de um aparelho novo apagava as atas antigas.
+function mesclarNfdDoIndex(html){
+  if(!_nfd||typeof _nfd!=='object') _nfd={};
+  var atasPub={}, seedObj=null;
+  try{
+    var b=html.match(/<script id="atas-data">[\s\S]*?var b64 = "([^"]+)"/);
+    if(b){ var j=JSON.parse(decodeURIComponent(escape(atob(b[1])))); if(j&&typeof j==='object') Object.assign(atasPub,j); }
+  }catch(e){}
+  try{
+    var sm=html.match(/<script id="nf-seed-data">window\.__NF_SEED__ = ([\s\S]*?);<\/script>/g);
+    if(sm&&sm.length){
+      var ult=sm[sm.length-1].replace(/^<script id="nf-seed-data">window\.__NF_SEED__ = /,'').replace(/;<\/script>$/,'');
+      seedObj=JSON.parse(ult);
+    }
+  }catch(e){ seedObj=null; }
+  if(seedObj&&seedObj.atas) Object.assign(atasPub,seedObj.atas);
+  _nfd.atas=Object.assign({},atasPub,_nfd.atas||{});
+  if(seedObj){
+    if((!_nfd.bruxarias||!_nfd.bruxarias.length)&&seedObj.bruxarias&&seedObj.bruxarias.length) _nfd.bruxarias=seedObj.bruxarias;
+    if((!_nfd.torneios||!_nfd.torneios.length)&&seedObj.torneios&&seedObj.torneios.length) _nfd.torneios=seedObj.torneios;
+    if(seedObj.midia) _nfd.midia=Object.assign({},seedObj.midia,_nfd.midia||{});
+  }
+  try{localStorage.setItem('nf_data_plaza',JSON.stringify(_nfd));}catch(e){}
+}
+// Busca o atas.json publicado e junta (não sobrescreve atas deste aparelho)
+async function mesclarAtasJsonGitHub(){
+  try{
+    var token=localStorage.getItem('gh_token')||'';
+    var repo=localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
+    var branch=localStorage.getItem('gh_branch')||'main';
+    if(!token) return;
+    var r=await fetch('https://api.github.com/repos/'+repo+'/contents/atas.json?ref='+branch,{cache:'no-store',headers:{'Authorization':'token '+token,'Accept':'application/vnd.github.raw'}});
+    if(!r.ok) return;
+    var j=await r.json();
+    if(j&&typeof j==='object'){
+      _nfd.atas=Object.assign({},j,_nfd.atas||{});
+      try{localStorage.setItem('nf_data_plaza',JSON.stringify(_nfd));}catch(e){}
+      if(typeof buildAWK==='function') buildAWK();
+    }
+  }catch(e){}
+}
 function processarIndexHtml(conteudo, nome){
   {
     _html=conteudo;
@@ -522,6 +565,7 @@ function processarIndexHtml(conteudo, nome){
     var hm=_html.match(/var DEFAULT_HOF\s*=\s*(\{[\s\S]*?\});/);if(hm){try{_nfd.hof=JSON.parse(hm[1]);}catch(x){}}
     var nm=_html.match(/id="nf-admin-inject"[^>]*>try\{localStorage\.setItem\([^,]+,"([\s\S]*?)"\)/);
     if(nm){try{var nd=JSON.parse(nm[1]);if(nd&&typeof nd==='object')_nfd=nd;}catch(x){}}
+    mesclarNfdDoIndex(_html);
     document.getElementById('uz').style.display='none';
     document.getElementById('fok').style.display='flex';
     document.getElementById('fn').textContent=nome;
@@ -982,7 +1026,7 @@ function baixar(){
       bruxarias:_nfd.bruxarias||[],
       torneios:_nfd.torneios||[]
     };
-    var ns=JSON.stringify(seedObj);
+    var ns=JSON.stringify(seedObj).replace(/<\//g,'<\\/');
     var seedScript='<script id="nf-seed-data">window.__NF_SEED__ = '+ns+';<\/script>';
     var nfInit='var NF_DATA = (function(){\n'
       +'  var seed = (window.__NF_SEED__ && typeof window.__NF_SEED__ === "object") ? window.__NF_SEED__ : '+ns+';\n'
@@ -1004,13 +1048,17 @@ function baixar(){
       +'  } catch(e){}\n'
       +'  return seed;\n'
       +'})();';
-    u=u.replace(/<script id="nf-seed-data">[\s\S]*?<\/script>/,'');
-    if(/var NF_DATA = \(function\(\)\{[\s\S]*?\}\)\(\);/.test(u)){
-      u=u.replace(/var NF_DATA = \(function\(\)\{[\s\S]*?\}\)\(\);/, seedScript+'\n<script>'+nfInit+'<\/script>');
-    } else if(u.indexOf('if(!NF_DATA.atas)')>=0){
-      u=u.replace('if(!NF_DATA.atas)', seedScript+'\n<script>\n'+nfInit+'\nif(!NF_DATA.atas)');
-    } else {
-      u=u.replace('</body>', seedScript+'\n<script>'+nfInit+'<\/script>\n</body>');
+    // Reconstrói SEMPRE o mesmo trecho do index (idempotente): depois do <script id="atas-data">
+    // vem o script de seed e a abertura do script principal com o NF_DATA. Isso também conserta
+    // versões que ficaram com <script> duplicados por publicações anteriores.
+    var _ancora=/if\(!NF_DATA\.atas\)\s+NF_DATA\.atas = \{\};\s*\n\/\/ Mesclar atas embutidas via base64/;
+    var _ad=u.indexOf('<script id="atas-data">');
+    var _adFim=_ad>=0?u.indexOf('<\/script>',_ad):-1;
+    var _m=_ancora.exec(u);
+    if(_ad>=0&&_adFim>=0&&_m&&_m.index>_adFim){
+      u=u.slice(0,_adFim+9)+'\n\n'+seedScript+'\n\n<script>\n'+nfInit+'\n\n'+u.slice(_m.index);
+    }else{
+      throw new Error('Não encontrei a estrutura esperada do index.html (NF_DATA). Publicação cancelada para não quebrar o dashboard.');
     }
 
     var _atasJson = JSON.stringify(_nfd.atas||{}).replace(/<\/script>/gi,'<\\/script>');
@@ -1667,8 +1715,12 @@ document.getElementById('c5').querySelector('.ch').addEventListener('click', fun
 // NOVAS FEATURES: IA + GitHub + Modo Ao Vivo
 // ═══════════════════════════════════════════════════════════
 
+// Remove aspas, espaços, quebras de linha e caracteres invisíveis que vêm junto ao copiar a chave
+function limparChave(v){ return String(v||'').replace(/[\s"'`\u200B-\u200D\u2060\uFEFF]/g,''); }
 // ── Carregar configurações salvas ─────────────────────────
 (function loadSavedConfigs(){
+  // corrige chaves já salvas com aspas ou espaços
+  ['anthr_key','gh_token'].forEach(function(k){ var v=localStorage.getItem(k); if(v&&limparChave(v)!==v) localStorage.setItem(k,limparChave(v)); });
   var fields = {
     'anthr-key':'anthr_key','gh-token':'gh_token',
     'gh-repo':'gh_repo','gh-branch':'gh_branch'
@@ -1699,7 +1751,7 @@ function autoMesTri(dateVal, prefix){
 
 // ── Chamada genérica ao Claude ────────────────────────────
 async function callClaude(prompt, images, opts){
-  var key=localStorage.getItem('anthr_key')||'';
+  var key=limparChave(localStorage.getItem('anthr_key')||'');
   if(!key){toast('Configure a API Key do Claude na seção 7');return null;}
   var content=[];
   if(images&&images.length){
@@ -1715,7 +1767,13 @@ async function callClaude(prompt, images, opts){
       body:JSON.stringify(body)
     });
     var j=await res.json();
-    if(j.error){toast('Erro Claude: '+j.error.message);return null;}
+    if(j.error){
+      var em=j.error.message||'';
+      if(j.error.type==='authentication_error'||/x-api-key/i.test(em)){
+        toast('Chave da Anthropic inválida neste aparelho. Cole de novo na Seção 7 (só o texto que começa com sk-ant-).');
+      }else toast('Erro Claude: '+em);
+      return null;
+    }
     var txt=(j.content||[]).filter(function(b){return b.type==='text';}).map(function(b){return b.text;}).join('\n');
     if(j.stop_reason==='max_tokens') toast('Aviso: resposta do Claude veio cortada (limite de tamanho)');
     return txt||null;
@@ -1927,7 +1985,7 @@ async function gerarAtaIA(){
     'Tom: sarcástico, divertido, íntimo do grupo, sem ser genérico. Use os apelidos.';
   var result=await callClaude(prompt, images, {system:'Você escreve atas de poker e responde exclusivamente com um único objeto JSON válido, sem texto antes ou depois.', maxTokens:8000});
   btn.disabled=false;btn.textContent='✨ Gerar Ata com IA';
-  if(!result){st.textContent='❌ Erro ao gerar (veja o aviso no rodapé)';st.className='pub-status err';return;}
+  if(!result){st.textContent='❌ Erro ao gerar. Veja o aviso que apareceu no topo da tela.';st.className='pub-status err';return;}
   var ata;
   try{
     var clean=result.replace(/```json\n?|```\n?/g,'').trim();
@@ -1978,6 +2036,10 @@ function gerarArquivosPublicacao(){
 }
 // Commita os arquivos no GitHub, um por vez, mostrando o andamento em "st"
 async function commitArquivosGitHub(arq, msg, st){
+  try{
+    var nAt=Object.keys(JSON.parse(arq['atas.json']||'{}')).length;
+    if(nAt<20&&!confirm('Atenção: o atas.json vai ser publicado com só '+nAt+' ata(s). O normal é ter todas as semanas. Publicar mesmo assim?')) throw new Error('Publicação cancelada');
+  }catch(e){ if(e.message==='Publicação cancelada') throw e; }
   var token=localStorage.getItem('gh_token')||'';
   var repo=localStorage.getItem('gh_repo')||'iorb07-ica/poker-dashboard';
   var branch=localStorage.getItem('gh_branch')||'main';
@@ -2325,6 +2387,7 @@ async function carregarDoGitHub(){
     if(!content || content.indexOf('window.DATA')<0){ throw new Error('Arquivo veio vazio ou sem os dados do dashboard'); }
     // Processar exatamente como o carregamento por arquivo (ledger, eliminações, Hall da Fama, atas, torneios)
     processarIndexHtml(content, 'index.html (GitHub)');
+    await mesclarAtasJsonGitHub();
     document.getElementById('fn').textContent = 'index.html (GitHub, '+_led.length+' registros)';
     document.getElementById('fbadge').textContent = _led.length+' registros';
     // Auto-preencher WK sugerida
