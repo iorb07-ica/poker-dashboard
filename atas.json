@@ -1,35 +1,37 @@
 {
-  "WK40": {
-    "titulo": "Papito e o Apocalipse: Cinco KOs, Zero Remorso",
-    "subtitulo": "WK40 – Oscar vira máquina de eliminar e leva tudo; Israel paga o dealer e ainda termina em segundo",
-    "clima": 9,
-    "intro": "Sete guerreiros se sentaram à mesa do Plaza Mediterrâneo na noite de 7 de outubro sem saber que estavam prestes a assistir a uma execução em massa com nome e sobrenome: Oscar, o Papito, o exterminador da WK40. Cristiano e Rafa deram o fora antes de ver o horror — e, convenhamos, fizeram bem.\n\nO início da noite enganou. Heron parecia o dono da bagunça, eliminando Magu logo de cara e depois derrubando Israel e Charles num mesmo arco narrativo de glória efêmera. Magu, por sua vez, virou um jogador de reencarnações: morreu três vezes, matou três, e ainda saiu em 5º com 9.300 pontos e uma conta de rebuy que não o envergonha — muito. O Grey Galináceo, Israel, também teve sua via-sacra particular: foi eliminado três vezes antes de se firmar em 28.000 fichas e cravar o segundo lugar.\n\nMas a noite pertenceu a Papito. Com zero rebuys e uma frieza cirúrgica que beirou o desumano, Oscar acumulou cinco KOs consecutivos — Charles, Heron, Magu, Pedro e, por fim, Marcus — varrendo a mesa como quem passa um pano molhado no balcão. Nenhuma piedade, nenhum vacilo. 42.000 fichas e 33.100 pontos. O grupo no WhatsApp resumiu bem: 'Porra, só dá Oscar.'\n\nIsrael, sempre o cronista involuntário da própria desgraça, registrou cada eliminação no grupo em tempo real — inclusive as três próprias — e ainda pagou o dealer no final. Ao menos o segundo lugar fica bonito no ranking. Por ora, o ranking anual ainda sorri para o Grey, líder geral com 659.341 pontos, mas a noite foi, sem contestação, a catedral particular de Oscar.",
-    "maoTitulo": "O Fold que Ninguém Vai Esquecer (ou Confirmar)",
-    "maoDesc": "Com trinca de oito na mão e um raise de 2.000 fichas no river vindo de Magu, o Grey Galináceo fez o que nenhum cronista consegue perdoar facilmente: foldou. Israel relatou a cena com aquela mistura característica de dúvida e autoconvencimento — 'não sei se me senti bem', disse. Magu, já no fim da noite antes de ser cruelmente executado pelo Papito, confirmou que o fold tinha sido correto. Mas Magu também é o mesmo sujeito que morreu três vezes na mesma noite, então a credibilidade do laudo fica a cargo de cada um. O mistério permanece aberto, as fichas não voltam, e Israel terminou em segundo de qualquer jeito — o que, na filosofia do Plaza Mediterrâneo, é o suficiente para dormir bem.",
-    "persJogador": "Oscar",
+  "WK41": {
+    "titulo": "Grey Galináceo elimina 3 numa noite, Mas Heron Leva a 14ª — O Universo É Injusto",
+    "subtitulo": "WK41 • 14 de outubro de 2026 • Plaza Mediterrâneo • 9 presentes, 19 eliminações, 1 herói improvável e um A9 que apareceu 5 vezes só pra trollar o Israel",
+    "clima": 8,
+    "intro": "Havia algo de místico no ar do Plaza Mediterrâneo nesta quarta-feira. Talvez fosse o cheiro de rebuy queimando. Talvez fosse o A9 do galera batendo no flop pela quinta vez consecutiva, como se o baralho tivesse feito um pacto pessoal com o pano. O fato é que a noite começou com Israel no modo exterminador — 6 KOs, a maior coleção de caveiras da rodada — e terminou com Heron levantando o troféu pela 14ª vez na carreira. Catorze. Nem o baralho acredita.\n\nIsrael eliminou Pedro logo de cara, depois Rafa, depois Cristiano. O homem não estava jogando poker, estava conduzindo um serviço de desligamento em massa. Seis eliminações no total, fichas empilhadas, sorrisos largos. Tudo indicava que a coroa era dele. Mas o poker tem senso de humor e o nome desse humor é Heron. Zerou nos rebuys, acumulou 3 KOs cirúrgicos e foi empilhando fichas com a tranquilidade de quem sabe que o destino já assinou o contrato.\n\nNo meio do caos, Magu protagonizou a trajetória mais dramática da noite: 1 rebuy, 4 KOs — incluindo liquidar Marcus duas vezes e Pedro uma — e ainda assim foi varrido por Israel na reta final. Charles também fez sua parte, com 4 KOs e nenhum rebuy, chegando ao pódio com a sobriedade de quem nunca perdeu a compostura, mesmo quando Rafa e Pedro insistiam em aparecer de volta como zumbis com fichas.\n\nA mão final foi o epitáfio perfeito: Heron vindo com par de 9, confiante, e o flop entregando dois noves pra Heron. O universo escolheu seu campeão. Pela 14ª vez. E o Grey Galináceo teve uma recuperação épica, digna de livro. Acertou um full house contra Marcolino num momento que só lhe restavam 3500 fichas. Depois eliminou Rafilds e Marcus numa mesma mão. E como esquecer da mão com 50 mil fichas no pano. Charlito baguette completando sequência no turn com KJ na mão e Grey acertando seu segundo par. Na última, foram 5000 de Charlito, call de Grey, 15000 de Heron e call de 15000 de Charlito. Os dois repartiram um potasso de mais de 50 mil fichas. Noite histórica no Plaza!",
+    "maoTitulo": "A e 9, Cinco Vezes Glorioso — e Na Última Mão, o Flop Decidiu Traí-lo",
+    "maoDesc": "Durante toda a noite, sempre que Israel olhava pras cartas e via A9, o flop respondia com reverência — cinco vezes o board cooperou. Mas na mão decisiva, o destino resolveu escrever um final diferente: Heron veio com 99 e quadrou no flop. Sua 14ª vitória. Monstrooo!!!",
+    "persJogador": "Heron",
     "persArq": "O Dominante",
     "falas": [
       {
-        "fala": "Porra só da Oscar",
-        "autor": "Rodrigo Mitke"
+        "fala": "Noite de A e 9… bateu umas 5 vezes no flop. Incrível…",
+        "autor": "Israel"
       },
       {
-        "fala": "Termina o serviço pelo menos né",
-        "autor": "Rodrigo Mitke"
+        "fala": "E na última mão termina com Heron vindo com par de 9 e batendo 2 noves no flop.",
+        "autor": "Israel"
       },
       {
-        "fala": "Papito eliminou todos menos um",
-        "autor": "Israel Oreano"
+        "fala": "Heron leva sua 14ª semana. O homem está impossível.",
+        "autor": "Israel"
       }
     ],
     "jogadores": {
-      "Oscar": "Zero rebuys, cinco KOs, 42.000 fichas e uma noite que vai precisar de capítulo próprio na história do Plaza. Papito não jogou poker — fez faxina. O ranking anual ainda não reflete o monstro que apareceu na WK40.",
-      "Israel": "Morreu três vezes, renasceu três vezes, chegou em segundo e ainda pagou o dealer. Grey Galináceo segue líder anual com 659.341 pontos e a dignidade levemente arranhada por um fold de trinca que talvez nunca se prove errado — ou certo.",
-      "Marcus": "Marcolino entrou limpo, sem rebuy, cravou um KO e chegou ao pódio em terceiro. Não fez barulho, não fez escândalo — foi exatamente o tipo de noite discreta que sobe no ranking sem que ninguém perceba.",
-      "Pedro": "Pedroca também zerou os rebuys, não eliminou ninguém e foi parar em quarto, encerrado pelo inexorável Papito. Uma noite honesta para um jogador que sabe que honestidade no poker tem limite.",
-      "Magu": "Magulets fez dois rebuys, três KOs e terminou em quinto — o currículo de quem vive perigosamente. Foi eliminado por Heron, por Marcus e, na sentença final, pelo carrasco da noite, Oscar. Ao menos confirmou o fold do Israel. Generoso até no fim.",
-      "Heron": "Um rebuy, três KOs e uma fase de domínio total que durou até Magu virar a mesa contra ele. Terminou em sexto, mas por uns bons minutos deu para acreditar que a noite seria dele.",
-      "Charles": "Charlito fez um rebuy, não eliminou ninguém e saiu em sétimo, cortesia de Heron na primeira vez e de Oscar na segunda. Uma noite que a gente prefere chamar de 'aprendizado' para não chamar de desastre."
+      "Heron": "14ª semana. CATORZE. Zero rebuys, 3 KOs, 46.275 fichas e uma trip de noves na última mão que pareceu menos poker e mais intervenção divina. Charlito e o Grey Galináceo fizeram o trabalho sujo a noite toda — Heron só chegou na hora do jantar e comeu tudo.",
+      "Israel": "6 KOs, zero rebuys, 42.600 fichas e a maior taxa de destruição da mesa — e ainda assim ficou em segundo. O Grey Galináceo dominou as eliminações de ponta a ponta e o baralho decidiu recompensar outra pessoa. Lidera o mês, o trimestre e ainda não entendeu o que aconteceu na última mão.",
+      "Charles": "Charlito chegou silencioso, foi eliminando gente sem fazer alarde — Rafa, Pedro duas vezes, Oscar — e subiu ao pódio com 4 KOs e nenhum rebuy. A consistência do homem é quase ofensiva pra quem gastou fortuna em rebuys do lado dele. E ainda teve cobrança com direito a inclusão de cliente inadimplente no SPC",
+      "Magu": "Magulets com 1 rebuy e 4 KOs foi o personagem mais caótico da noite: eliminou Marcus duas vezes, Oscar e Pedro, chegou à semifinal e foi destruído por Israel. Quarto lugar e uma história de montanha-russa que merecia série própria. Talvez o macho alfa rs",
+      "Marcus": "Marcolino entrou, morreu, voltou, morreu de novo, voltou de novo, morreu uma terceira vez — tudo isso sem eliminar ninguém. Três rebuys, zero KOs, 7.500 pts. A definição de investimento de alto risco com retorno emocional negativo. Vai comprar put de Petro, de certeza!",
+      "Rafa": "Dois rebuys, 1 KO e a glória de eliminar Cristiano na ressurreição — mas foi deletado por Israel pela segunda vez na noite antes de causar maiores danos. Sexto lugar e a sensação de ter dado tudo mas o 'tudo' não ter sido suficiente. Sua participação em 2027, dizem os colunistas, está ameaçada.",
+      "Pedro": "Pedroca foi eliminado por Israel, voltou, foi eliminado por Charles, voltou, foi eliminado por Charles de novo, voltou, foi finalmente executado por Magu. Três rebuys, 1 KO e uma teimosia que merece, no mínimo, respeito e uma consulta cardiológica.",
+      "Cristiano": "Dois rebuys, zero KOs e a honra de ter sido eliminado por Israel, depois por Rafa na ressurreição, depois por Pedro. Cristiano foi o único jogador da noite a ser mandado embora por alguém que já tinha morrido antes dele. Poético e trágico.",
+      "Oscar": "Papito entrou, foi eliminado por Heron, voltou, foi eliminado por Magu, voltou, foi eliminado por Charles. Dois rebuys, zero KOs, 1.000 pts. Nono lugar com a resiliência de quem recusa aceitar o recado — o recado sendo enviado três vezes seguidas."
     }
   }
 }
