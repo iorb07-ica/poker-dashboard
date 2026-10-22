@@ -1136,5 +1136,42 @@
       "Cristiano": "Dois rebuys, zero KOs e a honra de ter sido eliminado por Israel, depois por Rafa na ressurreição, depois por Pedro. Cristiano foi o único jogador da noite a ser mandado embora por alguém que já tinha morrido antes dele. Poético e trágico.",
       "Oscar": "Papito entrou, foi eliminado por Heron, voltou, foi eliminado por Magu, voltou, foi eliminado por Charles. Dois rebuys, zero KOs, 1.000 pts. Nono lugar com a resiliência de quem recusa aceitar o recado — o recado sendo enviado três vezes seguidas."
     }
+  },
+  "WK42": {
+    "titulo": "Oscar, o Exterminador: 7 KOs e nem chegou perto do pódio",
+    "subtitulo": "WK42: A noite em que o Papito fez história nas eliminações e sumiu no final, enquanto Heron erguia o troféu após três ressurreições",
+    "clima": 9,
+    "intro": "WK42 entrou para os anais do Plaza Mediterrâneo como a noite do paradoxo supremo: o homem que mais matou foi o primeiro a ser enterrado. Oscar — o Papito, o caçador implacável — colecionou sete eliminações com a precisão de um exterminador profissional, varreu Marcus quatro vezes da mesa como se fosse um ritual, despachou Heron e Magu múltiplas vezes, e ainda assim terminou em 6º lugar, sem ficha, sem troféu, sem pódio. A história do poker está cheia de ironias, mas poucas são tão redondas quanto essa.\n\nHeron, por sua vez, protagonizou a narrativa de ressurreição da temporada. Três rebuys. Três. O Heron morreu nas mãos de Oscar não uma, não duas, mas três vezes — e toda vez voltou, sacudiu a poeira e disse 'ainda não'. Quando Magu finalmente tirou o Papito de cena, o caminho se abriu, e Heron cravou 34 mil fichas e 25.919 pontos para levar a noite. Dramaturgia pura, gentileza nenhuma.\n\nMarcus/Marcolino merece uma menção especial no panteão do sofrimento: foi eliminado quatro vezes, todas por Oscar — exceto a última, gentilmente aplicada por Heron, como se faltasse apenas a cereja. Quatro rebuys, zero KOs, zero fichas no final. Se existe um prêmio pela resiliência masoquista, o Marcolino leva sem discussão. Cristiano, que não gastou um centavo em rebuy, foi o mais eficiente da mesa com 2 KOs e 15 mil fichas — mas o pódio ficou de fora por pouco.\n\nIsrael, o Grey Galináceo, deu o tom logo na mão da noite: viu uma sequência valiosa empatar com dois adversários ao mesmo tempo e dividir o pote em três. Se aquilo não é presságio, o que é? Terminou em 7º, com 1 rebuy e nenhum KO, mas segue firme no ranking anual, liderando com 697 mil pontos. A noite foi curta para o Grey — mas o ano ainda é dele.",
+    "maoTitulo": "Três sequências, um pote, nenhuma alegria: o universo conspirou contra o Grey",
+    "maoDesc": "Israel entrou no flop com sequência feita, sentiu o cheiro do dinheiro — e viu o universo dar uma gargalhada. No turn, Heron e Magu completaram as próprias sequências, empatando com o Grey Galináceo. O pote que prometia ser um festival foi dividido em três partes iguais, como um jantar onde todo mundo fica com fome. Não houve bad beat, não houve blefe, não houve vilão: apenas três mãos impecáveis dividindo o mesmo destino. Para Israel, foi o sinal de que a noite seria longa — e de fato foi, terminando com ele em 7º sem nenhum KO registrado.",
+    "persJogador": "Oscar",
+    "persArq": "",
+    "falas": [
+      {
+        "fala": "Depois que Grey, com sequência no flop, viu empatar e dividir o pote com Heron e Magu, no turn, quando eles também fizeram sequência, viu que a noite seria complicada.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Quatro vezes fui embora e quatro vezes voltei. Isso não é poker, isso é terapia cara.",
+        "autor": "Marcus"
+      },
+      {
+        "fala": "Sete KOs e sexto lugar. Resumo da obra.",
+        "autor": "Oscar"
+      },
+      {
+        "fala": "Três rebuys e primeiro lugar. Alguém tinha que fazer o trabalho sujo.",
+        "autor": "Heron"
+      }
+    ],
+    "jogadores": {
+      "Heron": "Morreu três vezes nas mãos do Papito e ressuscitou as três — terminou em 1º com 34.063 fichas e 25.919 pontos, como se o rebuy fosse apenas aquecimento. Dois KOs no currículo da noite e liderança isolada no ranking do mês. Heron não joga poker, ele protagoniza novelas.",
+      "Pedro": "Pedroca chegou discreto, pegou 2 KOs incluindo a eliminação definitiva do Israel, e foi ao segundo lugar com 24.663 fichas. Um rebuy apenas — eficiência rara numa noite de caos total. Silencioso como sempre, mas o resultado grita.",
+      "Magu": "Magulets apanhou do Oscar duas vezes antes de se recompor, fez um KO salvador e garantiu o pódio em 3º com 15.912 fichas. Dois rebuys não são glamorosos, mas a reviravolta foi — e foi justamente ele quem despachou o exterminador Papito da mesa.",
+      "Cristiano": "Zero rebuys, 2 KOs, 15.362 fichas — o mais econômico da noite ficou em 4º por margem mínima de fichas em relação ao Magu. Cristiano despachou Pedro e Heron (em rebuy) com a frieza de quem não gastou um tostão. Eficiência máxima, pódio mínimo.",
+      "Marcus": "Marcolino foi eliminado quatro vezes — três por Oscar e uma por Heron, como brinde de despedida. Quatro rebuys, zero KOs, zero fichas. Uma odisseia de sofrimento que só ele tem coragem de repetir semana após semana com o mesmo sorriso no rosto.",
+      "Oscar": "Papito colecionou 7 KOs numa noite histórica — Marcus caiu quatro vezes para ele, Heron três vezes, Magu duas — e mesmo assim terminou em 6º sem ficha nenhuma. É o paradoxo encarnado: o maior caçador da noite foi caça no final. A lenda do WK42 que não ganhou nada.",
+      "Israel": "Grey Galináceo entrou com sequência no flop, empatou com dois adversários no turn e dividiu o pote — foi o primeiro sinal de que a noite não seria dele. Um rebuy, nenhum KO, 7º lugar. Mas lidera o ranking anual com 697 mil pontos, então o Grey ainda está rindo por último."
+    }
   }
 }
