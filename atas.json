@@ -1211,5 +1211,42 @@
       "Pedro": "Pedroca protagonizou a tragédia épica da noite: 3 rebuys, zero KOs e eliminado quatro vezes — duas por Oscar, uma por Cristiano e uma por Israel. A cereja do bolo foi o flush de 6-9 de Grey que destruiu seus dois pares no flop. Uma noite de Job. Sem emprego.",
       "Marcus": "Marcolino entregou a performance mais zen da noite: sem rebuy, sem KO, sem ficha, sem drama. Saiu em 8º lugar como quem vai embora de uma festa cedo, sóbrio e misterioso. 6.000 pontos ganhos em silêncio — o monge da Plaza Mediterrâneo agradece e se retira."
     }
+  },
+  "WK44": {
+    "titulo": "O Festim do Magulets: Quitutes, Quadras e uma Noite Arrancada na Faca",
+    "subtitulo": "Charles trouxe a torre de guloseimas, mas foi Magu quem devorou tudo — inclusive a noite que era do Pedroca",
+    "clima": 8,
+    "intro": "A WK44 começou com um presente incomum: Charles, o Charlito de mãos leves na cozinha, montou uma torre de quitutes que, segundo o próprio Israel, foi 'as melhores do ano'. O pessoal chegou pensando em poker e encontrou um banquete. Mas nem todo brilho da noite veio da despensa — porque dentro das cartas, Charlito também estava inspirado, eliminando o Grey Galináceo com flush no flop e ainda exibindo uma quadra de 6 que fez todo mundo esquecer a comida por alguns segundos.\n\nOscar, o Papito, viveu a sua tragédia pessoal particular. Com 6 rebuys no bolso e zero eliminações no currículo, ele foi o coelho da noite — eliminado por Rafa, por Israel, por Rafa de novo, por Pedro, por Magu, por Charles e por Rafa uma última vez antes de desistir definitivamente. Sim, foram tantas entradas que alguém precisou contratar contador. A mesa agradece a generosidade, Papito.\n\nRafa foi a grande surpresa da primeira metade: 5 eliminações, zero rebuys, um jogo afiado e aquela frieza de quem sabe o que está fazendo. Até que pagou um all-in do Magu 'instantâneo, sem nada' — quase 8 mil fichas despachadas em um call que, até a hora que esta ata foi escrita, ninguém no grupo conseguiu explicar. A partir daí, o pódio começou a tomar forma, e o Magulets ativou o modo predador.\n\nMagu terminou o que Rafa começou: 4 eliminações, 1 rebuy, 39.300 fichas e 30.690 pontos. Com Pedro acumulando fichas e parecendo intocável, foi Magu quem 'foi pra cima, faca nos dentes', arrancou a liderança do Pedroca nas mãos finais e fechou a noite no topo — do ranking da semana, do mês e, agora, perigosamente perto de Israel no trimestre.",
+    "maoTitulo": "A Quadra Escondida de Charlito vs. Full House de 666 JJ — e o Call Misterioso de Rafa",
+    "maoDesc": "O momento mais cinematográfico da mesa foi a mão em que Charles, sem rebuy algum e com aquela cara de quem só está ali pela comida, mostrou uma quadra de 6 escondida contra um Full House de 666 JJ. O adversário deve ter respirado fundo com a trinca na mesa, certo de que estava a salvo — até as quatro cartas iguais surgirem como uma sentença. Mas o que ficou tatuado na memória coletiva foi o call do Rafa: Magu moveu all-in, e Rafa pagou na hora, sem pestanejar, sem nada na mão que justificasse. Quase 8 mil fichas foram embora em um instante de lógica que ainda é debatida nos grupos de WhatsApp. Se foi coragem, loucura ou apenas uma noite onde o coração mandou mais que a matemática, só Rafa sabe — e ele provavelmente prefere que ninguém pergunte.",
+    "persJogador": "Magu",
+    "persArq": "O Leao",
+    "falas": [
+      {
+        "fala": "As guloseimas do Charles foram as melhores do ano. Uma torre de quitutes especiais.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Deu show na cozinha e no poker, eliminando o galináceo com flush no flop e Grey com trinca.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Rafa deu um call que até agora ninguém entendeu. Magu voltou all in e ele pagou instantâneo sem nada. Quase 8 mil fichas.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Magu foi pra cima, faca nos dentes e arrancou a noite do Pedroca que estava praticamente garantida.",
+        "autor": "Israel"
+      }
+    ],
+    "jogadores": {
+      "Magu": "O Magulets chegou, deu 1 rebuy pra fingir que era mortal, e depois caçou 4 KOs com a serenidade de quem sabe que a noite é sua. Liderou o placar com 39.300 fichas e 30.690 pontos, disparou no ranking do mês e está farejando o pescoço do Israel no trimestre e no ano. Faca nos dentes, mesmo.",
+      "Pedro": "O Pedroca entrou com 2 rebuys, construiu um castelo de fichas com 3 KOs e ficou tão confortável no topo que nem percebeu o Magu chegando por trás. Segundo lugar com 37.000 fichas e 26.400 pontos — boa noite, mas aquele gostinho de 'era minha' vai durar até a WK45.",
+      "Charles": "Charlito zerou rebuys, anotou 2 KOs, trouxe a melhor comida do ano e ainda exibiu uma quadra de 6 que deixou a mesa em silêncio constrangido. Terceiro lugar com 18.700 fichas e 21.810 pontos. Alguém avisa que ele pode vir sem trazer nada da cozinha que a gente não vai acreditar.",
+      "Rafa": "Cinco eliminações sem nenhum rebuy — Rafa estava em modo assassino até o momento em que sua lógica simplesmente saiu de férias e ele pagou o all-in do Magu sem nada na mão. Terminou em quarto com 14.500 pontos, mas aquele call vai morar no folclore do Plaza Mediterrâneo por pelo menos duas temporadas.",
+      "Israel": "O Grey Galináceo fez 2 KOs, não deu rebuy e saiu em quinto — contribuição honesta para uma noite que ele passou mais documentando do que dominando. Lidera o ano com 738.841 pontos e o trimestre por apenas 5.876 acima do Magulets. Sinal de alerta, Grey.",
+      "Cristiano": "Três rebuys, zero KOs, sexto lugar e 5.500 pontos. Cristiano entrou, saiu, entrou, saiu, entrou e saiu de novo — eliminado por Magu duas vezes, por Pedro duas vezes e por Israel uma vez. É goleiro, não jogador. A mesa agradece as fichas, Cris.",
+      "Oscar": "Seis rebuys. Seis. Zero KOs. Sétimo lugar com -1.000 pontos. O Papito foi eliminado por Rafa três vezes, por Israel uma, por Magu uma, por Pedro uma e por Charles uma — sete mortes em uma única noite. Alguém precisava bancar a festa, e Oscar assumiu esse papel com uma generosidade que beira o altruísmo."
+    }
   }
 }
