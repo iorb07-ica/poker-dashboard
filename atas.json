@@ -1248,5 +1248,39 @@
       "Cristiano": "Três rebuys, zero KOs, sexto lugar e 5.500 pontos. Cristiano entrou, saiu, entrou, saiu, entrou e saiu de novo — eliminado por Magu duas vezes, por Pedro duas vezes e por Israel uma vez. É goleiro, não jogador. A mesa agradece as fichas, Cris.",
       "Oscar": "Seis rebuys. Seis. Zero KOs. Sétimo lugar com -1.000 pontos. O Papito foi eliminado por Rafa três vezes, por Israel uma, por Magu uma, por Pedro uma e por Charles uma — sete mortes em uma única noite. Alguém precisava bancar a festa, e Oscar assumiu esse papel com uma generosidade que beira o altruísmo."
     }
+  },
+  "WK46": {
+    "titulo": "Papito Vira Exterminador de Luxo e Faz 5 KOs Numa Noite de Loucura Total",
+    "subtitulo": "WK46 — 18/11/2026 — 8 jogadores, 1 ausente (Magu, como sempre faltando quando o circo pega fogo)",
+    "clima": 9,
+    "intro": "O Plaza Mediterrâneo recebeu sua sessão mais selvagem do mês com 8 jogadores dispostos a se destruírem mutuamente, e Oscar/Papito decidiu que era noite de caça. Com 2 rebuys no bolso e uma frieza desconcertante, o homem acumulou 5 KOs e 35.425 fichas para faturar o primeiro lugar com autoridade — o tipo de performance que faz a mesa perguntar se ele estava jogando poker ou praticando tiro ao alvo.\n\nMas antes de Papito virar soberano, a noite teve seus momentos de caos puro. Cristiano, num surto de lucidez temporária com 2 KOs seguidos (Oscar e Charles!), chegou a parecer ameaçador — antes de lembrar que era Cristiano e terminar em 7º. Heron/Pedroca do ar também foi generoso em eliminações (4 KOs!), mas generoso demais com os próprios chips e saiu no 4º lugar. A mesa foi um campo minado de all-ins, rebuys e egos em chamas.\n\nO grande drama filosófico da noite foi Rafa: 3 rebuys, 0 KOs, 1.500 pontos. Três vezes a mesa disse 'fora', três vezes ele voltou, e no fim a mesa simplesmente estava certa. É o tipo de teimosia que inspira e entristece ao mesmo tempo. Israel/Grey Galináceo tentou resistir com flush de 3 cartas e par de 10, o que diz tudo sobre o nível de esperança que o homem carregava.\n\nMagu ausente perdeu uma das noites mais barulhentas do trimestre — e enquanto isso, Pedro segura a liderança do mês quase sem fazer nada (6º lugar, zero rebuys, zero KOs). Estratégia ou covardia? No Plaza Mediterrâneo, às vezes não tem diferença.",
+    "maoTitulo": "O Straight Flush de Charles Quase Causou Parada Cardíaca Coletiva",
+    "maoDesc": "Charlito chegou no board com straight flush de Ás a 5 de paus — a mão que faz qualquer jogador pensar que está num sonho ou numa fraude. Só que a mesa não estava de brincadeira: Heron tinha sequência e Pedro tinha flush. Duas mãos que em qualquer outra noite ganhariam o pote com folga, destruídas pela combinação mais rara do baralho. A loucura não parou por aí: Grey Galináceo tentou sobreviver no segundo tempo com flush de 3 cartas e um par de 10 no all-in, recebeu um call de Papito com AQ, e o Ás apareceu no board como um carteiro trazendo notícias ruins. A noite resumida numa única mão: beleza, ilusão e Papito levando o dinheiro.",
+    "persJogador": "Oscar",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Charles fez straight flush de A a 5 de paus… Heron tinha sequência e Pedro flush. Loucura!",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Grey conseguiu fazer um flush de 3 com 6… e foi pro segundo tempo bem.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Veio com par de 10 e papito deu call no all in com AQ e bateu A",
+        "autor": "Israel"
+      }
+    ],
+    "jogadores": {
+      "Oscar": "Papito não veio jogar, veio trabalhar: 5 KOs, 35.425 fichas e o troféu da noite no bolso. Sim, precisou de 2 rebuys para aquecer, mas quando engatou virou uma máquina de eliminações — inclusive reliquidando as fichas de quem o havia eliminado antes. Vingança servida quente e com gorjeta.",
+      "Marcus": "Marcolino terminou em 2º com 27.600 fichas e apenas 1 rebuy, o que soa impressionante até você perceber que ele não eliminou ninguém — zero KOs. Passou a noite inteira acumulando chips sem sujar as mãos, o que no Plaza Mediterrâneo é considerado quase desonesto.",
+      "Charles": "Charlito fez o straight flush mais bonito da temporada, eliminou 2 adversários e ainda assim ficou em 3º. Precisou de 1 rebuy para lembrar quem era, mas no fim entregou uma noite sólida — a questão é: onde estava essa versão nas noites que mais precisava?",
+      "Heron": "4 KOs e 4º lugar — Heron foi violento e eficiente em igual medida, mas alguma coisa deu errado na reta final. Com esse arsenal de eliminações, terminar fora do pódio é o tipo de resultado que você não consegue explicar nem com slides. 1 rebuy usado, lição não aprendida.",
+      "Israel": "Grey Galináceo chegou com flush de 3 cartas e saiu com par de 10 no all-in perdido para AQ de Papito. É o tipo de jornada que inspira contos trágicos. 1 rebuy, 1 KO e uma saída que Israel mesmo relatou com a precisão de quem ainda não processou o trauma.",
+      "Pedro": "Pedroca não fez rebuy, não eliminou ninguém, terminou em 6º e ainda lidera o ranking do mês. A estratégia do homem é um enigma que a ciência ainda não consegue explicar — ou ele é muito bom, ou todos os outros são muito ruins. Provavelmente as duas coisas.",
+      "Cristiano": "Eliminou Oscar e Charles consecutivamente num momento que parecia o início de algo especial — e então lembrou que era Cristiano, tomou 2 KOs de volta, fez 1 rebuy e foi embora em 7º. É o tipo de flash de brilhantismo que torna a queda ainda mais dolorosa de assistir.",
+      "Rafa": "3 rebuys. Zero KOs. 1.500 pontos. Rafa foi eliminado, voltou, foi eliminado, voltou, foi eliminado, voltou e foi eliminado de vez. Em algum ponto entre o segundo e o terceiro rebuy, a mesa parou de sentir pena e começou a sentir admiração pela teimosia."
+    }
   }
 }
