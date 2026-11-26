@@ -1282,5 +1282,42 @@
       "Cristiano": "Eliminou Oscar e Charles consecutivamente num momento que parecia o início de algo especial — e então lembrou que era Cristiano, tomou 2 KOs de volta, fez 1 rebuy e foi embora em 7º. É o tipo de flash de brilhantismo que torna a queda ainda mais dolorosa de assistir.",
       "Rafa": "3 rebuys. Zero KOs. 1.500 pontos. Rafa foi eliminado, voltou, foi eliminado, voltou, foi eliminado, voltou e foi eliminado de vez. Em algum ponto entre o segundo e o terceiro rebuy, a mesa parou de sentir pena e começou a sentir admiração pela teimosia."
     }
+  },
+  "WK47": {
+    "titulo": "Papito Ressuscita, Magu Afunda e Heron Vira Lenda por Uma Noite",
+    "subtitulo": "WK47: sete guerreiros, um rebuy serial, um dominador improvável e guloseimas do Charles para adoçar o sofrimento",
+    "clima": 8,
+    "intro": "A mesa do Plaza Mediterrâneo recebeu sete almas dispostas a sofrer na noite de 25 de novembro, com Cristiano e Marcus mandando abraços de longe enquanto os presentes bancavam o espetáculo. O clima era de alta tensão desde o início, com Heron abrindo o baile de eliminações como se tivesse chegado com uma lista de nomes — e riscou quatro deles antes do intervalo do café.\n\nMagu foi o protagonista involuntário da tragédia grega da noite. Quatro rebuys. Zero KOs. Uma coleção de bad beats que faria chorar até o mais sanguinário dos sharks. Pedro bateu nele com sequência mais alta quando ele já achava que ia empatar no mínimo. Heron tirou uma trinca de 7 no river na hora mais cruel possível. O universo conspirou, e o Magulets pagou a conta quatro vezes seguidas sem nenhum desconto na dor.\n\nCharles chegou com guloseimas para a mesa — o que, em retrospecto, foi a coisa mais generosa que ele fez na noite, já que suas fichas também sumiram em três rebuys sem nenhum KO para mostrar. Charlito trouxe o açúcar, mas o poker não foi nada doce com ele. Heron, Pedro, Oscar e Rafa dividiram as eliminações do querido Charles como se fosse uma tarefa compartilhada no grupo.\n\nNo fim, foi Papito quem emergiu do caos com 44.250 fichas e três KOs, incluindo a cabeça do próprio Heron — que havia dominado a noite inteira até encontrar seu algoz natural. Israel fechou em segundo com classe, Rafa completou o pódio jogando bem, e Pedro, sem nenhum rebuy, garantiu o quarto lugar e um novo impulso no ranking do mês. A noite foi épica, barulhenta e completamente fiel ao DNA do grupo.",
+    "maoTitulo": "O Grey Galináceo e o 10 que valeu mais que qualquer Ás",
+    "maoDesc": "Com Magu já no limite da sanidade após uma sequência absurda de bad beats — perdeu para sequência mais alta quando achava que empataria, viu Heron tirar trinca de 7 no river contra ele como se o baralho fosse pessoal —, o Grey Galináceo chegou para assinar a sentença final. Israel, com apenas um par de 10s, enfrentou o terceiro par do flop, um humilde 4, nas mãos do Magulets. O 4 não cresceu, o 10 se segurou, e o algoz eterno fez o que sempre faz: eliminou Magu de um jeito que dói mais pelo histórico do que pela mão em si. Quatro rebuys para ser eliminado pelo segundo par do Israel. Isso tem nome, e o nome é destino.",
+    "persJogador": "Oscar",
+    "persArq": "O Dominante",
+    "falas": [
+      {
+        "fala": "Magu tomou umas 4 bad beat que eu lembro... bateu Q e perdeu com sequencia (empataria) perdeu pra sequencia mais alta.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Heron trincou o 7 no river contra ele.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Grey Galinaceo, que tinha 10 (segundo par) contra o terceiro par do flop que era um 4.",
+        "autor": "Israel"
+      },
+      {
+        "fala": "Querido amigo charles tRouxe guloseimas maravilhosas hj e deu show",
+        "autor": "Israel"
+      }
+    ],
+    "jogadores": {
+      "Oscar": "Papito morreu uma vez, voltou como campeão e ainda despachou Heron, Magu e Charles pelo caminho — 3 KOs, 44.250 fichas e 32.075 pontos de pura ressurreição. Um rebuy que virou investimento com retorno obsceno.",
+      "Israel": "Grey Galináceo fez o que sabe: eliminou quem precisava ser eliminado, incluindo o eterno Magu duas vezes. Segundo lugar com 2 KOs e 22.175 pontos — e ainda arranjou tempo para narrar a noite com precisão cirúrgica no grupo.",
+      "Rafa": "Pedroca disse que jogou bem, e os números confirmam: terceiro lugar, 2 KOs, 1 rebuy e 18.390 pontos. Rafa completou sem alarde e sem drama, que por si só já é uma conquista nessa mesa.",
+      "Pedro": "Pedroca entrou sem rebuy e saiu com 2 KOs e quarto lugar — a eficiência silenciosa de quem lidera o ranking do mês e sabe exatamente o que está fazendo. Nenhum investimento extra, retorno máximo.",
+      "Heron": "Fez 4 KOs, dominou o meio da noite, trincou 7 no river na cara dura e parecia imbatível — até Papito aparecer para lembrar que nenhum dominador escapa ileso da noite toda. Saiu em quinto, mas saiu com moral.",
+      "Magu": "Quatro rebuys. Zero KOs. Perdeu para sequência mais alta, levou trinca de 7 no river e foi eliminado pelo segundo par do Israel. Magulets, isso não é azar, isso é um roteiro de horror em tempo real.",
+      "Charles": "Charlito trouxe guloseimas para a mesa — o único momento em que foi verdadeiramente generoso com todos. Três rebuys, zero KOs, sétimo lugar. O show que Israel mencionou foi claramente gastronômico."
+    }
   }
 }
